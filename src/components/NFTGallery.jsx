@@ -12,7 +12,8 @@ const rpc = new JsonRpc(RPC_ENDPOINT);
 const NFTGallery = () => {
   const [nfts, setNfts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showStaking, setShowStaking] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [isUnstaking, setIsUnstaking] = useState(false);
   const [selected, setSelected] = useState([]);
   const [msg, setMsg] = useState("");
 
@@ -26,8 +27,7 @@ const NFTGallery = () => {
       }
 
       try {
-        if (showStaking === "unstake") {
-          // Obtener NFTs stakeados desde la tabla del contrato
+        if (isUnstaking) {
           const stakedData = await rpc.get_table_rows({
             json: true,
             code: CONTRACT_ACCOUNT,
@@ -40,7 +40,6 @@ const NFTGallery = () => {
 
           if (stakedData.rows.length > 0) {
             const assetIds = stakedData.rows[0].asset_ids;
-            // Obtener detalles de cada NFT stakeado
             const assetDetailsPromises = assetIds.map((id) =>
               fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${id}`).then((res) => res.json())
             );
@@ -51,7 +50,6 @@ const NFTGallery = () => {
             setNfts([]);
           }
         } else {
-          // Obtener NFTs en la wallet del usuario
           const queries = STAKE_SCHEMAS.map((schema) =>
             fetch(
               `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${UserService.authName}&collection_name=${COLLECTION}&schema_name=${schema}&limit=100`
@@ -70,7 +68,7 @@ const NFTGallery = () => {
     };
 
     fetchNFTs();
-  }, [UserService.authName, showStaking]);
+  }, [UserService.authName, isUnstaking]);
 
   const toggleSelect = (asset_id) => {
     setSelected((prev) =>
@@ -83,13 +81,14 @@ const NFTGallery = () => {
     if (selected.length === 0) return alert("Selecciona al menos un NFT.");
     setMsg("Firmando transacción...");
     try {
-      if (showStaking === "unstake") {
+      if (isUnstaking) {
         await UserService.unstakeNFTs(selected);
       } else {
         await UserService.stakeNFTs(selected);
       }
       setMsg("¡NFTs procesados exitosamente!");
-      setShowStaking(false);
+      setShowModal(false);
+      setIsUnstaking(false);
       setSelected([]);
       setTimeout(() => setMsg(""), 3000);
     } catch (err) {
@@ -98,18 +97,13 @@ const NFTGallery = () => {
   };
 
   return (
-    <div>
-      <div>
-        <button
-          onClick={() => setShowStaking("stake")}
-          disabled={loading}
-        >
+    <div style={{ padding: 24 }}>
+      <h2>NFT Gallery</h2>
+      <div style={{ marginBottom: 16 }}>
+        <button onClick={() => { setIsUnstaking(false); setShowModal(true); }}>
           Stake NFTs
         </button>
-        <button
-          onClick={() => setShowStaking("unstake")}
-          disabled={loading}
-        >
+        <button onClick={() => { setIsUnstaking(true); setShowModal(true); }}>
           Unstake NFTs
         </button>
         <button
@@ -158,14 +152,16 @@ const NFTGallery = () => {
         </div>
       )}
 
-      {showStaking && (
-        <div>
+      {showModal && (
+        <div style={{ marginTop: 24 }}>
+          <h3>{isUnstaking ? "Unstake NFTs seleccionados" : "Stakear NFTs seleccionados"}</h3>
           <button onClick={stakeSelectedNFTs}>
-            {showStaking === "unstake" ? "Unstakear seleccionados" : "Stakear seleccionados"}
+            Confirmar
           </button>
           <button
             onClick={() => {
-              setShowStaking(false);
+              setShowModal(false);
+              setIsUnstaking(false);
               setSelected([]);
             }}
           >
