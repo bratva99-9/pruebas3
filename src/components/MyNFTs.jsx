@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { UserService } from '../UserService';
 
 const COLLECTION = "nightclubnft";
-const STAKE_SCHEMAS = ["girls", "photos"]; // Solo estos schemas
+const STAKE_SCHEMAS = ["girls", "photos"];
+const CONTRACT_ACCOUNT = "nightclubapp";
 
 const MyNFTs = () => {
   const [nfts, setNfts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showStaking, setShowStaking] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [isUnstaking, setIsUnstaking] = useState(false);
   const [selected, setSelected] = useState([]);
 
-  // Traer NFTs del usuario
   useEffect(() => {
     const fetchNFTs = async () => {
       setLoading(true);
@@ -20,20 +21,43 @@ const MyNFTs = () => {
         return;
       }
       try {
-        const queries = STAKE_SCHEMAS.map(
-          schema => fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${UserService.authName}&collection_name=${COLLECTION}&schema_name=${schema}&limit=100`)
-            .then(res => res.json())
-        );
-        const results = await Promise.all(queries);
-        const nftsData = results.flatMap(r => Array.isArray(r.data) ? r.data : []);
-        setNfts(nftsData);
+        if (isUnstaking) {
+          const rpc = new (require('eosjs')).JsonRpc("https://wax.greymass.com");
+          const response = await rpc.get_table_rows({
+            json: true,
+            code: CONTRACT_ACCOUNT,
+            scope: CONTRACT_ACCOUNT,
+            table: "staked",
+            lower_bound: UserService.authName,
+            upper_bound: UserService.authName,
+            limit: 1
+          });
+          if (response.rows.length > 0) {
+            const assetIds = response.rows[0].asset_ids;
+            const promises = assetIds.map(id =>
+              fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${id}`).then(res => res.json())
+            );
+            const data = await Promise.all(promises);
+            setNfts(data.map(r => r.data));
+          } else {
+            setNfts([]);
+          }
+        } else {
+          const queries = STAKE_SCHEMAS.map(
+            schema => fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${UserService.authName}&collection_name=${COLLECTION}&schema_name=${schema}&limit=100`)
+              .then(res => res.json())
+          );
+          const results = await Promise.all(queries);
+          const nftsData = results.flatMap(r => Array.isArray(r.data) ? r.data : []);
+          setNfts(nftsData);
+        }
       } catch (err) {
         setNfts([]);
       }
       setLoading(false);
     };
     fetchNFTs();
-  }, [UserService.authName]);
+  }, [UserService.authName, isUnstaking]);
 
   const toggleSelect = (asset_id) => {
     setSelected(prev =>
@@ -45,21 +69,15 @@ const MyNFTs = () => {
     if (!UserService.session) return alert("Debes iniciar sesión.");
     if (selected.length === 0) return alert("Selecciona al menos un NFT.");
     try {
-      if (showStaking === "unstake") {
+      if (isUnstaking) {
         await UserService.unstakeNFTs(selected);
       } else {
         await UserService.stakeNFTs(selected);
       }
       alert(`Operación realizada correctamente.`);
-      setShowStaking(false);
+      setShowModal(false);
+      setIsUnstaking(false);
       setSelected([]);
-      const queries = STAKE_SCHEMAS.map(
-        schema => fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${UserService.authName}&collection_name=${COLLECTION}&schema_name=${schema}&limit=100`)
-          .then(res => res.json())
-      );
-      const results = await Promise.all(queries);
-      const nftsData = results.flatMap(r => Array.isArray(r.data) ? r.data : []);
-      setNfts(nftsData);
     } catch (err) {
       alert("Error al realizar la operación: " + (err.message || err));
     }
@@ -80,10 +98,10 @@ const MyNFTs = () => {
           fontSize: 18,
           cursor: "pointer"
         }}
-        onClick={() => setShowStaking(showStaking === "unstake" ? false : "unstake")}
+        onClick={() => { setIsUnstaking(true); setShowModal(true); }}
         disabled={nfts.length === 0}
       >
-        {showStaking === "unstake" ? "Cancelar" : "Unstake NFTs"}
+        Unstake NFTs
       </button>
 
       <button
@@ -110,7 +128,7 @@ const MyNFTs = () => {
         Reclamar recompensas
       </button>
 
-      {showStaking && (
+      {showModal && (
         <div style={{
           background: "#1a133a",
           borderRadius: 18,
@@ -119,7 +137,7 @@ const MyNFTs = () => {
           marginBottom: 20,
           boxShadow: "0 6px 24px #000b",
         }}>
-          <h3 style={{color:"#fff"}}>Selecciona los NFTs para {showStaking === "unstake" ? "Unstake" : "Staking"}</h3>
+          <h3 style={{color:"#fff"}}>Selecciona los NFTs para {isUnstaking ? "Unstake" : "Staking"}</h3>
           {loading ? <div>Cargando NFTs...</div> :
             nfts.length === 0 ? <div>No tienes NFTs disponibles.</div> :
             <div style={{display: 'flex', flexWrap: 'wrap', gap: 28}}>
@@ -181,7 +199,7 @@ const MyNFTs = () => {
             onClick={stakeSelectedNFTs}
             disabled={selected.length === 0}
           >
-            {showStaking === "unstake" ? "Unstakear seleccionados" : "Stakear seleccionados"}
+            {isUnstaking ? "Unstakear seleccionados" : "Stakear seleccionados"}
           </button>
           <button
             style={{
@@ -196,7 +214,7 @@ const MyNFTs = () => {
               fontSize: 15,
               cursor: "pointer"
             }}
-            onClick={() => {setShowStaking(false); setSelected([]);}}
+            onClick={() => {setShowModal(false); setIsUnstaking(false); setSelected([]);}}
           >
             Cancelar
           </button>
