@@ -17,7 +17,7 @@ export default function StakingModal({}) {
   const [claiming, setClaiming] = useState(false);
 
   const wallet = UserService.isLogged() ? UserService.getName() : null;
-  const [isUnstakeMode, setIsUnstakeMode] = useState(false);
+  const [isUnstakeModeMode, setIsUnstakeMode] = useState(false);
 
   const openUnstakeModal = async () => {
     setIsUnstakeMode(true);
@@ -96,10 +96,10 @@ export default function StakingModal({}) {
   const handleStakeOrUnstake = async () => {
     if (!UserService.isLogged() || selected.length === 0) return;
     setLoading(true);
-    setMensaje(isUnstake ? "Firmando Unstake..." : "Firmando Staking...");
+    setMensaje(isUnstakeMode ? "Firmando Unstake..." : "Firmando Staking...");
     try {
       await UserService.stakeNFTs(selected, ""); // Sin memo
-      setMensaje(isUnstake ? "¡Unstake realizado con éxito!" : "¡Staking realizado con éxito!");
+      setMensaje(isUnstakeMode ? "¡Unstake realizado con éxito!" : "¡Staking realizado con éxito!");
       setSelected([]);
       setTimeout(() => {
         setModalOpen(false);
@@ -168,7 +168,7 @@ export default function StakingModal({}) {
   // --- RENDER ---
   
   useEffect(() => {
-    if (!modalOpen || !wallet || !isUnstakeMode) return;
+    if (!modalOpen || !wallet || !isUnstakeModeMode) return;
 
     const fetchStaked = async () => {
       setMensaje("Cargando NFTs en staking...");
@@ -198,7 +198,7 @@ export default function StakingModal({}) {
     };
 
     fetchStaked();
-  }, [activeTab, isUnstakeMode, modalOpen]);
+  }, [activeTab, isUnstakeModeMode, modalOpen]);
 return (
     <>
       {/* Botones en Home */}
@@ -341,7 +341,7 @@ return (
                 onClick={handleStakeOrUnstake}
                 disabled={selected.length === 0 || loading}
               >
-                {isUnstakeMode ? "Unstake seleccionados" : "Stakear seleccionados"}
+                {isUnstakeModeMode ? "Unstake seleccionados" : "Stakear seleccionados"}
               </button>
             </div>
           </div>
