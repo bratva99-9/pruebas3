@@ -19,35 +19,87 @@ export default function StakingModal() {
 
   const wallet = UserService.isLogged() ? UserService.getName() : null;
 
+  const openUnstakeModal = async () => {
+    setIsUnstakeMode(true);
+    setModalOpen(true);
+    setActiveTab("girls");
+    setMensaje("Cargando NFTs en staking...");
+    setLoading(true);
+    try {
+      const rpc = new (require("eosjs")).JsonRpc("https://wax.greymass.com");
+      const res = await rpc.get_table_rows({
+        json: true,
+        code: "nightclubapp",
+        scope: "nightclubapp",
+        table: "assets",
+        limit: 1000,
+      });
+      const userNFTs = res.rows.filter(r => r.owner === wallet);
+      const assets = await Promise.all(userNFTs.map(n =>
+        fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${n.asset_id}`)
+          .then(r => r.json()).then(r => r.data)
+      ));
+      setNfts(assets.filter(a => a.schema?.schema_name === activeTab));
+      setMensaje("");
+    } catch (e) {
+      setMensaje("Error al cargar NFTs.");
+      setNfts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUnstakeConfirmed = async () => {
+    if (!UserService.isLogged() || selected.length === 0) return;
+    setMensaje("Firmando Unstake...");
+    try {
+      await UserService.unstakeNFTs(selected);
+      setMensaje("¡Unstake realizado!");
+      setTimeout(() => setModalOpen(false), 1500);
+    } catch (e) {
+      setMensaje("Error: " + (e.message || e));
+    }
+  };
+
+
+    const handleStake = async () => {
+    if (!UserService.isLogged() || selected.length === 0) return;
+    setMensaje("Firmando Staking...");
+    setLoading(true);
+    try {
+      await UserService.stakeNFTs(selected);
+      setMensaje("¡Staking realizado con éxito!");
+      setSelected([]);
+      setTimeout(() => setModalOpen(false), 1700);
+    } catch (e) {
+      setMensaje("Error al firmar: " + (e.message || e));
+    }
+    setLoading(false);
+  };
+  
+  const handleClaim = async () => {
+    setClaiming(true);
+    setMensaje("Procesando claim...");
+    try {
+      await UserService.claimRewards();
+      setMensaje("¡Claim exitoso!");
+    } catch (e) {
+      setMensaje("Error al reclamar: " + (e.message || e));
+    }
+    setClaiming(false);
+  };
+
   useEffect(() => {
-    if (!modalOpen || !wallet) return;
+    if (!modalOpen || !wallet || isUnstakeMode) return;
 
     const fetchNFTs = async () => {
       setMensaje("Cargando NFTs...");
       setLoading(true);
-
       try {
-        if (isUnstakeMode) {
-          const rpc = new (require("eosjs")).JsonRpc("https://wax.greymass.com");
-          const res = await rpc.get_table_rows({
-            json: true,
-            code: "nightclubapp",
-            scope: "nightclubapp",
-            table: "assets",
-            limit: 1000,
-          });
-          const userNFTs = res.rows.filter(r => r.owner === wallet && r.schema_name === activeTab);
-          const assets = await Promise.all(userNFTs.map(n =>
-            fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${n.asset_id}`)
-              .then(r => r.json()).then(r => r.data)
-          ));
-          setNfts(assets);
-        } else {
-          const res = await fetch(
-            `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=${COLLECTION}&owner=${wallet}&schema_name=${activeTab}&limit=100`
-          ).then(res => res.json());
-          setNfts(Array.isArray(res.data) ? res.data : []);
-        }
+        const res = await fetch(
+          `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=${COLLECTION}&owner=${wallet}&schema_name=${activeTab}&limit=100`
+        ).then(res => res.json());
+        setNfts(Array.isArray(res.data) ? res.data : []);
         setMensaje("");
       } catch {
         setMensaje("Error al cargar tus NFTs.");
@@ -66,46 +118,8 @@ export default function StakingModal() {
     );
   };
 
-  const handleStake = async () => {
-    if (!UserService.isLogged() || selected.length === 0) return;
-    setMensaje("Firmando Staking...");
-    setLoading(true);
-    try {
-      await UserService.stakeNFTs(selected);
-      setMensaje("¡Staking realizado con éxito!");
-      setSelected([]);
-      setTimeout(() => setModalOpen(false), 1700);
-    } catch (e) {
-      setMensaje("Error al firmar: " + (e.message || e));
-    }
-    setLoading(false);
-  };
 
-  const handleUnstakeConfirmed = async () => {
-    if (!UserService.isLogged() || selected.length === 0) return;
-    setMensaje("Firmando Unstake...");
-    try {
-      await UserService.unstakeNFTs(selected);
-      setMensaje("¡Unstake realizado!");
-      setTimeout(() => setModalOpen(false), 1500);
-    } catch (e) {
-      setMensaje("Error: " + (e.message || e));
-    }
-  };
-
-  const handleClaim = async () => {
-    setClaiming(true);
-    setMensaje("Procesando claim...");
-    try {
-      await UserService.claimRewards();
-      setMensaje("¡Claim exitoso!");
-    } catch (e) {
-      setMensaje("Error al reclamar: " + (e.message || e));
-    }
-    setClaiming(false);
-  };
-
-  const mainBtn = (label, color, onClick, disabled = false) => (
+    const mainBtn = (label, color, onClick, disabled = false) => (
     <button
       style={{
         background: color,
@@ -136,11 +150,7 @@ export default function StakingModal() {
           setModalOpen(true);
           setActiveTab("girls");
         }, !wallet)}
-        {mainBtn("Unstake NFTs", "#e11d48", () => {
-          setIsUnstakeMode(true);
-          setModalOpen(true);
-          setActiveTab("girls");
-        }, !wallet)}
+        {mainBtn("Unstake NFTs", "#e11d48", openUnstakeModal, !wallet)}
         {mainBtn("Claim", "linear-gradient(90deg,#5eead4 0%,#3b82f6 100%)", handleClaim, claiming || !wallet)}
       </div>
 
@@ -165,9 +175,7 @@ export default function StakingModal() {
                 fontWeight: "bold", lineHeight: "1"
               }}
               disabled={loading || claiming}
-            >&times;</button>
-
-            <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
+            >&times;</button>            <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
               {SCHEMAS.map(tab =>
                 <button
                   key={tab.key}
@@ -241,16 +249,20 @@ export default function StakingModal() {
                     key={nft.asset_id}
                     onClick={() => !loading && toggleSelect(nft.asset_id)}
                     style={{
-                      border: selected.includes(nft.asset_id) ? `3px solid ${isUnstakeMode ? "#f43f5e" : "#ff36ba"}` : "2px solid #252241",
+                      border: selected.includes(nft.asset_id)
+                        ? `3px solid ${isUnstakeMode ? "#f43f5e" : "#ff36ba"}`
+                        : "2px solid #252241",
                       borderRadius: "22px",
                       background: selected.includes(nft.asset_id)
                         ? "linear-gradient(135deg,#ff36ba25 60%,#fff0)"
                         : "#131025",
                       cursor: "pointer",
-                      boxShadow: selected.includes(nft.asset_id) ? "0 4px 16px #444a" : "0 2px 8px #1117",
+                      boxShadow: selected.includes(nft.asset_id)
+                        ? "0 4px 16px #444a"
+                        : "0 2px 8px #1117",
                       transition: "all .17s",
                       width: "120px",
-                      height: `210px`,
+                      height: "210px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -276,15 +288,22 @@ export default function StakingModal() {
                 );
               })}
             </div>
-
             <div style={{
-              display: "flex", justifyContent: "center", marginTop: 26
+              display: "flex",
+              justifyContent: "center",
+              marginTop: 26
             }}>
               <button
                 style={{
-                  background: isUnstakeMode ? "#f43f5e" : "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)",
-                  color: "#fff", border: "none", borderRadius: 10,
-                  fontSize: 17, fontWeight: "bold", padding: "11px 32px",
+                  background: isUnstakeMode
+                    ? "#f43f5e"
+                    : "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 10,
+                  fontSize: 17,
+                  fontWeight: "bold",
+                  padding: "11px 32px",
                   cursor: selected.length === 0 || loading ? "not-allowed" : "pointer",
                   opacity: selected.length === 0 || loading ? 0.65 : 1,
                   boxShadow: "0 2px 12px #7e47f799"
