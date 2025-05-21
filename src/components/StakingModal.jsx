@@ -15,28 +15,29 @@ export default function StakingModal() {
   const [selected, setSelected] = useState([]);
   const [mensaje, setMensaje] = useState("");
   const [claiming, setClaiming] = useState(false);
+  const [isUnstakeMode, setIsUnstakeMode] = useState(false);
 
   const wallet = UserService.isLogged() ? UserService.getName() : null;
 
   useEffect(() => {
-    if (modalOpen && wallet) {
-      setMensaje("Cargando NFTs...");
-      setLoading(true);
-      fetch(
-        `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=${COLLECTION}&owner=${wallet}&schema_name=${activeTab}&limit=100`
-      )
-        .then((res) => res.json())
-        .then((json) => {
-          setNfts(Array.isArray(json.data) ? json.data : []);
-          setMensaje("");
-        })
-        .catch(() => {
-          setMensaje("Error al cargar tus NFTs");
-          setNfts([]);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [modalOpen, wallet, activeTab]);
+    if (!modalOpen || !wallet || isUnstakeMode) return;
+
+    setMensaje("Cargando NFTs...");
+    setLoading(true);
+    fetch(
+      `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=${COLLECTION}&owner=${wallet}&schema_name=${activeTab}&limit=100`
+    )
+      .then((res) => res.json())
+      .then((json) => {
+        setNfts(Array.isArray(json.data) ? json.data : []);
+        setMensaje("");
+      })
+      .catch(() => {
+        setMensaje("Error al cargar tus NFTs");
+        setNfts([]);
+      })
+      .finally(() => setLoading(false));
+  }, [modalOpen, wallet, activeTab, isUnstakeMode]);
 
   const toggleSelect = (assetId) => {
     setSelected((selected) =>
@@ -64,6 +65,18 @@ export default function StakingModal() {
     setLoading(false);
   };
 
+  const handleUnstakeConfirmed = async () => {
+    if (!UserService.isLogged() || selected.length === 0) return;
+    setMensaje("Firmando Unstake...");
+    try {
+      await UserService.unstakeNFTs(selected);
+      setMensaje("¡Unstake realizado!");
+      setTimeout(() => setModalOpen(false), 1500);
+    } catch (e) {
+      setMensaje("Error: " + (e.message || e));
+    }
+  };
+
   const handleClaim = async () => {
     setClaiming(true);
     setMensaje("Procesando claim...");
@@ -74,6 +87,36 @@ export default function StakingModal() {
       setMensaje("Error al reclamar: " + (e.message || e));
     }
     setClaiming(false);
+  };
+
+  const openUnstakeModal = async () => {
+    setIsUnstakeMode(true);
+    setModalOpen(true);
+    setActiveTab("girls");
+    setMensaje("Cargando NFTs en staking...");
+    setLoading(true);
+    try {
+      const rpc = new (require('eosjs')).JsonRpc("https://wax.greymass.com");
+      const res = await rpc.get_table_rows({
+        json: true,
+        code: "nightclubapp",
+        scope: "nightclubapp",
+        table: "assets",
+        limit: 1000,
+      });
+      const userNFTs = res.rows.filter(r => r.owner === wallet);
+      const assets = await Promise.all(userNFTs.map(n =>
+        fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${n.asset_id}`)
+          .then(r => r.json()).then(r => r.data)
+      ));
+      setNfts(assets);
+      setMensaje("");
+    } catch (e) {
+      setMensaje("Error al cargar NFTs.");
+      setNfts([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const tabStyle = (tab) => ({
@@ -121,7 +164,12 @@ export default function StakingModal() {
       <div style={{
         display: "flex", justifyContent: "center", gap: 24, margin: "42px 0 32px"
       }}>
-        {mainBtn("Staking NFTs", "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)", () => { setModalOpen(true); setActiveTab("girls"); }, !wallet)}
+        {mainBtn("Staking NFTs", "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)", () => {
+          setIsUnstakeMode(false);
+          setModalOpen(true);
+          setActiveTab("girls");
+        }, !wallet)}
+        {mainBtn("Unstake NFTs", "#e11d48", openUnstakeModal, !wallet)}
         {mainBtn("Claim", "linear-gradient(90deg,#5eead4 0%,#3b82f6 100%)", handleClaim, claiming || !wallet)}
       </div>
 
@@ -135,26 +183,33 @@ export default function StakingModal() {
             boxShadow: "0 10px 36px #000a", padding: 32, position: "relative", maxWidth: 700, width: "95vw"
           }}>
             <button
-              onClick={() => { setModalOpen(false); setSelected([]); setMensaje(""); }}
+              onClick={() => {
+                setModalOpen(false);
+                setSelected([]);
+                setMensaje("");
+              }}
               style={{
-                position: "absolute", top: 16, right: 20, fontSize: 33, color: "#cfc", background: "none", border: "none",
-                cursor: "pointer", fontWeight: "bold", lineHeight: "1"
+                position: "absolute", top: 16, right: 20, fontSize: 33, color: "#cfc",
+                background: "none", border: "none", cursor: "pointer",
+                fontWeight: "bold", lineHeight: "1"
               }}
               disabled={loading || claiming}
             >&times;</button>
 
-            <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
-              {SCHEMAS.map(tab =>
-                <button
-                  key={tab.key}
-                  style={tabStyle(tab)}
-                  onClick={() => { setActiveTab(tab.key); setSelected([]); }}
-                  disabled={activeTab === tab.key || loading}
-                >
-                  {tab.label}
-                </button>
-              )}
-            </div>
+            {!isUnstakeMode && (
+              <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
+                {SCHEMAS.map(tab =>
+                  <button
+                    key={tab.key}
+                    style={tabStyle(tab)}
+                    onClick={() => { setActiveTab(tab.key); setSelected([]); }}
+                    disabled={activeTab === tab.key || loading}
+                  >
+                    {tab.label}
+                  </button>
+                )}
+              </div>
+            )}
 
             {mensaje && (
               <div style={{
@@ -199,12 +254,10 @@ export default function StakingModal() {
                     key={nft.asset_id}
                     onClick={() => !loading && toggleSelect(nft.asset_id)}
                     style={{
-                      border: selected.includes(nft.asset_id) ? `3px solid ${activeTab === "girls" ? "#ff36ba" : "#7e47f7"}` : "2px solid #252241",
+                      border: selected.includes(nft.asset_id) ? `3px solid ${isUnstakeMode ? "#f43f5e" : "#ff36ba"}` : "2px solid #252241",
                       borderRadius: "22px",
                       background: selected.includes(nft.asset_id)
-                        ? (activeTab === "girls"
-                          ? "linear-gradient(135deg,#ff36ba25 60%,#fff0)"
-                          : "linear-gradient(135deg,#7e47f730 60%,#fff0)")
+                        ? "linear-gradient(135deg,#ff36ba25 60%,#fff0)"
                         : "#131025",
                       cursor: "pointer",
                       boxShadow: selected.includes(nft.asset_id) ? "0 4px 16px #444a" : "0 2px 8px #1117",
@@ -242,17 +295,17 @@ export default function StakingModal() {
             }}>
               <button
                 style={{
-                  background: "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)",
+                  background: isUnstakeMode ? "#f43f5e" : "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)",
                   color: "#fff", border: "none", borderRadius: 10,
                   fontSize: 17, fontWeight: "bold", padding: "11px 32px",
                   cursor: selected.length === 0 || loading ? "not-allowed" : "pointer",
                   opacity: selected.length === 0 || loading ? 0.65 : 1,
                   boxShadow: "0 2px 12px #7e47f799"
                 }}
-                onClick={handleStake}
+                onClick={isUnstakeMode ? handleUnstakeConfirmed : handleStake}
                 disabled={selected.length === 0 || loading}
               >
-                Stakear seleccionados
+                {isUnstakeMode ? "Unstake seleccionados" : "Stakear seleccionados"}
               </button>
             </div>
           </div>
