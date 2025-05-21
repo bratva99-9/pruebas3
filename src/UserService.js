@@ -128,6 +128,40 @@ export class User {
     if (!this.session || !this.authName) throw new Error("No wallet session activa.");
     if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay NFTs seleccionados.");
 
+    const response = await this.session.rpc.get_table_rows({
+      code: 'nightclubapp',
+      scope: 'nightclubapp',
+      table: 'users',
+      lower_bound: this.authName,
+      upper_bound: this.authName,
+      limit: 1
+    });
+
+    const registered = response.rows.length > 0 && response.rows[0].user === this.authName;
+
+    if (!registered) {
+      await this.session.signTransaction(
+        {
+          actions: [{
+            account: 'nightclubapp',
+            name: 'regnewuser',
+            authorization: [{
+              actor: this.authName,
+              permission: 'active'
+            }],
+            data: {
+              user: this.authName,
+              referrer: this.authName
+            }
+          }]
+        },
+        {
+          blocksBehind: 3,
+          expireSeconds: 60
+        }
+      );
+    }
+
     const actions = [{
       account: "atomicassets",
       name: "transfer",
@@ -137,16 +171,13 @@ export class User {
       }],
       data: {
         from: this.authName,
-        to: "nightclub.gm",
+        to: "nightclubapp", // ✅ nuevo destino correcto
         asset_ids: asset_ids,
-        memo: "" // Memo vacío
+        memo: ""
       }
     }];
 
-    return this.session.signTransaction(
-      { actions },
-      { blocksBehind: 3, expireSeconds: 60 }
-    );
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
   init() {
