@@ -20,45 +20,61 @@ export default function StakingModal() {
   const wallet = UserService.isLogged() ? UserService.getName() : null;
 
   useEffect(() => {
-    if (!modalOpen || !wallet || isUnstakeMode) return;
+    if (!modalOpen || !wallet) return;
 
-    setMensaje("Cargando NFTs...");
-    setLoading(true);
-    fetch(
-      `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=${COLLECTION}&owner=${wallet}&schema_name=${activeTab}&limit=100`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        setNfts(Array.isArray(json.data) ? json.data : []);
+    const fetchNFTs = async () => {
+      setMensaje("Cargando NFTs...");
+      setLoading(true);
+
+      try {
+        if (isUnstakeMode) {
+          const rpc = new (require("eosjs")).JsonRpc("https://wax.greymass.com");
+          const res = await rpc.get_table_rows({
+            json: true,
+            code: "nightclubapp",
+            scope: "nightclubapp",
+            table: "assets",
+            limit: 1000,
+          });
+          const userNFTs = res.rows.filter(r => r.owner === wallet && r.schema_name === activeTab);
+          const assets = await Promise.all(userNFTs.map(n =>
+            fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${n.asset_id}`)
+              .then(r => r.json()).then(r => r.data)
+          ));
+          setNfts(assets);
+        } else {
+          const res = await fetch(
+            `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=${COLLECTION}&owner=${wallet}&schema_name=${activeTab}&limit=100`
+          ).then(res => res.json());
+          setNfts(Array.isArray(res.data) ? res.data : []);
+        }
         setMensaje("");
-      })
-      .catch(() => {
-        setMensaje("Error al cargar tus NFTs");
+      } catch {
+        setMensaje("Error al cargar tus NFTs.");
         setNfts([]);
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNFTs();
   }, [modalOpen, wallet, activeTab, isUnstakeMode]);
 
   const toggleSelect = (assetId) => {
-    setSelected((selected) =>
-      selected.includes(assetId)
-        ? selected.filter((id) => id !== assetId)
-        : [...selected, assetId]
+    setSelected(prev =>
+      prev.includes(assetId) ? prev.filter(id => id !== assetId) : [...prev, assetId]
     );
   };
 
   const handleStake = async () => {
     if (!UserService.isLogged() || selected.length === 0) return;
-    setLoading(true);
     setMensaje("Firmando Staking...");
+    setLoading(true);
     try {
       await UserService.stakeNFTs(selected);
       setMensaje("¡Staking realizado con éxito!");
       setSelected([]);
-      setTimeout(() => {
-        setModalOpen(false);
-        setMensaje("");
-      }, 1700);
+      setTimeout(() => setModalOpen(false), 1700);
     } catch (e) {
       setMensaje("Error al firmar: " + (e.message || e));
     }
@@ -89,53 +105,6 @@ export default function StakingModal() {
     setClaiming(false);
   };
 
-  const openUnstakeModal = async () => {
-    setIsUnstakeMode(true);
-    setModalOpen(true);
-    setActiveTab("girls");
-    setMensaje("Cargando NFTs en staking...");
-    setLoading(true);
-    try {
-      const rpc = new (require('eosjs')).JsonRpc("https://wax.greymass.com");
-      const res = await rpc.get_table_rows({
-        json: true,
-        code: "nightclubapp",
-        scope: "nightclubapp",
-        table: "assets",
-        limit: 1000,
-      });
-      const userNFTs = res.rows.filter(r => r.owner === wallet);
-      const assets = await Promise.all(userNFTs.map(n =>
-        fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${n.asset_id}`)
-          .then(r => r.json()).then(r => r.data)
-      ));
-      setNfts(assets);
-      setMensaje("");
-    } catch (e) {
-      setMensaje("Error al cargar NFTs.");
-      setNfts([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const tabStyle = (tab) => ({
-    padding: "10px 32px",
-    borderRadius: "16px 16px 0 0",
-    border: "none",
-    background: activeTab === tab.key
-      ? `linear-gradient(90deg,${tab.color} 70%,#fff0 100%)`
-      : "#1c1932",
-    color: activeTab === tab.key ? "#fff" : "#c8a0f5",
-    fontWeight: "bold",
-    fontSize: 18,
-    boxShadow: activeTab === tab.key ? "0 2px 16px #0008" : "none",
-    cursor: "pointer",
-    marginRight: 14,
-    outline: "none",
-    transition: "all .19s"
-  });
-
   const mainBtn = (label, color, onClick, disabled = false) => (
     <button
       style={{
@@ -161,15 +130,17 @@ export default function StakingModal() {
 
   return (
     <>
-      <div style={{
-        display: "flex", justifyContent: "center", gap: 24, margin: "42px 0 32px"
-      }}>
+      <div style={{ display: "flex", justifyContent: "center", gap: 24, margin: "42px 0 32px" }}>
         {mainBtn("Staking NFTs", "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)", () => {
           setIsUnstakeMode(false);
           setModalOpen(true);
           setActiveTab("girls");
         }, !wallet)}
-        {mainBtn("Unstake NFTs", "#e11d48", openUnstakeModal, !wallet)}
+        {mainBtn("Unstake NFTs", "#e11d48", () => {
+          setIsUnstakeMode(true);
+          setModalOpen(true);
+          setActiveTab("girls");
+        }, !wallet)}
         {mainBtn("Claim", "linear-gradient(90deg,#5eead4 0%,#3b82f6 100%)", handleClaim, claiming || !wallet)}
       </div>
 
@@ -196,20 +167,36 @@ export default function StakingModal() {
               disabled={loading || claiming}
             >&times;</button>
 
-            {!isUnstakeMode && (
-              <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
-                {SCHEMAS.map(tab =>
-                  <button
-                    key={tab.key}
-                    style={tabStyle(tab)}
-                    onClick={() => { setActiveTab(tab.key); setSelected([]); }}
-                    disabled={activeTab === tab.key || loading}
-                  >
-                    {tab.label}
-                  </button>
-                )}
-              </div>
-            )}
+            <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
+              {SCHEMAS.map(tab =>
+                <button
+                  key={tab.key}
+                  style={{
+                    padding: "10px 32px",
+                    borderRadius: "16px 16px 0 0",
+                    border: "none",
+                    background: activeTab === tab.key
+                      ? `linear-gradient(90deg,${tab.color} 70%,#fff0 100%)`
+                      : "#1c1932",
+                    color: activeTab === tab.key ? "#fff" : "#c8a0f5",
+                    fontWeight: "bold",
+                    fontSize: 18,
+                    boxShadow: activeTab === tab.key ? "0 2px 16px #0008" : "none",
+                    cursor: "pointer",
+                    marginRight: 14,
+                    outline: "none",
+                    transition: "all .19s"
+                  }}
+                  onClick={() => {
+                    setActiveTab(tab.key);
+                    setSelected([]);
+                  }}
+                  disabled={activeTab === tab.key || loading}
+                >
+                  {tab.label}
+                </button>
+              )}
+            </div>
 
             {mensaje && (
               <div style={{
