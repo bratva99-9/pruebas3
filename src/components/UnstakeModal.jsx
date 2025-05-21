@@ -1,70 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { UserService } from "../UserService";
+import { JsonRpc } from "eosjs";
 
 const SCHEMAS = [
   { key: "girls", label: "Girls", color: "#ff36ba" },
   { key: "photos", label: "Photos", color: "#7e47f7" }
 ];
-const COLLECTION = "nightclubnft";
 
-export default function StakingModal() {
+export default function UnstakeModal() {
   const [modalOpen, setModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("girls");
   const [nfts, setNfts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState([]);
   const [mensaje, setMensaje] = useState("");
-  const [claiming, setClaiming] = useState(false);
 
   const wallet = UserService.isLogged() ? UserService.getName() : null;
 
-  const handleStake = async () => {
-    if (!UserService.isLogged() || selected.length === 0) return;
-    setMensaje("Firmando Staking...");
+  const fetchStakedNFTs = async () => {
+    if (!wallet) return;
+    setMensaje("Cargando NFTs en staking...");
     setLoading(true);
     try {
-      await UserService.stakeNFTs(selected);
-      setMensaje("¡Staking realizado con éxito!");
-      setSelected([]);
-      setTimeout(() => setModalOpen(false), 1700);
+      const rpc = new JsonRpc("https://wax.greymass.com");
+      const res = await rpc.get_table_rows({
+        json: true,
+        code: "nightclubapp",
+        scope: "nightclubapp",
+        table: "assets",
+        limit: 1000,
+      });
+      const userNFTs = res.rows.filter(r => r.owner === wallet);
+      const assets = await Promise.all(userNFTs.map(n =>
+        fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${n.asset_id}`)
+          .then(r => r.json()).then(r => r.data)
+      ));
+      setNfts(assets.filter(a => a.schema?.schema_name === activeTab));
+      setMensaje("");
     } catch (e) {
-      setMensaje("Error al firmar: " + (e.message || e));
+      console.error("Error al cargar NFTs en staking:", e);
+      setMensaje("Error al cargar NFTs.");
+      setNfts([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
-
-  const handleClaim = async () => {
-    setClaiming(true);
-    setMensaje("Procesando claim...");
-    try {
-      await UserService.claimRewards();
-      setMensaje("¡Claim exitoso!");
-    } catch (e) {
-      setMensaje("Error al reclamar: " + (e.message || e));
-    }
-    setClaiming(false);
   };
 
   useEffect(() => {
-    if (!modalOpen || !wallet) return;
-    const fetchNFTs = async () => {
-      setMensaje("Cargando NFTs...");
-      setLoading(true);
-      try {
-        const res = await fetch(
-          `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=${COLLECTION}&owner=${wallet}&schema_name=${activeTab}&limit=100`
-        ).then(res => res.json());
-        setNfts(Array.isArray(res.data) ? res.data : []);
-        setMensaje("");
-      } catch {
-        setMensaje("Error al cargar tus NFTs.");
-        setNfts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchNFTs();
-  }, [modalOpen, wallet, activeTab]);
+    if (modalOpen) fetchStakedNFTs();
+  }, [modalOpen, activeTab]);
 
   const toggleSelect = (assetId) => {
     setSelected(prev =>
@@ -72,34 +56,35 @@ export default function StakingModal() {
     );
   };
 
+  const handleUnstake = async () => {
+    if (!UserService.isLogged() || selected.length === 0) return;
+    setMensaje("Firmando Unstake...");
+    try {
+      await UserService.unstakeNFTs(selected);
+      setMensaje("¡Unstake realizado!");
+      setTimeout(() => {
+        setModalOpen(false);
+        setSelected([]);
+        setMensaje("");
+      }, 1700);
+    } catch (e) {
+      setMensaje("Error al firmar: " + (e.message || e));
+    }
+  };
+
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "center", gap: 24, margin: "42px 0 32px" }}>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
         <button
-          style={{
-            background: "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)",
-            color: "#fff", fontWeight: "bold", fontSize: 18, border: "none",
-            borderRadius: 14, padding: "12px 38px", margin: "0 16px",
-            boxShadow: "0 4px 24px #0002", cursor: !wallet ? "not-allowed" : "pointer",
-            opacity: !wallet ? 0.6 : 1
-          }}
           onClick={() => { setModalOpen(true); setActiveTab("girls"); }}
           disabled={!wallet}
-        >
-          Staking NFTs
-        </button>
-        <button
           style={{
-            background: "linear-gradient(90deg,#5eead4 0%,#3b82f6 100%)",
-            color: "#fff", fontWeight: "bold", fontSize: 18, border: "none",
-            borderRadius: 14, padding: "12px 38px", margin: "0 16px",
-            boxShadow: "0 4px 24px #0002", cursor: claiming || !wallet ? "not-allowed" : "pointer",
-            opacity: claiming || !wallet ? 0.6 : 1
+            background: "#f43f5e", color: "#fff", fontWeight: "bold", fontSize: 18,
+            border: "none", borderRadius: 14, padding: "12px 38px",
+            cursor: !wallet ? "not-allowed" : "pointer", opacity: !wallet ? 0.6 : 1
           }}
-          onClick={handleClaim}
-          disabled={claiming || !wallet}
         >
-          Claim
+          Unstake NFTs
         </button>
       </div>
 
@@ -116,9 +101,10 @@ export default function StakingModal() {
               onClick={() => { setModalOpen(false); setSelected([]); setMensaje(""); }}
               style={{
                 position: "absolute", top: 16, right: 20, fontSize: 33, color: "#cfc",
-                background: "none", border: "none", cursor: "pointer", fontWeight: "bold", lineHeight: "1"
+                background: "none", border: "none", cursor: "pointer",
+                fontWeight: "bold", lineHeight: "1"
               }}
-              disabled={loading || claiming}
+              disabled={loading}
             >&times;</button>
 
             <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
@@ -126,14 +112,16 @@ export default function StakingModal() {
                 <button
                   key={tab.key}
                   style={{
-                    padding: "10px 32px", borderRadius: "16px 16px 0 0", border: "none",
+                    padding: "10px 32px",
+                    borderRadius: "16px 16px 0 0",
+                    border: "none",
                     background: activeTab === tab.key
                       ? `linear-gradient(90deg,${tab.color} 70%,#fff0 100%)`
                       : "#1c1932",
                     color: activeTab === tab.key ? "#fff" : "#c8a0f5",
                     fontWeight: "bold", fontSize: 18,
                     boxShadow: activeTab === tab.key ? "0 2px 16px #0008" : "none",
-                    cursor: "pointer", marginRight: 14, outline: "none"
+                    cursor: "pointer", marginRight: 14
                   }}
                   onClick={() => { setActiveTab(tab.key); setSelected([]); }}
                   disabled={activeTab === tab.key || loading}
@@ -158,7 +146,7 @@ export default function StakingModal() {
               {loading ? (
                 <div style={{ color: "#fff" }}>Cargando NFTs...</div>
               ) : nfts.length === 0 ? (
-                <div style={{ color: "#eee" }}>No tienes NFTs en este grupo.</div>
+                <div style={{ color: "#eee" }}>No tienes NFTs en staking.</div>
               ) : nfts.map(nft => {
                 let videoSrc = nft.data?.video || nft.data?.img;
                 if (videoSrc?.startsWith("Qm")) {
@@ -171,7 +159,7 @@ export default function StakingModal() {
                     onClick={() => !loading && toggleSelect(nft.asset_id)}
                     style={{
                       border: selected.includes(nft.asset_id)
-                        ? "3px solid #ff36ba" : "2px solid #252241",
+                        ? "3px solid #f43f5e" : "2px solid #252241",
                       borderRadius: 22, background: "#131025",
                       boxShadow: selected.includes(nft.asset_id)
                         ? "0 4px 16px #444a" : "0 2px 8px #1117",
@@ -195,18 +183,16 @@ export default function StakingModal() {
 
             <div style={{ display: "flex", justifyContent: "center", marginTop: 26 }}>
               <button
-                style={{
-                  background: "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)",
-                  color: "#fff", border: "none", borderRadius: 10,
-                  fontSize: 17, fontWeight: "bold", padding: "11px 32px",
-                  cursor: selected.length === 0 || loading ? "not-allowed" : "pointer",
-                  opacity: selected.length === 0 || loading ? 0.65 : 1,
-                  boxShadow: "0 2px 12px #7e47f799"
-                }}
-                onClick={handleStake}
+                onClick={handleUnstake}
                 disabled={selected.length === 0 || loading}
+                style={{
+                  background: "#f43f5e", color: "#fff", fontWeight: "bold", fontSize: 17,
+                  border: "none", borderRadius: 10, padding: "11px 32px",
+                  cursor: selected.length === 0 || loading ? "not-allowed" : "pointer",
+                  opacity: selected.length === 0 || loading ? 0.6 : 1
+                }}
               >
-                Stakear seleccionados
+                Unstake seleccionados
               </button>
             </div>
           </div>

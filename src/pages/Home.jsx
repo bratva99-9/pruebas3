@@ -1,5 +1,6 @@
 import React from "react";
 import StakingModal from "../components/StakingModal";
+import UnstakeModal from "../components/UnstakeModal";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
         Night Club Game
       </h1>
       <StakingModal />
+      <UnstakeModal />
       {/* Puedes agregar aquí otros componentes o información */}
     </div>
   );
