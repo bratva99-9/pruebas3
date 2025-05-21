@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { UserService } from "../UserService";
 
-// Utilidad para obtener la url de video o imagen
 const getMediaUrl = (nft) => {
   const vidHash = nft.data?.video;
   const imgHash = nft.data?.img;
@@ -10,7 +9,6 @@ const getMediaUrl = (nft) => {
   return "";
 };
 
-// Modal simple
 function Modal({ open, onClose, children }) {
   if (!open) return null;
   return (
@@ -38,7 +36,7 @@ function Modal({ open, onClose, children }) {
   );
 }
 
-const COLLECTION = "nightclubnft"; // Mainnet collection
+const COLLECTION = "nightclubnft";
 const STAKE_SCHEMAS = ["girls", "photos"];
 
 export default function NFTGallery() {
@@ -48,7 +46,6 @@ export default function NFTGallery() {
   const [selected, setSelected] = useState([]);
   const [msg, setMsg] = useState("");
 
-  // Cargar NFTs del usuario (solo los schemas válidos)
   useEffect(() => {
     const fetchNFTs = async () => {
       setLoading(true);
@@ -58,7 +55,6 @@ export default function NFTGallery() {
         return;
       }
       try {
-        // Busca ambos schemas, los une en un solo array
         const queries = STAKE_SCHEMAS.map(schema =>
           fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${UserService.authName}&collection_name=${COLLECTION}&schema_name=${schema}&limit=100`)
             .then(res => res.json())
@@ -74,26 +70,27 @@ export default function NFTGallery() {
     fetchNFTs();
   }, [UserService.authName, showStaking]);
 
-  // Seleccionar/deseleccionar
   const toggleSelect = (asset_id) => {
     setSelected(prev =>
       prev.includes(asset_id) ? prev.filter(id => id !== asset_id) : [...prev, asset_id]
     );
   };
 
-  // Stakear los seleccionados
   const stakeSelectedNFTs = async () => {
     if (!UserService.session) return alert("Debes iniciar sesión.");
     if (selected.length === 0) return alert("Selecciona al menos un NFT.");
     setMsg("Firmando transacción...");
     try {
-      await UserService.stakeNFTs(selected);
-      setMsg("¡NFTs enviados a staking exitosamente! 🎉");
+      if (showStaking === "unstake") {
+        await UserService.unstakeNFTs(selected);
+      } else {
+        await UserService.stakeNFTs(selected);
+      }
+      setMsg("¡NFTs procesados exitosamente!");
       setShowStaking(false);
       setSelected([]);
       setTimeout(() => setMsg(""), 3000);
 
-      // Recarga NFTs desde mainnet
       const queries = STAKE_SCHEMAS.map(schema =>
         fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${UserService.authName}&collection_name=${COLLECTION}&schema_name=${schema}&limit=100`)
           .then(res => res.json())
@@ -102,13 +99,12 @@ export default function NFTGallery() {
       const data = results.flatMap(r => Array.isArray(r.data) ? r.data : []);
       setNfts(data);
     } catch (err) {
-      setMsg("Error al stakear: " + (err.message || err));
+      setMsg("Error: " + (err.message || err));
     }
   };
 
   return (
     <div style={{padding: 0, maxWidth: 1200, margin: "0 auto"}}>
-      {/* HEADER */}
       <div style={{
         position: "sticky", top: 0, zIndex: 100, background: "rgba(24,20,36,0.95)",
         display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -120,7 +116,6 @@ export default function NFTGallery() {
         </div>
         <div style={{color:"#ff36ba", fontWeight:"bold", fontSize:18}}>
           {UserService.authName && <span>{UserService.authName}</span>}
-          {/* Puedes mostrar balances aquí si quieres */}
         </div>
         <button
           style={{
@@ -133,15 +128,36 @@ export default function NFTGallery() {
         >
           <span role="img" aria-label="stake">💎</span> Staking NFTs
         </button>
+        <button
+          style={{
+            background: "#2563eb",
+            color: "#fff",
+            border: "none",
+            borderRadius: 10,
+            padding: "10px 20px",
+            fontWeight: "bold",
+            fontSize: 16,
+            cursor: "pointer",
+            marginLeft: 16
+          }}
+          onClick={async () => {
+            try {
+              await UserService.claimRewards();
+              alert("¡Recompensas reclamadas!");
+            } catch (err) {
+              alert("Error al reclamar: " + (err.message || err));
+            }
+          }}
+        >
+          Claim
+        </button>
       </div>
 
-      {/* MENSAJE DE FEEDBACK */}
       {msg && <div style={{
         margin: "28px auto 0", maxWidth: 440, padding: "16px 24px", borderRadius: 14,
         background: "#251638", color: "#fff", fontSize: 18, textAlign: "center", boxShadow:"0 2px 14px #0006"
       }}>{msg}</div>}
 
-      {/* GALERÍA */}
       <div style={{
         marginTop: 40,
         display: "grid",
@@ -163,26 +179,18 @@ export default function NFTGallery() {
                 transition: "transform .18s,box-shadow .22s",
                 border: "3px solid #232848"
               }}
-              onMouseEnter={e => e.currentTarget.style.boxShadow = "0 8px 30px #ff36ba77"}
-              onMouseLeave={e => e.currentTarget.style.boxShadow = "0 6px 20px #0008"}
               onClick={() => setShowStaking(true)}
             >
               {mediaUrl.endsWith('.mp4') || mediaUrl.includes('video')
                 ? <video
                     src={mediaUrl}
-                    style={{
-                      width: "100%", height: 310, objectFit: "contain",
-                      background: "#19191d", borderRadius: "0 0 15px 15px", display:"block"
-                    }}
+                    style={{ width: "100%", height: 310, objectFit: "contain", background: "#19191d", borderRadius: "0 0 15px 15px" }}
                     autoPlay loop muted playsInline
                   />
                 : <img
                     src={mediaUrl}
                     alt="NFT"
-                    style={{
-                      width: "100%", height: 310, objectFit: "cover",
-                      background: "#19191d", borderRadius: "0 0 15px 15px", display:"block"
-                    }}
+                    style={{ width: "100%", height: 310, objectFit: "cover", background: "#19191d", borderRadius: "0 0 15px 15px" }}
                   />
               }
             </div>
@@ -190,7 +198,6 @@ export default function NFTGallery() {
         })}
       </div>
 
-      {/* MODAL DE STAKING */}
       <Modal open={showStaking} onClose={() => { setShowStaking(false); setSelected([]); }}>
         <h2 style={{color:"#fff", fontWeight:800, fontSize:24, marginBottom:12, textAlign:"center"}}>Selecciona tus NFTs para staking</h2>
         <div style={{
@@ -216,20 +223,13 @@ export default function NFTGallery() {
                   {mediaUrl.endsWith('.mp4') || mediaUrl.includes('video')
                     ? <video
                         src={mediaUrl}
-                        style={{
-                          width:"100%", height:105, borderRadius:10, background:"#19191d",
-                          boxShadow: selected.includes(nft.asset_id) ? "0 0 8px #fff5" : undefined
-                        }}
+                        style={{ width:"100%", height:105, borderRadius:10, background:"#19191d" }}
                         autoPlay loop muted playsInline
                       />
                     : <img
                         src={mediaUrl}
                         alt="NFT"
-                        style={{
-                          width:"100%", height:105, borderRadius:10, background:"#19191d",
-                          boxShadow: selected.includes(nft.asset_id) ? "0 0 8px #fff5" : undefined,
-                          objectFit: "cover"
-                        }}
+                        style={{ width:"100%", height:105, borderRadius:10, background:"#19191d", objectFit: "cover" }}
                       />
                   }
                   <input
@@ -253,7 +253,7 @@ export default function NFTGallery() {
             }}
             onClick={stakeSelectedNFTs}
             disabled={selected.length === 0}
-          >Stakear seleccionados</button>
+          >Procesar seleccionados</button>
           <button
             style={{
               background: "#666", color: "#fff", border: "none",

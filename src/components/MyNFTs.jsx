@@ -20,13 +20,11 @@ const MyNFTs = () => {
         return;
       }
       try {
-        // Trae solo schemas válidos (ambos)
         const queries = STAKE_SCHEMAS.map(
           schema => fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${UserService.authName}&collection_name=${COLLECTION}&schema_name=${schema}&limit=100`)
             .then(res => res.json())
         );
         const results = await Promise.all(queries);
-        // Une y filtra las respuestas
         const nftsData = results.flatMap(r => Array.isArray(r.data) ? r.data : []);
         setNfts(nftsData);
       } catch (err) {
@@ -37,23 +35,24 @@ const MyNFTs = () => {
     fetchNFTs();
   }, [UserService.authName]);
 
-  // Maneja selección/deselección de NFTs
   const toggleSelect = (asset_id) => {
     setSelected(prev =>
       prev.includes(asset_id) ? prev.filter(id => id !== asset_id) : [...prev, asset_id]
     );
   };
 
-  // Stakear NFTs seleccionados
   const stakeSelectedNFTs = async () => {
     if (!UserService.session) return alert("Debes iniciar sesión.");
     if (selected.length === 0) return alert("Selecciona al menos un NFT.");
     try {
-      await UserService.stakeNFTs(selected); // Ahora la lógica es centralizada y correcta para mainnet
-      alert(`NFT${selected.length > 1 ? 's' : ''} enviados a staking.`);
+      if (showStaking === "unstake") {
+        await UserService.unstakeNFTs(selected);
+      } else {
+        await UserService.stakeNFTs(selected);
+      }
+      alert(`Operación realizada correctamente.`);
       setShowStaking(false);
       setSelected([]);
-      // Recarga la lista de NFTs
       const queries = STAKE_SCHEMAS.map(
         schema => fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${UserService.authName}&collection_name=${COLLECTION}&schema_name=${schema}&limit=100`)
           .then(res => res.json())
@@ -62,7 +61,7 @@ const MyNFTs = () => {
       const nftsData = results.flatMap(r => Array.isArray(r.data) ? r.data : []);
       setNfts(nftsData);
     } catch (err) {
-      alert("Error al enviar los NFTs: " + (err.message || err));
+      alert("Error al realizar la operación: " + (err.message || err));
     }
   };
 
@@ -81,13 +80,36 @@ const MyNFTs = () => {
           fontSize: 18,
           cursor: "pointer"
         }}
-        onClick={() => setShowStaking(!showStaking)}
+        onClick={() => setShowStaking(showStaking === "unstake" ? false : "unstake")}
         disabled={nfts.length === 0}
       >
-        Staking NFTs
+        {showStaking === "unstake" ? "Cancelar" : "Unstake NFTs"}
       </button>
 
-      {/* Modal/sección de staking */}
+      <button
+        style={{
+          margin: "20px 10px",
+          padding: "10px 25px",
+          background: "#10b981",
+          color: "#fff",
+          border: "none",
+          borderRadius: 12,
+          fontWeight: "bold",
+          fontSize: 18,
+          cursor: "pointer"
+        }}
+        onClick={async () => {
+          try {
+            await UserService.claimRewards();
+            alert("¡Recompensas reclamadas!");
+          } catch (err) {
+            alert("Error al reclamar: " + (err.message || err));
+          }
+        }}
+      >
+        Reclamar recompensas
+      </button>
+
       {showStaking && (
         <div style={{
           background: "#1a133a",
@@ -97,9 +119,9 @@ const MyNFTs = () => {
           marginBottom: 20,
           boxShadow: "0 6px 24px #000b",
         }}>
-          <h3 style={{color:"#fff"}}>Selecciona los NFTs para Staking</h3>
+          <h3 style={{color:"#fff"}}>Selecciona los NFTs para {showStaking === "unstake" ? "Unstake" : "Staking"}</h3>
           {loading ? <div>Cargando NFTs...</div> :
-            nfts.length === 0 ? <div>No tienes NFTs disponibles para staking.</div> :
+            nfts.length === 0 ? <div>No tienes NFTs disponibles.</div> :
             <div style={{display: 'flex', flexWrap: 'wrap', gap: 28}}>
               {nfts.map(nft => {
                 const vidHash = nft.data && nft.data.video;
@@ -159,7 +181,7 @@ const MyNFTs = () => {
             onClick={stakeSelectedNFTs}
             disabled={selected.length === 0}
           >
-            Stakear seleccionados
+            {showStaking === "unstake" ? "Unstakear seleccionados" : "Stakear seleccionados"}
           </button>
           <button
             style={{
@@ -180,44 +202,6 @@ const MyNFTs = () => {
           </button>
         </div>
       )}
-
-      {/* Galería sin el botón de staking en cada carta */}
-      <div style={{display:'flex', flexWrap:'wrap', gap:28, marginTop:12}}>
-        {nfts.map(nft => {
-          const vidHash = nft.data && nft.data.video;
-          const imgHash = nft.data && nft.data.img;
-          const fileUrl =
-            vidHash && vidHash.length > 10
-              ? (vidHash.startsWith("http") ? vidHash : `https://ipfs.io/ipfs/${vidHash}`)
-              : (imgHash && imgHash.length > 10
-                  ? (imgHash.startsWith("http") ? imgHash : `https://ipfs.io/ipfs/${imgHash}`)
-                  : '');
-
-          return (
-            <div
-              key={nft.asset_id}
-              style={{
-                width: 200, borderRadius: 16,
-                background: "#232848",
-                padding: 8, boxShadow: "0 2px 12px #000a", display:"flex", flexDirection:"column", alignItems:"center"
-              }}
-            >
-              {fileUrl.endsWith('.mp4') || fileUrl.includes('video')
-                ? <video
-                    src={fileUrl}
-                    style={{width:"100%", height:270, borderRadius:12, background:"#19191d"}}
-                    autoPlay loop muted playsInline
-                  />
-                : <img
-                    src={fileUrl}
-                    alt="NFT"
-                    style={{width:"100%", height:270, borderRadius:12, background:"#19191d", objectFit:'cover'}}
-                  />
-              }
-            </div>
-          );
-        })}
-      </div>
     </div>
   );
 };

@@ -18,7 +18,6 @@ export default function StakingModal({ isUnstake = false }) {
 
   const wallet = UserService.isLogged() ? UserService.getName() : null;
 
-  // Cargar NFTs por schema
   useEffect(() => {
     if (modalOpen && wallet) {
       setMensaje("Cargando NFTs...");
@@ -39,7 +38,6 @@ export default function StakingModal({ isUnstake = false }) {
     }
   }, [modalOpen, wallet, activeTab]);
 
-  // Selección visual, solo borde
   const toggleSelect = (assetId) => {
     setSelected((selected) =>
       selected.includes(assetId)
@@ -48,13 +46,16 @@ export default function StakingModal({ isUnstake = false }) {
     );
   };
 
-  // Stake/Unstake real: transacción a nightclub.gm sin memo
   const handleStakeOrUnstake = async () => {
     if (!UserService.isLogged() || selected.length === 0) return;
     setLoading(true);
     setMensaje(isUnstake ? "Firmando Unstake..." : "Firmando Staking...");
     try {
-      await UserService.stakeNFTs(selected, ""); // Sin memo
+      if (isUnstake) {
+        await UserService.unstakeNFTs(selected);
+      } else {
+        await UserService.stakeNFTs(selected);
+      }
       setMensaje(isUnstake ? "¡Unstake realizado con éxito!" : "¡Staking realizado con éxito!");
       setSelected([]);
       setTimeout(() => {
@@ -67,22 +68,19 @@ export default function StakingModal({ isUnstake = false }) {
     setLoading(false);
   };
 
-  // Claim (placeholder, no implementado)
   const handleClaim = async () => {
     setClaiming(true);
-    setMensaje("Procesando claim... [lógica por implementar]");
-    setTimeout(() => {
-      setMensaje("Función de Claim no implementada aún.");
-      setClaiming(false);
-    }, 1500);
-    setTimeout(() => {
-      setMensaje("Función de Claim no implementada aún.");
-      setClaiming(false);
-    }, 1500);
+    setMensaje("Procesando claim...");
+    try {
+      await UserService.claimRewards();
+      setMensaje("¡Claim exitoso!");
+    } catch (e) {
+      setMensaje("Error al reclamar: " + (e.message || e));
+    }
+    setClaiming(false);
   };
 
-  // --- ESTILOS ---
-  const cardHeight = 210; // px (ajusta este tamaño a gusto)
+  const cardHeight = 210;
 
   const tabStyle = (tab) => ({
     padding: "10px 32px",
@@ -101,7 +99,6 @@ export default function StakingModal({ isUnstake = false }) {
     transition: "all .19s"
   });
 
-  // --- BOTONES PRINCIPALES ---
   const mainBtn = (label, color, onClick, disabled = false) => (
     <button
       style={{
@@ -125,10 +122,8 @@ export default function StakingModal({ isUnstake = false }) {
     </button>
   );
 
-  // --- RENDER ---
   return (
     <>
-      {/* Botones en Home */}
       <div style={{
         display: "flex", justifyContent: "center", gap: 24, margin: "42px 0 32px"
       }}>
@@ -137,7 +132,6 @@ export default function StakingModal({ isUnstake = false }) {
         {mainBtn("Claim", "linear-gradient(90deg,#5eead4 0%,#3b82f6 100%)", handleClaim, claiming || !wallet)}
       </div>
 
-      {/* Modal */}
       {modalOpen && (
         <div style={{
           position: "fixed", inset: 0, zIndex: 99,
@@ -147,7 +141,6 @@ export default function StakingModal({ isUnstake = false }) {
             background: "#201b2c", borderRadius: 24, minWidth: 380, minHeight: 300,
             boxShadow: "0 10px 36px #000a", padding: 32, position: "relative", maxWidth: 700, width: "95vw"
           }}>
-            {/* Cerrar */}
             <button
               onClick={() => { setModalOpen(false); setSelected([]); setMensaje(""); }}
               style={{
@@ -156,7 +149,7 @@ export default function StakingModal({ isUnstake = false }) {
               }}
               disabled={loading || claiming}
             >&times;</button>
-            {/* Tabs */}
+
             <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
               {SCHEMAS.map(tab =>
                 <button
@@ -169,7 +162,7 @@ export default function StakingModal({ isUnstake = false }) {
                 </button>
               )}
             </div>
-            {/* Mensaje de feedback */}
+
             {mensaje && (
               <div style={{
                 background: "#3b2548",
@@ -184,7 +177,6 @@ export default function StakingModal({ isUnstake = false }) {
               }}>{mensaje}</div>
             )}
 
-            {/* Galería NFTs */}
             <div style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(135px,1fr))",
@@ -251,7 +243,7 @@ export default function StakingModal({ isUnstake = false }) {
                 );
               })}
             </div>
-            {/* Botón stake/unstake */}
+
             <div style={{
               display: "flex", justifyContent: "center", marginTop: 26
             }}>

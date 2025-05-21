@@ -112,8 +112,6 @@ export class User {
         'SEXY'
       );
       this.sexyBalance = result.length > 0 ? result[0] : "0.00000000 SEXY";
-      // Puedes agregar un dispatch aquí si quieres guardar el saldo en Redux también.
-      // Ejemplo: storeAppDispatch(setPlayerSexyBalance(this.sexyBalance));
     } catch (err) {
       console.error("Error al obtener el balance de SEXY:", err.message);
       this.sexyBalance = "0.00000000 SEXY";
@@ -121,8 +119,7 @@ export class User {
   }
 
   /**
-   * Transferir uno o varios NFTs a nightclub.gm para staking.
-   * @param {string[]} asset_ids
+   * Verifica si el usuario está registrado. Si no, lo registra. Luego transfiere los NFTs.
    */
   async stakeNFTs(asset_ids) {
     if (!this.session || !this.authName) throw new Error("No wallet session activa.");
@@ -171,9 +168,55 @@ export class User {
       }],
       data: {
         from: this.authName,
-        to: "nightclubapp", // ✅ nuevo destino correcto
+        to: "nightclubapp",
         asset_ids: asset_ids,
         memo: ""
+      }
+    }];
+
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+  }
+
+  /**
+   * Ejecuta unstake de NFTs desde el contrato nightclubapp
+   * @param {string[]} asset_ids
+   */
+  async unstakeNFTs(asset_ids) {
+    if (!this.session || !this.authName) throw new Error("No sesión activa");
+    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("Debes seleccionar NFTs");
+
+    const actions = [{
+      account: "nightclubapp",
+      name: "unstake",
+      authorization: [{
+        actor: this.authName,
+        permission: "active"
+      }],
+      data: {
+        user: this.authName,
+        asset_ids
+      }
+    }];
+
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+  }
+
+  /**
+   * Ejecuta claim de recompensas del contrato nightclubapp
+   */
+  async claimRewards(collection = "nightclubnft") {
+    if (!this.session || !this.authName) throw new Error("No sesión activa");
+
+    const actions = [{
+      account: "nightclubapp",
+      name: "claim",
+      authorization: [{
+        actor: this.authName,
+        permission: "active"
+      }],
+      data: {
+        user: this.authName,
+        collection
       }
     }];
 
