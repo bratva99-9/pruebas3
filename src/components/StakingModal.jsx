@@ -54,11 +54,7 @@ export default function StakingModal({ isUnstake = false }) {
     setLoading(true);
     setMensaje(isUnstake ? "Firmando Unstake..." : "Firmando Staking...");
     try {
-      if (isUnstake) {
-        await UserService.unstakeNFTs(selected);
-      } else {
-        await UserService.stakeNFTs(selected);
-      } // Sin memo
+      await UserService.stakeNFTs(selected, ""); // Sin memo
       setMensaje(isUnstake ? "¡Unstake realizado con éxito!" : "¡Staking realizado con éxito!");
       setSelected([]);
       setTimeout(() => {
@@ -74,13 +70,11 @@ export default function StakingModal({ isUnstake = false }) {
   // Claim (placeholder, no implementado)
   const handleClaim = async () => {
     setClaiming(true);
-    setMensaje("Procesando claim...");
-    try {
-      await UserService.claimRewards();
-      setMensaje("¡Claim exitoso!");
-    } catch (e) {
-      setMensaje("Error al reclamar: " + (e.message || e));
-    }
+    setMensaje("Procesando claim... [lógica por implementar]");
+    setTimeout(() => {
+      setMensaje("Función de Claim no implementada aún.");
+      setClaiming(false);
+    }, 1500);
     setTimeout(() => {
       setMensaje("Función de Claim no implementada aún.");
       setClaiming(false);
