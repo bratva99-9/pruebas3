@@ -32,15 +32,30 @@ export default function UnstakeModal() {
           table: "assets",
           limit: 1000,
         });
+
+        if (!Array.isArray(res.rows)) throw new Error("No se pudo cargar la tabla");
+
         const userNFTs = res.rows.filter(r => r.owner === wallet);
-        const assets = await Promise.all(userNFTs.map(n =>
-          fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${n.asset_id}`)
-            .then(r => r.json()).then(r => r.data)
-        ));
-        setNfts(assets.filter(a => a.schema?.schema_name === activeTab));
+        if (userNFTs.length === 0) {
+          setMensaje("No tienes NFTs en staking.");
+          setNfts([]);
+          return;
+        }
+
+        const assets = await Promise.all(userNFTs.map(async n => {
+          try {
+            const r = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${n.asset_id}`);
+            const json = await r.json();
+            return json?.data || null;
+          } catch {
+            return null;
+          }
+        }));
+
+        setNfts(assets.filter(a => a?.schema?.schema_name === activeTab));
         setMensaje("");
       } catch (e) {
-        console.error("Error al cargar NFTs en staking:", e);
+        console.error("Error cargando NFTs:", e);
         setMensaje("Error al cargar NFTs.");
         setNfts([]);
       } finally {
@@ -99,14 +114,20 @@ export default function UnstakeModal() {
             boxShadow: "0 10px 36px #000a", padding: 32, position: "relative", maxWidth: 700, width: "95vw"
           }}>
             <button
-              onClick={() => { setModalOpen(false); setSelected([]); setMensaje(""); }}
+              onClick={() => {
+                setModalOpen(false);
+                setSelected([]);
+                setMensaje("");
+                setLoading(false);
+              }}
               style={{
                 position: "absolute", top: 16, right: 20, fontSize: 33, color: "#cfc",
                 background: "none", border: "none", cursor: "pointer",
                 fontWeight: "bold", lineHeight: "1"
               }}
-              disabled={loading}
-            >&times;</button>
+            >
+              &times;
+            </button>
 
             <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
               {SCHEMAS.map(tab =>
