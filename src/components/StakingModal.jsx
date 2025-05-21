@@ -7,7 +7,7 @@ const SCHEMAS = [
 ];
 const COLLECTION = "nightclubnft";
 
-export default function StakingModal({ isUnstake = false }) {
+export default function StakingModal() {
   const [modalOpen, setModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("girls");
   const [nfts, setNfts] = useState([]);
@@ -46,17 +46,13 @@ export default function StakingModal({ isUnstake = false }) {
     );
   };
 
-  const handleStakeOrUnstake = async () => {
+  const handleStake = async () => {
     if (!UserService.isLogged() || selected.length === 0) return;
     setLoading(true);
-    setMensaje(isUnstake ? "Firmando Unstake..." : "Firmando Staking...");
+    setMensaje("Firmando Staking...");
     try {
-      if (isUnstake) {
-        await UserService.unstakeNFTs(selected);
-      } else {
-        await UserService.stakeNFTs(selected);
-      }
-      setMensaje(isUnstake ? "¡Unstake realizado con éxito!" : "¡Staking realizado con éxito!");
+      await UserService.stakeNFTs(selected);
+      setMensaje("¡Staking realizado con éxito!");
       setSelected([]);
       setTimeout(() => {
         setModalOpen(false);
@@ -79,8 +75,6 @@ export default function StakingModal({ isUnstake = false }) {
     }
     setClaiming(false);
   };
-
-  const cardHeight = 210;
 
   const tabStyle = (tab) => ({
     padding: "10px 32px",
@@ -128,7 +122,6 @@ export default function StakingModal({ isUnstake = false }) {
         display: "flex", justifyContent: "center", gap: 24, margin: "42px 0 32px"
       }}>
         {mainBtn("Staking NFTs", "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)", () => { setModalOpen(true); setActiveTab("girls"); }, !wallet)}
-        {mainBtn("Unstake", "#f43f5e", () => { setModalOpen(true); setActiveTab("girls"); }, !wallet)}
         {mainBtn("Claim", "linear-gradient(90deg,#5eead4 0%,#3b82f6 100%)", handleClaim, claiming || !wallet)}
       </div>
 
@@ -217,7 +210,7 @@ export default function StakingModal({ isUnstake = false }) {
                       boxShadow: selected.includes(nft.asset_id) ? "0 4px 16px #444a" : "0 2px 8px #1117",
                       transition: "all .17s",
                       width: "120px",
-                      height: `${cardHeight}px`,
+                      height: `210px`,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -256,10 +249,10 @@ export default function StakingModal({ isUnstake = false }) {
                   opacity: selected.length === 0 || loading ? 0.65 : 1,
                   boxShadow: "0 2px 12px #7e47f799"
                 }}
-                onClick={handleStakeOrUnstake}
+                onClick={handleStake}
                 disabled={selected.length === 0 || loading}
               >
-                {isUnstake ? "Unstake seleccionados" : "Stakear seleccionados"}
+                Stakear seleccionados
               </button>
             </div>
           </div>

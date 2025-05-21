@@ -92,44 +92,6 @@ const NFTGallery = () => {
         >
           Claim
         </button>
-        <button
-          style={{
-            background: "#e11d48",
-            color: "#fff",
-            border: "none",
-            borderRadius: 10,
-            padding: "10px 20px",
-            fontWeight: "bold",
-            fontSize: 16,
-            cursor: "pointer",
-            marginLeft: 16
-          }}
-          onClick={async () => {
-            if (!UserService.authName) return alert("Conéctate primero.");
-            const rpc = new (require('eosjs')).JsonRpc("https://wax.greymass.com");
-            try {
-              const response = await rpc.get_table_rows({
-                json: true,
-                code: 'nightclubapp',
-                scope: 'nightclubapp',
-                table: 'staked',
-                lower_bound: UserService.authName,
-                upper_bound: UserService.authName,
-                limit: 1
-              });
-              if (response.rows.length === 0) return alert("No tienes NFTs en staking.");
-              const assetIds = response.rows[0].asset_ids;
-              const confirm = window.confirm(`¿Deseas hacer unstake de ${assetIds.length} NFTs?`);
-              if (!confirm) return;
-              await UserService.unstakeNFTs(assetIds);
-              alert("Unstake completado.");
-            } catch (err) {
-              alert("Error al hacer unstake: " + (err.message || err));
-            }
-          }}
-        >
-          Unstake NFTs
-        </button>
       </div>
 
       {msg && <div>{msg}</div>}
