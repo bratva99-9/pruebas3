@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { UserService } from "../UserService";
-import { JsonRpc } from "eosjs";
 
 const COLLECTION = "nightclubnft";
 const STAKE_SCHEMAS = ["girls", "photos"];
-const CONTRACT_ACCOUNT = "nightclubapp";
-const RPC_ENDPOINT = "https://wax.greymass.com";
-
-const rpc = new JsonRpc(RPC_ENDPOINT);
 
 const NFTGallery = () => {
   const [nfts, setNfts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [isUnstaking, setIsUnstaking] = useState(false);
   const [selected, setSelected] = useState([]);
   const [msg, setMsg] = useState("");
 
@@ -27,38 +20,14 @@ const NFTGallery = () => {
       }
 
       try {
-        if (isUnstaking) {
-          const stakedData = await rpc.get_table_rows({
-            json: true,
-            code: CONTRACT_ACCOUNT,
-            scope: CONTRACT_ACCOUNT,
-            table: "staked",
-            lower_bound: UserService.authName,
-            upper_bound: UserService.authName,
-            limit: 1,
-          });
-
-          if (stakedData.rows.length > 0) {
-            const assetIds = stakedData.rows[0].asset_ids;
-            const assetDetailsPromises = assetIds.map((id) =>
-              fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${id}`).then((res) => res.json())
-            );
-            const assetsData = await Promise.all(assetDetailsPromises);
-            const assets = assetsData.map((res) => res.data);
-            setNfts(assets);
-          } else {
-            setNfts([]);
-          }
-        } else {
-          const queries = STAKE_SCHEMAS.map((schema) =>
-            fetch(
-              `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${UserService.authName}&collection_name=${COLLECTION}&schema_name=${schema}&limit=100`
-            ).then((res) => res.json())
-          );
-          const results = await Promise.all(queries);
-          const data = results.flatMap((r) => (Array.isArray(r.data) ? r.data : []));
-          setNfts(data);
-        }
+        const queries = STAKE_SCHEMAS.map((schema) =>
+          fetch(
+            `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${UserService.authName}&collection_name=${COLLECTION}&schema_name=${schema}&limit=100`
+          ).then((res) => res.json())
+        );
+        const results = await Promise.all(queries);
+        const data = results.flatMap((r) => (Array.isArray(r.data) ? r.data : []));
+        setNfts(data);
       } catch (err) {
         console.error("Error al obtener NFTs:", err);
         setNfts([]);
@@ -68,7 +37,7 @@ const NFTGallery = () => {
     };
 
     fetchNFTs();
-  }, [UserService.authName, isUnstaking]);
+  }, [UserService.authName]);
 
   const toggleSelect = (asset_id) => {
     setSelected((prev) =>
@@ -81,14 +50,8 @@ const NFTGallery = () => {
     if (selected.length === 0) return alert("Selecciona al menos un NFT.");
     setMsg("Firmando transacción...");
     try {
-      if (isUnstaking) {
-        await UserService.unstakeNFTs(selected);
-      } else {
-        await UserService.stakeNFTs(selected);
-      }
-      setMsg("¡NFTs procesados exitosamente!");
-      setShowModal(false);
-      setIsUnstaking(false);
+      await UserService.stakeNFTs(selected);
+      setMsg("¡NFTs stakeados exitosamente!");
       setSelected([]);
       setTimeout(() => setMsg(""), 3000);
     } catch (err) {
@@ -100,13 +63,24 @@ const NFTGallery = () => {
     <div style={{ padding: 24 }}>
       <h2>NFT Gallery</h2>
       <div style={{ marginBottom: 16 }}>
-        <button onClick={() => { setIsUnstaking(false); setShowModal(true); }}>
-          Stake NFTs
-        </button>
-        <button onClick={() => { setIsUnstaking(true); setShowModal(true); }}>
-          Unstake NFTs
+        <button
+          onClick={stakeSelectedNFTs}
+          disabled={selected.length === 0}
+        >
+          Stake NFTs seleccionados
         </button>
         <button
+          style={{
+            background: "#2563eb",
+            color: "#fff",
+            border: "none",
+            borderRadius: 10,
+            padding: "10px 20px",
+            fontWeight: "bold",
+            fontSize: 16,
+            cursor: "pointer",
+            marginLeft: 16
+          }}
           onClick={async () => {
             try {
               await UserService.claimRewards();
@@ -117,6 +91,44 @@ const NFTGallery = () => {
           }}
         >
           Claim
+        </button>
+        <button
+          style={{
+            background: "#e11d48",
+            color: "#fff",
+            border: "none",
+            borderRadius: 10,
+            padding: "10px 20px",
+            fontWeight: "bold",
+            fontSize: 16,
+            cursor: "pointer",
+            marginLeft: 16
+          }}
+          onClick={async () => {
+            if (!UserService.authName) return alert("Conéctate primero.");
+            const rpc = new (require('eosjs')).JsonRpc("https://wax.greymass.com");
+            try {
+              const response = await rpc.get_table_rows({
+                json: true,
+                code: 'nightclubapp',
+                scope: 'nightclubapp',
+                table: 'staked',
+                lower_bound: UserService.authName,
+                upper_bound: UserService.authName,
+                limit: 1
+              });
+              if (response.rows.length === 0) return alert("No tienes NFTs en staking.");
+              const assetIds = response.rows[0].asset_ids;
+              const confirm = window.confirm(`¿Deseas hacer unstake de ${assetIds.length} NFTs?`);
+              if (!confirm) return;
+              await UserService.unstakeNFTs(assetIds);
+              alert("Unstake completado.");
+            } catch (err) {
+              alert("Error al hacer unstake: " + (err.message || err));
+            }
+          }}
+        >
+          Unstake NFTs
         </button>
       </div>
 
@@ -149,24 +161,6 @@ const NFTGallery = () => {
               </div>
             );
           })}
-        </div>
-      )}
-
-      {showModal && (
-        <div style={{ marginTop: 24 }}>
-          <h3>{isUnstaking ? "Unstake NFTs seleccionados" : "Stakear NFTs seleccionados"}</h3>
-          <button onClick={stakeSelectedNFTs}>
-            Confirmar
-          </button>
-          <button
-            onClick={() => {
-              setShowModal(false);
-              setIsUnstaking(false);
-              setSelected([]);
-            }}
-          >
-            Cancelar
-          </button>
         </div>
       )}
     </div>
