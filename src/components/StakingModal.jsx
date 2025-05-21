@@ -138,6 +138,50 @@ export default function StakingModal() {
     </button>
   );
 
+
+
+
+
+
+  useEffect(() => {
+  if (!modalOpen || !wallet || !isUnstakeMode) return;
+
+  const fetchStaked = async () => {
+    setMensaje("Cargando NFTs en staking...");
+    setLoading(true);
+    try {
+      const rpc = new (require("eosjs")).JsonRpc("https://wax.greymass.com");
+      const res = await rpc.get_table_rows({
+        json: true,
+        code: "nightclubapp",
+        scope: "nightclubapp",
+        table: "assets",
+        limit: 1000,
+      });
+      const userNFTs = res.rows.filter(r => r.owner === wallet);
+      const assets = await Promise.all(userNFTs.map(n =>
+        fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${n.asset_id}`)
+          .then(r => r.json()).then(r => r.data)
+      ));
+      setNfts(assets.filter(a => a.schema?.schema_name === activeTab));
+      setMensaje("");
+    } catch (e) {
+      setMensaje("Error al cargar NFTs.");
+      setNfts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchStaked();
+}, [activeTab, isUnstakeMode, modalOpen]);
+
+
+
+
+
+
+
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center", gap: 24, margin: "42px 0 32px" }}>
