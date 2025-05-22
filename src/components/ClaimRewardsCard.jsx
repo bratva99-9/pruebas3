@@ -14,11 +14,13 @@ export default function ClaimRewardsCard() {
 
   const fetchPendingRewards = async (user) => {
     setLoading(true);
+    const API = "https://api.wax.alohaeos.com";
+
     try {
       const now = Math.floor(Date.now() / 1000);
 
       const [assetsRes, configRes, templatesRes] = await Promise.all([
-        fetch("https://wax.greymass.com/v1/chain/get_table_rows", {
+        fetch(`${API}/v1/chain/get_table_rows`, {
           method: "POST",
           body: JSON.stringify({
             json: true,
@@ -30,7 +32,7 @@ export default function ClaimRewardsCard() {
           headers: { "Content-Type": "application/json" },
         }).then((res) => res.json()),
 
-        fetch("https://wax.greymass.com/v1/chain/get_table_rows", {
+        fetch(`${API}/v1/chain/get_table_rows`, {
           method: "POST",
           body: JSON.stringify({
             json: true,
@@ -42,7 +44,7 @@ export default function ClaimRewardsCard() {
           headers: { "Content-Type": "application/json" },
         }).then((res) => res.json()),
 
-        fetch("https://wax.greymass.com/v1/chain/get_table_rows", {
+        fetch(`${API}/v1/chain/get_table_rows`, {
           method: "POST",
           body: JSON.stringify({
             json: true,
