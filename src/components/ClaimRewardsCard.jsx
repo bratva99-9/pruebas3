@@ -46,7 +46,7 @@ export default function ClaimRewardsCard() {
       } catch (err) {
         console.warn(`❌ Nodo fallido para '${table}': ${endpoint}`);
       }
-      await sleep(500); // pequeña pausa entre nodos
+      await sleep(500); // espera 500ms entre intentos
     }
     throw new Error(`❌ No se pudo cargar la tabla '${table}' desde ningún nodo.`);
   };
@@ -63,7 +63,9 @@ export default function ClaimRewardsCard() {
       ]);
 
       const config = configRows[0];
-      if (!config || !config.time_unit_length) throw new Error("❌ 'time_unit_length' no definido");
+      if (!config || !config.time_unit_length)
+        throw new Error("❌ 'time_unit_length' no definido");
+
       const unitSeconds = parseInt(config.time_unit_length);
 
       const templatesMap = Object.fromEntries(
@@ -79,12 +81,15 @@ export default function ClaimRewardsCard() {
 
       for (const nft of userAssets) {
         const tplRate = templatesMap[String(nft.template_id)];
+        if (!tplRate) continue;
+
         const elapsed = now - nft.last_claim;
         const periods = Math.floor(elapsed / unitSeconds);
 
-        console.log(`⛏️ NFT ${nft.asset_id}: elapsed=${elapsed}, periods=${periods}, rate=${tplRate}`);
+        console.log(
+          `⛏️ NFT ${nft.asset_id}: elapsed=${elapsed}, periods=${periods}, rate=${tplRate}`
+        );
 
-        if (!tplRate) continue;
         totalReward += periods * tplRate;
       }
 
