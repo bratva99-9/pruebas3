@@ -14,7 +14,7 @@ export default function ClaimRewardsCard() {
 
   const fetchPendingRewards = async (user) => {
     setLoading(true);
-    const API = "https://api.wax.alohaeos.com";
+    const API = "https://wax.pink.gg";
 
     try {
       const now = Math.floor(Date.now() / 1000);
@@ -57,8 +57,11 @@ export default function ClaimRewardsCard() {
         }).then((res) => res.json()),
       ]);
 
+      if (!Array.isArray(configRes.rows) || configRes.rows.length === 0) {
+        throw new Error("❌ No se encontró configuración en la tabla 'config'.");
+      }
+
       const config = configRes.rows[0];
-      if (!config || !config.time_unit_length) throw new Error("Config inválido");
       const unitSeconds = parseInt(config.time_unit_length);
 
       const templatesMap = Object.fromEntries(
@@ -85,7 +88,7 @@ export default function ClaimRewardsCard() {
 
       setPending(totalReward.toFixed(4));
     } catch (err) {
-      console.warn("⚠️ Error al calcular rewards:", err);
+      console.warn("⚠️ Error al calcular rewards:", err.message || err);
       setPending("0.0000");
     }
     setLoading(false);
