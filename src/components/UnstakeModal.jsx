@@ -6,7 +6,7 @@ const SCHEMAS = [
   { key: "girls", label: "Girls", color: "#ff36ba" },
   { key: "photos", label: "Photos", color: "#7e47f7" }
 ];
-const COLLECTION = "nightclubnft";
+
 const rpc = new JsonRpc("https://wax.greymass.com");
 
 export default function UnstakeModal({ onClose }) {
@@ -51,7 +51,7 @@ export default function UnstakeModal({ onClose }) {
     if (modalOpen && wallet) {
       fetchStakedNFTs();
     }
-  }, [modalOpen, fetchStakedNFTs]);
+  }, [modalOpen, fetchStakedNFTs, wallet]);
 
   const handleUnstakeConfirmed = async () => {
     if (!UserService.isLogged() || selected.length === 0) return;
@@ -80,7 +80,7 @@ export default function UnstakeModal({ onClose }) {
     <div style={{ position: "fixed", inset: 0, zIndex: 99, background: "rgba(19,15,24,0.96)", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ background: "#201b2c", borderRadius: 24, minWidth: 380, minHeight: 300, boxShadow: "0 10px 36px #000a", padding: 32, position: "relative", maxWidth: 700, width: "95vw" }}>
         <button onClick={() => { setModalOpen(false); if (onClose) onClose(); }} style={{ position: "absolute", top: 16, right: 20, fontSize: 33, color: "#cfc", background: "none", border: "none", cursor: "pointer", fontWeight: "bold", lineHeight: "1" }}>&times;</button>
-        
+
         <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
           {SCHEMAS.map(tab =>
             <button
