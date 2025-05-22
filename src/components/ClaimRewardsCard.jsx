@@ -46,7 +46,7 @@ export default function ClaimRewardsCard() {
       } catch (err) {
         console.warn(`❌ Nodo fallido para '${table}': ${endpoint}`);
       }
-      await sleep(500); // espera 500ms entre intentos
+      await sleep(500);
     }
     throw new Error(`❌ No se pudo cargar la tabla '${table}' desde ningún nodo.`);
   };
@@ -148,6 +148,7 @@ export default function ClaimRewardsCard() {
       <button
         onClick={handleClaim}
         disabled={loading || pending === "0.0000"}
+        onMouseDown={(e) => e.preventDefault()}
         style={{
           background: "linear-gradient(90deg,#14b8a6,#3b82f6)",
           border: "none",
@@ -157,6 +158,8 @@ export default function ClaimRewardsCard() {
           color: "#fff",
           cursor: loading ? "not-allowed" : "pointer",
           opacity: loading ? 0.7 : 1,
+          outline: "none",
+          boxShadow: "none",
         }}
       >
         {loading ? "Reclamando..." : "Claim"}
