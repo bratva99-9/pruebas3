@@ -1,19 +1,21 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { UserService } from "../UserService";
+import { JsonRpc } from "eosjs";
 
 const SCHEMAS = [
   { key: "girls", label: "Girls", color: "#ff36ba" },
   { key: "photos", label: "Photos", color: "#7e47f7" }
 ];
 const COLLECTION = "nightclubnft";
+const rpc = new JsonRpc("https://wax.greymass.com");
 
-export default function UnstakeModal({ isOpen, onClose }) {
+export default function UnstakeModal({ onClose }) {
+  const [modalOpen, setModalOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("girls");
   const [nfts, setNfts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState([]);
   const [mensaje, setMensaje] = useState("");
-  const [claiming, setClaiming] = useState(false);
 
   const wallet = UserService.isLogged() ? UserService.getName() : null;
 
@@ -22,7 +24,6 @@ export default function UnstakeModal({ isOpen, onClose }) {
     setMensaje("Cargando NFTs en staking...");
     setLoading(true);
     try {
-      const rpc = new (require("eosjs")).JsonRpc("https://wax.greymass.com");
       const res = await rpc.get_table_rows({
         json: true,
         code: "nightclubapp",
@@ -33,9 +34,10 @@ export default function UnstakeModal({ isOpen, onClose }) {
       const userNFTs = res.rows.filter(r => r.owner === wallet);
       const assets = await Promise.all(userNFTs.map(n =>
         fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${n.asset_id}`)
-          .then(r => r.json()).then(r => r.data)
+          .then(r => r.json())
+          .then(r => r.data)
       ));
-      setNfts(assets.filter(a => a.schema?.schema_name === activeTab));
+      setNfts(assets.filter(a => a?.schema?.schema_name === activeTab));
       setMensaje("");
     } catch (e) {
       setMensaje("Error al cargar NFTs.");
@@ -46,10 +48,10 @@ export default function UnstakeModal({ isOpen, onClose }) {
   }, [wallet, activeTab]);
 
   useEffect(() => {
-    if (isOpen) {
+    if (modalOpen && wallet) {
       fetchStakedNFTs();
     }
-  }, [isOpen, fetchStakedNFTs]);
+  }, [modalOpen, fetchStakedNFTs]);
 
   const handleUnstakeConfirmed = async () => {
     if (!UserService.isLogged() || selected.length === 0) return;
@@ -58,25 +60,12 @@ export default function UnstakeModal({ isOpen, onClose }) {
       await UserService.unstakeNFTs(selected);
       setMensaje("¡Unstake realizado!");
       setTimeout(() => {
-        onClose();
-        setSelected([]);
-        setMensaje("");
+        setModalOpen(false);
+        if (onClose) onClose();
       }, 1500);
     } catch (e) {
       setMensaje("Error: " + (e.message || e));
     }
-  };
-
-  const handleClaim = async () => {
-    setClaiming(true);
-    setMensaje("Procesando claim...");
-    try {
-      await UserService.claimRewards();
-      setMensaje("¡Claim exitoso!");
-    } catch (e) {
-      setMensaje("Error al reclamar: " + (e.message || e));
-    }
-    setClaiming(false);
   };
 
   const toggleSelect = (assetId) => {
@@ -85,53 +74,13 @@ export default function UnstakeModal({ isOpen, onClose }) {
     );
   };
 
-  const mainBtn = (label, color, onClick, disabled = false) => (
-    <button
-      style={{
-        background: color,
-        color: "#fff",
-        fontWeight: "bold",
-        fontSize: 18,
-        border: "none",
-        borderRadius: 14,
-        padding: "12px 38px",
-        margin: "0 16px",
-        boxShadow: "0 4px 24px #0002",
-        cursor: disabled ? "not-allowed" : "pointer",
-        opacity: disabled ? 0.6 : 1,
-        transition: "all .18s"
-      }}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {label}
-    </button>
-  );
-
-  if (!isOpen) return null;
+  if (!modalOpen) return null;
 
   return (
-    <div style={{
-      position: "fixed", inset: 0, zIndex: 99,
-      background: "rgba(19,15,24,0.96)", display: "flex", alignItems: "center", justifyContent: "center"
-    }}>
-      <div style={{
-        background: "#201b2c", borderRadius: 24, minWidth: 380, minHeight: 300,
-        boxShadow: "0 10px 36px #000a", padding: 32, position: "relative", maxWidth: 700, width: "95vw"
-      }}>
-        <button
-          onClick={() => {
-            onClose();
-            setSelected([]);
-            setMensaje("");
-          }}
-          style={{
-            position: "absolute", top: 16, right: 20, fontSize: 33, color: "#cfc",
-            background: "none", border: "none", cursor: "pointer",
-            fontWeight: "bold", lineHeight: "1"
-          }}
-          disabled={loading || claiming}
-        >&times;</button>
+    <div style={{ position: "fixed", inset: 0, zIndex: 99, background: "rgba(19,15,24,0.96)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ background: "#201b2c", borderRadius: 24, minWidth: 380, minHeight: 300, boxShadow: "0 10px 36px #000a", padding: 32, position: "relative", maxWidth: 700, width: "95vw" }}>
+        <button onClick={() => { setModalOpen(false); if (onClose) onClose(); }} style={{ position: "absolute", top: 16, right: 20, fontSize: 33, color: "#cfc", background: "none", border: "none", cursor: "pointer", fontWeight: "bold", lineHeight: "1" }}>&times;</button>
+        
         <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
           {SCHEMAS.map(tab =>
             <button
@@ -152,11 +101,7 @@ export default function UnstakeModal({ isOpen, onClose }) {
                 outline: "none",
                 transition: "all .19s"
               }}
-              onClick={() => {
-                setActiveTab(tab.key);
-                setSelected([]);
-              }}
-              disabled={activeTab === tab.key || loading}
+              onClick={() => { setActiveTab(tab.key); setSelected([]); }}
             >
               {tab.label}
             </button>
@@ -164,92 +109,48 @@ export default function UnstakeModal({ isOpen, onClose }) {
         </div>
 
         {mensaje && (
-          <div style={{
-            background: "#3b2548",
-            color: "#fff",
-            borderRadius: 9,
-            padding: "10px 18px",
-            margin: "10px 0 16px",
-            textAlign: "center",
-            fontSize: 16,
-            fontWeight: 600,
-            minHeight: 38
-          }}>{mensaje}</div>
+          <div style={{ background: "#3b2548", color: "#fff", borderRadius: 9, padding: "10px 18px", margin: "10px 0 16px", textAlign: "center", fontSize: 16, fontWeight: 600, minHeight: 38 }}>
+            {mensaje}
+          </div>
         )}
 
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(135px,1fr))",
-          gap: 20,
-          maxHeight: 290,
-          overflowY: "auto",
-          marginTop: 12,
-          justifyItems: "center"
-        }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(135px,1fr))", gap: 20, maxHeight: 290, overflowY: "auto", marginTop: 12, justifyItems: "center" }}>
           {loading ? (
             <div style={{ color: "#fff" }}>Cargando NFTs...</div>
           ) : nfts.length === 0 ? (
-            <div style={{ color: "#eee" }}>No tienes NFTs en este grupo.</div>
+            <div style={{ color: "#eee" }}>No tienes NFTs en staking.</div>
           ) : nfts.map(nft => {
-            let videoSrc = nft.data?.video;
-            if (videoSrc && videoSrc.startsWith("Qm")) {
-              videoSrc = `https://ipfs.io/ipfs/${videoSrc}`;
-            }
-            if (!videoSrc && nft.data?.img) {
-              videoSrc = nft.data.img.startsWith("Qm")
-                ? `https://ipfs.io/ipfs/${nft.data.img}`
-                : nft.data.img;
-            }
-            if (!videoSrc) return null;
+            let videoSrc = nft.data?.video || nft.data?.img;
+            if (videoSrc?.startsWith("Qm")) videoSrc = `https://ipfs.io/ipfs/${videoSrc}`;
             return (
-              <div
-                key={nft.asset_id}
-                onClick={() => !loading && toggleSelect(nft.asset_id)}
-                style={{
-                  border: selected.includes(nft.asset_id)
-                    ? `3px solid #f43f5e`
-                    : "2px solid #252241",
-                  borderRadius: "22px",
-                  background: selected.includes(nft.asset_id)
-                    ? "linear-gradient(135deg,#f43f5e25 60%,#fff0)"
-                    : "#131025",
-                  cursor: "pointer",
-                  boxShadow: selected.includes(nft.asset_id)
-                    ? "0 4px 16px #444a"
-                    : "0 2px 8px #1117",
-                  transition: "all .17s",
-                  width: "120px",
-                  height: "210px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 8,
-                  overflow: "hidden"
-                }}
-              >
-                <video
-                  src={videoSrc}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    borderRadius: "20px",
-                    background: "#0c0c0e"
-                  }}
-                />
+              <div key={nft.asset_id} onClick={() => !loading && toggleSelect(nft.asset_id)} style={{
+                border: selected.includes(nft.asset_id) ? "3px solid #f43f5e" : "2px solid #252241",
+                borderRadius: "22px",
+                background: selected.includes(nft.asset_id) ? "linear-gradient(135deg,#f43f5e25 60%,#fff0)" : "#131025",
+                cursor: "pointer",
+                boxShadow: selected.includes(nft.asset_id) ? "0 4px 16px #444a" : "0 2px 8px #1117",
+                transition: "all .17s",
+                width: "120px",
+                height: "210px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 8,
+                overflow: "hidden"
+              }}>
+                <video src={videoSrc} autoPlay muted loop playsInline style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "20px",
+                  background: "#0c0c0e"
+                }} />
               </div>
             );
           })}
         </div>
-        <div style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: 26
-        }}>
+
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 26 }}>
           <button
             style={{
               background: "#f43f5e",
