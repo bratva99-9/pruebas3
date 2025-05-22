@@ -9,7 +9,8 @@ export default function ClaimRewardsCard() {
   useEffect(() => {
     if (!UserService.authName) return;
     fetchPendingRewards(UserService.authName);
-  }, [UserService.authName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchPendingRewards = async (user) => {
     setLoading(true);
