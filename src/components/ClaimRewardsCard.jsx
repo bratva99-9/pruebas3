@@ -64,19 +64,26 @@ export default function ClaimRewardsCard() {
       );
 
       const userAssets = assetsRes.rows.filter((a) => a.owner === user);
+      console.log("🔍 userAssets", userAssets);
+      console.log("📦 templatesMap", templatesMap);
+      console.log("⏱️ unitSeconds", unitSeconds);
+
       let totalReward = 0;
 
       for (const nft of userAssets) {
         const tplRate = templatesMap[String(nft.template_id)];
-        if (!tplRate) continue;
         const elapsed = now - nft.last_claim;
         const periods = Math.floor(elapsed / unitSeconds);
+
+        console.log(`⛏️ NFT ${nft.asset_id}: elapsed=${elapsed}, periods=${periods}, rate=${tplRate}`);
+
+        if (!tplRate) continue;
         totalReward += periods * tplRate;
       }
 
       setPending(totalReward.toFixed(4));
     } catch (err) {
-      console.warn("Error al calcular rewards:", err);
+      console.warn("⚠️ Error al calcular rewards:", err);
       setPending("0.0000");
     }
     setLoading(false);
