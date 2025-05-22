@@ -1,6 +1,7 @@
 import React from "react";
 import StakingModal from "../components/StakingModal";
 import UnstakeModal from "../components/UnstakeModal";
+import ClaimRewardsCard from "../components/ClaimRewardsCard";
 
 export default function Home() {
   return (
@@ -10,7 +11,9 @@ export default function Home() {
       </h1>
       <StakingModal />
       <UnstakeModal />
-      {/* Puedes agregar aquí otros componentes o información */}
+      <div className="mt-12">
+        <ClaimRewardsCard />
+      </div>
     </div>
   );
 }
