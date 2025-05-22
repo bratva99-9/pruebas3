@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { UserService } from "../UserService";
 
-export default function PendingRewardsCard() {
+export default function ClaimRewardsCard() {
   const [pending, setPending] = useState("0.0000");
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState("");
