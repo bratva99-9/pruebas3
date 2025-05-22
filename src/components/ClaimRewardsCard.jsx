@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { UserService } from "../UserService";
 
+const ENDPOINTS = [
+  "https://wax.pink.gg",
+  "https://api.waxsweden.org",
+  "https://wax.cryptolions.io"
+];
+
 export default function ClaimRewardsCard() {
   const [pending, setPending] = useState("0.0000");
   const [loading, setLoading] = useState(false);
@@ -12,63 +18,51 @@ export default function ClaimRewardsCard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const fetchFromAny = async (table) => {
+    for (const endpoint of ENDPOINTS) {
+      try {
+        const res = await fetch(`${endpoint}/v1/chain/get_table_rows`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            json: true,
+            code: "nightclub.gm",
+            scope: "nightclub.gm",
+            table,
+            limit: 1000,
+          }),
+        });
+        const data = await res.json();
+        if (Array.isArray(data.rows) && data.rows.length > 0) {
+          return data.rows;
+        }
+      } catch (err) {
+        console.warn(`⛔ ${table} falló en ${endpoint}`);
+      }
+    }
+    throw new Error(`❌ No se pudo cargar la tabla '${table}' desde ningún nodo.`);
+  };
+
   const fetchPendingRewards = async (user) => {
     setLoading(true);
-    const API = "https://wax.pink.gg";
-
     try {
       const now = Math.floor(Date.now() / 1000);
 
-      const [assetsRes, configRes, templatesRes] = await Promise.all([
-        fetch(`${API}/v1/chain/get_table_rows`, {
-          method: "POST",
-          body: JSON.stringify({
-            json: true,
-            code: "nightclub.gm",
-            scope: "nightclub.gm",
-            table: "assets",
-            limit: 1000,
-          }),
-          headers: { "Content-Type": "application/json" },
-        }).then((res) => res.json()),
-
-        fetch(`${API}/v1/chain/get_table_rows`, {
-          method: "POST",
-          body: JSON.stringify({
-            json: true,
-            code: "nightclub.gm",
-            scope: "nightclub.gm",
-            table: "config",
-            limit: 1,
-          }),
-          headers: { "Content-Type": "application/json" },
-        }).then((res) => res.json()),
-
-        fetch(`${API}/v1/chain/get_table_rows`, {
-          method: "POST",
-          body: JSON.stringify({
-            json: true,
-            code: "nightclub.gm",
-            scope: "nightclub.gm",
-            table: "templates",
-            limit: 1000,
-          }),
-          headers: { "Content-Type": "application/json" },
-        }).then((res) => res.json()),
+      const [assets, configRows, templates] = await Promise.all([
+        fetchFromAny("assets"),
+        fetchFromAny("config"),
+        fetchFromAny("templates"),
       ]);
 
-      if (!Array.isArray(configRes.rows) || configRes.rows.length === 0) {
-        throw new Error("❌ No se encontró configuración en la tabla 'config'.");
-      }
-
-      const config = configRes.rows[0];
+      const config = configRows[0];
+      if (!config || !config.time_unit_length) throw new Error("❌ 'time_unit_length' no definido");
       const unitSeconds = parseInt(config.time_unit_length);
 
       const templatesMap = Object.fromEntries(
-        templatesRes.rows.map((tpl) => [String(tpl.template_id), parseFloat(tpl.timeunit_rate)])
+        templates.map((tpl) => [String(tpl.template_id), parseFloat(tpl.timeunit_rate)])
       );
 
-      const userAssets = assetsRes.rows.filter((a) => a.owner === user);
+      const userAssets = assets.filter((a) => a.owner === user);
       console.log("🔍 userAssets", userAssets);
       console.log("📦 templatesMap", templatesMap);
       console.log("⏱️ unitSeconds", unitSeconds);
