@@ -4,7 +4,9 @@ import { UserService } from "../UserService";
 const ENDPOINTS = [
   "https://wax.pink.gg",
   "https://api.waxsweden.org",
-  "https://wax.cryptolions.io"
+  "https://wax.greymass.com",
+  "https://wax.cryptolions.io",
+  "https://wax.eosrio.io"
 ];
 
 export default function ClaimRewardsCard() {
@@ -17,6 +19,8 @@ export default function ClaimRewardsCard() {
     fetchPendingRewards(UserService.authName);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const fetchFromAny = async (table) => {
     for (const endpoint of ENDPOINTS) {
@@ -34,11 +38,15 @@ export default function ClaimRewardsCard() {
         });
         const data = await res.json();
         if (Array.isArray(data.rows) && data.rows.length > 0) {
+          console.log(`✅ Tabla '${table}' cargada desde ${endpoint}`);
           return data.rows;
+        } else {
+          console.warn(`⚠️ Tabla '${table}' vacía desde ${endpoint}`);
         }
       } catch (err) {
-        console.warn(`⛔ ${table} falló en ${endpoint}`);
+        console.warn(`❌ Nodo fallido para '${table}': ${endpoint}`);
       }
+      await sleep(500); // pequeña pausa entre nodos
     }
     throw new Error(`❌ No se pudo cargar la tabla '${table}' desde ningún nodo.`);
   };
