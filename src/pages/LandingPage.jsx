@@ -57,7 +57,7 @@ export default function LandingPage() {
   const handleLogin = () => {
     UserService.login(() => {
       if (UserService.isLogged()) {
-        history.push('/home');
+        history.push("/home");
       } else {
         dispatch(setPlayerLogout());
       }
@@ -65,22 +65,12 @@ export default function LandingPage() {
   };
 
   return (
-    <div style={{ width: "100vw", height: "calc(100vh - 80px)", position: "relative", overflow: "hidden" }}>
+    <div style={styles.container}>
       
-      {/* Galería de videos - fondo */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
-        gap: "24px",
-        height: "100%",
-        width: "100%",
-        position: "absolute",
-        top: 0,
-        left: 0,
-        zIndex: 0
-      }}>
+      {/* Galería de videos */}
+      <div style={styles.galleryGrid}>
         {gallery.map((vid, idx) => (
-          <div key={idx} style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div key={idx} style={styles.videoWrapper}>
             {vid ? (
               <video
                 src={vid}
@@ -88,73 +78,111 @@ export default function LandingPage() {
                 muted
                 loop
                 playsInline
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  aspectRatio: "9/16",
-                  objectFit: "cover",
-                  borderRadius: "32px",
-                  filter: "blur(18px) brightness(0.85) saturate(1.1)",
-                  transition: "filter 0.38s ease-in-out"
-                }}
-                onMouseEnter={e => e.currentTarget.style.filter = "blur(9px) brightness(1.03) saturate(1.13)"}
-                onMouseLeave={e => e.currentTarget.style.filter = "blur(18px) brightness(0.85) saturate(1.1)"}
+                style={styles.video}
+                onMouseEnter={e => e.currentTarget.style.filter = "blur(9px) brightness(1.05) saturate(1.1)"}
+                onMouseLeave={e => e.currentTarget.style.filter = styles.video.filter}
               />
             ) : (
-              <div style={{ color: "#fff", fontSize: 24 }}>Cargando...</div>
+              <div style={styles.loading}>Loading...</div>
             )}
           </div>
         ))}
       </div>
 
-      {/* Texto centrado por encima de galería */}
-      <div style={{
-        position: "absolute",
-        left: "50%",
-        top: "50%",
-        transform: "translate(-50%, -50%)",
-        zIndex: 1,
-        pointerEvents: "none"
-      }}>
-        <span style={{
-          fontFamily: "'Pacifico', cursive, Arial",
-          fontSize: "6.5vw",
-          color: "#ff36ba",
-          textShadow: "0 3px 24px #170415cc, 0 1.5px 8px #000c",
-          letterSpacing: 2,
-          userSelect: "none",
-          fontWeight: "bold"
-        }}>
-          Night Club Game
-        </span>
+      {/* Título centrado */}
+      <div style={styles.titleContainer}>
+        <h1 style={styles.title}>Night Club Game</h1>
       </div>
 
-      {/* Botón login */}
-      <div style={{
-        position: "absolute",
-        bottom: 40,
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        zIndex: 2
-      }}>
-        <button
-          onClick={handleLogin}
-          style={{
-            padding: "14px 36px",
-            fontSize: 18,
-            backgroundColor: "#e11d48",
-            color: "#fff",
-            border: "none",
-            borderRadius: 14,
-            cursor: "pointer",
-            fontWeight: "bold",
-            boxShadow: "0 4px 24px #0004"
-          }}
-        >
+      {/* Botón de login */}
+      <div style={styles.buttonContainer}>
+        <button onClick={handleLogin} style={styles.loginButton}>
           Login to Play
         </button>
       </div>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    width: "100vw",
+    height: "100vh",
+    position: "relative",
+    overflow: "hidden",
+    background: "#181824"
+  },
+  galleryGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    padding: "28px 2vw",
+    zIndex: 0
+  },
+  videoWrapper: {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  video: {
+    width: "100%",
+    height: "100%",
+    aspectRatio: "9 / 16",
+    objectFit: "cover",
+    borderRadius: "28px",
+    filter: "blur(18px) brightness(0.85) saturate(1.1)",
+    transition: "filter 0.38s ease-in-out"
+  },
+  loading: {
+    color: "#fff",
+    fontSize: 24,
+    textAlign: "center",
+    paddingTop: "60%"
+  },
+  titleContainer: {
+    position: "absolute",
+    left: "50%",
+    top: "30%",
+    transform: "translate(-50%, -50%)",
+    zIndex: 2,
+    pointerEvents: "none",
+    textAlign: "center",
+    width: "100%"
+  },
+  title: {
+    fontFamily: "'Pacifico', cursive, Arial",
+    fontSize: "6vw",
+    color: "#ff36ba",
+    textShadow: "0 3px 24px #170415cc, 0 1.5px 8px #000c",
+    letterSpacing: 2,
+    userSelect: "none",
+    fontWeight: "bold",
+    margin: 0
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 40,
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    zIndex: 3
+  },
+  loginButton: {
+    padding: "16px 42px",
+    fontSize: 18,
+    backgroundColor: "#ff36ba",
+    color: "#fff",
+    border: "none",
+    borderRadius: 20,
+    cursor: "pointer",
+    fontWeight: "bold",
+    boxShadow: "0 4px 24px #0005",
+    transition: "all 0.3s ease"
+  }
+};
