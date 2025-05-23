@@ -10,7 +10,7 @@ const CHANGE_INTERVAL = 5000;
 export default function LandingPage() {
   const [videos, setVideos] = useState([]);
   const [gallery, setGallery] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUALVisible, setIsUALVisible] = useState(false);
   const timerRef = useRef();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -24,12 +24,14 @@ export default function LandingPage() {
 
     UserService.init();
 
+    // Observa cambios en el DOM para detectar el modal de UAL
     const observer = new MutationObserver(() => {
-      const modalVisible = !!document.querySelector(".ual-modal");
-      setIsModalOpen(modalVisible);
+      const modal = document.querySelector(".ual-modal, .ual-container, .ual-content");
+      setIsUALVisible(!!modal);
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
+
     return () => observer.disconnect();
   }, []);
 
@@ -113,8 +115,8 @@ export default function LandingPage() {
         ))}
       </div>
 
-      {/* Texto y botón: solo si el modal no está visible */}
-      {!isModalOpen && (
+      {/* Texto y botón (ocultos cuando el UAL modal está abierto) */}
+      {!isUALVisible && (
         <>
           <h1 style={{
             position: "absolute",
@@ -125,7 +127,7 @@ export default function LandingPage() {
             fontSize: "6vw",
             color: "#ff36ba",
             textShadow: "0 3px 24px #0008",
-            zIndex: 1,
+            zIndex: 2,
             margin: 0
           }}>
             Night Club Game
@@ -136,7 +138,7 @@ export default function LandingPage() {
             top: "58%",
             left: "50%",
             transform: "translateX(-50%)",
-            zIndex: 1
+            zIndex: 2
           }}>
             <button
               onClick={handleLogin}
