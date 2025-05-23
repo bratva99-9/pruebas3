@@ -10,6 +10,13 @@ export default function LandingPage() {
   const timerRef = useRef();
 
   useEffect(() => {
+    // Asegurar que #ual-login exista antes de inicializar UAL
+    if (!document.getElementById("ual-login")) {
+      const divUal = document.createElement("div");
+      divUal.setAttribute("id", "ual-login");
+      document.body.appendChild(divUal);
+    }
+
     UserService.init(); // Inicializa UAL
   }, []);
 
@@ -148,7 +155,7 @@ export default function LandingPage() {
         ))}
       </div>
 
-      {/* Único botón de login */}
+      {/* Botón de login */}
       <div
         style={{
           position: "absolute",
