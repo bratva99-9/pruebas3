@@ -21,7 +21,17 @@ export default function LandingPage() {
       divUal.setAttribute("id", "ual-login");
       document.body.appendChild(divUal);
     }
+
+    // Hook para re-mostrar UI en caso de que se cierre el login modal
+    const interval = setInterval(() => {
+      const modalOpen = !!document.querySelector(".ual-modal");
+      if (!modalOpen && !UserService.isLogged()) {
+        setShowLoginUI(true);
+      }
+    }, 500);
+
     UserService.init();
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -72,16 +82,28 @@ export default function LandingPage() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", height: "100%", gap: "24px", padding: "28px 2vw", position: "absolute", top: 0, left: 0, zIndex: 0 }}>
         {gallery.map((vid, idx) => (
           <div key={idx} style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            {vid ? (
-              <video src={vid} autoPlay muted loop playsInline style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "32px", filter: "blur(18px) brightness(0.85) saturate(1.1)" }} />
-            ) : (
-              <div style={{ color: "#fff", fontSize: 24, textAlign: "center", paddingTop: "60%" }}>Cargando...</div>
+            {vid && (
+              <video
+                src={vid}
+                autoPlay
+                muted
+                loop
+                playsInline
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "32px",
+                  filter: "blur(18px) brightness(0.85) saturate(1.1)",
+                  transition: "filter 0.38s ease-in-out"
+                }}
+              />
             )}
           </div>
         ))}
       </div>
 
-      {/* Centered Title */}
+      {/* Centered Title and Login Button */}
       {showLoginUI && (
         <div style={{ position: "absolute", top: "40%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 1, textAlign: "center" }}>
           <span style={{
