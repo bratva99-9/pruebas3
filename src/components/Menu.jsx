@@ -31,7 +31,7 @@ export const Menu = () => {
         <span style={styles.userText}>
           {UserState.isLogged ? (
             <>
-              {UserState.name} - {UserService.formatWAXBalance()} &nbsp;&nbsp; {UserService.formatSEXYBalance()}
+              {UserState.name} - {UserService.formatWAXOnly()} WAX - {UserService.formatSEXYOnly()} SEXY
             </>
           ) : (
             <span style={{ fontWeight: 500, color: "#fff8" }}>Inicia sesión</span>
@@ -102,10 +102,7 @@ const styles = {
     borderRadius: 16,
     padding: "8px 28px",
     fontSize: 18,
-    marginLeft: 0,
-    marginRight: 0,
     boxShadow: "0 1px 10px #ff36ba30",
-    transition: "all .16s",
     cursor: "pointer",
     outline: "none",
     textDecoration: "none",

@@ -4,7 +4,12 @@ import { isEmpty } from 'lodash';
 import { Anchor } from 'ual-anchor';
 
 import { storeAppDispatch } from './GlobalState/Store';
-import { setPlayerBalance, setPlayerData, setPlayerLogout } from './GlobalState/UserReducer';
+import {
+  setPlayerBalance,
+  setPlayerData,
+  setPlayerLogout,
+  setPlayerSexy
+} from './GlobalState/UserReducer';
 
 export class User {
   appName = 'ual_template';
@@ -43,15 +48,11 @@ export class User {
   }
 
   logout() {
-    console.log("Logout");
     this.authName = undefined;
     this.session = undefined;
     this.ual.logoutUser();
     storeAppDispatch(setPlayerLogout());
-
-    if (this.callbackServerUserData !== undefined) {
-      this.callbackServerUserData();
-    }
+    if (this.callbackServerUserData) this.callbackServerUserData();
   }
 
   async ualCallback(userObject) {
@@ -66,10 +67,7 @@ export class User {
     }));
 
     await this.reloadBalances();
-
-    if (this.callbackServerUserData !== undefined) {
-      this.callbackServerUserData();
-    }
+    if (this.callbackServerUserData) this.callbackServerUserData();
   }
 
   async reloadBalances() {
@@ -78,31 +76,19 @@ export class User {
   }
 
   getBalance() {
-    if (!this.session || !this.session.rpc || !this.authName) {
-      console.warn("No se pudo obtener el balance porque no hay sesión.");
-      return;
-    }
-
-    const balance = this.session.rpc.get_account(this.authName);
-
-    balance.then((accountData) => {
+    if (!this.session || !this.session.rpc || !this.authName) return;
+    return this.session.rpc.get_account(this.authName).then(accountData => {
       this.balance = accountData.core_liquid_balance || "0.00000000 WAX";
       storeAppDispatch(setPlayerBalance(this.balance));
-    }).catch((error) => {
-      console.error("Error al obtener el balance de WAX:", error.message);
+    }).catch(err => {
+      console.error("Error al obtener balance de WAX:", err.message);
       this.balance = "0.00000000 WAX";
       storeAppDispatch(setPlayerBalance(this.balance));
     });
-
-    return balance;
   }
 
   async getSexyBalance() {
-    if (!this.session || !this.session.rpc || !this.authName) {
-      console.warn("No se pudo obtener el balance de SEXY porque no hay sesión.");
-      return;
-    }
-
+    if (!this.session || !this.session.rpc || !this.authName) return;
     try {
       const result = await this.session.rpc.get_currency_balance(
         'nightclub.gm',
@@ -110,9 +96,11 @@ export class User {
         'SEXY'
       );
       this.sexyBalance = result.length > 0 ? result[0] : "0.00000000 SEXY";
+      storeAppDispatch(setPlayerSexy(this.sexyBalance));
     } catch (err) {
-      console.error("Error al obtener el balance de SEXY:", err.message);
+      console.error("Error al obtener balance de SEXY:", err.message);
       this.sexyBalance = "0.00000000 SEXY";
+      storeAppDispatch(setPlayerSexy(this.sexyBalance));
     }
   }
 
@@ -136,28 +124,16 @@ export class User {
         actions: [{
           account: 'nightclubapp',
           name: 'regnewuser',
-          authorization: [{
-            actor: this.authName,
-            permission: 'active'
-          }],
-          data: {
-            user: this.authName,
-            referrer: this.authName
-          }
+          authorization: [{ actor: this.authName, permission: 'active' }],
+          data: { user: this.authName, referrer: this.authName }
         }]
-      }, {
-        blocksBehind: 3,
-        expireSeconds: 60
-      });
+      }, { blocksBehind: 3, expireSeconds: 60 });
     }
 
     const actions = [{
       account: "atomicassets",
       name: "transfer",
-      authorization: [{
-        actor: this.authName,
-        permission: "active"
-      }],
+      authorization: [{ actor: this.authName, permission: "active" }],
       data: {
         from: this.authName,
         to: "nightclubapp",
@@ -176,14 +152,8 @@ export class User {
     const actions = [{
       account: "nightclubapp",
       name: "unstake",
-      authorization: [{
-        actor: this.authName,
-        permission: "active"
-      }],
-      data: {
-        user: this.authName,
-        asset_ids
-      }
+      authorization: [{ actor: this.authName, permission: "active" }],
+      data: { user: this.authName, asset_ids }
     }];
 
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
@@ -195,20 +165,13 @@ export class User {
     const actions = [{
       account: "nightclubapp",
       name: "claim",
-      authorization: [{
-        actor: this.authName,
-        permission: "active"
-      }],
-      data: {
-        user: this.authName,
-        collection
-      }
+      authorization: [{ actor: this.authName, permission: "active" }],
+      data: { user: this.authName, collection }
     }];
 
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
-  // ✅ Nuevos métodos de formato para balances
   formatWAXBalance() {
     const wax = parseFloat(this.balance);
     return isNaN(wax) ? "0.00 WAX" : `${wax.toFixed(2)} WAX`;
