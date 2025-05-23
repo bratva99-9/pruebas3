@@ -14,7 +14,6 @@ export default function StakingModal() {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState([]);
   const [mensaje, setMensaje] = useState("");
-  const [claiming, setClaiming] = useState(false);
 
   const wallet = UserService.isLogged() ? UserService.getName() : null;
 
@@ -31,18 +30,6 @@ export default function StakingModal() {
       setMensaje("Error al firmar: " + (e.message || e));
     }
     setLoading(false);
-  };
-
-  const handleClaim = async () => {
-    setClaiming(true);
-    setMensaje("Procesando claim...");
-    try {
-      await UserService.claimRewards();
-      setMensaje("¡Claim exitoso!");
-    } catch (e) {
-      setMensaje("Error al reclamar: " + (e.message || e));
-    }
-    setClaiming(false);
   };
 
   useEffect(() => {
@@ -74,7 +61,7 @@ export default function StakingModal() {
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "center", gap: 24, margin: "42px 0 32px" }}>
+      <div style={{ display: "flex", justifyContent: "center", margin: "42px 0 32px" }}>
         <button
           style={{
             background: "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)",
@@ -87,19 +74,6 @@ export default function StakingModal() {
           disabled={!wallet}
         >
           Staking NFTs
-        </button>
-        <button
-          style={{
-            background: "linear-gradient(90deg,#5eead4 0%,#3b82f6 100%)",
-            color: "#fff", fontWeight: "bold", fontSize: 18, border: "none",
-            borderRadius: 14, padding: "12px 38px", margin: "0 16px",
-            boxShadow: "0 4px 24px #0002", cursor: claiming || !wallet ? "not-allowed" : "pointer",
-            opacity: claiming || !wallet ? 0.6 : 1
-          }}
-          onClick={handleClaim}
-          disabled={claiming || !wallet}
-        >
-          Claim
         </button>
       </div>
 
@@ -118,7 +92,7 @@ export default function StakingModal() {
                 position: "absolute", top: 16, right: 20, fontSize: 33, color: "#cfc",
                 background: "none", border: "none", cursor: "pointer", fontWeight: "bold", lineHeight: "1"
               }}
-              disabled={loading || claiming}
+              disabled={loading}
             >&times;</button>
 
             <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
