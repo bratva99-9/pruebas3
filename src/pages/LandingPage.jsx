@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { UserService } from "../UserService";
+import { setPlayerLogout } from "../GlobalState/UserReducer";
 
 const CARD_COUNT = 4;
 const CHANGE_INTERVAL = 5000;
@@ -8,9 +11,10 @@ export default function LandingPage() {
   const [videos, setVideos] = useState([]);
   const [gallery, setGallery] = useState(Array(CARD_COUNT).fill(null));
   const timerRef = useRef();
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
-    // Asegura que el contenedor para UAL esté en el DOM
     if (!document.getElementById("ual-login")) {
       const divUal = document.createElement("div");
       divUal.setAttribute("id", "ual-login");
@@ -53,7 +57,9 @@ export default function LandingPage() {
   const handleLogin = () => {
     UserService.login(() => {
       if (UserService.isLogged()) {
-        window.location.href = "/home";
+        history.push('/home');
+      } else {
+        dispatch(setPlayerLogout());
       }
     });
   };
@@ -155,7 +161,7 @@ export default function LandingPage() {
         ))}
       </div>
 
-      {/* Botón único para login */}
+      {/* Botón de login */}
       <div
         style={{
           position: "absolute",
