@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { UserService } from "../UserService";
 
 const CARD_COUNT = 4;
-const CHANGE_INTERVAL = 5000; // 5 segundos
+const CHANGE_INTERVAL = 5000;
 
 export default function LandingPage() {
   const [videos, setVideos] = useState([]);
@@ -16,9 +16,7 @@ export default function LandingPage() {
         const vids = json.data
           .map(a => a.data?.video || a.data?.img || null)
           .filter(Boolean)
-          .map(ipfs =>
-            ipfs.startsWith("Qm") ? `https://ipfs.io/ipfs/${ipfs}` : ipfs
-          );
+          .map(ipfs => ipfs.startsWith("Qm") ? `https://ipfs.io/ipfs/${ipfs}` : ipfs);
         setVideos(vids);
         setGallery(Array(CARD_COUNT).fill(0).map(() => vids[Math.floor(Math.random() * vids.length)]));
       });
@@ -41,6 +39,23 @@ export default function LandingPage() {
     return () => clearInterval(timerRef.current);
   }, [videos]);
 
+  const handleLogin = (authType) => {
+    // Forzar autenticador y login inmediato
+    const authenticator = UserService.ual.authenticators.find(auth =>
+      auth.getStyle().text.toLowerCase().includes(authType.toLowerCase())
+    );
+    if (authenticator) {
+      UserService.callbackServerUserData = () => {
+        if (UserService.isLogged()) window.location.href = "/home";
+        else alert(`${authType} login failed.`);
+      };
+      UserService.ual.selectAuthenticator(authenticator);
+      UserService.ual.login();
+    } else {
+      alert(`Wallet "${authType}" not available`);
+    }
+  };
+
   return (
     <div
       style={{
@@ -52,14 +67,14 @@ export default function LandingPage() {
       }}
       className="main-blur-gallery"
     >
-      {/* Título centrado */}
+      {/* Título centrado detrás del modal */}
       <div
         style={{
           position: "absolute",
           left: "50%",
           top: "50%",
           transform: "translate(-50%, -50%)",
-          zIndex: 10,
+          zIndex: 1,
           pointerEvents: "none",
           width: "100vw",
           display: "flex",
@@ -82,7 +97,7 @@ export default function LandingPage() {
         </span>
       </div>
 
-      {/* Grid de videos */}
+      {/* Galería de videos */}
       <div
         style={{
           display: "grid",
@@ -108,8 +123,7 @@ export default function LandingPage() {
               height: "100%",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              background: "none"
+              justifyContent: "center"
             }}
           >
             {vid ? (
@@ -125,26 +139,14 @@ export default function LandingPage() {
                   aspectRatio: "9/16",
                   objectFit: "cover",
                   borderRadius: "32px",
-                  transition: "filter 0.38s cubic-bezier(.22,1,.36,1)",
-                  filter: "blur(18px) brightness(0.85) saturate(1.1)"
+                  filter: "blur(18px) brightness(0.85) saturate(1.1)",
+                  transition: "filter 0.38s ease-in-out"
                 }}
-                onMouseEnter={e =>
-                  (e.currentTarget.style.filter = "blur(9px) brightness(1.03) saturate(1.13)")
-                }
-                onMouseLeave={e =>
-                  (e.currentTarget.style.filter = "blur(18px) brightness(0.85) saturate(1.1)")
-                }
+                onMouseEnter={e => e.currentTarget.style.filter = "blur(9px) brightness(1.03) saturate(1.13)"}
+                onMouseLeave={e => e.currentTarget.style.filter = "blur(18px) brightness(0.85) saturate(1.1)"}
               />
             ) : (
-              <div
-                style={{
-                  color: "#fff",
-                  fontSize: 24,
-                  width: "100%",
-                  textAlign: "center",
-                  paddingTop: "60%"
-                }}
-              >
+              <div style={{ color: "#fff", fontSize: 24, textAlign: "center", paddingTop: "60%" }}>
                 Cargando...
               </div>
             )}
@@ -161,14 +163,11 @@ export default function LandingPage() {
           display: "flex",
           justifyContent: "center",
           gap: 40,
-          zIndex: 20
+          zIndex: 5
         }}
       >
         <button
-          onClick={() => UserService.login("anchor", () => {
-            if (UserService.isLogged()) window.location.href = "/home";
-            else alert("Anchor login failed.");
-          })}
+          onClick={() => handleLogin("anchor")}
           style={{
             padding: "12px 28px",
             fontSize: 18,
@@ -183,10 +182,7 @@ export default function LandingPage() {
           Login with Anchor
         </button>
         <button
-          onClick={() => UserService.login("wax", () => {
-            if (UserService.isLogged()) window.location.href = "/home";
-            else alert("Cloud Wallet login failed.");
-          })}
+          onClick={() => handleLogin("wax")}
           style={{
             padding: "12px 28px",
             fontSize: 18,
