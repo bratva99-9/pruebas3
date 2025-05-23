@@ -10,6 +10,10 @@ export default function LandingPage() {
   const timerRef = useRef();
 
   useEffect(() => {
+    UserService.init(); // Importante: asegura que UALJs se inicialice
+  }, []);
+
+  useEffect(() => {
     fetch("https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=nightclubnft&schema_name=photos&page=1&limit=100")
       .then(res => res.json())
       .then(json => {
@@ -41,7 +45,6 @@ export default function LandingPage() {
 
   const handleLogin = (wallet) => {
     const buttons = document.querySelectorAll(".ual-button-gen");
-
     let match = null;
     buttons.forEach(btn => {
       const text = btn.textContent?.toLowerCase();
@@ -51,7 +54,14 @@ export default function LandingPage() {
     });
 
     if (match) {
-      match.click(); // Simula clic en el autenticador correcto
+      UserService.callbackServerUserData = () => {
+        if (UserService.isLogged()) {
+          window.location.href = "/home";
+        } else {
+          alert(`Login with ${wallet} failed.`);
+        }
+      };
+      match.click();
     } else {
       alert(`Login button for ${wallet} not found.`);
     }
@@ -68,7 +78,7 @@ export default function LandingPage() {
       }}
       className="main-blur-gallery"
     >
-      {/* Título centrado detrás del login modal */}
+      {/* Título centrado detrás del modal */}
       <div
         style={{
           position: "absolute",
