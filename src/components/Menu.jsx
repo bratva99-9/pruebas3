@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import LogoIcon from '../images/3DK_LOGO_ICON_1300.png';
 import ExitIcon from '../images/exit.png';
 import { UserService } from '../UserService';
 
 export const Menu = () => {
+  const location = useLocation();
   const locationHistory = useHistory();
   const UserState = useSelector((store) => store.user);
 
@@ -19,6 +20,9 @@ export const Menu = () => {
     UserService.logout();
     locationHistory.push('/');
   };
+
+  // 👉 Ocultar menú si estamos en la ruta raíz "/"
+  if (location.pathname === '/') return null;
 
   return (
     <nav
