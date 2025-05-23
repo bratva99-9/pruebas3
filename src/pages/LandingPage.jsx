@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
+import { UserService } from "../UserService";
 
 const CARD_COUNT = 4;
 const CHANGE_INTERVAL = 5000; // 5 segundos
 
-export default function Main() {
+export default function LandingPage() {
   const [videos, setVideos] = useState([]);
   const [gallery, setGallery] = useState(Array(CARD_COUNT).fill(null));
   const timerRef = useRef();
@@ -51,7 +52,7 @@ export default function Main() {
       }}
       className="main-blur-gallery"
     >
-      {/* Título centrado perfectamente */}
+      {/* Título centrado */}
       <div
         style={{
           position: "absolute",
@@ -69,7 +70,7 @@ export default function Main() {
         <span
           style={{
             fontFamily: "'Pacifico', cursive, Arial",
-            fontSize: "6.5vw", // Escalado responsivo
+            fontSize: "6.5vw",
             color: "#ff36ba",
             textShadow: "0 3px 24px #170415cc, 0 1.5px 8px #000c",
             letterSpacing: 2,
@@ -81,7 +82,7 @@ export default function Main() {
         </span>
       </div>
 
-      {/* Grid de videos, sin bordes */}
+      {/* Grid de videos */}
       <div
         style={{
           display: "grid",
@@ -95,7 +96,7 @@ export default function Main() {
           left: 0,
           right: 0,
           bottom: 0,
-          padding: "28px 2vw 28px 2vw",
+          padding: "28px 2vw",
           background: "transparent"
         }}
       >
@@ -123,7 +124,7 @@ export default function Main() {
                   height: "100%",
                   aspectRatio: "9/16",
                   objectFit: "cover",
-                  borderRadius: "32px", // Borde suave solo para elegancia
+                  borderRadius: "32px",
                   transition: "filter 0.38s cubic-bezier(.22,1,.36,1)",
                   filter: "blur(18px) brightness(0.85) saturate(1.1)"
                 }}
@@ -149,6 +150,56 @@ export default function Main() {
             )}
           </div>
         ))}
+      </div>
+
+      {/* Botones de login */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 40,
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          gap: 40,
+          zIndex: 20
+        }}
+      >
+        <button
+          onClick={() => UserService.login("anchor", () => {
+            if (UserService.isLogged()) window.location.href = "/home";
+            else alert("Anchor login failed.");
+          })}
+          style={{
+            padding: "12px 28px",
+            fontSize: 18,
+            backgroundColor: "#512da8",
+            color: "#fff",
+            border: "none",
+            borderRadius: 10,
+            cursor: "pointer",
+            fontWeight: "bold"
+          }}
+        >
+          Login with Anchor
+        </button>
+        <button
+          onClick={() => UserService.login("wax", () => {
+            if (UserService.isLogged()) window.location.href = "/home";
+            else alert("Cloud Wallet login failed.");
+          })}
+          style={{
+            padding: "12px 28px",
+            fontSize: 18,
+            backgroundColor: "#03a9f4",
+            color: "#fff",
+            border: "none",
+            borderRadius: 10,
+            cursor: "pointer",
+            fontWeight: "bold"
+          }}
+        >
+          Login with Cloud Wallet
+        </button>
       </div>
     </div>
   );
