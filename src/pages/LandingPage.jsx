@@ -10,7 +10,7 @@ export default function LandingPage() {
   const timerRef = useRef();
 
   useEffect(() => {
-    // Asegura que #ual-login exista antes de inicializar
+    // Asegura que el contenedor para UAL esté en el DOM
     if (!document.getElementById("ual-login")) {
       const divUal = document.createElement("div");
       divUal.setAttribute("id", "ual-login");
@@ -49,6 +49,14 @@ export default function LandingPage() {
     }, CHANGE_INTERVAL);
     return () => clearInterval(timerRef.current);
   }, [videos]);
+
+  const handleLogin = () => {
+    UserService.login(() => {
+      if (UserService.isLogged()) {
+        window.location.href = "/home";
+      }
+    });
+  };
 
   return (
     <div
@@ -145,6 +153,35 @@ export default function LandingPage() {
             )}
           </div>
         ))}
+      </div>
+
+      {/* Botón único para login */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 40,
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          zIndex: 5
+        }}
+      >
+        <button
+          onClick={handleLogin}
+          style={{
+            padding: "14px 36px",
+            fontSize: 18,
+            backgroundColor: "#e11d48",
+            color: "#fff",
+            border: "none",
+            borderRadius: 14,
+            cursor: "pointer",
+            fontWeight: "bold",
+            boxShadow: "0 4px 24px #0004"
+          }}
+        >
+          Login to Play
+        </button>
       </div>
     </div>
   );
