@@ -31,7 +31,7 @@ export const Menu = () => {
         <span style={styles.userText}>
           {UserState.isLogged ? (
             <>
-              {UserState.name} - <span style={{ color: "#fff" }}>Wallet:</span> {UserState.balance} - <span style={{ color: "#fff" }}>SEXY:</span> {UserService.sexyBalance}
+              {UserState.name} - {UserService.formatWAXBalance()} &nbsp;&nbsp; {UserService.formatSEXYBalance()}
             </>
           ) : (
             <span style={{ fontWeight: 500, color: "#fff8" }}>Inicia sesión</span>

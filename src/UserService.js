@@ -9,12 +9,11 @@ import { setPlayerBalance, setPlayerData, setPlayerLogout } from './GlobalState/
 export class User {
   appName = 'ual_template';
 
-  // CONFIGURACIÓN MAINNET
   myChain = {
-    chainId: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4', // WAX Mainnet
+    chainId: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
     rpcEndpoints: [{
       protocol: 'https',
-      host: 'wax.greymass.com', // ENDPOINT MAINNET recomendado
+      host: 'wax.greymass.com',
       port: ''
     }]
   };
@@ -73,7 +72,6 @@ export class User {
     }
   }
 
-  // --- Recarga ambos balances
   async reloadBalances() {
     await this.getBalance();
     await this.getSexyBalance();
@@ -118,9 +116,6 @@ export class User {
     }
   }
 
-  /**
-   * Verifica si el usuario está registrado. Si no, lo registra. Luego transfiere los NFTs.
-   */
   async stakeNFTs(asset_ids) {
     if (!this.session || !this.authName) throw new Error("No wallet session activa.");
     if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay NFTs seleccionados.");
@@ -137,26 +132,23 @@ export class User {
     const registered = response.rows.length > 0 && response.rows[0].user === this.authName;
 
     if (!registered) {
-      await this.session.signTransaction(
-        {
-          actions: [{
-            account: 'nightclubapp',
-            name: 'regnewuser',
-            authorization: [{
-              actor: this.authName,
-              permission: 'active'
-            }],
-            data: {
-              user: this.authName,
-              referrer: this.authName
-            }
-          }]
-        },
-        {
-          blocksBehind: 3,
-          expireSeconds: 60
-        }
-      );
+      await this.session.signTransaction({
+        actions: [{
+          account: 'nightclubapp',
+          name: 'regnewuser',
+          authorization: [{
+            actor: this.authName,
+            permission: 'active'
+          }],
+          data: {
+            user: this.authName,
+            referrer: this.authName
+          }
+        }]
+      }, {
+        blocksBehind: 3,
+        expireSeconds: 60
+      });
     }
 
     const actions = [{
@@ -177,10 +169,6 @@ export class User {
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
-  /**
-   * Ejecuta unstake de NFTs desde el contrato nightclubapp
-   * @param {string[]} asset_ids
-   */
   async unstakeNFTs(asset_ids) {
     if (!this.session || !this.authName) throw new Error("No sesión activa");
     if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("Debes seleccionar NFTs");
@@ -201,9 +189,6 @@ export class User {
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
-  /**
-   * Ejecuta claim de recompensas del contrato nightclubapp
-   */
   async claimRewards(collection = "nightclubnft") {
     if (!this.session || !this.authName) throw new Error("No sesión activa");
 
@@ -221,6 +206,27 @@ export class User {
     }];
 
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+  }
+
+  // ✅ Nuevos métodos de formato para balances
+  formatWAXBalance() {
+    const wax = parseFloat(this.balance);
+    return isNaN(wax) ? "0.00 WAX" : `${wax.toFixed(2)} WAX`;
+  }
+
+  formatSEXYBalance() {
+    const sexy = parseFloat(this.sexyBalance);
+    return isNaN(sexy) ? "0.00 SEXY" : `${sexy.toFixed(2)} SEXY`;
+  }
+
+  formatWAXOnly() {
+    const wax = parseFloat(this.balance);
+    return isNaN(wax) ? "0.00" : wax.toFixed(2);
+  }
+
+  formatSEXYOnly() {
+    const sexy = parseFloat(this.sexyBalance);
+    return isNaN(sexy) ? "0.00" : sexy.toFixed(2);
   }
 
   init() {
@@ -249,4 +255,4 @@ export class User {
   }
 }
 
-export const UserService = User.new(); // debe ser una instancia, no la clase User
+export const UserService = User.new();
