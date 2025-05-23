@@ -39,20 +39,21 @@ export default function LandingPage() {
     return () => clearInterval(timerRef.current);
   }, [videos]);
 
-  const handleLogin = (authType) => {
-    // Forzar autenticador y login inmediato
-    const authenticator = UserService.ual.authenticators.find(auth =>
-      auth.getStyle().text.toLowerCase().includes(authType.toLowerCase())
-    );
-    if (authenticator) {
-      UserService.callbackServerUserData = () => {
-        if (UserService.isLogged()) window.location.href = "/home";
-        else alert(`${authType} login failed.`);
-      };
-      UserService.ual.selectAuthenticator(authenticator);
-      UserService.ual.login();
+  const handleLogin = (wallet) => {
+    const buttons = document.querySelectorAll(".ual-button-gen");
+
+    let match = null;
+    buttons.forEach(btn => {
+      const text = btn.textContent?.toLowerCase();
+      if (text && text.includes(wallet)) {
+        match = btn;
+      }
+    });
+
+    if (match) {
+      match.click(); // Simula clic en el autenticador correcto
     } else {
-      alert(`Wallet "${authType}" not available`);
+      alert(`Login button for ${wallet} not found.`);
     }
   };
 
@@ -67,7 +68,7 @@ export default function LandingPage() {
       }}
       className="main-blur-gallery"
     >
-      {/* Título centrado detrás del modal */}
+      {/* Título centrado detrás del login modal */}
       <div
         style={{
           position: "absolute",
