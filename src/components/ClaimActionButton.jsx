@@ -12,6 +12,17 @@ export default function ClaimActionButton() {
     try {
       await UserService.claimRewards();
       setToast({ type: "success", message: "Claim successful!" });
+
+      // Mostrar toast de actualización
+      setTimeout(() => {
+        setToast({ type: "info", message: "Updating balances..." });
+
+        UserService.reloadBalances().then(() => {
+          setTimeout(() => {
+            setToast({ type: "success", message: "Balances updated!" });
+          }, 500);
+        });
+      }, 1500);
     } catch (e) {
       setToast({ type: "error", message: "Claim failed: " + (e.message || e) });
     }
@@ -24,15 +35,21 @@ export default function ClaimActionButton() {
       return () => clearTimeout(timer);
     }, []);
 
+    const backgroundColor = {
+      success: "#22c55e",
+      error: "#ef4444",
+      info: "#3b82f6"
+    }[type] || "#555";
+
     return (
       <div style={{
         position: "fixed",
-        top: 100, // Más abajo para evitar el menú
+        top: 100,
         right: 20,
         zIndex: 9999,
         padding: "14px 22px",
         borderRadius: 10,
-        backgroundColor: type === "success" ? "#22c55e" : "#ef4444",
+        backgroundColor,
         color: "#fff",
         boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
         fontSize: 16,
