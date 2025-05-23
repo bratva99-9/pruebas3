@@ -9,8 +9,8 @@ const CHANGE_INTERVAL = 5000;
 
 export default function LandingPage() {
   const [videos, setVideos] = useState([]);
-  const [gallery, setGallery] = useState([]);
-  const [isUALVisible, setIsUALVisible] = useState(false);
+  const [gallery, setGallery] = useState(Array(CARD_COUNT).fill(null));
+  const [ualVisible, setUalVisible] = useState(false);
   const timerRef = useRef();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -21,17 +21,12 @@ export default function LandingPage() {
       divUal.setAttribute("id", "ual-login");
       document.body.appendChild(divUal);
     }
-
     UserService.init();
-
-    // Observa cambios en el DOM para detectar el modal de UAL
     const observer = new MutationObserver(() => {
-      const modal = document.querySelector(".ual-modal, .ual-container, .ual-content");
-      setIsUALVisible(!!modal);
+      const ual = document.querySelector(".ual-modal");
+      setUalVisible(Boolean(ual && ual.style.display !== "none"));
     });
-
     observer.observe(document.body, { childList: true, subtree: true });
-
     return () => observer.disconnect();
   }, []);
 
@@ -68,7 +63,7 @@ export default function LandingPage() {
   const handleLogin = () => {
     UserService.login(() => {
       if (UserService.isLogged()) {
-        history.push("/home");
+        history.push('/home');
       } else {
         dispatch(setPlayerLogout());
       }
@@ -76,70 +71,82 @@ export default function LandingPage() {
   };
 
   return (
-    <div style={{
-      width: "100vw",
-      height: "100vh",
-      position: "relative",
-      overflow: "hidden",
-      background: "#181824"
-    }}>
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        position: "relative",
+        overflow: "hidden",
+        background: "#181824"
+      }}
+    >
       {/* Galería de fondo */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
-        gap: 24,
-        height: "100%",
-        width: "100%",
-        position: "absolute",
-        top: 0,
-        left: 0,
-        padding: "24px 2vw",
-        zIndex: 0
-      }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          height: "100%",
+          width: "100%",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          zIndex: 0,
+        }}
+      >
         {gallery.map((vid, idx) => (
-          <video
-            key={idx}
-            src={vid}
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: 28,
-              filter: "blur(16px) brightness(0.85)"
-            }}
-          />
+          <div key={idx} style={{ width: "100%", height: "100%" }}>
+            {vid && (
+              <video
+                src={vid}
+                autoPlay
+                muted
+                loop
+                playsInline
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "0px",
+                  filter: "blur(20px) brightness(0.8) saturate(1.1)"
+                }}
+              />
+            )}
+          </div>
         ))}
       </div>
 
-      {/* Texto y botón (ocultos cuando el UAL modal está abierto) */}
-      {!isUALVisible && (
+      {/* Título y botón solo si no está visible el UAL */}
+      {!ualVisible && (
         <>
-          <h1 style={{
-            position: "absolute",
-            top: "40%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            fontFamily: "'Pacifico', cursive",
-            fontSize: "6vw",
-            color: "#ff36ba",
-            textShadow: "0 3px 24px #0008",
-            zIndex: 2,
-            margin: 0
-          }}>
+          <div
+            style={{
+              position: "absolute",
+              top: "40%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 1,
+              pointerEvents: "none",
+              fontFamily: "'Pacifico', cursive",
+              fontSize: "5vw",
+              color: "#ff36ba",
+              textShadow: "0 4px 24px #000a",
+              fontWeight: "bold",
+              textAlign: "center",
+              userSelect: "none"
+            }}
+          >
             Night Club Game
-          </h1>
+          </div>
 
-          <div style={{
-            position: "absolute",
-            top: "58%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 2
-          }}>
+          <div
+            style={{
+              position: "absolute",
+              top: "55%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 1,
+            }}
+          >
             <button
               onClick={handleLogin}
               style={{
@@ -148,10 +155,10 @@ export default function LandingPage() {
                 backgroundColor: "#ff36ba",
                 color: "#fff",
                 border: "none",
-                borderRadius: 16,
+                borderRadius: 14,
                 cursor: "pointer",
                 fontWeight: "bold",
-                boxShadow: "0 4px 24px #0005"
+                boxShadow: "0 4px 24px #0006"
               }}
             >
               Login to Play
