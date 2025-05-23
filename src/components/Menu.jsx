@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import LogoIcon from '../images/3DK_LOGO_ICON_1300.png';
-import EnterIcon from '../images/enter.png';
 import ExitIcon from '../images/exit.png';
 import { UserService } from '../UserService';
 import { setPlayerLogout } from '../GlobalState/UserReducer';
@@ -17,16 +16,6 @@ export const Menu = () => {
       UserService.reloadBalances();
     }
   }, [UserState.isLogged]);
-
-  const handleLogin = () => {
-    UserService.login(() => {
-      if (UserService.isLogged()) {
-        locationHistory.push('/home');
-      } else {
-        dispatch(setPlayerLogout());
-      }
-    });
-  };
 
   const onHandleLogout = () => {
     UserService.logout();
@@ -69,12 +58,10 @@ export const Menu = () => {
           letterSpacing: 1,
           textShadow: "0 2px 8px #5325e955"
         }}>
-          {UserState.isLogged ? (
+          {UserState.isLogged && (
             <>
               {UserState.name} - <span style={{ color: "#fff" }}>Wallet:</span> {UserState.balance} - <span style={{ color: "#fff" }}>SEXY:</span> {UserService.sexyBalance}
             </>
-          ) : (
-            <span style={{ fontWeight: 500, color: "#fff8" }}>Inicia sesión</span>
           )}
         </span>
       </div>
@@ -92,26 +79,18 @@ export const Menu = () => {
           pointerEvents: UserState.isLogged ? "auto" : "none"
         }}>Page2</Link>
 
-        {/* Mostrar login o logout según el estado */}
-        {typeof UserState.isLogged === "boolean" && (
-          !UserState.isLogged ? (
-            <button style={loginBtnStyle} onClick={handleLogin}>
-              <img src={EnterIcon} alt="Login" style={{ width: 22, marginRight: 7, marginBottom: -3 }} />
-              Login
-            </button>
-          ) : (
-            <button style={logoutBtnStyle} onClick={onHandleLogout}>
-              Logout
-              <img src={ExitIcon} alt="Exit" style={{ width: 21, marginLeft: 7, marginBottom: -3 }} />
-            </button>
-          )
+        {UserState.isLogged && (
+          <button style={logoutBtnStyle} onClick={onHandleLogout}>
+            Logout
+            <img src={ExitIcon} alt="Exit" style={{ width: 21, marginLeft: 7, marginBottom: -3 }} />
+          </button>
         )}
       </div>
     </nav>
   );
 };
 
-// --- ESTILOS REUTILIZABLES ---
+// --- ESTILOS ---
 const navBtnStyle = {
   background: "linear-gradient(90deg,#ff36ba 0%,#7e47f7 100%)",
   color: "#fff",
@@ -128,14 +107,6 @@ const navBtnStyle = {
   outline: "none",
   textDecoration: "none",
   letterSpacing: 0.5
-};
-
-const loginBtnStyle = {
-  ...navBtnStyle,
-  background: "linear-gradient(90deg,#7e47f7 0%,#ff36ba 100%)",
-  color: "#fff",
-  display: "flex",
-  alignItems: "center",
 };
 
 const logoutBtnStyle = {
