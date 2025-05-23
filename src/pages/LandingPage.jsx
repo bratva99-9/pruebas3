@@ -10,7 +10,7 @@ const CHANGE_INTERVAL = 5000;
 export default function LandingPage() {
   const [videos, setVideos] = useState([]);
   const [gallery, setGallery] = useState(Array(CARD_COUNT).fill(null));
-  const [ualVisible, setUalVisible] = useState(false);
+  const [showLoginUI, setShowLoginUI] = useState(true);
   const timerRef = useRef();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -22,12 +22,6 @@ export default function LandingPage() {
       document.body.appendChild(divUal);
     }
     UserService.init();
-    const observer = new MutationObserver(() => {
-      const ual = document.querySelector(".ual-modal");
-      setUalVisible(Boolean(ual && ual.style.display !== "none"));
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -61,110 +55,65 @@ export default function LandingPage() {
   }, [videos]);
 
   const handleLogin = () => {
+    setShowLoginUI(false);
     UserService.login(() => {
       if (UserService.isLogged()) {
         history.push('/home');
       } else {
+        setShowLoginUI(true);
         dispatch(setPlayerLogout());
       }
     });
   };
 
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        position: "relative",
-        overflow: "hidden",
-        background: "#181824"
-      }}
-    >
-      {/* Galería de fondo */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          height: "100%",
-          width: "100%",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          zIndex: 0,
-        }}
-      >
+    <div style={{ width: "100vw", height: "100vh", overflow: "hidden", position: "relative", background: "#181824" }}>
+      {/* Video Background */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", height: "100%", gap: "24px", padding: "28px 2vw", position: "absolute", top: 0, left: 0, zIndex: 0 }}>
         {gallery.map((vid, idx) => (
-          <div key={idx} style={{ width: "100%", height: "100%" }}>
-            {vid && (
-              <video
-                src={vid}
-                autoPlay
-                muted
-                loop
-                playsInline
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "0px",
-                  filter: "blur(20px) brightness(0.8) saturate(1.1)"
-                }}
-              />
+          <div key={idx} style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {vid ? (
+              <video src={vid} autoPlay muted loop playsInline style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "32px", filter: "blur(18px) brightness(0.85) saturate(1.1)" }} />
+            ) : (
+              <div style={{ color: "#fff", fontSize: 24, textAlign: "center", paddingTop: "60%" }}>Cargando...</div>
             )}
           </div>
         ))}
       </div>
 
-      {/* Título y botón solo si no está visible el UAL */}
-      {!ualVisible && (
-        <>
-          <div
-            style={{
-              position: "absolute",
-              top: "40%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              zIndex: 1,
-              pointerEvents: "none",
-              fontFamily: "'Pacifico', cursive",
-              fontSize: "5vw",
-              color: "#ff36ba",
-              textShadow: "0 4px 24px #000a",
-              fontWeight: "bold",
-              textAlign: "center",
-              userSelect: "none"
-            }}
-          >
+      {/* Centered Title */}
+      {showLoginUI && (
+        <div style={{ position: "absolute", top: "40%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 1, textAlign: "center" }}>
+          <span style={{
+            fontFamily: "'Pacifico', cursive",
+            fontSize: "5vw",
+            color: "#ff36ba",
+            textShadow: "0 3px 24px #170415cc, 0 1.5px 8px #000c",
+            letterSpacing: 2,
+            userSelect: "none",
+            fontWeight: "bold"
+          }}>
             Night Club Game
-          </div>
-
-          <div
-            style={{
-              position: "absolute",
-              top: "55%",
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: 1,
-            }}
-          >
+          </span>
+          <div style={{ marginTop: 24 }}>
             <button
               onClick={handleLogin}
               style={{
                 padding: "14px 36px",
                 fontSize: 18,
-                backgroundColor: "#ff36ba",
+                backgroundColor: "#e11d48",
                 color: "#fff",
                 border: "none",
                 borderRadius: 14,
                 cursor: "pointer",
                 fontWeight: "bold",
-                boxShadow: "0 4px 24px #0006"
+                boxShadow: "0 4px 24px #0004"
               }}
             >
               Login to Play
             </button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
