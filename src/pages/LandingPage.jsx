@@ -10,7 +10,7 @@ export default function LandingPage() {
   const timerRef = useRef();
 
   useEffect(() => {
-    UserService.init(); // Inicializa UAL y renderiza los botones
+    UserService.init(); // Inicializa UAL
   }, []);
 
   useEffect(() => {
@@ -43,41 +43,12 @@ export default function LandingPage() {
     return () => clearInterval(timerRef.current);
   }, [videos]);
 
-  const handleLogin = (wallet) => {
-    const maxRetries = 10;
-    let attempts = 0;
-
-    const tryLogin = () => {
-      const buttons = document.querySelectorAll(".ual-button-gen");
-      let match = null;
-
-      buttons.forEach(btn => {
-        const text = btn.textContent?.toLowerCase();
-        if (text && text.includes(wallet)) {
-          match = btn;
-        }
-      });
-
-      if (match) {
-        UserService.callbackServerUserData = () => {
-          if (UserService.isLogged()) {
-            window.location.href = "/home";
-          } else {
-            alert(`Login with ${wallet} failed.`);
-          }
-        };
-        match.click();
-      } else {
-        if (attempts < maxRetries) {
-          attempts++;
-          setTimeout(tryLogin, 300);
-        } else {
-          alert(`Login button for ${wallet} not found after waiting.`);
-        }
+  const handleLogin = () => {
+    UserService.login(() => {
+      if (UserService.isLogged()) {
+        window.location.href = "/home";
       }
-    };
-
-    tryLogin();
+    });
   };
 
   return (
@@ -91,7 +62,7 @@ export default function LandingPage() {
       }}
       className="main-blur-gallery"
     >
-      {/* Título centrado detrás del modal */}
+      {/* Título centrado */}
       <div
         style={{
           position: "absolute",
@@ -126,7 +97,6 @@ export default function LandingPage() {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
-          gridTemplateRows: "1fr",
           gap: "24px",
           height: "100%",
           width: "100%",
@@ -178,7 +148,7 @@ export default function LandingPage() {
         ))}
       </div>
 
-      {/* Botones de login */}
+      {/* Único botón de login */}
       <div
         style={{
           position: "absolute",
@@ -186,39 +156,24 @@ export default function LandingPage() {
           width: "100%",
           display: "flex",
           justifyContent: "center",
-          gap: 40,
           zIndex: 5
         }}
       >
         <button
-          onClick={() => handleLogin("anchor")}
+          onClick={handleLogin}
           style={{
-            padding: "12px 28px",
+            padding: "14px 36px",
             fontSize: 18,
-            backgroundColor: "#512da8",
+            backgroundColor: "#e11d48",
             color: "#fff",
             border: "none",
-            borderRadius: 10,
+            borderRadius: 14,
             cursor: "pointer",
-            fontWeight: "bold"
+            fontWeight: "bold",
+            boxShadow: "0 4px 24px #0004"
           }}
         >
-          Login with Anchor
-        </button>
-        <button
-          onClick={() => handleLogin("wax")}
-          style={{
-            padding: "12px 28px",
-            fontSize: 18,
-            backgroundColor: "#03a9f4",
-            color: "#fff",
-            border: "none",
-            borderRadius: 10,
-            cursor: "pointer",
-            fontWeight: "bold"
-          }}
-        >
-          Login with Cloud Wallet
+          Login to Play
         </button>
       </div>
     </div>
