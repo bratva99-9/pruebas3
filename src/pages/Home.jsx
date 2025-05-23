@@ -2,6 +2,8 @@ import React from "react";
 import StakingModal from "../components/StakingModal";
 import UnstakeModal from "../components/UnstakeModal";
 import ClaimRewardsCard from "../components/ClaimRewardsCard";
+import ClaimRewardsCard from "../components/ClaimActionButton";
+import ClaimActionButton from "../components/ClaimActionButton";
 
 export default function Home() {
   return (
@@ -10,6 +12,7 @@ export default function Home() {
         Night Club Game
       </h1>
       <StakingModal />
+      <ClaimActionButton/>
       <UnstakeModal />
       <div className="mt-12">
         <ClaimRewardsCard />
