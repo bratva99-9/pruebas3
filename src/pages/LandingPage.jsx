@@ -10,7 +10,7 @@ export default function LandingPage() {
   const timerRef = useRef();
 
   useEffect(() => {
-    UserService.init(); // Importante: asegura que UALJs se inicialice
+    UserService.init(); // Inicializa UAL y renderiza los botones
   }, []);
 
   useEffect(() => {
@@ -44,27 +44,40 @@ export default function LandingPage() {
   }, [videos]);
 
   const handleLogin = (wallet) => {
-    const buttons = document.querySelectorAll(".ual-button-gen");
-    let match = null;
-    buttons.forEach(btn => {
-      const text = btn.textContent?.toLowerCase();
-      if (text && text.includes(wallet)) {
-        match = btn;
-      }
-    });
+    const maxRetries = 10;
+    let attempts = 0;
 
-    if (match) {
-      UserService.callbackServerUserData = () => {
-        if (UserService.isLogged()) {
-          window.location.href = "/home";
-        } else {
-          alert(`Login with ${wallet} failed.`);
+    const tryLogin = () => {
+      const buttons = document.querySelectorAll(".ual-button-gen");
+      let match = null;
+
+      buttons.forEach(btn => {
+        const text = btn.textContent?.toLowerCase();
+        if (text && text.includes(wallet)) {
+          match = btn;
         }
-      };
-      match.click();
-    } else {
-      alert(`Login button for ${wallet} not found.`);
-    }
+      });
+
+      if (match) {
+        UserService.callbackServerUserData = () => {
+          if (UserService.isLogged()) {
+            window.location.href = "/home";
+          } else {
+            alert(`Login with ${wallet} failed.`);
+          }
+        };
+        match.click();
+      } else {
+        if (attempts < maxRetries) {
+          attempts++;
+          setTimeout(tryLogin, 300);
+        } else {
+          alert(`Login button for ${wallet} not found after waiting.`);
+        }
+      }
+    };
+
+    tryLogin();
   };
 
   return (
