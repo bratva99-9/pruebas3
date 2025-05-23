@@ -11,9 +11,9 @@ export default function ClaimActionButton() {
     setClaiming(true);
     try {
       await UserService.claimRewards();
-      setToast({ type: "success", message: "¡Claim exitoso!" });
+      setToast({ type: "success", message: "Claim successful!" });
     } catch (e) {
-      setToast({ type: "error", message: "Error al reclamar: " + (e.message || e) });
+      setToast({ type: "error", message: "Claim failed: " + (e.message || e) });
     }
     setClaiming(false);
   };
@@ -27,7 +27,7 @@ export default function ClaimActionButton() {
     return (
       <div style={{
         position: "fixed",
-        top: 20,
+        top: 100, // Más abajo para evitar el menú
         right: 20,
         zIndex: 9999,
         padding: "14px 22px",
