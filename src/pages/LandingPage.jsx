@@ -9,7 +9,8 @@ const CHANGE_INTERVAL = 5000;
 
 export default function LandingPage() {
   const [videos, setVideos] = useState([]);
-  const [gallery, setGallery] = useState(Array(CARD_COUNT).fill(null));
+  const [gallery, setGallery] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const timerRef = useRef();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -18,12 +19,18 @@ export default function LandingPage() {
     if (!document.getElementById("ual-login")) {
       const divUal = document.createElement("div");
       divUal.setAttribute("id", "ual-login");
-      divUal.style.position = "relative"; // importante para stacking
-      divUal.style.zIndex = 99; // muy por encima del contenido de fondo
       document.body.appendChild(divUal);
     }
 
     UserService.init();
+
+    const observer = new MutationObserver(() => {
+      const modalVisible = !!document.querySelector(".ual-modal");
+      setIsModalOpen(modalVisible);
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -67,116 +74,89 @@ export default function LandingPage() {
   };
 
   return (
-    <div style={styles.container}>
+    <div style={{
+      width: "100vw",
+      height: "100vh",
+      position: "relative",
+      overflow: "hidden",
+      background: "#181824"
+    }}>
       {/* Galería de fondo */}
-      <div style={styles.galleryGrid}>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4, 1fr)",
+        gap: 24,
+        height: "100%",
+        width: "100%",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        padding: "24px 2vw",
+        zIndex: 0
+      }}>
         {gallery.map((vid, idx) => (
-          <div key={idx} style={styles.videoWrapper}>
-            {vid ? (
-              <video
-                src={vid}
-                autoPlay
-                muted
-                loop
-                playsInline
-                style={styles.video}
-                onMouseEnter={e => e.currentTarget.style.filter = "blur(9px) brightness(1.05) saturate(1.1)"}
-                onMouseLeave={e => e.currentTarget.style.filter = styles.video.filter}
-              />
-            ) : (
-              <div style={styles.loading}>Loading...</div>
-            )}
-          </div>
+          <video
+            key={idx}
+            src={vid}
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: 28,
+              filter: "blur(16px) brightness(0.85)"
+            }}
+          />
         ))}
       </div>
 
-      {/* Contenedor del título y botón */}
-      <div style={styles.centerContent}>
-        <h1 style={styles.title}>Night Club Game</h1>
-        <button onClick={handleLogin} style={styles.loginButton}>
-          Login to Play
-        </button>
-      </div>
+      {/* Texto y botón: solo si el modal no está visible */}
+      {!isModalOpen && (
+        <>
+          <h1 style={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            fontFamily: "'Pacifico', cursive",
+            fontSize: "6vw",
+            color: "#ff36ba",
+            textShadow: "0 3px 24px #0008",
+            zIndex: 1,
+            margin: 0
+          }}>
+            Night Club Game
+          </h1>
+
+          <div style={{
+            position: "absolute",
+            top: "58%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 1
+          }}>
+            <button
+              onClick={handleLogin}
+              style={{
+                padding: "14px 36px",
+                fontSize: 18,
+                backgroundColor: "#ff36ba",
+                color: "#fff",
+                border: "none",
+                borderRadius: 16,
+                cursor: "pointer",
+                fontWeight: "bold",
+                boxShadow: "0 4px 24px #0005"
+              }}
+            >
+              Login to Play
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
-
-const styles = {
-  container: {
-    width: "100vw",
-    height: "100vh",
-    position: "relative",
-    overflow: "hidden",
-    background: "#181824"
-  },
-  galleryGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-    height: "100%",
-    width: "100%",
-    position: "absolute",
-    top: 0,
-    left: 0,
-    padding: "28px 2vw",
-    zIndex: 0
-  },
-  videoWrapper: {
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  video: {
-    width: "100%",
-    height: "100%",
-    aspectRatio: "9 / 16",
-    objectFit: "cover",
-    borderRadius: "28px",
-    filter: "blur(18px) brightness(0.85) saturate(1.1)",
-    transition: "filter 0.38s ease-in-out"
-  },
-  loading: {
-    color: "#fff",
-    fontSize: 24,
-    textAlign: "center",
-    paddingTop: "60%"
-  },
-  centerContent: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    zIndex: 2,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 24,
-    width: "100%",
-    pointerEvents: "none"
-  },
-  title: {
-    fontFamily: "'Pacifico', cursive, Arial",
-    fontSize: "6vw",
-    color: "#ff36ba",
-    textShadow: "0 3px 24px #170415cc, 0 1.5px 8px #000c",
-    letterSpacing: 2,
-    userSelect: "none",
-    fontWeight: "bold",
-    textAlign: "center",
-    margin: 0
-  },
-  loginButton: {
-    padding: "16px 42px",
-    fontSize: 18,
-    backgroundColor: "#ff36ba",
-    color: "#fff",
-    border: "none",
-    borderRadius: 20,
-    cursor: "pointer",
-    fontWeight: "bold",
-    boxShadow: "0 4px 24px #0005",
-    transition: "all 0.3s ease",
-    pointerEvents: "auto"
-  }
-};
