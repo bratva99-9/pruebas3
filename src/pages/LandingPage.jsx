@@ -66,8 +66,7 @@ export default function LandingPage() {
 
   return (
     <div style={styles.container}>
-      
-      {/* Galería de videos */}
+      {/* Galería de fondo */}
       <div style={styles.galleryGrid}>
         {gallery.map((vid, idx) => (
           <div key={idx} style={styles.videoWrapper}>
@@ -89,13 +88,9 @@ export default function LandingPage() {
         ))}
       </div>
 
-      {/* Título centrado */}
-      <div style={styles.titleContainer}>
+      {/* Contenedor del título y botón */}
+      <div style={styles.centerContent}>
         <h1 style={styles.title}>Night Club Game</h1>
-      </div>
-
-      {/* Botón de login */}
-      <div style={styles.buttonContainer}>
         <button onClick={handleLogin} style={styles.loginButton}>
           Login to Play
         </button>
@@ -145,14 +140,16 @@ const styles = {
     textAlign: "center",
     paddingTop: "60%"
   },
-  titleContainer: {
+  centerContent: {
     position: "absolute",
+    top: "50%",
     left: "50%",
-    top: "30%",
     transform: "translate(-50%, -50%)",
     zIndex: 2,
-    pointerEvents: "none",
-    textAlign: "center",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 24,
     width: "100%"
   },
   title: {
@@ -163,15 +160,8 @@ const styles = {
     letterSpacing: 2,
     userSelect: "none",
     fontWeight: "bold",
+    textAlign: "center",
     margin: 0
-  },
-  buttonContainer: {
-    position: "absolute",
-    bottom: 40,
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    zIndex: 3
   },
   loginButton: {
     padding: "16px 42px",
