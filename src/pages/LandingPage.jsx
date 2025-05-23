@@ -65,74 +65,22 @@ export default function LandingPage() {
   };
 
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "calc(100vh - 80px)",
-        position: "relative",
-        overflow: "hidden",
-        background: "#181824"
-      }}
-      className="main-blur-gallery"
-    >
-      {/* Título centrado */}
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-          zIndex: 0, // Corregido: por debajo del modal UAL
-          pointerEvents: "none",
-          width: "100vw",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "'Pacifico', cursive, Arial",
-            fontSize: "6.5vw",
-            color: "#ff36ba",
-            textShadow: "0 3px 24px #170415cc, 0 1.5px 8px #000c",
-            letterSpacing: 2,
-            userSelect: "none",
-            fontWeight: "bold"
-          }}
-        >
-          Night Club Game
-        </span>
-      </div>
-
-      {/* Galería de videos */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "24px",
-          height: "100%",
-          width: "100%",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          padding: "28px 2vw",
-          background: "transparent"
-        }}
-      >
+    <div style={{ width: "100vw", height: "calc(100vh - 80px)", position: "relative", overflow: "hidden" }}>
+      
+      {/* Galería de videos - fondo */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4, 1fr)",
+        gap: "24px",
+        height: "100%",
+        width: "100%",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        zIndex: 0
+      }}>
         {gallery.map((vid, idx) => (
-          <div
-            key={idx}
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
+          <div key={idx} style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             {vid ? (
               <video
                 src={vid}
@@ -153,25 +101,43 @@ export default function LandingPage() {
                 onMouseLeave={e => e.currentTarget.style.filter = "blur(18px) brightness(0.85) saturate(1.1)"}
               />
             ) : (
-              <div style={{ color: "#fff", fontSize: 24, textAlign: "center", paddingTop: "60%" }}>
-                Cargando...
-              </div>
+              <div style={{ color: "#fff", fontSize: 24 }}>Cargando...</div>
             )}
           </div>
         ))}
       </div>
 
-      {/* Botón de login */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 40,
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          zIndex: 5
-        }}
-      >
+      {/* Texto centrado por encima de galería */}
+      <div style={{
+        position: "absolute",
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
+        zIndex: 1,
+        pointerEvents: "none"
+      }}>
+        <span style={{
+          fontFamily: "'Pacifico', cursive, Arial",
+          fontSize: "6.5vw",
+          color: "#ff36ba",
+          textShadow: "0 3px 24px #170415cc, 0 1.5px 8px #000c",
+          letterSpacing: 2,
+          userSelect: "none",
+          fontWeight: "bold"
+        }}>
+          Night Club Game
+        </span>
+      </div>
+
+      {/* Botón login */}
+      <div style={{
+        position: "absolute",
+        bottom: 40,
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        zIndex: 2
+      }}>
         <button
           onClick={handleLogin}
           style={{
