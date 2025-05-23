@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import LogoIcon from '../images/3DK_LOGO_ICON_1300.png';
 import ExitIcon from '../images/exit.png';
 import { UserService } from '../UserService';
-import { setPlayerLogout } from '../GlobalState/UserReducer';
 
 export const Menu = () => {
-  const dispatch = useDispatch();
   const locationHistory = useHistory();
   const UserState = useSelector((store) => store.user);
 
@@ -19,6 +17,7 @@ export const Menu = () => {
 
   const onHandleLogout = () => {
     UserService.logout();
+    locationHistory.push('/');
   };
 
   return (
@@ -90,7 +89,6 @@ export const Menu = () => {
   );
 };
 
-// --- ESTILOS ---
 const navBtnStyle = {
   background: "linear-gradient(90deg,#ff36ba 0%,#7e47f7 100%)",
   color: "#fff",
