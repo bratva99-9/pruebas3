@@ -2,7 +2,6 @@ import React from "react";
 import StakingModal from "../components/StakingModal";
 import UnstakeModal from "../components/UnstakeModal";
 import ClaimRewardsCard from "../components/ClaimRewardsCard";
-import ClaimRewardsCard from "../components/ClaimActionButton";
 import ClaimActionButton from "../components/ClaimActionButton";
 
 export default function Home() {
