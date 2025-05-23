@@ -18,6 +18,8 @@ export default function LandingPage() {
     if (!document.getElementById("ual-login")) {
       const divUal = document.createElement("div");
       divUal.setAttribute("id", "ual-login");
+      divUal.style.position = "relative"; // importante para stacking
+      divUal.style.zIndex = 99; // muy por encima del contenido de fondo
       document.body.appendChild(divUal);
     }
 
@@ -150,7 +152,8 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     gap: 24,
-    width: "100%"
+    width: "100%",
+    pointerEvents: "none"
   },
   title: {
     fontFamily: "'Pacifico', cursive, Arial",
@@ -173,6 +176,7 @@ const styles = {
     cursor: "pointer",
     fontWeight: "bold",
     boxShadow: "0 4px 24px #0005",
-    transition: "all 0.3s ease"
+    transition: "all 0.3s ease",
+    pointerEvents: "auto"
   }
 };
