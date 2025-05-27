@@ -13,8 +13,10 @@ import {
 } from './GlobalState/UserReducer';
 
 export class User {
+  // Nombre de la app para UAL
   appName = 'ual_template';
 
+  // Configuración de la cadena WAX
   myChain = {
     chainId: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
     rpcEndpoints: [{
@@ -24,33 +26,40 @@ export class User {
     }]
   };
 
-  // Instancia global de JsonRpc
+  // Instancia para llamadas RPC
   rpc = new JsonRpc('https://wax.greymass.com');
 
+  // UAL session
   ual;
   authName = undefined;
   serviceLoginName = undefined;
   session = undefined;
 
+  // Balances como strings
   balance = "0.00000000 WAX";
   sexyBalance = "0.00000000 SEXY";
 
+  // Callback cuando cambia el estado de login
   callbackServerUserData = undefined;
 
+  // Devuelve el nombre de cuenta activo
   getName() {
     return this.authName;
   }
 
+  // Inicia el flujo de login (click al botón UAL)
   login(callback) {
     const ualButton = document.querySelector(".ual-button-gen");
     if (ualButton) ualButton.click();
     this.callbackServerUserData = callback;
   }
 
+  // ¿Está logueado?
   isLogged() {
     return !isEmpty(this.authName) && !isEmpty(this.session);
   }
 
+  // Logout de UAL y redux
   logout() {
     this.authName = undefined;
     this.session = undefined;
@@ -59,6 +68,7 @@ export class User {
     if (this.callbackServerUserData) this.callbackServerUserData();
   }
 
+  // Callback que recibe UAL cuando el usuario se autentica
   async ualCallback(userObject) {
     this.session = userObject[0];
     this.serviceLoginName = this.session.constructor.name;
@@ -74,24 +84,29 @@ export class User {
     if (this.callbackServerUserData) this.callbackServerUserData();
   }
 
+  // Recarga ambos balances
   async reloadBalances() {
     await this.getBalance();
     await this.getSexyBalance();
   }
 
+  // WAX on‐chain balance
   getBalance() {
     if (!this.authName) return;
     
-    return this.rpc.get_account(this.authName).then(accountData => {
-      this.balance = accountData.core_liquid_balance || "0.00000000 WAX";
-      storeAppDispatch(setPlayerBalance(this.balance));
-    }).catch(err => {
-      console.error("Error al obtener balance de WAX:", err.message);
-      this.balance = "0.00000000 WAX";
-      storeAppDispatch(setPlayerBalance(this.balance));
-    });
+    return this.rpc.get_account(this.authName)
+      .then(accountData => {
+        this.balance = accountData.core_liquid_balance || "0.00000000 WAX";
+        storeAppDispatch(setPlayerBalance(this.balance));
+      })
+      .catch(err => {
+        console.error("Error al obtener balance de WAX:", err.message);
+        this.balance = "0.00000000 WAX";
+        storeAppDispatch(setPlayerBalance(this.balance));
+      });
   }
 
+  // SEXY token balance
   async getSexyBalance() {
     if (!this.authName) return;
     
@@ -110,12 +125,11 @@ export class User {
     }
   }
 
+  // Enviar NFTs al contrato (misiones, stake, etc.)
   async stakeNFTs(asset_ids, memo = "") {
     if (!this.session || !this.authName) throw new Error("No wallet session activa.");
     if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay NFTs seleccionados.");
 
-    // Directamente enviar los NFTs sin verificar registro
-    // El contrato manejará la lógica necesaria al recibir los NFTs con el memo de misión
     const actions = [{
       account: "atomicassets",
       name: "transfer",
@@ -123,14 +137,15 @@ export class User {
       data: {
         from: this.authName,
         to: "nightclubapp",
-        asset_ids: asset_ids,
-        memo: memo
+        asset_ids,
+        memo
       }
     }];
 
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
+  // Reclamar todas las recompensas
   async claimRewards() {
     if (!this.session || !this.authName) throw new Error("No active session");
 
@@ -144,7 +159,7 @@ export class User {
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
-  // Nuevo método para obtener misiones activas del usuario
+  // Obtener misiones activas del usuario
   async getUserActiveMissions() {
     if (!this.authName) return [];
     
@@ -162,7 +177,7 @@ export class User {
     }
   }
 
-  // Nuevo método para obtener tipos de misiones disponibles
+  // Obtener tipos de misiones disponibles
   async getMissionTypes() {
     try {
       const response = await this.rpc.get_table_rows({
@@ -178,7 +193,7 @@ export class User {
     }
   }
 
-  // Nuevo método para reclamar recompensas de misión
+  // Reclamar recompensa de una misión en específico
   async claimMissionRewards(missionId) {
     if (!this.session || !this.authName) throw new Error("No sesión activa");
 
@@ -186,21 +201,21 @@ export class User {
       account: "nightclubapp",
       name: "claimmission",
       authorization: [{ actor: this.authName, permission: "active" }],
-      data: { 
-        user: this.authName, 
-        mission_id: missionId 
+      data: {
+        user: this.authName,
+        mission_id: missionId
       }
     }];
 
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
-  // Método de utilidad para explorar tablas del contrato
+  // Explorar todas las tablas ABI del contrato
   async getContractTables() {
     try {
-      const abi = await this.rpc.get_abi('nightclubapp');
-      if (abi && abi.abi && abi.abi.tables) {
-        return abi.abi.tables.map(table => ({
+      const { abi } = await this.rpc.get_abi('nightclubapp');
+      if (abi && abi.tables) {
+        return abi.tables.map(table => ({
           name: table.name,
           type: table.type,
           indexes: table.indexes
@@ -212,25 +227,32 @@ export class User {
       return [];
     }
   }
+
+  // Formatea el balance WAX con 2 decimales y sufijo
+  formatWAXBalance() {
     const wax = parseFloat(this.balance);
     return isNaN(wax) ? "0.00 WAX" : `${wax.toFixed(2)} WAX`;
   }
 
+  // Formatea el balance SEXY con 2 decimales y sufijo
   formatSEXYBalance() {
     const sexy = parseFloat(this.sexyBalance);
     return isNaN(sexy) ? "0.00 SEXY" : `${sexy.toFixed(2)} SEXY`;
   }
 
+  // Sólo número WAX (2 decimales, sin sufijo)
   formatWAXOnly() {
     const wax = parseFloat(this.balance);
     return isNaN(wax) ? "0.00" : wax.toFixed(2);
   }
 
+  // Sólo número SEXY (2 decimales, sin sufijo)
   formatSEXYOnly() {
     const sexy = parseFloat(this.sexyBalance);
     return isNaN(sexy) ? "0.00" : sexy.toFixed(2);
   }
 
+  // Inicializa UAL
   init() {
     this.ualCallback = this.ualCallback.bind(this);
 
@@ -249,6 +271,7 @@ export class User {
     this.ual.init();
   }
 
+  // Singleton
   static new() {
     if (!User.instance) {
       User.instance = new User();
@@ -257,4 +280,5 @@ export class User {
   }
 }
 
+// Exporta la instancia única
 export const UserService = User.new();
