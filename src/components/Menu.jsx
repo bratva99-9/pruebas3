@@ -21,7 +21,7 @@ export const Menu = () => {
     history.push('/');
   };
 
-  // Ocultar menú completo en landing page si no está logueado
+  // Hide complete menu on landing page if not logged in
   if (location.pathname === '/' && !UserState.isLogged) return null;
 
   return (
@@ -34,7 +34,7 @@ export const Menu = () => {
               {UserState.name} - {UserService.formatWAXOnly()} WAX - {UserService.formatSEXYOnly()} SEXY
             </>
           ) : (
-            <span style={{ fontWeight: 500, color: "#fff8" }}>Inicia sesión</span>
+            <span style={{ fontWeight: 500, color: "#fff8" }}>Please log in</span>
           )}
         </span>
       </div>
@@ -52,7 +52,7 @@ export const Menu = () => {
           ...styles.navBtn,
           opacity: UserState.isLogged ? 1 : 0.45,
           pointerEvents: UserState.isLogged ? "auto" : "none"
-        }}>Page2</Link>
+        }}>Transfer</Link>
         {UserState.isLogged && (
           <button style={styles.logoutBtn} onClick={onHandleLogout}>
             Logout

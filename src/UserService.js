@@ -131,28 +131,14 @@ export class User {
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
-  async unstakeNFTs(asset_ids) {
-    if (!this.session || !this.authName) throw new Error("No sesión activa");
-    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("Debes seleccionar NFTs");
+  async claimRewards() {
+    if (!this.session || !this.authName) throw new Error("No active session");
 
     const actions = [{
       account: "nightclubapp",
-      name: "unstake",
+      name: "claimall",
       authorization: [{ actor: this.authName, permission: "active" }],
-      data: { user: this.authName, asset_ids }
-    }];
-
-    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
-  }
-
-  async claimRewards(collection = "nightclubnft") {
-    if (!this.session || !this.authName) throw new Error("No sesión activa");
-
-    const actions = [{
-      account: "nightclubapp",
-      name: "claim",
-      authorization: [{ actor: this.authName, permission: "active" }],
-      data: { user: this.authName, collection }
+      data: { user: this.authName }
     }];
 
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
@@ -209,7 +195,23 @@ export class User {
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
-  formatWAXBalance() {
+  // Método de utilidad para explorar tablas del contrato
+  async getContractTables() {
+    try {
+      const abi = await this.rpc.get_abi('nightclubapp');
+      if (abi && abi.abi && abi.abi.tables) {
+        return abi.abi.tables.map(table => ({
+          name: table.name,
+          type: table.type,
+          indexes: table.indexes
+        }));
+      }
+      return [];
+    } catch (err) {
+      console.error("Error obteniendo tablas del contrato:", err);
+      return [];
+    }
+  }
     const wax = parseFloat(this.balance);
     return isNaN(wax) ? "0.00 WAX" : `${wax.toFixed(2)} WAX`;
   }

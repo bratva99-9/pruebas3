@@ -1,6 +1,5 @@
 import React from "react";
 import MissionModal from "../components/MissionModal";
-import UnstakeModal from "../components/UnstakeModal";
 import ClaimActionButton from "../components/ClaimActionButton";
 
 export default function Home() {
@@ -9,11 +8,10 @@ export default function Home() {
       <h1 style={styles.title}>Night Club Game</h1>
 
       <div style={styles.card}>
-        <h2 style={styles.sectionTitle}>Gestión de Misiones</h2>
+        <h2 style={styles.sectionTitle}>Mission Management</h2>
         <div style={styles.actions}>
           <MissionModal />
           <ClaimActionButton />
-          <UnstakeModal />
         </div>
       </div>
     </div>
