@@ -32,7 +32,9 @@ export default function MissionModal() {
       if (!activeMissions.length) setMessage("No active missions at this time");
     } catch {
       setMessage("Error loading missions");
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const fetchUserNFTs = useCallback(async () => {
@@ -54,7 +56,9 @@ export default function MissionModal() {
     } catch {
       setNfts([]);
       setMessage("Error loading your NFTs");
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   }, [wallet]);
 
   useEffect(() => {
@@ -85,7 +89,9 @@ export default function MissionModal() {
       setTimeout(handleClose, 2000);
     } catch (e) {
       setMessage(`Error: ${e.message || "Could not send to mission"}`);
-    } finally { setSending(false); }
+    } finally {
+      setSending(false);
+    }
   };
 
   const handleClose = () => {
