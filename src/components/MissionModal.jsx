@@ -1,226 +1,224 @@
-import React, { useEffect, useState } from "react";
-import { UserService } from "../UserService";
+import { UALJs } from 'ual-plainjs-renderer';
+import { Wax } from '@eosdacio/ual-wax';
+import { isEmpty } from 'lodash';
+import { Anchor } from 'ual-anchor';
 
-const COLLECTION = "nightclubnft";
-const MISSION_TYPES = [
-  { id: 1, label: "Recon Club" },
-  { id: 2, label: "Escort VIP" },
-  { id: 3, label: "Photoshoot" },
-  { id: 4, label: "After Party" },
-  { id: 5, label: "Challenge Semanal" }
-];
+import { storeAppDispatch } from './GlobalState/Store';
+import {
+  setPlayerBalance,
+  setPlayerData,
+  setPlayerLogout,
+  setPlayerSexy
+} from './GlobalState/UserReducer';
 
-export default function MissionsModal() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedMission, setSelectedMission] = useState(null);
-  const [nfts, setNfts] = useState([]);
-  const [selected, setSelected] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [mensaje, setMensaje] = useState("");
+export class User {
+  appName = 'ual_template';
 
-  const wallet = UserService.isLogged() ? UserService.getName() : null;
-
-  // Convierte hash de IPFS o URI a URL válida
-  const resolveIpfs = (hashOrUrl) => {
-    if (!hashOrUrl) return null;
-    if (hashOrUrl.startsWith("http")) return hashOrUrl;
-    const cleaned = hashOrUrl.replace(/^ipfs:\/\//, "");
-    return `https://ipfs.io/ipfs/${cleaned}`;
+  myChain = {
+    chainId: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
+    rpcEndpoints: [{
+      protocol: 'https',
+      host: 'wax.greymass.com',
+      port: ''
+    }]
   };
 
-  // Carga cartas del esquema 'girls' cuando se elige misión
-  useEffect(() => {
-    if (!modalOpen || !wallet || !selectedMission) return;
-    const fetchNFTs = async () => {
-      setMensaje("Cargando cartas...");
-      setLoading(true);
-      try {
-        const response = await fetch(
-          `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=${COLLECTION}&owner=${wallet}&schema_name=girls&limit=100`
-        );
-        const json = await response.json();
-        console.log("NFT data api:", json.data);
-        setNfts(Array.isArray(json.data) ? json.data : []);
-        setMensaje("");
-      } catch (e) {
-        console.error(e);
-        setMensaje("Error cargando cartas.");
-        setNfts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchNFTs();
-  }, [modalOpen, wallet, selectedMission]);
+  ual;
+  authName = undefined;
+  serviceLoginName = undefined;
+  session = undefined;
+  rpc = undefined;
 
-  // Selección de hasta 5 cartas
-  const toggleSelect = (assetId) => {
-    if (loading) return;
-    if (selected.includes(assetId)) {
-      setSelected(prev => prev.filter(id => id !== assetId));
-      setMensaje("");
-    } else {
-      if (selected.length >= 5) {
-        setMensaje("Máximo 5 cartas por envío.");
-        return;
-      }
-      setSelected(prev => [...prev, assetId]);
-      setMensaje("");
-    }
-  };
+  balance = "0.00000000 WAX";
+  sexyBalance = "0.00000000 SEXY";
 
-  // Envía staking con memo de misión
-  const handleStake = async () => {
-    if (!wallet || !selectedMission || selected.length === 0) return;
-    setMensaje("Firmando misión...");
-    setLoading(true);
+  callbackServerUserData = undefined;
+
+  getName() {
+    return this.authName;
+  }
+
+  login(callback) {
+    const ualButton = document.querySelector(".ual-button-gen");
+    if (ualButton) ualButton.click();
+    this.callbackServerUserData = callback;
+  }
+
+  isLogged() {
+    return !isEmpty(this.authName) && !isEmpty(this.session);
+  }
+
+  logout() {
+    this.authName = undefined;
+    this.session = undefined;
+    this.rpc = undefined;
+    this.ual.logoutUser();
+    storeAppDispatch(setPlayerLogout());
+    if (this.callbackServerUserData) this.callbackServerUserData();
+  }
+
+  async ualCallback(userObject) {
+    this.session = userObject[0];
+    this.rpc = this.session?.rpc;
+    this.serviceLoginName = this.session.constructor.name;
+    this.authName = await this.session.getAccountName();
+
+    storeAppDispatch(setPlayerData({
+      name: this.authName,
+      isLogged: this.isLogged(),
+      balance: this.balance
+    }));
+
+    await this.reloadBalances();
+    if (this.callbackServerUserData) this.callbackServerUserData();
+  }
+
+  async reloadBalances() {
+    await this.getBalance();
+    await this.getSexyBalance();
+  }
+
+  getBalance() {
+    if (!this.rpc || !this.authName) return;
+    return this.rpc.get_account(this.authName).then(accountData => {
+      this.balance = accountData.core_liquid_balance || "0.00000000 WAX";
+      storeAppDispatch(setPlayerBalance(this.balance));
+    }).catch(err => {
+      console.error("Error al obtener balance de WAX:", err.message);
+      this.balance = "0.00000000 WAX";
+      storeAppDispatch(setPlayerBalance(this.balance));
+    });
+  }
+
+  async getSexyBalance() {
+    if (!this.rpc || !this.authName) return;
     try {
-      const memo = `mission:${selectedMission}`;
-      console.log("Staking NFTs:", selected, "memo:", memo);
-      await UserService.stakeNFTs(selected, memo);
-      setMensaje("¡Misión enviada con éxito!");
-      setSelected([]);
-      setSelectedMission(null);
-      setTimeout(() => setModalOpen(false), 1700);
-    } catch (e) {
-      console.error(e);
-      setMensaje("Error al enviar: " + (e.message || e));
+      const result = await this.rpc.get_currency_balance(
+        'nightclub.gm',
+        this.authName,
+        'SEXY'
+      );
+      this.sexyBalance = result.length > 0 ? result[0] : "0.00000000 SEXY";
+      storeAppDispatch(setPlayerSexy(this.sexyBalance));
+    } catch (err) {
+      console.error("Error al obtener balance de SEXY:", err.message);
+      this.sexyBalance = "0.00000000 SEXY";
+      storeAppDispatch(setPlayerSexy(this.sexyBalance));
     }
-    setLoading(false);
-  };
+  }
 
-  return (
-    <>
-      <div style={{ textAlign: 'center', margin: '42px 0' }}>
-        <button
-          onClick={() => setModalOpen(true)}
-          disabled={!wallet}
-          style={{
-            background: 'linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)',
-            color: '#fff', padding: '12px 38px', border: 'none',
-            borderRadius: 14, fontWeight: 'bold', fontSize: 18,
-            cursor: wallet ? 'pointer' : 'not-allowed', opacity: wallet ? 1 : 0.6
-          }}
-        >
-          Misiones
-        </button>
-      </div>
+  async stakeNFTs(asset_ids, memo = "") {
+    if (!this.session || !this.authName) throw new Error("No wallet session activa.");
+    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay NFTs seleccionados.");
 
-      {modalOpen && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 99,
-          background: 'rgba(19,15,24,0.96)', overflowY: 'auto'
-        }}>
-          <div style={{
-            background: '#201b2c', borderRadius: 24, maxWidth: 700,
-            width: '95vw', maxHeight: '90vh', overflowY: 'auto',
-            padding: 32, margin: 'auto', position: 'relative'
-          }}>
-            <button
-              onClick={() => {
-                setModalOpen(false);
-                setSelected([]);
-                setSelectedMission(null);
-                setMensaje("");
-              }}
-              style={{
-                position: 'absolute', top: 16, right: 20,
-                fontSize: 33, color: '#cfc', background: 'none',
-                border: 'none', cursor: 'pointer'
-              }}
-              disabled={loading}
-            >&times;</button>
+    const response = await this.rpc.get_table_rows({
+      code: 'nightclubapp',
+      scope: 'nightclubapp',
+      table: 'users',
+      lower_bound: this.authName,
+      upper_bound: this.authName,
+      limit: 1
+    });
 
-            {/* Selección de misión */}
-            {!selectedMission ? (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-                {MISSION_TYPES.map(m => (
-                  <button
-                    key={m.id}
-                    onClick={() => setSelectedMission(m.id)}
-                    style={{
-                      flex: '1 1 calc(40% - 24px)', padding: '14px 20px',
-                      borderRadius: 12, border: '2px solid #433f58',
-                      color: '#fff', background: '#1c1932',
-                      fontSize: 16, fontWeight: 'bold', cursor: 'pointer'
-                    }}
-                  >
-                    {m.label}
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <>
-                <div style={{ marginBottom: 16, color: '#c8a0f5', fontWeight: 600 }}>
-                  Misión: <span style={{ color: '#fff' }}>
-                    {MISSION_TYPES.find(m => m.id === selectedMission)?.label}
-                  </span>
-                </div>
+    const registered = response.rows.length > 0 && response.rows[0].user === this.authName;
 
-                {mensaje && (
-                  <div style={{
-                    background: '#3b2548', color: '#fff', borderRadius: 9,
-                    padding: '10px 18px', margin: '10px 0 16px', textAlign: 'center'
-                  }}>{mensaje}</div>
-                )}
+    if (!registered) {
+      await this.session.signTransaction({
+        actions: [{
+          account: 'nightclubapp',
+          name: 'regnewuser',
+          authorization: [{ actor: this.authName, permission: 'active' }],
+          data: { user: this.authName, referrer: this.authName }
+        }]
+      }, { blocksBehind: 3, expireSeconds: 60 });
+    }
 
-                {/* Grid de cartas ajustado */}
-                <div style={{
-                  display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px,1fr))',
-                  gap: 12
-                }}>
-                  {loading ? (
-                    <div style={{ color: '#fff' }}>Cargando...</div>
-                  ) : nfts.length === 0 ? (
-                    <div style={{ color: '#eee' }}>No tienes cartas.</div>
-                  ) : nfts.map(nft => {
-                    const mediaHash = nft.data.video || nft.data.img || nft.data.image;
-                    const mediaUrl = resolveIpfs(mediaHash);
-                    if (!mediaUrl) return null;
+    const actions = [{
+      account: "atomicassets",
+      name: "transfer",
+      authorization: [{ actor: this.authName, permission: "active" }],
+      data: {
+        from: this.authName,
+        to: "nightclubapp",
+        asset_ids: asset_ids,
+        memo: memo
+      }
+    }];
 
-                    return (
-                      <div
-                        key={nft.asset_id}
-                        onClick={() => toggleSelect(nft.asset_id)}
-                        style={{
-                          border: selected.includes(nft.asset_id)
-                            ? '2px solid #ff36ba' : '1px solid #252241',
-                          borderRadius: 12, cursor: 'pointer'
-                        }}
-                      >
-                        <div style={{ width: 100, aspectRatio: '1080 / 2030' }}>
-                          <video
-                            src={mediaUrl}
-                            autoPlay muted loop playsInline
-                            style={{ width: '100%', height: '100%' }}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+  }
 
-                {/* Botón enviar misión */}
-                <div style={{ textAlign: 'center', marginTop: 24 }}>
-                  <button
-                    onClick={handleStake}
-                    disabled={selected.length === 0 || loading}
-                    style={{
-                      background: 'linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)',
-                      color: '#fff', padding: '12px 32px', border: 'none',
-                      borderRadius: 10, fontWeight: 'bold', fontSize: 17,
-                      cursor: selected.length > 0 && !loading ? 'pointer' : 'not-allowed',
-                      opacity: selected.length > 0 && !loading ? 1 : 0.65
-                    }}
-                  >
-                    Enviar a misión
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-    </>
-  );
+  async unstakeNFTs(asset_ids) {
+    if (!this.session || !this.authName) throw new Error("No sesión activa");
+    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("Debes seleccionar NFTs");
+
+    const actions = [{
+      account: "nightclubapp",
+      name: "unstake",
+      authorization: [{ actor: this.authName, permission: "active" }],
+      data: { user: this.authName, asset_ids }
+    }];
+
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+  }
+
+  async claimRewards(collection = "nightclubnft") {
+    if (!this.session || !this.authName) throw new Error("No sesión activa");
+
+    const actions = [{
+      account: "nightclubapp",
+      name: "claim",
+      authorization: [{ actor: this.authName, permission: "active" }],
+      data: { user: this.authName, collection }
+    }];
+
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+  }
+
+  formatWAXBalance() {
+    const wax = parseFloat(this.balance);
+    return isNaN(wax) ? "0.00 WAX" : `${wax.toFixed(2)} WAX`;
+  }
+
+  formatSEXYBalance() {
+    const sexy = parseFloat(this.sexyBalance);
+    return isNaN(sexy) ? "0.00 SEXY" : `${sexy.toFixed(2)} SEXY`;
+  }
+
+  formatWAXOnly() {
+    const wax = parseFloat(this.balance);
+    return isNaN(wax) ? "0.00" : wax.toFixed(2);
+  }
+
+  formatSEXYOnly() {
+    const sexy = parseFloat(this.sexyBalance);
+    return isNaN(sexy) ? "0.00" : sexy.toFixed(2);
+  }
+
+  init() {
+    this.ualCallback = this.ualCallback.bind(this);
+
+    const wax = new Wax([this.myChain], { appName: this.appName });
+    const anchor = new Anchor([this.myChain], { appName: this.appName });
+
+    const divUal = document.createElement('div');
+    divUal.setAttribute('id', 'ual-login');
+    document.body.appendChild(divUal);
+
+    const divLoginRoot = document.getElementById('ual-login');
+    this.ual = new UALJs(this.ualCallback, [this.myChain], this.appName, [wax, anchor], {
+      containerElement: divLoginRoot
+    });
+
+    this.ual.init();
+  }
+
+  static new() {
+    if (!User.instance) {
+      User.instance = new User();
+    }
+    return User.instance;
+  }
 }
+
+export const UserService = User.new();
