@@ -164,9 +164,9 @@ export default function MissionsModal() {
                   }}>{mensaje}</div>
                 )}
 
-                {/* Grid de cartas más pequeño */}
+                {/* Grid de cartas ajustado */}
                 <div style={{
-                  display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px,1fr))',
+                  display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px,1fr))',
                   gap: 12
                 }}>
                   {loading ? (
@@ -185,14 +185,16 @@ export default function MissionsModal() {
                         style={{
                           border: selected.includes(nft.asset_id)
                             ? '2px solid #ff36ba' : '1px solid #252241',
-                          borderRadius: 12, overflow: 'hidden', cursor: 'pointer'
+                          borderRadius: 12, cursor: 'pointer'
                         }}
                       >
-                        <video
-                          src={mediaUrl}
-                          autoPlay muted loop playsInline
-                          style={{ width: '100%', height: 'auto' }}
-                        />
+                        <div style={{ width: 100, aspectRatio: '1080 / 2030' }}>
+                          <video
+                            src={mediaUrl}
+                            autoPlay muted loop playsInline
+                            style={{ width: '100%', height: '100%' }}
+                          />
+                        </div>
                       </div>
                     );
                   })}
