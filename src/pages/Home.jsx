@@ -1,5 +1,5 @@
 import React from "react";
-import StakingModal from "../components/StakingModal";
+import MissionModal from "../components/MissionModal";
 import UnstakeModal from "../components/UnstakeModal";
 import ClaimActionButton from "../components/ClaimActionButton";
 
@@ -9,9 +9,9 @@ export default function Home() {
       <h1 style={styles.title}>Night Club Game</h1>
 
       <div style={styles.card}>
-        <h2 style={styles.sectionTitle}>NFT Staking</h2>
+        <h2 style={styles.sectionTitle}>Gestión de Misiones</h2>
         <div style={styles.actions}>
-          <StakingModal />
+          <MissionModal />
           <ClaimActionButton />
           <UnstakeModal />
         </div>
@@ -30,33 +30,35 @@ const styles = {
     alignItems: "center"
   },
   title: {
-    fontSize: "2.5rem",
+    fontSize: "3rem",
     fontWeight: "bold",
     color: "#ff36ba",
     marginBottom: "40px",
-    textShadow: "0 2px 8px rgba(255, 54, 186, 0.6)"
+    textShadow: "0 3px 12px rgba(255, 54, 186, 0.7)",
+    textAlign: "center"
   },
   card: {
-    backgroundColor: "#221c34",
-    borderRadius: "16px",
-    padding: "40px",
-    maxWidth: "460px",
+    background: "linear-gradient(135deg, #221c34 60%, #1a162b)",
+    borderRadius: "20px",
+    padding: "50px 30px",
+    maxWidth: "480px",
     width: "100%",
-    boxShadow: "0 8px 28px rgba(0,0,0,0.3)",
+    boxShadow: "0 12px 40px rgba(0, 0, 0, 0.4)",
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
+    backdropFilter: "blur(5px)"
   },
   sectionTitle: {
-    fontSize: "1.6rem",
-    fontWeight: "600",
+    fontSize: "1.8rem",
+    fontWeight: "700",
     color: "#ffffff",
     marginBottom: "30px"
   },
   actions: {
     display: "flex",
     flexDirection: "column",
-    gap: "20px",
+    gap: "24px",
     width: "100%"
   }
 };
