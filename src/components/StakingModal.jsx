@@ -1,188 +1,200 @@
 import React, { useEffect, useState } from "react";
 import { UserService } from "../UserService";
 
-const SCHEMAS = [
-  { key: "girls", label: "Girls", color: "#ff36ba" },
-  { key: "photos", label: "Photos", color: "#7e47f7" }
-];
 const COLLECTION = "nightclubnft";
+const MISSION_TYPES = [
+  { id: 1, label: "Recon Club" },
+  { id: 2, label: "Escort VIP" },
+  { id: 3, label: "Photoshoot" },
+  { id: 4, label: "After Party" },
+  { id: 5, label: "Challenge Semanal" }
+];
 
-export default function StakingModal() {
+export default function MissionsModal() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("girls");
+  const [selectedMission, setSelectedMission] = useState(null);
   const [nfts, setNfts] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState("");
 
   const wallet = UserService.isLogged() ? UserService.getName() : null;
 
-  const handleStake = async () => {
-    if (!UserService.isLogged() || selected.length === 0) return;
-    setMensaje("Firmando Staking...");
-    setLoading(true);
-    try {
-      await UserService.stakeNFTs(selected);
-      setMensaje("¡Staking realizado con éxito!");
-      setSelected([]);
-      setTimeout(() => setModalOpen(false), 1700);
-    } catch (e) {
-      setMensaje("Error al firmar: " + (e.message || e));
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
     if (!modalOpen || !wallet) return;
+    if (!selectedMission) return;
     const fetchNFTs = async () => {
-      setMensaje("Cargando NFTs...");
+      setMensaje("Cargando cartas...");
       setLoading(true);
       try {
         const res = await fetch(
-          `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=${COLLECTION}&owner=${wallet}&schema_name=${activeTab}&limit=100`
-        ).then(res => res.json());
+          `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=${COLLECTION}&owner=${wallet}&schema_name=girls&limit=100`
+        ).then((r) => r.json());
         setNfts(Array.isArray(res.data) ? res.data : []);
         setMensaje("");
-      } catch {
-        setMensaje("Error al cargar tus NFTs.");
+      } catch (e) {
+        setMensaje("Error cargando cartas.");
         setNfts([]);
       } finally {
         setLoading(false);
       }
     };
     fetchNFTs();
-  }, [modalOpen, wallet, activeTab]);
+  }, [modalOpen, wallet, selectedMission]);
 
   const toggleSelect = (assetId) => {
-    setSelected(prev =>
-      prev.includes(assetId) ? prev.filter(id => id !== assetId) : [...prev, assetId]
-    );
+    if (loading) return;
+    if (selected.includes(assetId)) {
+      setSelected((prev) => prev.filter((id) => id !== assetId));
+    } else {
+      if (selected.length >= 5) {
+        setMensaje("Máximo 5 cartas por envío.");
+        return;
+      }
+      setSelected((prev) => [...prev, assetId]);
+      setMensaje("");
+    }
+  };
+
+  const handleStake = async () => {
+    if (!wallet || !selectedMission || selected.length === 0) return;
+    setMensaje("Firmando misión...");
+    setLoading(true);
+    try {
+      // Enviar staking con memo de misión
+      const memo = `mission:${selectedMission}`;
+      await UserService.stakeNFTs(selected, memo);
+      setMensaje("¡Misión enviada con éxito!");
+      setSelected([]);
+      setSelectedMission(null);
+      setTimeout(() => setModalOpen(false), 1700);
+    } catch (e) {
+      setMensaje("Error al enviar: " + (e.message || e));
+    }
+    setLoading(false);
   };
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "center", margin: "42px 0 32px" }}>
+      <div style={{ textAlign: 'center', margin: '42px 0' }}>
         <button
-          style={{
-            background: "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)",
-            color: "#fff", fontWeight: "bold", fontSize: 18, border: "none",
-            borderRadius: 14, padding: "12px 38px", margin: "0 16px",
-            boxShadow: "0 4px 24px #0002", cursor: !wallet ? "not-allowed" : "pointer",
-            opacity: !wallet ? 0.6 : 1
-          }}
-          onClick={() => { setModalOpen(true); setActiveTab("girls"); }}
+          onClick={() => setModalOpen(true)}
           disabled={!wallet}
+          style={{
+            background: 'linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)',
+            color: '#fff', padding: '12px 38px', border: 'none',
+            borderRadius: 14, fontWeight: 'bold', fontSize: 18,
+            cursor: wallet ? 'pointer' : 'not-allowed', opacity: wallet ? 1 : 0.6
+          }}
         >
-          Staking NFTs
+          Misiones
         </button>
       </div>
 
       {modalOpen && (
         <div style={{
-          position: "fixed", inset: 0, zIndex: 99,
-          background: "rgba(19,15,24,0.96)", display: "flex", alignItems: "center", justifyContent: "center"
+          position: 'fixed', inset: 0, zIndex: 99,
+          background: 'rgba(19,15,24,0.96)', display: 'flex',
+          alignItems: 'center', justifyContent: 'center'
         }}>
           <div style={{
-            background: "#201b2c", borderRadius: 24, minWidth: 380, minHeight: 300,
-            boxShadow: "0 10px 36px #000a", padding: 32, position: "relative", maxWidth: 700, width: "95vw"
+            background: '#201b2c', borderRadius: 24, maxWidth: 700,
+            width: '95vw', padding: 32, position: 'relative'
           }}>
             <button
-              onClick={() => { setModalOpen(false); setSelected([]); setMensaje(""); }}
+              onClick={() => {
+                setModalOpen(false);
+                setSelected([]);
+                setSelectedMission(null);
+                setMensaje("");
+              }}
               style={{
-                position: "absolute", top: 16, right: 20, fontSize: 33, color: "#cfc",
-                background: "none", border: "none", cursor: "pointer", fontWeight: "bold", lineHeight: "1"
+                position: 'absolute', top: 16, right: 20,
+                fontSize: 33, color: '#cfc', background: 'none',
+                border: 'none', cursor: 'pointer'
               }}
               disabled={loading}
             >&times;</button>
 
-            <div style={{ display: "flex", borderBottom: "2.5px solid #433f58", marginBottom: 16 }}>
-              {SCHEMAS.map(tab =>
-                <button
-                  key={tab.key}
-                  style={{
-                    padding: "10px 32px", borderRadius: "16px 16px 0 0", border: "none",
-                    background: activeTab === tab.key
-                      ? `linear-gradient(90deg,${tab.color} 70%,#fff0 100%)`
-                      : "#1c1932",
-                    color: activeTab === tab.key ? "#fff" : "#c8a0f5",
-                    fontWeight: "bold", fontSize: 18,
-                    boxShadow: activeTab === tab.key ? "0 2px 16px #0008" : "none",
-                    cursor: "pointer", marginRight: 14, outline: "none"
-                  }}
-                  onClick={() => { setActiveTab(tab.key); setSelected([]); }}
-                  disabled={activeTab === tab.key || loading}
-                >
-                  {tab.label}
-                </button>
-              )}
-            </div>
-
-            {mensaje && (
-              <div style={{
-                background: "#3b2548", color: "#fff", borderRadius: 9,
-                padding: "10px 18px", margin: "10px 0 16px", textAlign: "center",
-                fontSize: 16, fontWeight: 600, minHeight: 38
-              }}>{mensaje}</div>
-            )}
-
-            <div style={{
-              display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(135px,1fr))",
-              gap: 20, maxHeight: 290, overflowY: "auto", marginTop: 12, justifyItems: "center"
-            }}>
-              {loading ? (
-                <div style={{ color: "#fff" }}>Cargando NFTs...</div>
-              ) : nfts.length === 0 ? (
-                <div style={{ color: "#eee" }}>No tienes NFTs en este grupo.</div>
-              ) : nfts.map(nft => {
-                let videoSrc = nft.data?.video || nft.data?.img;
-                if (videoSrc?.startsWith("Qm")) {
-                  videoSrc = `https://ipfs.io/ipfs/${videoSrc}`;
-                }
-                if (!videoSrc) return null;
-                return (
-                  <div
-                    key={nft.asset_id}
-                    onClick={() => !loading && toggleSelect(nft.asset_id)}
+            {!selectedMission ? (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                {MISSION_TYPES.map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => setSelectedMission(m.id)}
                     style={{
-                      border: selected.includes(nft.asset_id)
-                        ? "3px solid #ff36ba" : "2px solid #252241",
-                      borderRadius: 22, background: "#131025",
-                      boxShadow: selected.includes(nft.asset_id)
-                        ? "0 4px 16px #444a" : "0 2px 8px #1117",
-                      width: 120, height: 210, display: "flex",
-                      alignItems: "center", justifyContent: "center", marginBottom: 8,
-                      overflow: "hidden", cursor: "pointer"
+                      flex: '1 1 calc(40% - 24px)',
+                      padding: '14px 20px', borderRadius: 12,
+                      border: '2px solid #433f58', color: '#fff',
+                      background: '#1c1932', fontSize: 16,
+                      fontWeight: 'bold', cursor: 'pointer'
                     }}
                   >
-                    <video
-                      src={videoSrc}
-                      autoPlay muted loop playsInline
-                      style={{
-                        width: "100%", height: "100%", objectFit: "cover",
-                        borderRadius: 20, background: "#0c0c0e"
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
+                    {m.label}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <>
+                <div style={{ marginBottom: 16, color: '#c8a0f5', fontWeight: '600' }}>
+                  Misión: <span style={{ color: '#fff' }}>{MISSION_TYPES.find(m => m.id === selectedMission).label}</span>
+                </div>
 
-            <div style={{ display: "flex", justifyContent: "center", marginTop: 26 }}>
-              <button
-                style={{
-                  background: "linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)",
-                  color: "#fff", border: "none", borderRadius: 10,
-                  fontSize: 17, fontWeight: "bold", padding: "11px 32px",
-                  cursor: selected.length === 0 || loading ? "not-allowed" : "pointer",
-                  opacity: selected.length === 0 || loading ? 0.65 : 1,
-                  boxShadow: "0 2px 12px #7e47f799"
-                }}
-                onClick={handleStake}
-                disabled={selected.length === 0 || loading}
-              >
-                Stakear seleccionados
-              </button>
-            </div>
+                {mensaje && (
+                  <div style={{
+                    background: '#3b2548', color: '#fff', borderRadius: 9,
+                    padding: '10px 18px', margin: '10px 0 16px', textAlign: 'center'
+                  }}>{mensaje}</div>
+                )}
+
+                <div style={{
+                  display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px,1fr))',
+                  gap: 16, maxHeight: 300, overflowY: 'auto'
+                }}>
+                  {loading ? (
+                    <div style={{ color: '#fff' }}>Cargando...</div>
+                  ) : nfts.length === 0 ? (
+                    <div style={{ color: '#eee' }}>No tienes cartas.</div>
+                  ) : nfts.map(nft => {
+                    let src = nft.data?.img || nft.data?.video;
+                    if (src?.startsWith('Qm')) src = `https://ipfs.io/ipfs/${src}`;
+                    return (
+                      <div
+                        key={nft.asset_id}
+                        onClick={() => toggleSelect(nft.asset_id)}
+                        style={{
+                          border: selected.includes(nft.asset_id)
+                            ? '3px solid #ff36ba' : '2px solid #252241',
+                          borderRadius: 20, overflow: 'hidden', cursor: 'pointer'
+                        }}
+                      >
+                        <img
+                          src={src}
+                          alt="nft"
+                          style={{ width: '100%', objectFit: 'cover' }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div style={{ textAlign: 'center', marginTop: 24 }}>
+                  <button
+                    onClick={handleStake}
+                    disabled={selected.length === 0 || loading}
+                    style={{
+                      background: 'linear-gradient(90deg,#a259ff 30%,#ff36ba 100%)',
+                      color: '#fff', padding: '12px 32px', border: 'none',
+                      borderRadius: 10, fontWeight: 'bold', fontSize: 17,
+                      cursor: selected.length > 0 && !loading ? 'pointer' : 'not-allowed',
+                      opacity: selected.length > 0 && !loading ? 1 : 0.65
+                    }}
+                  >
+                    Enviar a misión
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
