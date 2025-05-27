@@ -195,13 +195,13 @@ export default function MissionsModal() {
                           <video
                             src={mediaUrl}
                             autoPlay muted loop playsInline
-                            style={{ width: '100%', height: 120, objectFit: 'cover' }}
+                            style={{ width: '100%', height: 225, objectFit: 'cover' }}
                           />
                         ) : (
                           <img
                             src={mediaUrl}
                             alt="NFT"
-                            style={{ width: '100%', height: 120, objectFit: 'cover' }}
+                            style={{ width: '100%', height: 225, objectFit: 'cover' }}
                           />
                         )}
                       </div>
