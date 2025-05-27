@@ -99,266 +99,94 @@ export default function MissionModal() {
 
   const formatDuration = (mins) => {
     if (mins < 60) return `${mins} minutes`;
-    const h = Math.floor(mins/60), m = mins%60;
-    return m>0? `${h}h ${m}m` : `${h} hours`;
+    const h = Math.floor(mins / 60), m = mins % 60;
+    return m > 0 ? `${h}h ${m}m` : `${h} hours`;
   };
 
   return (
     <>
-      {/* Botón principal */}
       <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
-        <button
-          onClick={() => setIsOpen(true)}
-          disabled={!wallet}
-          style={{
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            color: "#fff",
-            border: "none",
-            borderRadius: 16,
-            padding: "14px 32px",
-            fontSize: 18,
-            fontWeight: "bold",
-            cursor: wallet ? "pointer" : "not-allowed",
-            opacity: wallet ? 1 : 0.6,
-            boxShadow: "0 4px 15px rgba(102,126,234,0.4)",
-            transition: "all 0.3s"
-          }}
-        >
-          🚀 Send to Mission
-        </button>
+        <button onClick={() => setIsOpen(true)} disabled={!wallet}>🚀 Send to Mission</button>
       </div>
 
-      {/* Modal */}
       {isOpen && (
-        <div style={{
-          position: "fixed", inset: 0,
-          background: "rgba(0,0,0,0.85)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          zIndex: 9999, backdropFilter: "blur(5px)"
-        }}>
-          <div style={{
-            background: "linear-gradient(135deg, #1e1e2e 0%, #2d1b69 100%)",
-            borderRadius: 24, width: "90%", maxWidth: 900, maxHeight: "90vh",
-            overflow: "hidden", boxShadow: "0 20px 60px rgba(0,0,0,0.5)"
-          }}>
-            {/* Header */}
-            <div style={{
-              padding: "24px 32px", borderBottom: "1px solid rgba(255,255,255,0.1)",
-              display: "flex", justifyContent: "space-between", alignItems: "center",
-              background: "rgba(0,0,0,0.2)"
-            }}>
-              <h2 style={{ margin:0, color:"#fff", fontSize:24, fontWeight:"bold" }}>
-                {step===1? "🎯 Select a Mission" : "👥 Select your NFTs"}
-              </h2>
-              <button onClick={handleClose} style={{
-                background:"transparent", border:"none", color:"#fff",
-                fontSize:28, cursor:"pointer", opacity:0.7
-              }}>×</button>
-            </div>
-
-            {/* Content */}
-            <div style={{
-              padding:"24px 32px", overflowY:"auto", maxHeight:"calc(90vh - 180px)"
-            }}>
-              {message && (
-                <div style={{
-                  background: message.includes("Error") ? "rgba(239,68,68,0.2)" : "rgba(16,185,129,0.2)",
-                  border: `1px solid ${message.includes("Error")? "#ef4444" : "#10b981"}`,
-                  borderRadius:12, padding:"12px 20px", marginBottom:20,
-                  color:"#fff", textAlign:"center"
-                }}>
-                  {message}
-                </div>
-              )}
-
-              {/* Step 1 */}
-              {step===1 && (
-                loading
-                  ? <div style={{textAlign:"center", color:"#fff", padding:40}}>Loading missions...</div>
-                  : <div style={{
-                      display:"grid",
-                      gridTemplateColumns:"repeat(auto-fill, minmax(300px,1fr))",
-                      gap:20
-                    }}>
-                      {missions.map(m => (
-                        <div key={m.id} onClick={()=>handleMissionSelect(m)} style={{
-                          background:"rgba(255,255,255,0.05)",
-                          border:"1px solid rgba(255,255,255,0.1)",
-                          borderRadius:16, padding:20, cursor:"pointer",
-                          transition:"all .3s"
-                        }}>
-                          <h3 style={{color:"#667eea", margin:"0 0 10px"}}>{m.name}</h3>
-                          <p style={{color:"#ccc", fontSize:14, margin:"0 0 15px"}}>{m.description}</p>
-                          <div style={{display:"flex", justifyContent:"space-between", fontSize:13}}>
-                            <span style={{color:"#10b981"}}>⏱️ {formatDuration(m.duration_minutes)}</span>
-                            <span style={{color:"#f59e0b"}}>💰 x{m.reward_multiplier}</span>
-                            {m.nft_drop_multiplier>0 && <span style={{color:"#ec4899"}}>🎁 x{m.nft_drop_multiplier}</span>}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-              )}
-
-              {/* Step 2 */}
-              {step===2 && selectedMission && (
-                <>
-                  <div style={{
-                    background:"rgba(102,126,234,0.2)",
-                    border:"1px solid #667eea", borderRadius:12,
-                    padding:16, marginBottom:20
-                  }}>
-                    <h4 style={{color:"#fff", margin:"0 0 8px"}}>
-                      Selected mission: {selectedMission.name}
-                    </h4>
-                    <button onClick={()=>{ setStep(1); setSelectedNFTs([]); }} style={{
-                      background:"transparent", border:"1px solid #667eea",
-                      color:"#667eea", padding:"6px 16px", borderRadius:8,
-                      cursor:"pointer", fontSize:14
-                    }}>
-                      Change mission
-                    </button>
-                  </div>
-
-                  {loading
-                    ? <div style={{textAlign:"center", color:"#fff", padding:40}}>Loading your NFTs...</div>
-                    : nfts.length===0
-                      ? <div style={{textAlign:"center", color:"#ccc", padding:40}}>You don't have any NFTs available for missions</div>
-                      : <div style={{
-                          display:"grid",
-                          gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",
-                          gap:20, padding:"10px 0"
-                        }}>
-                          {nfts.map(nft => {
-  const data = nft.data || {};
-
-  // 1) Saca todas las strings de data
-  const allStrings = Object.values(data).filter(v => typeof v === 'string');
-
-  // 2) Busca primero alguna que parezca vídeo por extensión
-  const videoField = allStrings.find(u => /\.(mp4|webm|ogg)$/i.test(u));
-
-  // 3) Si no hay vídeo, coge el primer hash/IPFS (Qm... o ipfs://)
-  const ipfsField = allStrings.find(u => /^Qm/.test(u) || u.startsWith('ipfs://'));
-
-  const raw = videoField || ipfsField || '';
-  const src = ipfsify(raw);
-
-  // DEBUG: mira en consola qué estás recibiendo
-  console.log(`NFT ${nft.asset_id} metadata:`, data);
-  console.log(` -> raw=${raw}`, ` -> src=${src}`);
-
-  const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
-  const isSelected = selectedNFTs.includes(nft.asset_id);
-
-  return (
-    <div
-      key={nft.asset_id}
-      onClick={() => toggleNFTSelection(nft.asset_id)}
-      style={{
-        position: "relative",
-        cursor: "pointer",
-        transform: isSelected ? "scale(0.95)" : "scale(1)",
-        transition: "all .3s"
-      }}
-    >
-      <div style={{
-        position: "relative",
-        width: "100%",
-        paddingBottom: "190%",
-        borderRadius: 20,
-        overflow: "hidden",
-        border: isSelected ? "3px solid #667eea" : "3px solid transparent",
-        boxShadow: isSelected ? "0 0 20px rgba(102,126,234,0.5)" : "0 4px 10px rgba(0,0,0,0.3)"
-      }}>
-        {isVideo ? (
-          <video
-            src={src}
-            controls
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{
-              position: "absolute",
-              top: 0, left: 0,
-              width: "100%", height: "100%",
-              objectFit: "cover"
-            }}
-            onError={e => console.error("Video load error:", e)}
-          />
-        ) : (
-          <img
-            src={src}
-            alt={nft.name}
-            style={{
-              position: "absolute",
-              top: 0, left: 0,
-              width: "100%", height: "100%",
-              objectFit: "cover"
-            }}
-            onError={e => console.error("Image load error:", e)}
-          />
-        )}
-
-        {isSelected && (
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "rgba(102,126,234,0.2)",
-            display: "flex", alignItems: "center", justifyContent: "center"
-          }}>
-            <div style={{
-              background: "#667eea", borderRadius: "50%",
-              width: 45, height: 45,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              color: "#fff", fontSize: 24,
-              boxShadow: "0 4px 15px rgba(0,0,0,0.3)"
-            }}>✓</div>
+        <div>
+          <div>
+            <h2>{step === 1 ? "🎯 Select a Mission" : "👥 Select your NFTs"}</h2>
+            <button onClick={handleClose}>×</button>
           </div>
-        )}
-      </div>
-    </div>
-  );
-})}
 
+          <div>
+            {message && <div>{message}</div>}
 
-            {/* Footer */}
-            {step===2 && !loading && nfts.length>0 && (
-              <div style={{
-                padding:"20px 32px", borderTop:"1px solid rgba(255,255,255,0.1)",
-                display:"flex", justifyContent:"space-between", alignItems:"center",
-                background:"rgba(0,0,0,0.2)"
-              }}>
-                <div style={{color:"#ccc"}}>
-                  {selectedNFTs.length} NFT{selectedNFTs.length!==1?'s':''} selected
+            {step === 1 && (
+              loading ? <div>Loading missions...</div> : (
+                <div>
+                  {missions.map(m => (
+                    <div key={m.id} onClick={() => handleMissionSelect(m)}>
+                      <h3>{m.name}</h3>
+                      <p>{m.description}</p>
+                      <div>
+                        <span>⏱️ {formatDuration(m.duration_minutes)}</span>
+                        <span>💰 x{m.reward_multiplier}</span>
+                        {m.nft_drop_multiplier > 0 && <span>🎁 x{m.nft_drop_multiplier}</span>}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <button
-                  onClick={handleSendToMission}
-                  disabled={!selectedNFTs.length || sending}
-                  style={{
-                    background: selectedNFTs.length
-                      ? "linear-gradient(135deg,#667eea 0%,#764ba2 100%)"
-                      : "#444",
-                    color:"#fff", border:"none", borderRadius:12,
-                    padding:"12px 28px", fontSize:16, fontWeight:"bold",
-                    cursor: selectedNFTs.length && !sending ? "pointer" : "not-allowed",
-                    opacity: selectedNFTs.length && !sending ? 1 : 0.5,
-                    transition:"all .3s"
-                  }}
-                >
-                  {sending ? "Sending..." : "Send to Mission"}
-                </button>
-              </div>
+              )
+            )}
+
+            {step === 2 && selectedMission && (
+              <>
+                <div>
+                  <h4>Selected mission: {selectedMission.name}</h4>
+                  <button onClick={() => { setStep(1); setSelectedNFTs([]); }}>Change mission</button>
+                </div>
+
+                {loading ? <div>Loading your NFTs...</div> : (
+                  nfts.length === 0 ? <div>No NFTs available</div> : (
+                    <div>
+                      {nfts.map(nft => {
+                        const data = nft.data || {};
+                        const allStrings = Object.values(data).filter(v => typeof v === "string");
+                        const videoField = allStrings.find(u => /\.(mp4|webm|ogg)$/i.test(u));
+                        const ipfsField = allStrings.find(u => /^Qm/.test(u) || u.startsWith("ipfs://"));
+                        const raw = videoField || ipfsField || "";
+                        const src = ipfsify(raw);
+                        const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
+                        const isSelected = selectedNFTs.includes(nft.asset_id);
+
+                        return (
+                          <div key={nft.asset_id} onClick={() => toggleNFTSelection(nft.asset_id)}>
+                            <div>
+                              {isVideo ? (
+                                <video src={src} controls autoPlay muted loop playsInline />
+                              ) : (
+                                <img src={src} alt={nft.name} />
+                              )}
+                              {isSelected && <div>✓</div>}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )
+                )}
+              </>
             )}
           </div>
+
+          {step === 2 && !loading && nfts.length > 0 && (
+            <div>
+              <div>{selectedNFTs.length} NFT(s) selected</div>
+              <button onClick={handleSendToMission} disabled={!selectedNFTs.length || sending}>
+                {sending ? "Sending..." : "Send to Mission"}
+              </button>
+            </div>
+          )}
         </div>
       )}
-
-      {/* Animations */}
-      <style jsx>{`
-        @keyframes fadeIn { from {opacity:0;} to{opacity:1;} }
-        @keyframes slideIn { from{transform: translateY(20px);opacity:0;} to{transform:translateY(0);opacity:1;} }
-        @keyframes spin { to{transform:rotate(360deg);} }
-      `}</style>
     </>
   );
 }
