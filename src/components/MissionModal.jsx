@@ -3,14 +3,6 @@ import { Wax } from '@eosdacio/ual-wax';
 import { isEmpty } from 'lodash';
 import { Anchor } from 'ual-anchor';
 
-import { storeAppDispatch } from './GlobalState/Store';
-import {
-  setPlayerBalance,
-  setPlayerData,
-  setPlayerLogout,
-  setPlayerSexy
-} from './GlobalState/UserReducer';
-
 export class User {
   appName = 'ual_template';
 
@@ -53,7 +45,6 @@ export class User {
     this.session = undefined;
     this.rpc = undefined;
     this.ual.logoutUser();
-    storeAppDispatch(setPlayerLogout());
     if (this.callbackServerUserData) this.callbackServerUserData();
   }
 
@@ -62,12 +53,6 @@ export class User {
     this.rpc = this.session?.rpc;
     this.serviceLoginName = this.session.constructor.name;
     this.authName = await this.session.getAccountName();
-
-    storeAppDispatch(setPlayerData({
-      name: this.authName,
-      isLogged: this.isLogged(),
-      balance: this.balance
-    }));
 
     await this.reloadBalances();
     if (this.callbackServerUserData) this.callbackServerUserData();
@@ -82,11 +67,9 @@ export class User {
     if (!this.rpc || !this.authName) return;
     return this.rpc.get_account(this.authName).then(accountData => {
       this.balance = accountData.core_liquid_balance || "0.00000000 WAX";
-      storeAppDispatch(setPlayerBalance(this.balance));
     }).catch(err => {
       console.error("Error al obtener balance de WAX:", err.message);
       this.balance = "0.00000000 WAX";
-      storeAppDispatch(setPlayerBalance(this.balance));
     });
   }
 
@@ -99,11 +82,9 @@ export class User {
         'SEXY'
       );
       this.sexyBalance = result.length > 0 ? result[0] : "0.00000000 SEXY";
-      storeAppDispatch(setPlayerSexy(this.sexyBalance));
     } catch (err) {
       console.error("Error al obtener balance de SEXY:", err.message);
       this.sexyBalance = "0.00000000 SEXY";
-      storeAppDispatch(setPlayerSexy(this.sexyBalance));
     }
   }
 
