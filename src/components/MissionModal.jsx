@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { UserService } from "../UserService";
-import { JsonRpc } from "eosjs";
-
-const rpc = new JsonRpc("https://wax.greymass.com");
 
 export default function MissionModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,21 +14,15 @@ export default function MissionModal() {
 
   const wallet = UserService.isLogged() ? UserService.getName() : null;
 
-  // Fetch missions from blockchain
+  // Fetch missions from blockchain using UserService
   const fetchMissions = useCallback(async () => {
     setLoading(true);
     setMessage("");
     try {
-      const response = await rpc.get_table_rows({
-        json: true,
-        code: "nightclubapp",
-        scope: "nightclubapp",
-        table: "missiontypes",
-        limit: 100
-      });
+      const missionTypes = await UserService.getMissionTypes();
       
       // Filter only active missions
-      const activeMissions = response.rows.filter(m => m.is_active === 1);
+      const activeMissions = missionTypes.filter(m => m.is_active === 1);
       setMissions(activeMissions);
       
       if (activeMissions.length === 0) {
@@ -112,6 +103,9 @@ export default function MissionModal() {
       await UserService.stakeNFTs(selectedNFTs, memo);
       
       setMessage("¡NFTs enviados a misión exitosamente!");
+      
+      // Reload balances after successful mission
+      await UserService.reloadBalances();
       
       // Close modal after success
       setTimeout(() => {

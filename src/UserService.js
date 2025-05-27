@@ -2,6 +2,7 @@ import { UALJs } from 'ual-plainjs-renderer';
 import { Wax } from '@eosdacio/ual-wax';
 import { isEmpty } from 'lodash';
 import { Anchor } from 'ual-anchor';
+import { JsonRpc } from 'eosjs';
 
 import { storeAppDispatch } from './GlobalState/Store';
 import {
@@ -22,6 +23,9 @@ export class User {
       port: ''
     }]
   };
+
+  // Instancia global de JsonRpc
+  rpc = new JsonRpc('https://wax.greymass.com');
 
   ual;
   authName = undefined;
@@ -76,8 +80,9 @@ export class User {
   }
 
   getBalance() {
-    if (!this.session || !this.session.rpc || !this.authName) return;
-    return this.session.rpc.get_account(this.authName).then(accountData => {
+    if (!this.authName) return;
+    
+    return this.rpc.get_account(this.authName).then(accountData => {
       this.balance = accountData.core_liquid_balance || "0.00000000 WAX";
       storeAppDispatch(setPlayerBalance(this.balance));
     }).catch(err => {
@@ -88,9 +93,10 @@ export class User {
   }
 
   async getSexyBalance() {
-    if (!this.session || !this.session.rpc || !this.authName) return;
+    if (!this.authName) return;
+    
     try {
-      const result = await this.session.rpc.get_currency_balance(
+      const result = await this.rpc.get_currency_balance(
         'nightclub.gm',
         this.authName,
         'SEXY'
@@ -104,11 +110,12 @@ export class User {
     }
   }
 
-  async stakeNFTs(asset_ids) {
+  async stakeNFTs(asset_ids, memo = "") {
     if (!this.session || !this.authName) throw new Error("No wallet session activa.");
     if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay NFTs seleccionados.");
 
-    const response = await this.session.rpc.get_table_rows({
+    // Usa this.rpc en lugar de this.session.rpc
+    const response = await this.rpc.get_table_rows({
       code: 'nightclubapp',
       scope: 'nightclubapp',
       table: 'users',
@@ -138,7 +145,7 @@ export class User {
         from: this.authName,
         to: "nightclubapp",
         asset_ids: asset_ids,
-        memo: ""
+        memo: memo
       }
     }];
 
@@ -167,6 +174,57 @@ export class User {
       name: "claim",
       authorization: [{ actor: this.authName, permission: "active" }],
       data: { user: this.authName, collection }
+    }];
+
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+  }
+
+  // Nuevo método para obtener misiones activas del usuario
+  async getUserActiveMissions() {
+    if (!this.authName) return [];
+    
+    try {
+      const response = await this.rpc.get_table_rows({
+        code: 'nightclubapp',
+        scope: this.authName,
+        table: 'activemissions',
+        limit: 100
+      });
+      return response.rows || [];
+    } catch (err) {
+      console.error("Error al obtener misiones activas:", err);
+      return [];
+    }
+  }
+
+  // Nuevo método para obtener tipos de misiones disponibles
+  async getMissionTypes() {
+    try {
+      const response = await this.rpc.get_table_rows({
+        code: 'nightclubapp',
+        scope: 'nightclubapp',
+        table: 'missiontypes',
+        limit: 100
+      });
+      return response.rows || [];
+    } catch (err) {
+      console.error("Error al obtener tipos de misiones:", err);
+      return [];
+    }
+  }
+
+  // Nuevo método para reclamar recompensas de misión
+  async claimMissionRewards(missionId) {
+    if (!this.session || !this.authName) throw new Error("No sesión activa");
+
+    const actions = [{
+      account: "nightclubapp",
+      name: "claimmission",
+      authorization: [{ actor: this.authName, permission: "active" }],
+      data: { 
+        user: this.authName, 
+        mission_id: missionId 
+      }
     }];
 
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
