@@ -169,7 +169,7 @@ export default function MissionsModal() {
                 {/* Grid de cartas */}
                 <div style={{
                   display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px,1fr))',
-                  gap: 16, maxHeight: 300, overflowY: 'auto'
+                  gap: 16
                 }}>
                   {loading ? (
                     <div style={{ color: '#fff' }}>Cargando...</div>
@@ -191,19 +191,11 @@ export default function MissionsModal() {
                           borderRadius: 20, overflow: 'hidden', cursor: 'pointer'
                         }}
                       >
-                        {nft.data.video ? (
-                          <video
-                            src={mediaUrl}
-                            autoPlay muted loop playsInline
-                            style={{ width: '100%', height: 225, objectFit: 'cover' }}
-                          />
-                        ) : (
-                          <img
-                            src={mediaUrl}
-                            alt="NFT"
-                            style={{ width: '100%', height: 225, objectFit: 'cover' }}
-                          />
-                        )}
+                        <video
+                          src={mediaUrl}
+                          autoPlay muted loop playsInline
+                          style={{ width: '100%', height: 'auto' }}
+                        />
                       </div>
                     );
                   })}
