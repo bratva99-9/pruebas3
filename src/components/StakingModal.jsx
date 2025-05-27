@@ -31,7 +31,6 @@ export default function MissionsModal() {
   // Carga cartas del esquema 'girls' cuando se elige misión
   useEffect(() => {
     if (!modalOpen || !wallet || !selectedMission) return;
-
     const fetchNFTs = async () => {
       setMensaje("Cargando cartas...");
       setLoading(true);
@@ -51,7 +50,6 @@ export default function MissionsModal() {
         setLoading(false);
       }
     };
-
     fetchNFTs();
   }, [modalOpen, wallet, selectedMission]);
 
@@ -111,12 +109,12 @@ export default function MissionsModal() {
       {modalOpen && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 99,
-          background: 'rgba(19,15,24,0.96)', display: 'flex',
-          alignItems: 'center', justifyContent: 'center'
+          background: 'rgba(19,15,24,0.96)', overflowY: 'auto'
         }}>
           <div style={{
             background: '#201b2c', borderRadius: 24, maxWidth: 700,
-            width: '95vw', padding: 32, position: 'relative'
+            width: '95vw', maxHeight: '90vh', overflowY: 'auto',
+            padding: 32, margin: 'auto', position: 'relative'
           }}>
             <button
               onClick={() => {
@@ -166,17 +164,16 @@ export default function MissionsModal() {
                   }}>{mensaje}</div>
                 )}
 
-                {/* Grid de cartas */}
+                {/* Grid de cartas más pequeño */}
                 <div style={{
-                  display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px,1fr))',
-                  gap: 16
+                  display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px,1fr))',
+                  gap: 12
                 }}>
                   {loading ? (
                     <div style={{ color: '#fff' }}>Cargando...</div>
                   ) : nfts.length === 0 ? (
                     <div style={{ color: '#eee' }}>No tienes cartas.</div>
                   ) : nfts.map(nft => {
-                    // Determina URL del media
                     const mediaHash = nft.data.video || nft.data.img || nft.data.image;
                     const mediaUrl = resolveIpfs(mediaHash);
                     if (!mediaUrl) return null;
@@ -187,8 +184,8 @@ export default function MissionsModal() {
                         onClick={() => toggleSelect(nft.asset_id)}
                         style={{
                           border: selected.includes(nft.asset_id)
-                            ? '3px solid #ff36ba' : '2px solid #252241',
-                          borderRadius: 20, overflow: 'hidden', cursor: 'pointer'
+                            ? '2px solid #ff36ba' : '1px solid #252241',
+                          borderRadius: 12, overflow: 'hidden', cursor: 'pointer'
                         }}
                       >
                         <video
