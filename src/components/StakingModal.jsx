@@ -20,55 +20,72 @@ export default function MissionsModal() {
 
   const wallet = UserService.isLogged() ? UserService.getName() : null;
 
+  // Convierte hash de IPFS o URI a URL válida
+  const resolveIpfs = (hashOrUrl) => {
+    if (!hashOrUrl) return null;
+    if (hashOrUrl.startsWith("http")) return hashOrUrl;
+    const cleaned = hashOrUrl.replace(/^ipfs:\/\//, "");
+    return `https://ipfs.io/ipfs/${cleaned}`;
+  };
+
+  // Carga cartas del esquema 'girls' cuando se elige misión
   useEffect(() => {
-    if (!modalOpen || !wallet) return;
-    if (!selectedMission) return;
+    if (!modalOpen || !wallet || !selectedMission) return;
+
     const fetchNFTs = async () => {
       setMensaje("Cargando cartas...");
       setLoading(true);
       try {
-        const res = await fetch(
+        const response = await fetch(
           `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=${COLLECTION}&owner=${wallet}&schema_name=girls&limit=100`
-        ).then((r) => r.json());
-        setNfts(Array.isArray(res.data) ? res.data : []);
+        );
+        const json = await response.json();
+        console.log("NFT data api:", json.data);
+        setNfts(Array.isArray(json.data) ? json.data : []);
         setMensaje("");
       } catch (e) {
+        console.error(e);
         setMensaje("Error cargando cartas.");
         setNfts([]);
       } finally {
         setLoading(false);
       }
     };
+
     fetchNFTs();
   }, [modalOpen, wallet, selectedMission]);
 
+  // Selección de hasta 5 cartas
   const toggleSelect = (assetId) => {
     if (loading) return;
     if (selected.includes(assetId)) {
-      setSelected((prev) => prev.filter((id) => id !== assetId));
+      setSelected(prev => prev.filter(id => id !== assetId));
+      setMensaje("");
     } else {
       if (selected.length >= 5) {
         setMensaje("Máximo 5 cartas por envío.");
         return;
       }
-      setSelected((prev) => [...prev, assetId]);
+      setSelected(prev => [...prev, assetId]);
       setMensaje("");
     }
   };
 
+  // Envía staking con memo de misión
   const handleStake = async () => {
     if (!wallet || !selectedMission || selected.length === 0) return;
     setMensaje("Firmando misión...");
     setLoading(true);
     try {
-      // Enviar staking con memo de misión
       const memo = `mission:${selectedMission}`;
+      console.log("Staking NFTs:", selected, "memo:", memo);
       await UserService.stakeNFTs(selected, memo);
       setMensaje("¡Misión enviada con éxito!");
       setSelected([]);
       setSelectedMission(null);
       setTimeout(() => setModalOpen(false), 1700);
     } catch (e) {
+      console.error(e);
       setMensaje("Error al enviar: " + (e.message || e));
     }
     setLoading(false);
@@ -116,18 +133,18 @@ export default function MissionsModal() {
               disabled={loading}
             >&times;</button>
 
+            {/* Selección de misión */}
             {!selectedMission ? (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-                {MISSION_TYPES.map((m) => (
+                {MISSION_TYPES.map(m => (
                   <button
                     key={m.id}
                     onClick={() => setSelectedMission(m.id)}
                     style={{
-                      flex: '1 1 calc(40% - 24px)',
-                      padding: '14px 20px', borderRadius: 12,
-                      border: '2px solid #433f58', color: '#fff',
-                      background: '#1c1932', fontSize: 16,
-                      fontWeight: 'bold', cursor: 'pointer'
+                      flex: '1 1 calc(40% - 24px)', padding: '14px 20px',
+                      borderRadius: 12, border: '2px solid #433f58',
+                      color: '#fff', background: '#1c1932',
+                      fontSize: 16, fontWeight: 'bold', cursor: 'pointer'
                     }}
                   >
                     {m.label}
@@ -136,8 +153,10 @@ export default function MissionsModal() {
               </div>
             ) : (
               <>
-                <div style={{ marginBottom: 16, color: '#c8a0f5', fontWeight: '600' }}>
-                  Misión: <span style={{ color: '#fff' }}>{MISSION_TYPES.find(m => m.id === selectedMission).label}</span>
+                <div style={{ marginBottom: 16, color: '#c8a0f5', fontWeight: 600 }}>
+                  Misión: <span style={{ color: '#fff' }}>
+                    {MISSION_TYPES.find(m => m.id === selectedMission)?.label}
+                  </span>
                 </div>
 
                 {mensaje && (
@@ -147,6 +166,7 @@ export default function MissionsModal() {
                   }}>{mensaje}</div>
                 )}
 
+                {/* Grid de cartas */}
                 <div style={{
                   display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px,1fr))',
                   gap: 16, maxHeight: 300, overflowY: 'auto'
@@ -156,8 +176,11 @@ export default function MissionsModal() {
                   ) : nfts.length === 0 ? (
                     <div style={{ color: '#eee' }}>No tienes cartas.</div>
                   ) : nfts.map(nft => {
-                    let src = nft.data?.img || nft.data?.video;
-                    if (src?.startsWith('Qm')) src = `https://ipfs.io/ipfs/${src}`;
+                    // Determina URL del media
+                    const mediaHash = nft.data.video || nft.data.img || nft.data.image;
+                    const mediaUrl = resolveIpfs(mediaHash);
+                    if (!mediaUrl) return null;
+
                     return (
                       <div
                         key={nft.asset_id}
@@ -168,16 +191,25 @@ export default function MissionsModal() {
                           borderRadius: 20, overflow: 'hidden', cursor: 'pointer'
                         }}
                       >
-                        <img
-                          src={src}
-                          alt="nft"
-                          style={{ width: '100%', objectFit: 'cover' }}
-                        />
+                        {nft.data.video ? (
+                          <video
+                            src={mediaUrl}
+                            autoPlay muted loop playsInline
+                            style={{ width: '100%', height: 120, objectFit: 'cover' }}
+                          />
+                        ) : (
+                          <img
+                            src={mediaUrl}
+                            alt="NFT"
+                            style={{ width: '100%', height: 120, objectFit: 'cover' }}
+                          />
+                        )}
                       </div>
                     );
                   })}
                 </div>
 
+                {/* Botón enviar misión */}
                 <div style={{ textAlign: 'center', marginTop: 24 }}>
                   <button
                     onClick={handleStake}
