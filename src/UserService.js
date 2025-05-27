@@ -25,10 +25,12 @@ export class User {
 
   ual;
   authName = undefined;
+  serviceLoginName = undefined;
   session = undefined;
 
-  balance = '0.00000000 WAX';
-  sexyBalance = '0.00000000 SEXY';
+  balance = "0.00000000 WAX";
+  sexyBalance = "0.00000000 SEXY";
+
   callbackServerUserData = undefined;
 
   getName() {
@@ -36,13 +38,13 @@ export class User {
   }
 
   login(callback) {
-    const ualButton = document.querySelector('.ual-button-gen');
+    const ualButton = document.querySelector(".ual-button-gen");
     if (ualButton) ualButton.click();
     this.callbackServerUserData = callback;
   }
 
   isLogged() {
-    return !isEmpty(this.authName) && !!this.session;
+    return !isEmpty(this.authName) && !isEmpty(this.session);
   }
 
   logout() {
@@ -55,6 +57,7 @@ export class User {
 
   async ualCallback(userObject) {
     this.session = userObject[0];
+    this.serviceLoginName = this.session.constructor.name;
     this.authName = await this.session.getAccountName();
 
     storeAppDispatch(setPlayerData({
@@ -74,96 +77,143 @@ export class User {
 
   getBalance() {
     if (!this.session || !this.session.rpc || !this.authName) return;
-    return this.session.rpc.get_account(this.authName)
-      .then(acc => {
-        this.balance = acc.core_liquid_balance || this.balance;
-        storeAppDispatch(setPlayerBalance(this.balance));
-      })
-      .catch(() => {
-        this.balance = '0.00000000 WAX';
-        storeAppDispatch(setPlayerBalance(this.balance));
-      });
+    return this.session.rpc.get_account(this.authName).then(accountData => {
+      this.balance = accountData.core_liquid_balance || "0.00000000 WAX";
+      storeAppDispatch(setPlayerBalance(this.balance));
+    }).catch(err => {
+      console.error("Error al obtener balance de WAX:", err.message);
+      this.balance = "0.00000000 WAX";
+      storeAppDispatch(setPlayerBalance(this.balance));
+    });
   }
 
   async getSexyBalance() {
     if (!this.session || !this.session.rpc || !this.authName) return;
     try {
       const result = await this.session.rpc.get_currency_balance(
-        'nightclub.gm', this.authName, 'SEXY'
+        'nightclub.gm',
+        this.authName,
+        'SEXY'
       );
-      this.sexyBalance = result[0] || this.sexyBalance;
+      this.sexyBalance = result.length > 0 ? result[0] : "0.00000000 SEXY";
       storeAppDispatch(setPlayerSexy(this.sexyBalance));
-    } catch {
-      this.sexyBalance = '0.00000000 SEXY';
+    } catch (err) {
+      console.error("Error al obtener balance de SEXY:", err.message);
+      this.sexyBalance = "0.00000000 SEXY";
       storeAppDispatch(setPlayerSexy(this.sexyBalance));
     }
   }
 
-  // Envía transacción de staking sin lecturas de tabla
-  async stakeNFTs(asset_ids, memo = '') {
-    if (!this.session || !this.authName) throw new Error('No wallet session activa.');
-    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error('No hay NFTs seleccionados.');
+  async stakeNFTs(asset_ids) {
+    if (!this.session || !this.authName) throw new Error("No wallet session activa.");
+    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay NFTs seleccionados.");
 
-    const actions = asset_ids.map(id => ({
-      account: 'atomicassets',
-      name:    'transfer',
-      authorization: [{ actor: this.authName, permission: 'active' }],
-      data: { from: this.authName, to: 'nightclubapp', asset_ids: [id], memo }
-    }));
+    const response = await this.session.rpc.get_table_rows({
+      code: 'nightclubapp',
+      scope: 'nightclubapp',
+      table: 'users',
+      lower_bound: this.authName,
+      upper_bound: this.authName,
+      limit: 1
+    });
 
-    return this.session.signTransaction(
-      { actions },
-      { blocksBehind: 3, expireSeconds: 60 }
-    );
+    const registered = response.rows.length > 0 && response.rows[0].user === this.authName;
+
+    if (!registered) {
+      await this.session.signTransaction({
+        actions: [{
+          account: 'nightclubapp',
+          name: 'regnewuser',
+          authorization: [{ actor: this.authName, permission: 'active' }],
+          data: { user: this.authName, referrer: this.authName }
+        }]
+      }, { blocksBehind: 3, expireSeconds: 60 });
+    }
+
+    const actions = [{
+      account: "atomicassets",
+      name: "transfer",
+      authorization: [{ actor: this.authName, permission: "active" }],
+      data: {
+        from: this.authName,
+        to: "nightclubapp",
+        asset_ids: asset_ids,
+        memo: ""
+      }
+    }];
+
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
   async unstakeNFTs(asset_ids) {
-    if (!this.session || !this.authName) throw new Error('No sesión activa');
-    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error('Debes seleccionar NFTs');
+    if (!this.session || !this.authName) throw new Error("No sesión activa");
+    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("Debes seleccionar NFTs");
 
     const actions = [{
-      account: 'nightclubapp',
-      name:    'unstake',
-      authorization: [{ actor: this.authName, permission: 'active' }],
+      account: "nightclubapp",
+      name: "unstake",
+      authorization: [{ actor: this.authName, permission: "active" }],
       data: { user: this.authName, asset_ids }
     }];
 
-    return this.session.signTransaction(
-      { actions },
-      { blocksBehind: 3, expireSeconds: 60 }
-    );
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
-  async claimRewards(collection = 'nightclubnft') {
-    if (!this.session || !this.authName) throw new Error('No sesión activa');
+  async claimRewards(collection = "nightclubnft") {
+    if (!this.session || !this.authName) throw new Error("No sesión activa");
 
     const actions = [{
-      account: 'nightclubapp',
-      name:    'claim',
-      authorization: [{ actor: this.authName, permission: 'active' }],
+      account: "nightclubapp",
+      name: "claim",
+      authorization: [{ actor: this.authName, permission: "active" }],
       data: { user: this.authName, collection }
     }];
 
-    return this.session.signTransaction(
-      { actions },
-      { blocksBehind: 3, expireSeconds: 60 }
-    );
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+  }
+
+  formatWAXBalance() {
+    const wax = parseFloat(this.balance);
+    return isNaN(wax) ? "0.00 WAX" : `${wax.toFixed(2)} WAX`;
+  }
+
+  formatSEXYBalance() {
+    const sexy = parseFloat(this.sexyBalance);
+    return isNaN(sexy) ? "0.00 SEXY" : `${sexy.toFixed(2)} SEXY`;
+  }
+
+  formatWAXOnly() {
+    const wax = parseFloat(this.balance);
+    return isNaN(wax) ? "0.00" : wax.toFixed(2);
+  }
+
+  formatSEXYOnly() {
+    const sexy = parseFloat(this.sexyBalance);
+    return isNaN(sexy) ? "0.00" : sexy.toFixed(2);
   }
 
   init() {
     this.ualCallback = this.ualCallback.bind(this);
+
     const wax = new Wax([this.myChain], { appName: this.appName });
     const anchor = new Anchor([this.myChain], { appName: this.appName });
-    const div = document.createElement('div');
-    div.id = 'ual-login'; document.body.appendChild(div);
-    this.ual = new UALJs(
-      this.ualCallback, [this.myChain], this.appName, [wax, anchor], { containerElement: div }
-    );
+
+    const divUal = document.createElement('div');
+    divUal.setAttribute('id', 'ual-login');
+    document.body.appendChild(divUal);
+
+    const divLoginRoot = document.getElementById('ual-login');
+    this.ual = new UALJs(this.ualCallback, [this.myChain], this.appName, [wax, anchor], {
+      containerElement: divLoginRoot
+    });
+
     this.ual.init();
   }
 
   static new() {
-    if (!User.instance) User.instance = new User();
+    if (!User.instance) {
+      User.instance = new User();
+    }
     return User.instance;
   }
 }
