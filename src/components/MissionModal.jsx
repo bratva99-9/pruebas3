@@ -229,17 +229,21 @@ export default function MissionModal() {
                           gap:20, padding:"10px 0"
                         }}>
                           {nfts.map(nft => {
-                            const candidates = [
-                              nft.data.video,
-                              nft.data.video_url,
-                              nft.data.media?.[0]?.url,
-                              nft.data.img,
-                              nft.data.image
-                            ];
-                            const raw = candidates.find(u => !!u) || "";
-                            const src = ipfsify(raw);
-                            const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
-                            const isSelected = selectedNFTs.includes(nft.asset_id);
+                            const mediaArr = nft.data?.media || [];
+const videoFromMedia = mediaArr.find(m => m.type?.includes("video") && m.url)?.url;
+
+const candidates = [
+  videoFromMedia,
+  nft.data.video,
+  nft.data.video_url,
+  nft.data.img,
+  nft.data.image
+];
+
+const raw = candidates.find(u => typeof u === "string" && u.length > 5) || "";
+const src = ipfsify(raw);
+const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
+
 
                             return (
                               <div key={nft.asset_id} onClick={()=>toggleNFTSelection(nft.asset_id)} style={{
