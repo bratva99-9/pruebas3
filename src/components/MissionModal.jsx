@@ -224,106 +224,85 @@ export default function MissionModal() {
                     : nfts.length===0
                       ? <div style={{textAlign:"center", color:"#ccc", padding:40}}>You don't have any NFTs available for missions</div>
                       : <div style={{
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fill,minmax(140px,1fr))",
-  gap: 20,
-  padding: "10px 0"
-}}>
-  {nfts.map(nft => {
-    const data = nft.data || {};
-    const allStrings = Object.values(data).filter(v => typeof v === "string");
-    const videoField = allStrings.find(u => /\.(mp4|webm|ogg)$/i.test(u));
-    const ipfsField = allStrings.find(u => /^Qm/.test(u) || u.startsWith("ipfs://"));
-    const raw = videoField || ipfsField || "";
-    const src = ipfsify(raw);
-    const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
-    const isSelected = selectedNFTs.includes(nft.asset_id);
+                          display:"grid",
+                          gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",
+                          gap:20, padding:"10px 0"
+                        }}>
+                          {nfts.map(nft => {
+                            const candidates = [
+                              nft.data.video,
+                              nft.data.video_url,
+                              nft.data.media?.[0]?.url,
+                              nft.data.img,
+                              nft.data.image
+                            ];
+                            const raw = candidates.find(u => !!u) || "";
+                            const src = ipfsify(raw);
+                            const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
+                            const isSelected = selectedNFTs.includes(nft.asset_id);
 
-    console.log(`NFT ${nft.asset_id}`, raw, src);
-
-    return (
-      <div
-        key={nft.asset_id}
-        onClick={() => toggleNFTSelection(nft.asset_id)}
-        style={{
-          position: "relative",
-          cursor: "pointer",
-          transform: isSelected ? "scale(0.95)" : "scale(1)",
-          transition: "all 0.3s ease"
-        }}
-      >
-        <div style={{
-          position: "relative",
-          width: "100%",
-          paddingBottom: "190%",
-          borderRadius: 20,
-          overflow: "hidden",
-          border: isSelected ? "3px solid #667eea" : "3px solid transparent",
-          boxShadow: isSelected ? "0 0 20px rgba(102,126,234,0.5)" : "0 4px 10px rgba(0,0,0,0.3)"
-        }}>
-          {isVideo ? (
-            <video
-              src={src}
-              controls
-              autoPlay
-              muted
-              loop
-              playsInline
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover"
-              }}
-              onError={(e) => console.error("Video error:", e)}
-            />
-          ) : (
-            <img
-              src={src}
-              alt={nft.name}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover"
-              }}
-              onError={(e) => console.error("Image error:", e)}
-            />
-          )}
-
-          {isSelected && (
-            <div style={{
-              position: "absolute",
-              inset: 0,
-              background: "rgba(102,126,234,0.2)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}>
-              <div style={{
-                background: "#667eea",
-                borderRadius: "50%",
-                width: 45,
-                height: 45,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#fff",
-                fontSize: 24,
-                boxShadow: "0 4px 15px rgba(0,0,0,0.3)"
-              }}>✓</div>
+                            return (
+                              <div key={nft.asset_id} onClick={()=>toggleNFTSelection(nft.asset_id)} style={{
+                                position:"relative",
+                                cursor:"pointer",
+                                transform: isSelected? "scale(0.95)" : "scale(1)",
+                                transition:"all .3s"
+                              }}>
+                                <div style={{
+                                  position:"relative",
+                                  width:"100%", paddingBottom:"190%",
+                                  borderRadius:20, overflow:"hidden",
+                                  border: isSelected? "3px solid #667eea" : "3px solid transparent",
+                                  boxShadow: isSelected? "0 0 20px rgba(102,126,234,0.5)" : "0 4px 10px rgba(0,0,0,0.3)"
+                                }}>
+                                  {isVideo ? (
+                                    <video
+                                      src={src}
+                                      controls
+                                      autoPlay muted loop playsInline
+                                      style={{
+                                        position:"absolute", top:0, left:0,
+                                        width:"100%", height:"100%",
+                                        objectFit:"cover"
+                                      }}
+                                      onError={e => console.error("Video error:", e)}
+                                    />
+                                  ) : (
+                                    <img
+                                      src={src}
+                                      alt={nft.name}
+                                      style={{
+                                        position:"absolute", top:0, left:0,
+                                        width:"100%", height:"100%",
+                                        objectFit:"cover"
+                                      }}
+                                      onError={e => console.error("Image error:", e)}
+                                    />
+                                  )}
+                                  {isSelected && (
+                                    <div style={{
+                                      position:"absolute", inset:0,
+                                      background:"rgba(102,126,234,0.2)",
+                                      display:"flex", alignItems:"center", justifyContent:"center"
+                                    }}>
+                                      <div style={{
+                                        background:"#667eea", borderRadius:"50%",
+                                        width:45, height:45,
+                                        display:"flex", alignItems:"center", justifyContent:"center",
+                                        color:"#fff", fontSize:24,
+                                        boxShadow:"0 4px 15px rgba(0,0,0,0.3)"
+                                      }}>✓</div>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                  }
+                </>
+              )}
             </div>
-          )}
-        </div>
-      </div>
-    );
-  })}
-</div> {/* <--- este cierra el grid de NFTs */}
-
 
             {/* Footer */}
             {step===2 && !loading && nfts.length>0 && (
