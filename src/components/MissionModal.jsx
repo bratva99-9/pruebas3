@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-// import { UserService } from '../User'; // Comentado temporalmente
+import { UserService } from '../UserService';
 import NFTModal from './NFTModal';
 
 const MissionModal = ({ onClose }) => {
@@ -9,52 +9,6 @@ const MissionModal = ({ onClose }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showNFTModal, setShowNFTModal] = useState(false);
 
-  // Mock UserService para testing
-  const UserService = {
-    rpc: {
-      get_table_rows: async (params) => {
-        // Mock data para testing
-        return {
-          rows: [
-            {
-              id: 1,
-              name: 'Night Club',
-              description: 'Experience the ultimate nightlife adventure',
-              duration_minutes: 120,
-              reward_multiplier: 2.5,
-              nft_drop_multiplier: 15.0
-            },
-            {
-              id: 2,
-              name: 'City Stroll',
-              description: 'Explore the vibrant city streets',
-              duration_minutes: 60,
-              reward_multiplier: 1.8,
-              nft_drop_multiplier: 10.0
-            },
-            {
-              id: 3,
-              name: 'Luxury Hotel',
-              description: 'Enjoy premium hospitality services',
-              duration_minutes: 180,
-              reward_multiplier: 3.2,
-              nft_drop_multiplier: 20.0
-            },
-            {
-              id: 4,
-              name: 'Beach Party',
-              description: 'Join the ultimate beach celebration',
-              duration_minutes: 240,
-              reward_multiplier: 4.0,
-              nft_drop_multiplier: 25.0
-            }
-          ]
-        };
-      }
-    }
-  };
-
-  // Mapeo de imágenes por nombre de misión
   const missionImages = {
     'Night Club': '/missions/nightclub.png',
     'City Stroll': '/missions/city.png', 
@@ -77,7 +31,7 @@ const MissionModal = ({ onClose }) => {
       console.error('Error fetching missions:', error);
       setLoading(false);
     }
-  }, [UserService.rpc]);
+  }, []);
 
   useEffect(() => {
     fetchMissions();

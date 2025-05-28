@@ -1,16 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-// import { UserService } from '../User'; // Comentado temporalmente
-
-// Mock UserService para testing
-const UserService = {
-  getName: () => 'testuser.wam', // Mock user name
-  stakeNFTs: async (nftIds, memo) => {
-    console.log('Staking NFTs:', nftIds, 'with memo:', memo);
-    // Simular delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    return { success: true };
-  }
-};
+import { UserService } from '../UserService';
 
 const NFTModal = ({ mission, onClose }) => {
   const [nfts, setNfts] = useState([]);
@@ -26,6 +15,7 @@ const NFTModal = ({ mission, onClose }) => {
 
   const fetchNFTs = useCallback(async (pageNum) => {
     try {
+      setLoading(true);
       const currentUser = UserService.getName();
       if (!currentUser) {
         console.error('No user logged in');
@@ -33,56 +23,16 @@ const NFTModal = ({ mission, onClose }) => {
         return;
       }
 
-      console.log('Fetching NFTs for user:', currentUser, 'page:', pageNum);
+      // Ajusta la tabla y parámetros según tu backend/NFTs
+      const response = await UserService.rpc.get_table_rows({
+        code: 'atomicassets',
+        scope: currentUser,
+        table: 'assets',
+        limit: LIMIT,
+        lower_bound: (pageNum - 1) * LIMIT,
+      });
 
-      // Mock NFT data para testing
-      const mockNFTs = [
-        {
-          asset_id: '1001',
-          data: {
-            name: 'Night Queen #1',
-            img: null, // Simular NFT sin imagen
-            video: null
-          }
-        },
-        {
-          asset_id: '1002',
-          data: {
-            name: 'City Girl #2',
-            img: null,
-            video: null
-          }
-        },
-        {
-          asset_id: '1003',
-          data: {
-            name: 'Luxury Lady #3',
-            img: null,
-            video: null
-          }
-        },
-        {
-          asset_id: '1004',
-          data: {
-            name: 'Beach Babe #4',
-            img: null,
-            video: null
-          }
-        },
-        {
-          asset_id: '1005',
-          data: {
-            name: 'Party Princess #5',
-            img: null,
-            video: null
-          }
-        }
-      ];
-
-      // Simular paginación
-      const startIndex = (pageNum - 1) * LIMIT;
-      const endIndex = startIndex + LIMIT;
-      const pageNFTs = mockNFTs.slice(startIndex, endIndex);
+      const pageNFTs = response.rows || [];
 
       if (pageNum === 1) {
         setNfts(pageNFTs);
@@ -90,12 +40,11 @@ const NFTModal = ({ mission, onClose }) => {
         setNfts(prev => [...prev, ...pageNFTs]);
       }
 
-      setHasMore(pageNFTs.length === LIMIT && endIndex < mockNFTs.length);
+      setHasMore(pageNFTs.length === LIMIT);
       setPage(pageNum);
       setLoading(false);
       setLoadingMore(false);
 
-      console.log('NFTs loaded:', pageNFTs);
     } catch (error) {
       console.error('Error fetching NFTs:', error);
       setLoading(false);
