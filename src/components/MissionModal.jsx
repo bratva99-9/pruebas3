@@ -68,7 +68,7 @@ const MissionModal = ({ onClose }) => {
       const response = await UserService.rpc.get_table_rows({
         code: 'nightclubapp',
         scope: 'nightclubapp',
-        table: 'missions',
+        table: 'missiontypes',
         limit: 100
       });
       setMissions(response.rows || []);
