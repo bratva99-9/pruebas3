@@ -106,18 +106,16 @@ const NFTModal = ({ mission, onClose }) => {
       <div className={`nft-modal${isClosing ? ' closing' : ''}`}>
         <button className="close-btn neon-x" onClick={onClose} aria-label="Cerrar modal">×</button>
         <div className="mission-info-header">
-          <div className="mission-name">{mission.name}</div>
-          <div className="mission-details-badges">
+          <div className="mission-name-glow">{mission.name}</div>
+          <div className="mission-description">{mission.description}</div>
+          <div className="mission-details-card">
             <span className="mission-badge duration"><span role="img" aria-label="Duración">⏱️</span> {mission.duration} min</span>
-            <span className="mission-badge mults"><span role="img" aria-label="Multiplicadores">✨</span> {Array.isArray(mission.multipliers) ? mission.multipliers.join(', ') : mission.multipliers}</span>
+            <span className="mission-badge mults"><span role="img" aria-label="Multiplicadores">✨</span> {Array.isArray(mission.multipliers) ? mission.multipliers.map(m => parseInt(m)).join(', ') : parseInt(mission.multipliers)}</span>
           </div>
         </div>
         <div className="nfts-header-row">
           <button className="back-btn selected-style back-style" onClick={onClose} aria-label="Volver a seleccionar misión">Select Mission</button>
-          <div className="nfts-header-center">
-            <span className="nfts-header-title">Select up to {MAX_SELECTED} NFTs to send on this mission</span>
-            <span className="selected-count selected-style">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
-          </div>
+          <span className="selected-count selected-style center-badge">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           <button 
             className="send-btn selected-style send-style"
             onClick={sendMission}
@@ -535,21 +533,13 @@ const NFTModal = ({ mission, onClose }) => {
           padding: 0 10px;
           gap: 10px;
           min-height: 90px;
+          position: relative;
         }
-        .nfts-header-center {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          flex: 1;
-          min-width: 0;
-          justify-content: center;
-        }
-        .nfts-header-title {
-          color: #ccc;
-          font-size: 18px;
-          margin-bottom: 6px;
+        .center-badge {
+          margin: 0 auto;
+          font-size: 20px;
+          min-width: 200px;
           text-align: center;
-          white-space: pre-line;
         }
         .selected-style {
           font-size: 18px;
@@ -597,25 +587,37 @@ const NFTModal = ({ mission, onClose }) => {
           flex-direction: column;
           align-items: center;
         }
-        .mission-name {
-          font-size: 32px;
-          color: #00fff7;
+        .mission-name-glow {
+          font-size: 44px;
+          color: #fff;
           font-weight: bold;
           margin-bottom: 8px;
-          text-shadow: 0 0 32px #00fff788, 0 0 8px #fff;
-          letter-spacing: 1px;
+          text-shadow: 0 0 32px #00fff7, 0 0 8px #ff00ff, 0 0 2px #fff;
+          letter-spacing: 2px;
+          font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif;
+          text-transform: uppercase;
         }
-        .mission-details-badges {
+        .mission-description {
+          color: #ccc;
+          font-size: 18px;
+          margin-bottom: 12px;
+          max-width: 80%;
+        }
+        .mission-details-card {
           display: flex;
-          gap: 16px;
+          gap: 18px;
           justify-content: center;
           margin-bottom: 2px;
+          background: rgba(0,255,255,0.07);
+          border-radius: 18px;
+          padding: 12px 32px;
+          box-shadow: 0 2px 16px #00fff733;
         }
         .mission-badge {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          font-size: 15px;
+          font-size: 17px;
           font-weight: 500;
           border-radius: 16px;
           padding: 6px 18px;
