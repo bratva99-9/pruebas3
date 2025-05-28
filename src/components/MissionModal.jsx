@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { UserService } from '../UserService';
 import NFTModal from './NFTModal';
+import missionImg from '../images/1.webp';
 
 const MissionModal = ({ onClose }) => {
   const [missions, setMissions] = useState([]);
@@ -82,7 +83,7 @@ const MissionModal = ({ onClose }) => {
             >
               <div className="mission-bg-image">
                 <img 
-                  src={require('../images/1.webp')} 
+                  src={missionImg} 
                   alt={mission.name}
                   className="mission-bg-img"
                 />
