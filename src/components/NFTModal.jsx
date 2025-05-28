@@ -105,19 +105,8 @@ const NFTModal = ({ mission, onClose }) => {
       )}
       <div className={`nft-modal${isClosing ? ' closing' : ''}`}>
         <button className="close-btn neon-x" onClick={onClose} aria-label="Cerrar modal">×</button>
-        <div className="mission-header">
-          <h2>Select NFTs for Mission</h2>
-          <div className="mission-info">
-            <h3>{mission.name}</h3>
-            <p>Select up to {MAX_SELECTED} NFTs to send on this mission</p>
-            <div className="selected-count">
-              Selected: {selectedNFTs.length}/{MAX_SELECTED}
-            </div>
-          </div>
-        </div>
-
         <div className="nfts-header-row">
-          <button className="back-btn selected-style back-style" onClick={onClose} aria-label="Volver a seleccionar misión">Back</button>
+          <button className="back-btn selected-style back-style" onClick={onClose} aria-label="Volver a seleccionar misión">Select Mission</button>
           <div className="nfts-header-center">
             <span className="nfts-header-title">Select up to {MAX_SELECTED} NFTs to send on this mission</span>
             <span className="selected-count selected-style">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
@@ -537,17 +526,21 @@ const NFTModal = ({ mission, onClose }) => {
           margin: 0 0 30px 0;
           width: 100%;
           padding: 0 10px;
+          gap: 10px;
         }
         .nfts-header-center {
           display: flex;
           flex-direction: column;
           align-items: center;
           flex: 1;
+          min-width: 0;
         }
         .nfts-header-title {
           color: #ccc;
           font-size: 18px;
           margin-bottom: 6px;
+          text-align: center;
+          white-space: pre-line;
         }
         .selected-style {
           font-size: 18px;
