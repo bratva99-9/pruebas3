@@ -5,15 +5,12 @@ const NFTModal = ({ mission, onClose }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNFTs, setSelectedNFTs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
   const [sending, setSending] = useState(false);
   const [displayCount, setDisplayCount] = useState(10);
 
   const MAX_SELECTED = 10;
 
-  const fetchNFTs = useCallback(async (pageNum) => {
+  const fetchNFTs = useCallback(async () => {
     try {
       setLoading(true);
       const currentUser = UserService.getName();
@@ -32,20 +29,16 @@ const NFTModal = ({ mission, onClose }) => {
       console.log('NFTs recibidos:', nfts);
 
       setNfts(nfts);
-      setHasMore(false);
-      setPage(1);
       setLoading(false);
-      setLoadingMore(false);
 
     } catch (error) {
       console.error('Error fetching NFTs:', error);
       setLoading(false);
-      setLoadingMore(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchNFTs(1);
+    fetchNFTs();
   }, [fetchNFTs]);
 
   // Filtrar NFTs por colección, schema y que tengan video
