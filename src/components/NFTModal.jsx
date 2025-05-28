@@ -8,6 +8,7 @@ const NFTModal = ({ mission, onClose }) => {
   const [sending, setSending] = useState(false);
   const [displayCount, setDisplayCount] = useState(5);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   const MAX_SELECTED = 10;
 
@@ -75,7 +76,10 @@ const NFTModal = ({ mission, onClose }) => {
       await UserService.stakeNFTs(selectedNFTs, memo);
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3500);
-      setTimeout(() => onClose(), 1200);
+      setTimeout(() => {
+        setIsClosing(true);
+        setTimeout(() => onClose(), 500);
+      }, 1200);
     } catch (error) {
       console.error('Error sending mission:', error);
       alert('Error: ' + error.message);
@@ -99,9 +103,15 @@ const NFTModal = ({ mission, onClose }) => {
       {showSuccess && (
         <div className="success-toast">¡Misión enviada con éxito!</div>
       )}
-      <div className="nft-modal">
+      <div className={`nft-modal${isClosing ? ' closing' : ''}`}>
         <button className="close-btn" onClick={onClose}>×</button>
-        
+        <button 
+          className="send-btn top-right"
+          onClick={sendMission}
+          disabled={selectedNFTs.length === 0 || sending}
+        >
+          {sending ? 'Sending...' : `Enviar misión (${selectedNFTs.length} NFTs)`}
+        </button>
         <div className="mission-header">
           <h2>Select NFTs for Mission</h2>
           <div className="mission-info">
@@ -186,16 +196,6 @@ const NFTModal = ({ mission, onClose }) => {
             )}
           </>
         )}
-
-        <div className="actions">
-          <button 
-            className="send-btn"
-            onClick={sendMission}
-            disabled={selectedNFTs.length === 0 || sending}
-          >
-            {sending ? 'Sending...' : `Enviar misión (${selectedNFTs.length} NFTs)`}
-          </button>
-        </div>
       </div>
 
       <style jsx>{`
@@ -223,6 +223,14 @@ const NFTModal = ({ mission, onClose }) => {
           position: relative;
           border: 2px solid #00ffff;
           box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+          opacity: 1;
+          transform: scale(1);
+          transition: opacity 0.5s cubic-bezier(.4,0,.2,1), transform 0.5s cubic-bezier(.4,0,.2,1);
+        }
+
+        .nft-modal.closing {
+          opacity: 0;
+          transform: scale(0.96);
         }
 
         .close-btn {
@@ -420,43 +428,24 @@ const NFTModal = ({ mission, onClose }) => {
           cursor: not-allowed;
         }
 
-        .actions {
-          text-align: center;
-          padding-top: 20px;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .send-btn {
+        .send-btn.top-right {
+          position: absolute;
+          top: 18px;
+          right: 70px;
+          z-index: 11;
+          padding: 10px 24px;
+          font-size: 15px;
+          border-radius: 18px;
           background: linear-gradient(45deg, #ff00ff, #00ffff);
+          color: #fff;
           border: none;
-          border-radius: 25px;
-          padding: 15px 40px;
-          font-size: 18px;
           font-weight: bold;
-          color: white;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          text-transform: uppercase;
-          letter-spacing: 1px;
+          box-shadow: 0 2px 12px #0004;
+          transition: all 0.2s;
         }
-
-        .send-btn:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 20px rgba(255, 0, 255, 0.3);
-          background: linear-gradient(45deg, #00ffff, #ff00ff);
-        }
-
-        .send-btn:disabled {
+        .send-btn.top-right:disabled {
           opacity: 0.5;
           cursor: not-allowed;
-          background: #666;
-        }
-
-        .loading {
-          text-align: center;
-          color: white;
-          font-size: 20px;
-          padding: 40px;
         }
 
         .success-toast {
