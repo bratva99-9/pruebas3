@@ -64,21 +64,20 @@ const MissionModal = ({ onClose }) => {
 
   const fetchMissions = useCallback(async () => {
     try {
-      console.log('Fetching missions...');
+      setLoading(true);
       const response = await UserService.rpc.get_table_rows({
         code: 'nightclubapp',
-        scope: 'nightclubapp', 
-        table: 'missiontypes',
+        scope: 'nightclubapp',
+        table: 'missions',
         limit: 100
       });
-      console.log('Missions response:', response);
       setMissions(response.rows || []);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching missions:', error);
       setLoading(false);
     }
-  }, []);
+  }, [UserService.rpc]);
 
   useEffect(() => {
     fetchMissions();

@@ -26,7 +26,7 @@ const NFTModal = ({ mission, onClose }) => {
 
   useEffect(() => {
     fetchNFTs(1);
-  }, []);
+  }, [fetchNFTs]);
 
   const fetchNFTs = async (pageNum) => {
     try {
