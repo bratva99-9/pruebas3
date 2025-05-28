@@ -80,37 +80,21 @@ const MissionModal = ({ onClose }) => {
               className={`mission-card ${selectedMission?.id === mission.id ? 'selected' : ''}`}
               onClick={() => handleMissionSelect(mission)}
             >
-              <div className="mission-image">
+              <div className="mission-bg-image">
                 <img 
-                  src={missionImages[mission.name] || '/missions/nightclub.png'} 
+                  src={require('../images/1.webp')} 
                   alt={mission.name}
-                  onError={(e) => {
-                    console.log('Image failed to load:', e.target.src);
-                    // Usar un placeholder o imagen por defecto
-                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
-                  }}
+                  className="mission-bg-img"
                 />
+                <div className="mission-gradient-overlay" />
               </div>
-              
-              <div className="mission-info">
-                <h3 className="mission-name">{mission.name}</h3>
-                <p className="mission-description">{mission.description}</p>
-                
-                <div className="mission-stats">
-                  <div className="stat">
-                    <span className="stat-icon">⏱️</span>
-                    <span>{formatDuration(mission.duration_minutes)}</span>
-                  </div>
-                  
-                  <div className="stat">
-                    <span className="stat-icon">🪙</span>
-                    <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span>
-                  </div>
-                  
-                  <div className="stat">
-                    <span className="stat-icon">🎁</span>
-                    <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span>
-                  </div>
+              <div className="mission-content">
+                <div className="mission-name neon-title">{mission.name}</div>
+                <div className="mission-description">{mission.description}</div>
+                <div className="mission-stats-row">
+                  <div className="stat"><span className="stat-icon">⏱️</span> {formatDuration(mission.duration_minutes)}</div>
+                  <div className="stat"><span className="stat-icon">🪙</span> {Number(mission.reward_multiplier).toFixed(1)} SEXXY</div>
+                  <div className="stat"><span className="stat-icon">🎁</span> {Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</div>
                 </div>
               </div>
             </div>
@@ -206,16 +190,19 @@ const MissionModal = ({ onClose }) => {
           background: linear-gradient(90deg, #00ffff 0%, #ff00ff 100%);
         }
         .mission-card {
-          background: rgba(255, 255, 255, 0.05);
+          position: relative;
+          background: transparent;
           border: 2px solid #ff00ff;
-          border-radius: 15px;
-          padding: 20px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          backdrop-filter: blur(10px);
+          border-radius: 18px;
           min-width: 224px;
           max-width: 224px;
           width: 224px;
+          height: 390px;
+          padding: 0;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          overflow: hidden;
+          box-shadow: 0 0 24px #ff00ff44;
         }
 
         .mission-card:hover {
@@ -230,61 +217,65 @@ const MissionModal = ({ onClose }) => {
           background: rgba(0, 255, 255, 0.1);
         }
 
-        .mission-image {
+        .mission-bg-image {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
           width: 100%;
-          height: 200px;
-          border-radius: 10px;
-          overflow: hidden;
-          margin-bottom: 15px;
-          background: #333;
+          height: 100%;
+          z-index: 1;
         }
-
-        .mission-image img {
+        .mission-bg-img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.3s ease;
+          display: block;
         }
-
-        .mission-card:hover .mission-image img {
-          transform: scale(1.05);
+        .mission-gradient-overlay {
+          position: absolute;
+          left: 0; right: 0; bottom: 0;
+          height: 55%;
+          background: linear-gradient(0deg, #181828 90%, rgba(24,24,40,0.1) 100%, transparent 100%);
+          z-index: 2;
         }
-
-        .mission-info {
-          color: white;
-        }
-
-        .mission-name {
-          font-size: 24px;
-          font-weight: bold;
-          color: #ff00ff;
-          margin-bottom: 10px;
-          text-align: center;
-        }
-
-        .mission-description {
-          font-size: 14px;
-          color: #ccc;
-          margin-bottom: 20px;
-          text-align: center;
-          line-height: 1.4;
-        }
-
-        .mission-stats {
+        .mission-content {
+          position: absolute;
+          z-index: 3;
+          left: 0; right: 0; bottom: 0; top: 0;
           display: flex;
           flex-direction: column;
-          gap: 10px;
+          justify-content: flex-end;
+          align-items: center;
+          padding: 24px 12px 18px 12px;
         }
-
+        .mission-name.neon-title {
+          font-size: 22px;
+          font-weight: bold;
+          color: #ff00ff;
+          text-shadow: 0 0 12px #ff00ff, 0 0 2px #fff;
+          margin-bottom: 6px;
+          text-align: center;
+        }
+        .mission-description {
+          color: #b3b3ff;
+          font-size: 15px;
+          margin-bottom: 18px;
+          text-align: center;
+        }
+        .mission-stats-row {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          align-items: flex-start;
+        }
         .stat {
+          color: #fff;
+          font-size: 16px;
           display: flex;
           align-items: center;
-          gap: 10px;
-          font-size: 16px;
-          color: #fff;
-          padding: 5px 0;
+          gap: 8px;
+          font-weight: 500;
         }
-
         .stat-icon {
           font-size: 18px;
           width: 24px;
