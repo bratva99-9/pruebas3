@@ -112,12 +112,12 @@ const MissionModal = ({ onClose }) => {
                   
                   <div className="stat">
                     <span className="stat-icon">🪙</span>
-                    <span>{mission.reward_multiplier.toFixed(1)} SEXXY</span>
+                    <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span>
                   </div>
                   
                   <div className="stat">
                     <span className="stat-icon">🎁</span>
-                    <span>{mission.nft_drop_multiplier.toFixed(1)}% probabilidad</span>
+                    <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span>
                   </div>
                 </div>
               </div>
