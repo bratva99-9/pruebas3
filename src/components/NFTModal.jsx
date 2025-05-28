@@ -127,9 +127,9 @@ const NFTModal = ({ mission, onClose }) => {
                     key={nft.asset_id}
                     className={`nft-card ${isSelected ? 'selected' : ''}`}
                     onClick={() => toggleNFTSelection(nft.asset_id)}
-                    style={{ aspectRatio: '1/2', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 24px #0004', minWidth: 100, maxWidth: 200, minHeight: 200, maxHeight: 400, background: 'rgba(255,255,255,0.04)', border: isSelected ? '3px solid #ff00ff' : '2px solid #00ffff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', margin: '0 auto' }}
+                    style={{ aspectRatio: '9/16', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 24px #0004', minWidth: 135, maxWidth: 270, minHeight: 240, maxHeight: 480, background: 'rgba(255,255,255,0.04)', border: isSelected ? '3px solid #ff00ff' : '2px solid #00ffff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', margin: '0 auto', padding: 0 }}
                   >
-                    <div className="nft-media" style={{ width: '100%', height: '200px', borderRadius: '20px', overflow: 'hidden', background: '#222', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div className="nft-media" style={{ width: '100%', height: '100%', aspectRatio: '9/16', borderRadius: '20px', overflow: 'hidden', background: '#222', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}>
                       <video 
                         src={videoUrl}
                         autoPlay
@@ -143,14 +143,6 @@ const NFTModal = ({ mission, onClose }) => {
                         }}
                       />
                     </div>
-                    
-                    <div className="nft-info">
-                      <div className="nft-name">
-                        {nft.data?.name || `NFT #${nft.asset_id}`}
-                      </div>
-                      <div className="nft-id">#{nft.asset_id}</div>
-                    </div>
-                    
                     {isSelected && (
                       <div className="selected-indicator">✓</div>
                     )}
