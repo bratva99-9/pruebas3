@@ -105,6 +105,17 @@ const NFTModal = ({ mission, onClose }) => {
       )}
       <div className={`nft-modal${isClosing ? ' closing' : ''}`}>
         <button className="close-btn neon-x" onClick={onClose} aria-label="Cerrar modal">×</button>
+        <div className="mission-header">
+          <h2>Select NFTs for Mission</h2>
+          <div className="mission-info">
+            <h3>{mission.name}</h3>
+            <p>Select up to {MAX_SELECTED} NFTs to send on this mission</p>
+            <div className="selected-count">
+              Selected: {selectedNFTs.length}/{MAX_SELECTED}
+            </div>
+          </div>
+        </div>
+
         <div className="nfts-header-row">
           <button className="back-btn neon-back" onClick={onClose} aria-label="Volver a seleccionar misión">Back</button>
           <div style={{ flex: 1 }} />
@@ -115,16 +126,6 @@ const NFTModal = ({ mission, onClose }) => {
           >
             {sending ? 'Sending...' : `Send Bitchs !`}
           </button>
-        </div>
-        <div className="mission-header">
-          <h2>Select NFTs for Mission</h2>
-          <div className="mission-info">
-            <h3>{mission.name}</h3>
-            <p>Select up to {MAX_SELECTED} NFTs to send on this mission</p>
-            <div className="selected-count">
-              Selected: {selectedNFTs.length}/{MAX_SELECTED}
-            </div>
-          </div>
         </div>
 
         {filteredNFTs.length === 0 ? (
@@ -529,9 +530,10 @@ const NFTModal = ({ mission, onClose }) => {
           display: flex;
           flex-direction: row;
           align-items: center;
-          justify-content: flex-end;
-          margin-bottom: 10px;
+          justify-content: space-between;
+          margin: 0 0 20px 0;
           width: 100%;
+          padding: 0 10px;
         }
 
         .back-btn.neon-back {
