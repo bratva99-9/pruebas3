@@ -1,6 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 // import { UserService } from '../User'; // Comentado temporalmente
 
+// Mock UserService para testing
+const UserService = {
+  getName: () => 'testuser.wam', // Mock user name
+  stakeNFTs: async (nftIds, memo) => {
+    console.log('Staking NFTs:', nftIds, 'with memo:', memo);
+    // Simular delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    return { success: true };
+  }
+};
+
 const NFTModal = ({ mission, onClose }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNFTs, setSelectedNFTs] = useState([]);
@@ -12,17 +23,6 @@ const NFTModal = ({ mission, onClose }) => {
 
   const LIMIT = 10;
   const MAX_SELECTED = 10;
-
-  // Mock UserService para testing
-  const UserService = {
-    getName: () => 'testuser.wam', // Mock user name
-    stakeNFTs: async (nftIds, memo) => {
-      console.log('Staking NFTs:', nftIds, 'with memo:', memo);
-      // Simular delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      return { success: true };
-    }
-  };
 
   const fetchNFTs = useCallback(async (pageNum) => {
     try {
