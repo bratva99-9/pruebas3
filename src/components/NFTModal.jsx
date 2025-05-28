@@ -10,7 +10,6 @@ const NFTModal = ({ mission, onClose }) => {
   const [hasMore, setHasMore] = useState(true);
   const [sending, setSending] = useState(false);
 
-  const LIMIT = 10;
   const MAX_SELECTED = 10;
 
   const fetchNFTs = useCallback(async (pageNum) => {
