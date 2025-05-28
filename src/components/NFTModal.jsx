@@ -117,10 +117,13 @@ const NFTModal = ({ mission, onClose }) => {
         </div>
 
         <div className="nfts-header-row">
-          <button className="back-btn neon-back" onClick={onClose} aria-label="Volver a seleccionar misión">Back</button>
-          <div style={{ flex: 1 }} />
+          <button className="back-btn selected-style back-style" onClick={onClose} aria-label="Volver a seleccionar misión">Back</button>
+          <div className="nfts-header-center">
+            <span className="nfts-header-title">Select up to {MAX_SELECTED} NFTs to send on this mission</span>
+            <span className="selected-count selected-style">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
+          </div>
           <button 
-            className="send-btn neon-send"
+            className="send-btn selected-style send-style"
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}
           >
@@ -531,28 +534,58 @@ const NFTModal = ({ mission, onClose }) => {
           flex-direction: row;
           align-items: center;
           justify-content: space-between;
-          margin: 0 0 20px 0;
+          margin: 0 0 30px 0;
           width: 100%;
           padding: 0 10px;
         }
-
-        .back-btn.neon-back {
-          background: #181828;
-          border: 2px solid #a259f7;
-          border-radius: 18px;
-          padding: 14px 38px;
-          color: #a259f7;
+        .nfts-header-center {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          flex: 1;
+        }
+        .nfts-header-title {
+          color: #ccc;
+          font-size: 18px;
+          margin-bottom: 6px;
+        }
+        .selected-style {
           font-size: 18px;
           font-weight: bold;
-          letter-spacing: 1px;
-          cursor: pointer;
-          box-shadow: 0 2px 12px #a259f780;
+          border-radius: 20px;
+          padding: 8px 24px;
+          border: 2px solid #00ffff;
+          background: rgba(0,255,255,0.08);
+          color: #00ffff;
+          box-shadow: 0 2px 12px #00ffff33;
+          display: inline-block;
           transition: all 0.2s;
         }
-        .back-btn.neon-back:hover:not(:disabled) {
-          background: #a259f7;
+        .back-style {
+          border: 2px solid #444;
+          background: #181828;
           color: #fff;
-          box-shadow: 0 4px 24px #ff00cc80;
+          box-shadow: 0 2px 12px #2228;
+        }
+        .back-style:hover {
+          background: #333;
+          color: #fff;
+          border-color: #888;
+        }
+        .send-style {
+          border: 2px solid #1ed760;
+          background: #1ed76022;
+          color: #1ed760;
+          box-shadow: 0 2px 12px #1ed76044;
+        }
+        .send-style:hover:not(:disabled) {
+          background: #1ed760;
+          color: #fff;
+          border-color: #1ed760;
+        }
+        .send-style:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
         }
       `}</style>
     </div>
