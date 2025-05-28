@@ -49,7 +49,7 @@ const NFTModal = ({ mission, onClose }) => {
 
   // Filtrar NFTs solo por colección
   const filteredNFTs = nfts.filter(nft =>
-    nft.collection_name === 'nightclubnft'
+    nft.collection && nft.collection.collection_name === 'nightclubnft'
   );
 
   const loadMoreNFTs = () => {
