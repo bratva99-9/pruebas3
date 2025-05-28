@@ -9,13 +9,6 @@ const MissionModal = ({ onClose }) => {
   const [loading, setLoading] = useState(true);
   const [showNFTModal, setShowNFTModal] = useState(false);
 
-  const missionImages = {
-    'Night Club': '/missions/nightclub.png',
-    'City Stroll': '/missions/city.png', 
-    'Luxury Hotel': '/missions/hotel.png',
-    'Beach Party': '/missions/beach.png'
-  };
-
   const fetchMissions = useCallback(async () => {
     try {
       setLoading(true);
