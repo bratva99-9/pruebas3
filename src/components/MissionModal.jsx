@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { UserService } from '../User'; // Ajusta la ruta según tu estructura
+// import { UserService } from '../User'; // Comentado temporalmente
 import NFTModal from './NFTModal';
 
 const MissionModal = ({ onClose }) => {
@@ -8,6 +8,51 @@ const MissionModal = ({ onClose }) => {
   const [loading, setLoading] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showNFTModal, setShowNFTModal] = useState(false);
+
+  // Mock UserService para testing
+  const UserService = {
+    rpc: {
+      get_table_rows: async (params) => {
+        // Mock data para testing
+        return {
+          rows: [
+            {
+              id: 1,
+              name: 'Night Club',
+              description: 'Experience the ultimate nightlife adventure',
+              duration_minutes: 120,
+              reward_multiplier: 2.5,
+              nft_drop_multiplier: 15.0
+            },
+            {
+              id: 2,
+              name: 'City Stroll',
+              description: 'Explore the vibrant city streets',
+              duration_minutes: 60,
+              reward_multiplier: 1.8,
+              nft_drop_multiplier: 10.0
+            },
+            {
+              id: 3,
+              name: 'Luxury Hotel',
+              description: 'Enjoy premium hospitality services',
+              duration_minutes: 180,
+              reward_multiplier: 3.2,
+              nft_drop_multiplier: 20.0
+            },
+            {
+              id: 4,
+              name: 'Beach Party',
+              description: 'Join the ultimate beach celebration',
+              duration_minutes: 240,
+              reward_multiplier: 4.0,
+              nft_drop_multiplier: 25.0
+            }
+          ]
+        };
+      }
+    }
+  };
 
   // Mapeo de imágenes por nombre de misión
   const missionImages = {
@@ -23,12 +68,14 @@ const MissionModal = ({ onClose }) => {
 
   const fetchMissions = async () => {
     try {
+      console.log('Fetching missions...');
       const response = await UserService.rpc.get_table_rows({
         code: 'nightclubapp',
         scope: 'nightclubapp', 
         table: 'missiontypes',
         limit: 100
       });
+      console.log('Missions response:', response);
       setMissions(response.rows || []);
       setLoading(false);
     } catch (error) {
@@ -52,6 +99,7 @@ const MissionModal = ({ onClose }) => {
   };
 
   const handleMissionSelect = (mission) => {
+    console.log('Mission selected:', mission);
     setSelectedMission(mission);
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
@@ -76,7 +124,7 @@ const MissionModal = ({ onClose }) => {
         
         {showSuccess && (
           <div className="success-message">
-            Success! Mission completed.
+            Success! Mission selected: {selectedMission?.name}
           </div>
         )}
 
@@ -91,6 +139,11 @@ const MissionModal = ({ onClose }) => {
                 <img 
                   src={missionImages[mission.name] || '/missions/nightclub.png'} 
                   alt={mission.name}
+                  onError={(e) => {
+                    console.log('Image failed to load:', e.target.src);
+                    // Usar un placeholder o imagen por defecto
+                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+                  }}
                 />
               </div>
               
@@ -124,6 +177,7 @@ const MissionModal = ({ onClose }) => {
           disabled={!selectedMission}
           onClick={() => {
             if (selectedMission) {
+              console.log('Opening NFT Modal for mission:', selectedMission);
               setShowNFTModal(true);
             }
           }}
@@ -135,6 +189,7 @@ const MissionModal = ({ onClose }) => {
           <NFTModal 
             mission={selectedMission}
             onClose={() => {
+              console.log('Closing NFT Modal');
               setShowNFTModal(false);
               onClose(); // Cierra también el mission modal después de enviar
             }}
@@ -179,6 +234,11 @@ const MissionModal = ({ onClose }) => {
           font-size: 30px;
           cursor: pointer;
           z-index: 10;
+          transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+          color: #ff00ff;
         }
 
         .mission-title {
@@ -200,6 +260,12 @@ const MissionModal = ({ onClose }) => {
           color: #00ffff;
           margin-bottom: 30px;
           font-size: 18px;
+          animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
         .missions-grid {
@@ -228,6 +294,7 @@ const MissionModal = ({ onClose }) => {
         .mission-card.selected {
           border-color: #00ffff;
           box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+          background: rgba(0, 255, 255, 0.1);
         }
 
         .mission-image {
@@ -236,12 +303,18 @@ const MissionModal = ({ onClose }) => {
           border-radius: 10px;
           overflow: hidden;
           margin-bottom: 15px;
+          background: #333;
         }
 
         .mission-image img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          transition: transform 0.3s ease;
+        }
+
+        .mission-card:hover .mission-image img {
+          transform: scale(1.05);
         }
 
         .mission-info {
@@ -261,6 +334,7 @@ const MissionModal = ({ onClose }) => {
           color: #ccc;
           margin-bottom: 20px;
           text-align: center;
+          line-height: 1.4;
         }
 
         .mission-stats {
@@ -275,10 +349,13 @@ const MissionModal = ({ onClose }) => {
           gap: 10px;
           font-size: 16px;
           color: #fff;
+          padding: 5px 0;
         }
 
         .stat-icon {
           font-size: 18px;
+          width: 24px;
+          text-align: center;
         }
 
         .select-mission-btn {
@@ -300,11 +377,13 @@ const MissionModal = ({ onClose }) => {
         .select-mission-btn:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3);
+          background: linear-gradient(45deg, #ff00ff, #00ffff);
         }
 
         .select-mission-btn:disabled {
           opacity: 0.5;
           cursor: not-allowed;
+          background: #666;
         }
 
         .loading {
@@ -312,6 +391,23 @@ const MissionModal = ({ onClose }) => {
           color: white;
           font-size: 20px;
           padding: 40px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+          .mission-modal {
+            padding: 20px;
+            width: 95%;
+          }
+          
+          .mission-title {
+            font-size: 32px;
+          }
+          
+          .missions-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
         }
       `}</style>
     </div>
