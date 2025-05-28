@@ -56,9 +56,9 @@ const NFTModal = ({ mission, onClose }) => {
     fetchNFTs(1);
   }, [fetchNFTs]);
 
-  // Filtrar NFTs por colección y schema
+  // Filtrar NFTs solo por colección
   const filteredNFTs = nfts.filter(nft =>
-    nft.collection_name === 'nightclubnft' && nft.schema && nft.schema.schema_name === 'girls'
+    nft.collection_name === 'nightclubnft'
   );
 
   const loadMoreNFTs = () => {
@@ -147,7 +147,7 @@ const NFTModal = ({ mission, onClose }) => {
         {filteredNFTs.length === 0 ? (
           <div className="no-nfts">
             <p>No NFTs found in your collection</p>
-            <p>Make sure you own NFTs from the 'nightclubapp' collection with 'girls' schema</p>
+            <p>Make sure you own NFTs from the 'nightclubnft' collection</p>
           </div>
         ) : (
           <>
