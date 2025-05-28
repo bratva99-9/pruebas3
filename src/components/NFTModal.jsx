@@ -491,4 +491,77 @@ const NFTModal = ({ mission, onClose }) => {
         }
 
         .load-more-btn:hover:not(:disabled) {
-          background: rgba(0, 255, 255, 0.3);git
+          background: rgba(0, 255, 255, 0.3);
+          box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .load-more-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .actions {
+          text-align: center;
+          padding-top: 20px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .send-btn {
+          background: linear-gradient(45deg, #ff00ff, #00ffff);
+          border: none;
+          border-radius: 25px;
+          padding: 15px 40px;
+          font-size: 18px;
+          font-weight: bold;
+          color: white;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        .send-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(255, 0, 255, 0.3);
+          background: linear-gradient(45deg, #00ffff, #ff00ff);
+        }
+
+        .send-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          background: #666;
+        }
+
+        .loading {
+          text-align: center;
+          color: white;
+          font-size: 20px;
+          padding: 40px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+          .nft-modal {
+            padding: 20px;
+            width: 95%;
+          }
+          
+          .mission-header h2 {
+            font-size: 24px;
+          }
+          
+          .nfts-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+          }
+          
+          .nft-media {
+            height: 150px;
+          }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default NFTModal;
