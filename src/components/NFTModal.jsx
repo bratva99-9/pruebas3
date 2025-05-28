@@ -9,6 +9,7 @@ const NFTModal = ({ mission, onClose }) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [sending, setSending] = useState(false);
+  const [displayCount, setDisplayCount] = useState(10);
 
   const MAX_SELECTED = 10;
 
@@ -31,7 +32,7 @@ const NFTModal = ({ mission, onClose }) => {
       console.log('NFTs recibidos:', nfts);
 
       setNfts(nfts);
-      setHasMore(false); // Si quieres paginación, ajusta esto
+      setHasMore(false);
       setPage(1);
       setLoading(false);
       setLoadingMore(false);
@@ -47,9 +48,14 @@ const NFTModal = ({ mission, onClose }) => {
     fetchNFTs(1);
   }, [fetchNFTs]);
 
-  // Filtrar NFTs solo por colección
+  // Filtrar NFTs por colección, schema y que tengan video
   const filteredNFTs = nfts.filter(nft =>
-    nft.collection && nft.collection.collection_name === 'nightclubnft'
+    nft.collection && 
+    nft.collection.collection_name === 'nightclubnft' &&
+    nft.schema && 
+    nft.schema.schema_name === 'girls' &&
+    nft.data && 
+    nft.data.video
   );
 
   const loadMoreNFTs = () => {
@@ -90,24 +96,6 @@ const NFTModal = ({ mission, onClose }) => {
     }
   };
 
-  const getNFTImage = (nft) => {
-    if (nft.data && nft.data.img) {
-      return nft.data.img.startsWith('Qm')
-        ? `https://ipfs.io/ipfs/${nft.data.img}`
-        : nft.data.img;
-    }
-    if (nft.data && nft.data.image) {
-      return nft.data.image.startsWith('Qm')
-        ? `https://ipfs.io/ipfs/${nft.data.image}`
-        : nft.data.image;
-    }
-    return null;
-  };
-
-  const isVideo = (url) => {
-    return url && (url.includes('.mp4') || url.includes('.webm') || url.includes('.mov'));
-  };
-
   if (loading) {
     return (
       <div className="nft-modal-overlay">
@@ -137,14 +125,16 @@ const NFTModal = ({ mission, onClose }) => {
         {filteredNFTs.length === 0 ? (
           <div className="no-nfts">
             <p>No NFTs found in your collection</p>
-            <p>Make sure you own NFTs from the 'nightclubnft' collection</p>
+            <p>Make sure you own NFTs from the 'nightclubnft' collection with schema 'girls'</p>
           </div>
         ) : (
           <>
             <div className="nfts-grid">
-              {filteredNFTs.map((nft) => {
+              {filteredNFTs.slice(0, displayCount).map((nft) => {
                 const isSelected = selectedNFTs.includes(nft.asset_id);
-                const mediaUrl = getNFTImage(nft);
+                const videoUrl = nft.data.video.startsWith('Qm')
+                  ? `https://ipfs.io/ipfs/${nft.data.video}`
+                  : nft.data.video;
                 
                 return (
                   <div 
@@ -154,37 +144,18 @@ const NFTModal = ({ mission, onClose }) => {
                     style={{ aspectRatio: '1/2', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 24px #0004', minWidth: 100, maxWidth: 200, minHeight: 200, maxHeight: 400, background: 'rgba(255,255,255,0.04)', border: isSelected ? '3px solid #ff00ff' : '2px solid #00ffff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', margin: '0 auto' }}
                   >
                     <div className="nft-media" style={{ width: '100%', height: '200px', borderRadius: '20px', overflow: 'hidden', background: '#222', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      {mediaUrl ? (
-                        isVideo(mediaUrl) ? (
-                          <video 
-                            src={mediaUrl}
-                            autoPlay 
-                            loop 
-                            muted 
-                            playsInline
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '20px' }}
-                            onError={(e) => {
-                              console.error('Video error:', e);
-                              e.target.style.display = 'none';
-                            }}
-                          />
-                        ) : (
-                          <img 
-                            src={mediaUrl} 
-                            alt={nft.data?.name || `NFT #${nft.asset_id}`}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '20px' }}
-                            onError={(e) => {
-                              console.error('Image error:', e);
-                              e.target.style.display = 'none';
-                            }}
-                          />
-                        )
-                      ) : (
-                        <div className="no-media">
-                          <div className="no-media-icon">🖼️</div>
-                          <div className="no-media-text">No Media</div>
-                        </div>
-                      )}
+                      <video 
+                        src={videoUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '20px' }}
+                        onError={(e) => {
+                          console.error('Video error:', e);
+                          e.target.style.display = 'none';
+                        }}
+                      />
                     </div>
                     
                     <div className="nft-info">
@@ -202,13 +173,9 @@ const NFTModal = ({ mission, onClose }) => {
               })}
             </div>
 
-            {hasMore && (
-              <button 
-                className="load-more-btn"
-                onClick={loadMoreNFTs}
-                disabled={loadingMore}
-              >
-                {loadingMore ? 'Loading...' : 'Load More'}
+            {filteredNFTs.length > displayCount && (
+              <button className="load-more-btn" onClick={() => setDisplayCount(displayCount + 10)}>
+                Cargar más NFTs
               </button>
             )}
           </>
