@@ -127,22 +127,49 @@ const NFTModal = ({ mission, onClose }) => {
                     key={nft.asset_id}
                     className={`nft-card ${isSelected ? 'selected' : ''}`}
                     onClick={() => toggleNFTSelection(nft.asset_id)}
-                    style={{ aspectRatio: '9/16', borderRadius: '18px', overflow: 'hidden', boxShadow: '0 2px 12px #0004', minWidth: 80, maxWidth: 120, minHeight: 140, maxHeight: 220, background: 'rgba(255,255,255,0.04)', border: isSelected ? '3px solid #ff00ff' : '2px solid #00ffff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', margin: '0 auto', padding: 0 }}
+                    style={{
+                      aspectRatio: '9/16',
+                      borderRadius: '18px',
+                      overflow: 'hidden',
+                      boxShadow: '0 2px 12px #0004',
+                      minWidth: 80,
+                      maxWidth: 120,
+                      minHeight: 140,
+                      maxHeight: 220,
+                      background: 'transparent',
+                      border: isSelected ? '3px solid #ff00ff' : '2px solid #00ffff',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      margin: '0 auto',
+                      padding: 0
+                    }}
                   >
-                    <div className="nft-media" style={{ width: '100%', height: '100%', aspectRatio: '9/16', borderRadius: '16px', overflow: 'hidden', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}>
-                      <video 
-                        src={videoUrl}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px', display: 'block' }}
-                        onError={(e) => {
-                          console.error('Video error:', e);
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                    </div>
+                    <video
+                      src={videoUrl}
+                      loop
+                      muted
+                      playsInline
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                        background: 'black',
+                        borderRadius: '0',
+                        margin: 0,
+                        padding: 0
+                      }}
+                      onMouseEnter={e => e.target.play()}
+                      onMouseLeave={e => { e.target.pause(); e.target.currentTime = 0; }}
+                      preload="none"
+                      controls={false}
+                      onError={e => {
+                        console.error('Video error:', e);
+                        e.target.style.display = 'none';
+                      }}
+                    />
                   </div>
                 );
               })}
