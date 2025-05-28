@@ -105,13 +105,17 @@ const NFTModal = ({ mission, onClose }) => {
       )}
       <div className={`nft-modal${isClosing ? ' closing' : ''}`}>
         <button className="close-btn neon-x" onClick={onClose} aria-label="Cerrar modal">×</button>
-        <button 
-          className="send-btn top-right neon-send"
-          onClick={sendMission}
-          disabled={selectedNFTs.length === 0 || sending}
-        >
-          {sending ? 'Sending...' : `Send Bitchs !`}
-        </button>
+        <div className="nfts-header-row">
+          <button className="back-btn neon-back" onClick={onClose} aria-label="Volver a seleccionar misión">Back</button>
+          <div style={{ flex: 1 }} />
+          <button 
+            className="send-btn neon-send"
+            onClick={sendMission}
+            disabled={selectedNFTs.length === 0 || sending}
+          >
+            {sending ? 'Sending...' : `Send Bitchs !`}
+          </button>
+        </div>
         <div className="mission-header">
           <h2>Select NFTs for Mission</h2>
           <div className="mission-info">
@@ -190,8 +194,8 @@ const NFTModal = ({ mission, onClose }) => {
             </div>
 
             {filteredNFTs.length > displayCount && (
-              <button className="load-more-btn" onClick={() => setDisplayCount(displayCount + 5)}>
-                Cargar más NFTs
+              <button className="load-more-btn neon-load" onClick={() => setDisplayCount(displayCount + 5)}>
+                Load More
               </button>
             )}
           </>
@@ -239,13 +243,13 @@ const NFTModal = ({ mission, onClose }) => {
           right: 28px;
           width: 48px;
           height: 48px;
-          background: linear-gradient(135deg, #0ff 0%, #f0f 100%);
+          background: linear-gradient(135deg, #ff00cc 0%, #a259f7 100%);
           color: #fff;
           border: none;
           border-radius: 50%;
           font-size: 32px;
           font-weight: bold;
-          box-shadow: 0 2px 16px #00ffff80, 0 0 8px #ff00cc80;
+          box-shadow: 0 2px 16px #a259f780, 0 0 8px #ff00cc80;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -254,9 +258,9 @@ const NFTModal = ({ mission, onClose }) => {
           outline: none;
         }
         .close-btn.neon-x:hover {
-          background: linear-gradient(135deg, #ff00cc 0%, #00ffff 100%);
+          background: linear-gradient(135deg, #a259f7 0%, #ff00cc 100%);
           color: #fff;
-          box-shadow: 0 4px 32px #ff00cc80, 0 0 16px #00ffffcc;
+          box-shadow: 0 4px 32px #ff00cc80, 0 0 16px #a259f7cc;
         }
 
         .mission-header {
@@ -415,53 +419,49 @@ const NFTModal = ({ mission, onClose }) => {
           100% { transform: scale(1); }
         }
 
-        .load-more-btn {
+        .load-more-btn.neon-load {
           display: block;
-          margin: 0 auto 30px auto;
-          background: rgba(0, 255, 255, 0.2);
-          border: 2px solid #00ffff;
-          border-radius: 15px;
-          padding: 12px 30px;
-          color: #00ffff;
+          margin: 30px auto 0 auto;
+          background: #181828;
+          border: 2px solid #a259f7;
+          border-radius: 18px;
+          padding: 14px 38px;
+          color: #a259f7;
+          font-size: 18px;
+          font-weight: bold;
+          letter-spacing: 1px;
           cursor: pointer;
-          transition: all 0.3s ease;
+          box-shadow: 0 2px 12px #a259f780;
+          transition: all 0.2s;
+        }
+        .load-more-btn.neon-load:hover:not(:disabled) {
+          background: #a259f7;
+          color: #fff;
+          box-shadow: 0 4px 24px #ff00cc80;
         }
 
-        .load-more-btn:hover:not(:disabled) {
-          background: rgba(0, 255, 255, 0.3);
-          box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
-        }
-
-        .load-more-btn:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .send-btn.top-right.neon-send {
-          position: absolute;
-          top: 22px;
-          right: 110px;
-          z-index: 11;
+        .send-btn.neon-send {
           padding: 16px 38px;
           font-size: 20px;
           border-radius: 30px;
-          background: linear-gradient(90deg, #ff00cc 0%, #00ffff 100%);
+          background: linear-gradient(90deg, #ff00cc 0%, #a259f7 100%);
           color: #fff;
           border: none;
           font-weight: bold;
-          box-shadow: 0 4px 24px #00ffff80, 0 0 8px #ff00cc80;
+          box-shadow: 0 4px 24px #a259f780, 0 0 8px #ff00cc80;
           text-shadow: 0 2px 8px #000a;
           letter-spacing: 2px;
           cursor: pointer;
           transition: all 0.2s, box-shadow 0.3s;
           text-transform: uppercase;
+          margin-right: 10px;
         }
-        .send-btn.top-right.neon-send:hover:not(:disabled) {
-          background: linear-gradient(90deg, #00ffff 0%, #ff00cc 100%);
-          box-shadow: 0 6px 32px #ff00cc80, 0 0 16px #00ffffcc;
+        .send-btn.neon-send:hover:not(:disabled) {
+          background: linear-gradient(90deg, #a259f7 0%, #ff00cc 100%);
+          box-shadow: 0 6px 32px #ff00cc80, 0 0 16px #a259f7cc;
           color: #fff;
         }
-        .send-btn.top-right.neon-send:disabled {
+        .send-btn.neon-send:disabled {
           opacity: 0.5;
           cursor: not-allowed;
           background: #222;
@@ -523,6 +523,34 @@ const NFTModal = ({ mission, onClose }) => {
         }
         .nft-modal::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
+        }
+
+        .nfts-header-row {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-end;
+          margin-bottom: 10px;
+          width: 100%;
+        }
+
+        .back-btn.neon-back {
+          background: #181828;
+          border: 2px solid #a259f7;
+          border-radius: 18px;
+          padding: 14px 38px;
+          color: #a259f7;
+          font-size: 18px;
+          font-weight: bold;
+          letter-spacing: 1px;
+          cursor: pointer;
+          box-shadow: 0 2px 12px #a259f780;
+          transition: all 0.2s;
+        }
+        .back-btn.neon-back:hover:not(:disabled) {
+          background: #a259f7;
+          color: #fff;
+          box-shadow: 0 4px 24px #ff00cc80;
         }
       `}</style>
     </div>
