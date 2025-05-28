@@ -101,7 +101,7 @@ const NFTModal = ({ mission, onClose }) => {
       setLoading(false);
       setLoadingMore(false);
     }
-  }, [UserService]);
+  }, []);
 
   useEffect(() => {
     fetchNFTs(1);
