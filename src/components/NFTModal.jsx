@@ -109,8 +109,22 @@ const NFTModal = ({ mission, onClose }) => {
           <div className="mission-name-glow">{mission.name}</div>
           <div className="mission-description">{mission.description}</div>
           <div className="mission-details-card">
-            <span className="mission-badge duration"><span role="img" aria-label="Duración">⏱️</span> {mission.duration} min</span>
-            <span className="mission-badge mults"><span role="img" aria-label="Multiplicadores">✨</span> {Array.isArray(mission.multipliers) ? mission.multipliers.map(m => parseInt(m)).join(', ') : parseInt(mission.multipliers)}</span>
+            <span className="mission-badge duration">
+              <span role="img" aria-label="Duración">⏱️</span> {mission.duration ? `${mission.duration} min` : 'No disponible'}
+            </span>
+            <span className="mission-badge mults">
+              <span role="img" aria-label="Multiplicadores">✨</span> {
+                Array.isArray(mission.multipliers) && mission.multipliers.length > 0
+                  ? mission.multipliers.map(m => {
+                      if (typeof m === 'string') {
+                        const match = m.match(/\d+/);
+                        return match ? match[0] : m;
+                      }
+                      return m;
+                    }).join(', ')
+                  : 'No disponible'
+              }
+            </span>
           </div>
         </div>
         <div className="nfts-header-row">
@@ -218,8 +232,8 @@ const NFTModal = ({ mission, onClose }) => {
           background: linear-gradient(135deg, #0a0a2e 0%, #16213e 50%, #0f3460 100%);
           border-radius: 20px;
           padding: 30px;
-          max-width: 1120px;
-          width: 75%;
+          max-width: 1400px;
+          width: 95%;
           max-height: 90vh;
           overflow-y: auto;
           position: relative;
