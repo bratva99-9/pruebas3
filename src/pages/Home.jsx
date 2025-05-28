@@ -1,62 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
+import StakingModal from "../components/StakingModal";
 import MissionModal from "../components/MissionModal";
-import ClaimActionButton from "../components/ClaimActionButton";
 
 export default function Home() {
-  return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Night Club Game</h1>
+  const [showMissionModal, setShowMissionModal] = useState(false);
 
-      <div style={styles.card}>
-        <h2 style={styles.sectionTitle}>Mission Management</h2>
-        <div style={styles.actions}>
-          <MissionModal />
-          <ClaimActionButton />
-        </div>
-      </div>
+  return (
+    <div className="gigaland-home-container flex flex-col items-center min-h-screen">
+      <h1 className="gigaland-title text-center mb-8 mt-12 text-3xl font-bold text-white">
+        Night Club Game
+      </h1>
+      <StakingModal />
+      <button
+        className="mt-6 bg-pink-600 text-white py-3 px-6 rounded-xl font-bold shadow-lg hover:bg-pink-700"
+        onClick={() => setShowMissionModal(true)}
+      >
+        Seleccionar Misión
+      </button>
+      {showMissionModal && <MissionModal onClose={() => setShowMissionModal(false)} />}
     </div>
   );
 }
-
-const styles = {
-  container: {
-    backgroundColor: "#181824",
-    minHeight: "100vh",
-    padding: "40px 20px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  title: {
-    fontSize: "3rem",
-    fontWeight: "bold",
-    color: "#ff36ba",
-    marginBottom: "40px",
-    textShadow: "0 3px 12px rgba(255, 54, 186, 0.7)",
-    textAlign: "center"
-  },
-  card: {
-    background: "linear-gradient(135deg, #221c34 60%, #1a162b)",
-    borderRadius: "20px",
-    padding: "50px 30px",
-    maxWidth: "480px",
-    width: "100%",
-    boxShadow: "0 12px 40px rgba(0, 0, 0, 0.4)",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    backdropFilter: "blur(5px)"
-  },
-  sectionTitle: {
-    fontSize: "1.8rem",
-    fontWeight: "700",
-    color: "#ffffff",
-    marginBottom: "30px"
-  },
-  actions: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "24px",
-    width: "100%"
-  }
-};
