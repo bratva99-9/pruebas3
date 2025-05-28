@@ -58,13 +58,6 @@ const NFTModal = ({ mission, onClose }) => {
     nft.data.video
   );
 
-  const loadMoreNFTs = () => {
-    if (!loadingMore && hasMore) {
-      setLoadingMore(true);
-      fetchNFTs(page + 1);
-    }
-  };
-
   const toggleNFTSelection = (assetId) => {
     console.log('Toggling NFT selection:', assetId);
     if (selectedNFTs.includes(assetId)) {
