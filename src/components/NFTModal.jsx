@@ -105,6 +105,12 @@ const NFTModal = ({ mission, onClose }) => {
       )}
       <div className={`nft-modal${isClosing ? ' closing' : ''}`}>
         <button className="close-btn neon-x" onClick={onClose} aria-label="Cerrar modal">×</button>
+        <div className="mission-info-header">
+          <div className="mission-name">{mission.name}</div>
+          <div className="mission-details">
+            Duración: {mission.duration} min | Multiplicadores: {Array.isArray(mission.multipliers) ? mission.multipliers.join(', ') : mission.multipliers}
+          </div>
+        </div>
         <div className="nfts-header-row">
           <button className="back-btn selected-style back-style" onClick={onClose} aria-label="Volver a seleccionar misión">Select Mission</button>
           <div className="nfts-header-center">
@@ -579,6 +585,23 @@ const NFTModal = ({ mission, onClose }) => {
         .send-style:disabled {
           opacity: 0.5;
           cursor: not-allowed;
+        }
+
+        .mission-info-header {
+          text-align: center;
+          margin-bottom: 10px;
+        }
+        .mission-name {
+          font-size: 28px;
+          color: #00ffff;
+          font-weight: bold;
+          margin-bottom: 4px;
+          text-shadow: 0 0 20px #00ffff88;
+        }
+        .mission-details {
+          color: #ff00ff;
+          font-size: 16px;
+          margin-bottom: 2px;
         }
       `}</style>
     </div>
