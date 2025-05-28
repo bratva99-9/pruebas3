@@ -17,6 +17,7 @@ const NFTModal = ({ mission, onClose }) => {
     try {
       setLoading(true);
       const currentUser = UserService.getName();
+      console.log('Usuario actual:', currentUser);
       if (!currentUser) {
         console.error('No user logged in');
         setLoading(false);
@@ -28,6 +29,7 @@ const NFTModal = ({ mission, onClose }) => {
       const res = await fetch(url);
       const data = await res.json();
       const nfts = data.data || [];
+      console.log('NFTs recibidos:', nfts);
 
       setNfts(nfts);
       setHasMore(false); // Si quieres paginación, ajusta esto
@@ -90,16 +92,15 @@ const NFTModal = ({ mission, onClose }) => {
   };
 
   const getNFTImage = (nft) => {
-    // Priorizar video si existe
-    if (nft.data && nft.data.video) {
-      return nft.data.video;
-    }
-    // Fallback a imagen
     if (nft.data && nft.data.img) {
-      return `https://ipfs.io/ipfs/${nft.data.img}`;
+      return nft.data.img.startsWith('Qm')
+        ? `https://ipfs.io/ipfs/${nft.data.img}`
+        : nft.data.img;
     }
     if (nft.data && nft.data.image) {
-      return `https://ipfs.io/ipfs/${nft.data.image}`;
+      return nft.data.image.startsWith('Qm')
+        ? `https://ipfs.io/ipfs/${nft.data.image}`
+        : nft.data.image;
     }
     return null;
   };
