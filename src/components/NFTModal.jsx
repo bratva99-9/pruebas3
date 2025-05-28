@@ -23,25 +23,15 @@ const NFTModal = ({ mission, onClose }) => {
         return;
       }
 
-      // Ajusta la tabla y parámetros según tu backend/NFTs
-      const response = await UserService.rpc.get_table_rows({
-        code: 'atomicassets',
-        scope: currentUser,
-        table: 'assets',
-        limit: LIMIT,
-        lower_bound: (pageNum - 1) * LIMIT,
-      });
+      // Usar la API pública de AtomicAssets
+      const url = `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${currentUser}&collection_name=nightclubnft&limit=100`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const nfts = data.data || [];
 
-      const pageNFTs = response.rows || [];
-
-      if (pageNum === 1) {
-        setNfts(pageNFTs);
-      } else {
-        setNfts(prev => [...prev, ...pageNFTs]);
-      }
-
-      setHasMore(pageNFTs.length === LIMIT);
-      setPage(pageNum);
+      setNfts(nfts);
+      setHasMore(false); // Si quieres paginación, ajusta esto
+      setPage(1);
       setLoading(false);
       setLoadingMore(false);
 
