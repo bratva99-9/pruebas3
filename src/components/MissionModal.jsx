@@ -73,7 +73,7 @@ const MissionModal = ({ onClose }) => {
         
         <h1 className="mission-title">MISSION SELECTION</h1>
         
-        <div className="missions-grid">
+        <div className="missions-row-scroll">
           {missions.map((mission) => (
             <div 
               key={mission.id} 
@@ -183,13 +183,28 @@ const MissionModal = ({ onClose }) => {
           letter-spacing: 3px;
         }
 
-        .missions-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        .missions-row-scroll {
+          display: flex;
+          flex-direction: row;
           gap: 30px;
+          overflow-x: auto;
+          padding-bottom: 18px;
           margin-bottom: 40px;
+          scrollbar-color: #ff00ff #181828;
+          scrollbar-width: thin;
         }
-
+        .missions-row-scroll::-webkit-scrollbar {
+          height: 14px;
+          background: #181828;
+          border-radius: 8px;
+        }
+        .missions-row-scroll::-webkit-scrollbar-thumb {
+          background: linear-gradient(90deg, #ff00ff 0%, #00ffff 100%);
+          border-radius: 8px;
+        }
+        .missions-row-scroll::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(90deg, #00ffff 0%, #ff00ff 100%);
+        }
         .mission-card {
           background: rgba(255, 255, 255, 0.05);
           border: 2px solid #ff00ff;
@@ -198,6 +213,9 @@ const MissionModal = ({ onClose }) => {
           cursor: pointer;
           transition: all 0.3s ease;
           backdrop-filter: blur(10px);
+          min-width: 224px;
+          max-width: 224px;
+          width: 224px;
         }
 
         .mission-card:hover {
@@ -283,17 +301,21 @@ const MissionModal = ({ onClose }) => {
         /* Responsive design */
         @media (max-width: 768px) {
           .mission-modal {
-            padding: 20px;
-            width: 95%;
+            padding: 10px;
+            width: 99%;
           }
-          
           .mission-title {
-            font-size: 32px;
+            font-size: 26px;
           }
-          
-          .missions-grid {
-            grid-template-columns: 1fr;
-            gap: 20px;
+          .missions-row-scroll {
+            gap: 12px;
+            padding-bottom: 10px;
+          }
+          .mission-card {
+            min-width: 170px;
+            max-width: 170px;
+            width: 170px;
+            padding: 10px;
           }
         }
       `}</style>
