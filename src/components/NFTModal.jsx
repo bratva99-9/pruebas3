@@ -107,8 +107,9 @@ const NFTModal = ({ mission, onClose }) => {
         <button className="close-btn neon-x" onClick={onClose} aria-label="Cerrar modal">×</button>
         <div className="mission-info-header">
           <div className="mission-name">{mission.name}</div>
-          <div className="mission-details">
-            Duración: {mission.duration} min | Multiplicadores: {Array.isArray(mission.multipliers) ? mission.multipliers.join(', ') : mission.multipliers}
+          <div className="mission-details-badges">
+            <span className="mission-badge duration"><span role="img" aria-label="Duración">⏱️</span> {mission.duration} min</span>
+            <span className="mission-badge mults"><span role="img" aria-label="Multiplicadores">✨</span> {Array.isArray(mission.multipliers) ? mission.multipliers.join(', ') : mission.multipliers}</span>
           </div>
         </div>
         <div className="nfts-header-row">
@@ -219,8 +220,8 @@ const NFTModal = ({ mission, onClose }) => {
           background: linear-gradient(135deg, #0a0a2e 0%, #16213e 50%, #0f3460 100%);
           border-radius: 20px;
           padding: 30px;
-          max-width: 1400px;
-          width: 95%;
+          max-width: 1120px;
+          width: 75%;
           max-height: 90vh;
           overflow-y: auto;
           position: relative;
@@ -533,6 +534,7 @@ const NFTModal = ({ mission, onClose }) => {
           width: 100%;
           padding: 0 10px;
           gap: 10px;
+          min-height: 90px;
         }
         .nfts-header-center {
           display: flex;
@@ -540,6 +542,7 @@ const NFTModal = ({ mission, onClose }) => {
           align-items: center;
           flex: 1;
           min-width: 0;
+          justify-content: center;
         }
         .nfts-header-title {
           color: #ccc;
@@ -589,19 +592,43 @@ const NFTModal = ({ mission, onClose }) => {
 
         .mission-info-header {
           text-align: center;
-          margin-bottom: 10px;
+          margin-bottom: 18px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
         .mission-name {
-          font-size: 28px;
-          color: #00ffff;
+          font-size: 32px;
+          color: #00fff7;
           font-weight: bold;
-          margin-bottom: 4px;
-          text-shadow: 0 0 20px #00ffff88;
+          margin-bottom: 8px;
+          text-shadow: 0 0 32px #00fff788, 0 0 8px #fff;
+          letter-spacing: 1px;
         }
-        .mission-details {
-          color: #ff00ff;
-          font-size: 16px;
+        .mission-details-badges {
+          display: flex;
+          gap: 16px;
+          justify-content: center;
           margin-bottom: 2px;
+        }
+        .mission-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 15px;
+          font-weight: 500;
+          border-radius: 16px;
+          padding: 6px 18px;
+          background: rgba(255,255,255,0.08);
+          box-shadow: 0 2px 8px #00fff733;
+        }
+        .mission-badge.duration {
+          color: #00fff7;
+          border: 1.5px solid #00fff7;
+        }
+        .mission-badge.mults {
+          color: #ff00ff;
+          border: 1.5px solid #ff00ff;
         }
       `}</style>
     </div>
