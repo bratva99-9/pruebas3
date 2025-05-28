@@ -229,80 +229,96 @@ export default function MissionModal() {
                           gap:20, padding:"10px 0"
                         }}>
                           {nfts.map(nft => {
-                            const mediaArr = nft.data?.media || [];
-const videoFromMedia = mediaArr.find(m => m.type?.includes("video") && m.url)?.url;
+  const mediaArr = nft.data?.media || [];
+  const videoFromMedia = mediaArr.find(m => m.type?.includes("video") && m.url)?.url;
 
-const candidates = [
-  videoFromMedia,
-  nft.data.video,
-  nft.data.video_url,
-  nft.data.img,
-  nft.data.image
-];
+  const candidates = [
+    videoFromMedia,
+    nft.data.video,
+    nft.data.video_url,
+    nft.data.img,
+    nft.data.image
+  ];
 
-const raw = candidates.find(u => typeof u === "string" && u.length > 5) || "";
-const src = ipfsify(raw);
-const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
+  const raw = candidates.find(u => typeof u === "string" && u.length > 5) || "";
+  const src = ipfsify(raw);
+  const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
+  const isSelected = selectedNFTs.includes(nft.asset_id);
+
+  console.log("NFT data:", nft.data);
+  console.log("URL seleccionada:", src);
+
+  return (
+    <div key={nft.asset_id} onClick={() => toggleNFTSelection(nft.asset_id)} style={{
+      position: "relative",
+      cursor: "pointer",
+      transform: isSelected ? "scale(0.95)" : "scale(1)",
+      transition: "all .3s"
+    }}>
+      <div style={{
+        position: "relative",
+        width: "100%",
+        paddingBottom: "190%",
+        borderRadius: 20,
+        overflow: "hidden",
+        border: isSelected ? "3px solid #667eea" : "3px solid transparent",
+        boxShadow: isSelected ? "0 0 20px rgba(102,126,234,0.5)" : "0 4px 10px rgba(0,0,0,0.3)"
+      }}>
+        {isVideo ? (
+          <video
+            src={src}
+            controls
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover"
+            }}
+            onError={(e) => console.error("Video error:", e)}
+          />
+        ) : (
+          <img
+            src={src}
+            alt={nft.name}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover"
+            }}
+            onError={(e) => console.error("Image error:", e)}
+          />
+        )}
+
+        {isSelected && (
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "rgba(102,126,234,0.2)",
+            display: "flex", alignItems: "center", justifyContent: "center"
+          }}>
+            <div style={{
+              background: "#667eea", borderRadius: "50%",
+              width: 45, height: 45,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: "#fff", fontSize: 24,
+              boxShadow: "0 4px 15px rgba(0,0,0,0.3)"
+            }}>✓</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+})}
 
 
-                            return (
-                              <div key={nft.asset_id} onClick={()=>toggleNFTSelection(nft.asset_id)} style={{
-                                position:"relative",
-                                cursor:"pointer",
-                                transform: isSelected? "scale(0.95)" : "scale(1)",
-                                transition:"all .3s"
-                              }}>
-                                <div style={{
-                                  position:"relative",
-                                  width:"100%", paddingBottom:"190%",
-                                  borderRadius:20, overflow:"hidden",
-                                  border: isSelected? "3px solid #667eea" : "3px solid transparent",
-                                  boxShadow: isSelected? "0 0 20px rgba(102,126,234,0.5)" : "0 4px 10px rgba(0,0,0,0.3)"
-                                }}>
-                                  {isVideo ? (
-                                    <video
-                                      src={src}
-                                      controls
-                                      autoPlay muted loop playsInline
-                                      style={{
-                                        position:"absolute", top:0, left:0,
-                                        width:"100%", height:"100%",
-                                        objectFit:"cover"
-                                      }}
-                                      onError={e => console.error("Video error:", e)}
-                                    />
-                                  ) : (
-                                    <img
-                                      src={src}
-                                      alt={nft.name}
-                                      style={{
-                                        position:"absolute", top:0, left:0,
-                                        width:"100%", height:"100%",
-                                        objectFit:"cover"
-                                      }}
-                                      onError={e => console.error("Image error:", e)}
-                                    />
-                                  )}
-                                  {isSelected && (
-                                    <div style={{
-                                      position:"absolute", inset:0,
-                                      background:"rgba(102,126,234,0.2)",
-                                      display:"flex", alignItems:"center", justifyContent:"center"
-                                    }}>
-                                      <div style={{
-                                        background:"#667eea", borderRadius:"50%",
-                                        width:45, height:45,
-                                        display:"flex", alignItems:"center", justifyContent:"center",
-                                        color:"#fff", fontSize:24,
-                                        boxShadow:"0 4px 15px rgba(0,0,0,0.3)"
-                                      }}>✓</div>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
                   }
                 </>
               )}
