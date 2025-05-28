@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 // import { UserService } from '../User'; // Comentado temporalmente
 
 const NFTModal = ({ mission, onClose }) => {
@@ -24,11 +24,7 @@ const NFTModal = ({ mission, onClose }) => {
     }
   };
 
-  useEffect(() => {
-    fetchNFTs(1);
-  }, [fetchNFTs]);
-
-  const fetchNFTs = async (pageNum) => {
+  const fetchNFTs = useCallback(async (pageNum) => {
     try {
       const currentUser = UserService.getName();
       if (!currentUser) {
@@ -105,7 +101,11 @@ const NFTModal = ({ mission, onClose }) => {
       setLoading(false);
       setLoadingMore(false);
     }
-  };
+  }, [UserService]);
+
+  useEffect(() => {
+    fetchNFTs(1);
+  }, [fetchNFTs]);
 
   const loadMoreNFTs = () => {
     if (!loadingMore && hasMore) {
