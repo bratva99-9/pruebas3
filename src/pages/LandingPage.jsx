@@ -1,7 +1,29 @@
 import React from "react";
-import fondo from "../images/inicio1.webp"; // Asegúrate que la carpeta se llama 'images' como en el panel
+import fondo from "../images/inicio1.webp";
+import { useHistory } from "react-router-dom";
+import { UserService } from "../UserService";
+import { useDispatch } from "react-redux";
+import { setPlayerLogout } from "../GlobalState/UserReducer";
 
 export default function LandingPage() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const handleLogin = async () => {
+    try {
+      await UserService.login(() => {
+        if (UserService.isLogged()) {
+          history.push("/home");
+        } else {
+          dispatch(setPlayerLogout());
+          alert("Error al iniciar sesión");
+        }
+      });
+    } catch (err) {
+      alert("Hubo un error en el login: " + err.message);
+    }
+  };
+
   return (
     <div
       style={{
@@ -26,8 +48,11 @@ export default function LandingPage() {
           color: "#fff",
         }}
       >
-        <h1 style={{ fontSize: "48px", marginBottom: "20px" }}>Night Club Game</h1>
+        <h1 style={{ fontSize: "48px", marginBottom: "20px" }}>
+          Night Club Game
+        </h1>
         <button
+          onClick={handleLogin}
           style={{
             padding: "14px 36px",
             fontSize: "18px",
