@@ -7,6 +7,7 @@ const NFTModal = ({ mission, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [displayCount, setDisplayCount] = useState(5);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const MAX_SELECTED = 10;
 
@@ -72,8 +73,9 @@ const NFTModal = ({ mission, onClose }) => {
       const memo = `mission:${mission.id}`;
       console.log('Sending mission with NFTs:', selectedNFTs, 'memo:', memo);
       await UserService.stakeNFTs(selectedNFTs, memo);
-      alert('¡Misión enviada con éxito!');
-      onClose();
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3500);
+      setTimeout(() => onClose(), 1200);
     } catch (error) {
       console.error('Error sending mission:', error);
       alert('Error: ' + error.message);
@@ -94,6 +96,9 @@ const NFTModal = ({ mission, onClose }) => {
 
   return (
     <div className="nft-modal-overlay">
+      {showSuccess && (
+        <div className="success-toast">¡Misión enviada con éxito!</div>
+      )}
       <div className="nft-modal">
         <button className="close-btn" onClick={onClose}>×</button>
         
@@ -452,6 +457,27 @@ const NFTModal = ({ mission, onClose }) => {
           color: white;
           font-size: 20px;
           padding: 40px;
+        }
+
+        .success-toast {
+          position: fixed;
+          top: 24px;
+          right: 32px;
+          z-index: 2000;
+          background: #1ed760;
+          color: #fff;
+          padding: 18px 32px;
+          border-radius: 12px;
+          font-size: 18px;
+          font-weight: bold;
+          box-shadow: 0 4px 24px #0006;
+          animation: fadeInOut 3.5s;
+        }
+        @keyframes fadeInOut {
+          0% { opacity: 0; transform: translateY(-20px); }
+          10% { opacity: 1; transform: translateY(0); }
+          90% { opacity: 1; transform: translateY(0); }
+          100% { opacity: 0; transform: translateY(-20px); }
         }
 
         /* Responsive design */
