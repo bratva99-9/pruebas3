@@ -6,7 +6,6 @@ const MissionModal = ({ onClose }) => {
   const [missions, setMissions] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showSuccess, setShowSuccess] = useState(false);
   const [showNFTModal, setShowNFTModal] = useState(false);
 
   const missionImages = {
@@ -74,12 +73,6 @@ const MissionModal = ({ onClose }) => {
         
         <h1 className="mission-title">MISSION SELECTION</h1>
         
-        {showSuccess && (
-          <div className="success-message">
-            Success! Mission selected: {selectedMission?.name}
-          </div>
-        )}
-
         <div className="missions-grid">
           {missions.map((mission) => (
             <div 
@@ -188,23 +181,6 @@ const MissionModal = ({ onClose }) => {
           margin-bottom: 30px;
           text-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
           letter-spacing: 3px;
-        }
-
-        .success-message {
-          background: rgba(0, 255, 255, 0.2);
-          border: 2px solid #00ffff;
-          border-radius: 10px;
-          padding: 15px;
-          text-align: center;
-          color: #00ffff;
-          margin-bottom: 30px;
-          font-size: 18px;
-          animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
         }
 
         .missions-grid {
