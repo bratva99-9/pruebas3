@@ -56,6 +56,11 @@ const NFTModal = ({ mission, onClose }) => {
     fetchNFTs(1);
   }, [fetchNFTs]);
 
+  // Filtrar NFTs por colección y schema
+  const filteredNFTs = nfts.filter(nft =>
+    nft.collection_name === 'nightclubnft' && nft.schema && nft.schema.schema_name === 'girls'
+  );
+
   const loadMoreNFTs = () => {
     if (!loadingMore && hasMore) {
       setLoadingMore(true);
@@ -139,7 +144,7 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         </div>
 
-        {nfts.length === 0 ? (
+        {filteredNFTs.length === 0 ? (
           <div className="no-nfts">
             <p>No NFTs found in your collection</p>
             <p>Make sure you own NFTs from the 'nightclubapp' collection with 'girls' schema</p>
@@ -147,7 +152,7 @@ const NFTModal = ({ mission, onClose }) => {
         ) : (
           <>
             <div className="nfts-grid">
-              {nfts.map((nft) => {
+              {filteredNFTs.map((nft) => {
                 const isSelected = selectedNFTs.includes(nft.asset_id);
                 const mediaUrl = getNFTImage(nft);
                 
@@ -156,8 +161,9 @@ const NFTModal = ({ mission, onClose }) => {
                     key={nft.asset_id}
                     className={`nft-card ${isSelected ? 'selected' : ''}`}
                     onClick={() => toggleNFTSelection(nft.asset_id)}
+                    style={{ aspectRatio: '1/2', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 24px #0004', minWidth: 100, maxWidth: 200, minHeight: 200, maxHeight: 400, background: 'rgba(255,255,255,0.04)', border: isSelected ? '3px solid #ff00ff' : '2px solid #00ffff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', margin: '0 auto' }}
                   >
-                    <div className="nft-media">
+                    <div className="nft-media" style={{ width: '100%', height: '200px', borderRadius: '20px', overflow: 'hidden', background: '#222', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {mediaUrl ? (
                         isVideo(mediaUrl) ? (
                           <video 
@@ -166,6 +172,7 @@ const NFTModal = ({ mission, onClose }) => {
                             loop 
                             muted 
                             playsInline
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '20px' }}
                             onError={(e) => {
                               console.error('Video error:', e);
                               e.target.style.display = 'none';
@@ -175,6 +182,7 @@ const NFTModal = ({ mission, onClose }) => {
                           <img 
                             src={mediaUrl} 
                             alt={nft.data?.name || `NFT #${nft.asset_id}`}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '20px' }}
                             onError={(e) => {
                               console.error('Image error:', e);
                               e.target.style.display = 'none';
