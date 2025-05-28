@@ -489,6 +489,21 @@ const NFTModal = ({ mission, onClose }) => {
             height: 150px;
           }
         }
+
+        /* Scrollbar elegante para el modal */
+        .nft-modal::-webkit-scrollbar {
+          width: 12px;
+          background: rgba(0, 255, 255, 0.08);
+          border-radius: 10px;
+        }
+        .nft-modal::-webkit-scrollbar-thumb {
+          background: linear-gradient(135deg, #00ffff 0%, #ff00ff 100%);
+          border-radius: 10px;
+          box-shadow: 0 2px 8px #0006;
+        }
+        .nft-modal::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
+        }
       `}</style>
     </div>
   );
