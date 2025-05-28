@@ -54,8 +54,7 @@ const MissionModal = ({ onClose }) => {
   const handleMissionSelect = (mission) => {
     console.log('Mission selected:', mission);
     setSelectedMission(mission);
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+    setShowNFTModal(true);
   };
 
   if (loading) {
@@ -124,19 +123,6 @@ const MissionModal = ({ onClose }) => {
             </div>
           ))}
         </div>
-
-        <button 
-          className="select-mission-btn"
-          disabled={!selectedMission}
-          onClick={() => {
-            if (selectedMission) {
-              console.log('Opening NFT Modal for mission:', selectedMission);
-              setShowNFTModal(true);
-            }
-          }}
-        >
-          Seleccionar misión
-        </button>
 
         {showNFTModal && selectedMission && (
           <NFTModal 
@@ -309,34 +295,6 @@ const MissionModal = ({ onClose }) => {
           font-size: 18px;
           width: 24px;
           text-align: center;
-        }
-
-        .select-mission-btn {
-          display: block;
-          margin: 0 auto;
-          background: linear-gradient(45deg, #00ffff, #ff00ff);
-          border: none;
-          border-radius: 25px;
-          padding: 15px 40px;
-          font-size: 20px;
-          font-weight: bold;
-          color: white;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
-
-        .select-mission-btn:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3);
-          background: linear-gradient(45deg, #ff00ff, #00ffff);
-        }
-
-        .select-mission-btn:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-          background: #666;
         }
 
         .loading {
