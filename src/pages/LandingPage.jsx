@@ -1,5 +1,5 @@
 import React from "react";
-import fondo from "../imagenes/inicio1.webp"; // asegúrate que está en src/imagenes/
+import fondo from "../imagenes/inicio1.webp"; // Asegúrate que la ruta sea correcta y que la carpeta esté dentro de /src
 
 export default function LandingPage() {
   return (
