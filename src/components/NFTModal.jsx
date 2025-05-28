@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { UserService } from '../User'; // Ajusta la ruta según tu estructura
+// import { UserService } from '../User'; // Comentado temporalmente
 
 const NFTModal = ({ mission, onClose }) => {
   const [nfts, setNfts] = useState([]);
@@ -12,6 +12,17 @@ const NFTModal = ({ mission, onClose }) => {
 
   const LIMIT = 10;
   const MAX_SELECTED = 10;
+
+  // Mock UserService para testing
+  const UserService = {
+    getName: () => 'testuser.wam', // Mock user name
+    stakeNFTs: async (nftIds, memo) => {
+      console.log('Staking NFTs:', nftIds, 'with memo:', memo);
+      // Simular delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      return { success: true };
+    }
+  };
 
   useEffect(() => {
     fetchNFTs(1);
@@ -26,27 +37,69 @@ const NFTModal = ({ mission, onClose }) => {
         return;
       }
 
-      const response = await fetch(
-        `https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=nightclubapp&schema_name=girls&owner=${currentUser}&page=${pageNum}&limit=${LIMIT}&order=desc&sort=asset_id`
-      );
+      console.log('Fetching NFTs for user:', currentUser, 'page:', pageNum);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      // Mock NFT data para testing
+      const mockNFTs = [
+        {
+          asset_id: '1001',
+          data: {
+            name: 'Night Queen #1',
+            img: null, // Simular NFT sin imagen
+            video: null
+          }
+        },
+        {
+          asset_id: '1002',
+          data: {
+            name: 'City Girl #2',
+            img: null,
+            video: null
+          }
+        },
+        {
+          asset_id: '1003',
+          data: {
+            name: 'Luxury Lady #3',
+            img: null,
+            video: null
+          }
+        },
+        {
+          asset_id: '1004',
+          data: {
+            name: 'Beach Babe #4',
+            img: null,
+            video: null
+          }
+        },
+        {
+          asset_id: '1005',
+          data: {
+            name: 'Party Princess #5',
+            img: null,
+            video: null
+          }
+        }
+      ];
 
-      const data = await response.json();
-      const newNFTs = data.data || [];
+      // Simular paginación
+      const startIndex = (pageNum - 1) * LIMIT;
+      const endIndex = startIndex + LIMIT;
+      const pageNFTs = mockNFTs.slice(startIndex, endIndex);
 
       if (pageNum === 1) {
-        setNfts(newNFTs);
+        setNfts(pageNFTs);
       } else {
-        setNfts(prev => [...prev, ...newNFTs]);
+        setNfts(prev => [...prev, ...pageNFTs]);
       }
 
-      setHasMore(newNFTs.length === LIMIT);
+      setHasMore(pageNFTs.length === LIMIT && endIndex < mockNFTs.length);
       setPage(pageNum);
       setLoading(false);
       setLoadingMore(false);
+
+      console.log('NFTs loaded:', pageNFTs);
     } catch (error) {
       console.error('Error fetching NFTs:', error);
       setLoading(false);
@@ -62,6 +115,7 @@ const NFTModal = ({ mission, onClose }) => {
   };
 
   const toggleNFTSelection = (assetId) => {
+    console.log('Toggling NFT selection:', assetId);
     if (selectedNFTs.includes(assetId)) {
       setSelectedNFTs(prev => prev.filter(id => id !== assetId));
     } else {
@@ -79,8 +133,9 @@ const NFTModal = ({ mission, onClose }) => {
     setSending(true);
     try {
       const memo = `mission:${mission.id}`;
+      console.log('Sending mission with NFTs:', selectedNFTs, 'memo:', memo);
       await UserService.stakeNFTs(selectedNFTs, memo);
-      alert('Misión enviada con éxito');
+      alert('¡Misión enviada con éxito!');
       onClose();
     } catch (error) {
       console.error('Error sending mission:', error);
@@ -178,7 +233,10 @@ const NFTModal = ({ mission, onClose }) => {
                           />
                         )
                       ) : (
-                        <div className="no-media">No Media</div>
+                        <div className="no-media">
+                          <div className="no-media-icon">🖼️</div>
+                          <div className="no-media-text">No Media</div>
+                        </div>
                       )}
                     </div>
                     
@@ -215,7 +273,7 @@ const NFTModal = ({ mission, onClose }) => {
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}
           >
-            {sending ? 'Sending...' : 'Enviar misión'}
+            {sending ? 'Sending...' : `Enviar misión (${selectedNFTs.length} NFTs)`}
           </button>
         </div>
       </div>
@@ -257,6 +315,11 @@ const NFTModal = ({ mission, onClose }) => {
           font-size: 30px;
           cursor: pointer;
           z-index: 10;
+          transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+          color: #00ffff;
         }
 
         .mission-header {
@@ -291,12 +354,16 @@ const NFTModal = ({ mission, onClose }) => {
           padding: 8px 16px;
           border-radius: 20px;
           display: inline-block;
+          border: 1px solid rgba(0, 255, 255, 0.3);
         }
 
         .no-nfts {
           text-align: center;
           color: #ccc;
           padding: 40px;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 15px;
+          border: 2px dashed #666;
         }
 
         .no-nfts p {
@@ -354,7 +421,20 @@ const NFTModal = ({ mission, onClose }) => {
         }
 
         .no-media {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
           color: #666;
+        }
+
+        .no-media-icon {
+          font-size: 48px;
+          margin-bottom: 10px;
+        }
+
+        .no-media-text {
           font-size: 14px;
         }
 
@@ -367,6 +447,7 @@ const NFTModal = ({ mission, onClose }) => {
           font-weight: bold;
           margin-bottom: 5px;
           font-size: 16px;
+          line-height: 1.2;
         }
 
         .nft-id {
@@ -388,6 +469,13 @@ const NFTModal = ({ mission, onClose }) => {
           justify-content: center;
           font-weight: bold;
           font-size: 18px;
+          animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+          100% { transform: scale(1); }
         }
 
         .load-more-btn {
@@ -403,54 +491,4 @@ const NFTModal = ({ mission, onClose }) => {
         }
 
         .load-more-btn:hover:not(:disabled) {
-          background: rgba(0, 255, 255, 0.3);
-          transform: translateY(-2px);
-        }
-
-        .load-more-btn:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .actions {
-          text-align: center;
-          padding-top: 20px;
-          border-top: 2px solid #333;
-        }
-
-        .send-btn {
-          background: linear-gradient(45deg, #ff00ff, #00ffff);
-          border: none;
-          border-radius: 25px;
-          padding: 15px 40px;
-          font-size: 20px;
-          font-weight: bold;
-          color: white;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
-
-        .send-btn:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 20px rgba(255, 0, 255, 0.3);
-        }
-
-        .send-btn:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .loading {
-          text-align: center;
-          color: white;
-          font-size: 20px;
-          padding: 40px;
-        }
-      `}</style>
-    </div>
-  );
-};
-
-export default NFTModal;
+          background: rgba(0, 255, 255, 0.3);git
