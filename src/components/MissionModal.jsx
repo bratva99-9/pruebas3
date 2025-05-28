@@ -228,39 +228,36 @@ export default function MissionModal() {
                           gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",
                           gap:20, padding:"10px 0"
                         }}>
-                          <div>
-  {nfts.map(nft => {
-    const mediaArr = nft.data?.media || [];
-    const videoFromMedia = mediaArr.find(m => m.type?.includes("video") && m.url)?.url;
+                          {nfts.map(nft => {
+  const mediaArr = nft.data?.media || [];
+  const videoFromMedia = mediaArr.find(m => m.type?.includes("video") && m.url)?.url;
 
-    const candidates = [
-      videoFromMedia,
-      nft.data.video,
-      nft.data.video_url,
-      nft.data.img,
-      nft.data.image
-    ];
+  const candidates = [
+    videoFromMedia,
+    nft.data.video,
+    nft.data.video_url,
+    nft.data.img,
+    nft.data.image
+  ];
 
-    const raw = candidates.find(u => typeof u === "string" && u.length > 5) || "";
-    const src = ipfsify(raw);
-    const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
-    const isSelected = selectedNFTs.includes(nft.asset_id);
+  const raw = candidates.find(u => typeof u === "string" && u.length > 5) || "";
+  const src = ipfsify(raw);
+  const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
+  const isSelected = selectedNFTs.includes(nft.asset_id); // <- ESTA línea es obligatoria aquí
 
-    return (
-      <div key={nft.asset_id} onClick={() => toggleNFTSelection(nft.asset_id)}>
-        <div>
-          {isVideo ? (
-            <video src={src} controls autoPlay muted loop playsInline />
-          ) : (
-            <img src={src} alt={nft.name} />
-          )}
-          {isSelected && <div>✓</div>}
-        </div>
+  return (
+    <div key={nft.asset_id} onClick={() => toggleNFTSelection(nft.asset_id)}>
+      <div>
+        {isVideo ? (
+          <video src={src} controls autoPlay muted loop playsInline />
+        ) : (
+          <img src={src} alt={nft.name} />
+        )}
+        {isSelected && <div>✓</div>}
       </div>
-    );
-  })}
-</div> 
-
+    </div>
+  );
+})}
 
                   }
                 </>
