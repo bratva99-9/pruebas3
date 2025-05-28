@@ -6,7 +6,7 @@ const NFTModal = ({ mission, onClose }) => {
   const [selectedNFTs, setSelectedNFTs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
-  const [displayCount, setDisplayCount] = useState(10);
+  const [displayCount, setDisplayCount] = useState(5);
 
   const MAX_SELECTED = 10;
 
@@ -151,6 +151,7 @@ const NFTModal = ({ mission, onClose }) => {
                       loop
                       muted
                       playsInline
+                      autoPlay
                       style={{
                         width: '100%',
                         height: '100%',
@@ -161,8 +162,6 @@ const NFTModal = ({ mission, onClose }) => {
                         margin: 0,
                         padding: 0
                       }}
-                      onMouseEnter={e => e.target.play()}
-                      onMouseLeave={e => { e.target.pause(); e.target.currentTime = 0; }}
                       preload="none"
                       controls={false}
                       onError={e => {
@@ -176,7 +175,7 @@ const NFTModal = ({ mission, onClose }) => {
             </div>
 
             {filteredNFTs.length > displayCount && (
-              <button className="load-more-btn" onClick={() => setDisplayCount(displayCount + 10)}>
+              <button className="load-more-btn" onClick={() => setDisplayCount(displayCount + 5)}>
                 Cargar más NFTs
               </button>
             )}
