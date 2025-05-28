@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 // import { UserService } from '../User'; // Comentado temporalmente
 import NFTModal from './NFTModal';
 
@@ -62,11 +62,7 @@ const MissionModal = ({ onClose }) => {
     'Beach Party': '/missions/beach.png'
   };
 
-  useEffect(() => {
-    fetchMissions();
-  }, []);
-
-  const fetchMissions = async () => {
+  const fetchMissions = useCallback(async () => {
     try {
       console.log('Fetching missions...');
       const response = await UserService.rpc.get_table_rows({
@@ -82,7 +78,11 @@ const MissionModal = ({ onClose }) => {
       console.error('Error fetching missions:', error);
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchMissions();
+  }, [fetchMissions]);
 
   const formatDuration = (minutes) => {
     if (minutes < 60) {
