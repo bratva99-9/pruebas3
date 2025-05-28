@@ -104,13 +104,13 @@ const NFTModal = ({ mission, onClose }) => {
         <div className="success-toast">¡Misión enviada con éxito!</div>
       )}
       <div className={`nft-modal${isClosing ? ' closing' : ''}`}>
-        <button className="close-btn" onClick={onClose}>×</button>
+        <button className="close-btn neon-x" onClick={onClose} aria-label="Cerrar modal">×</button>
         <button 
-          className="send-btn top-right"
+          className="send-btn top-right neon-send"
           onClick={sendMission}
           disabled={selectedNFTs.length === 0 || sending}
         >
-          {sending ? 'Sending...' : `Enviar misión (${selectedNFTs.length} NFTs)`}
+          {sending ? 'Sending...' : `Send Bitchs !`}
         </button>
         <div className="mission-header">
           <h2>Select NFTs for Mission</h2>
@@ -233,21 +233,30 @@ const NFTModal = ({ mission, onClose }) => {
           transform: scale(0.96);
         }
 
-        .close-btn {
+        .close-btn.neon-x {
           position: absolute;
-          top: 15px;
-          right: 25px;
-          background: none;
-          border: none;
+          top: 18px;
+          right: 28px;
+          width: 48px;
+          height: 48px;
+          background: linear-gradient(135deg, #0ff 0%, #f0f 100%);
           color: #fff;
-          font-size: 30px;
+          border: none;
+          border-radius: 50%;
+          font-size: 32px;
+          font-weight: bold;
+          box-shadow: 0 2px 16px #00ffff80, 0 0 8px #ff00cc80;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           cursor: pointer;
-          z-index: 10;
-          transition: color 0.3s ease;
+          transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+          outline: none;
         }
-
-        .close-btn:hover {
-          color: #00ffff;
+        .close-btn.neon-x:hover {
+          background: linear-gradient(135deg, #ff00cc 0%, #00ffff 100%);
+          color: #fff;
+          box-shadow: 0 4px 32px #ff00cc80, 0 0 16px #00ffffcc;
         }
 
         .mission-header {
@@ -428,24 +437,35 @@ const NFTModal = ({ mission, onClose }) => {
           cursor: not-allowed;
         }
 
-        .send-btn.top-right {
+        .send-btn.top-right.neon-send {
           position: absolute;
-          top: 18px;
-          right: 70px;
+          top: 22px;
+          right: 110px;
           z-index: 11;
-          padding: 10px 24px;
-          font-size: 15px;
-          border-radius: 18px;
-          background: linear-gradient(45deg, #ff00ff, #00ffff);
+          padding: 16px 38px;
+          font-size: 20px;
+          border-radius: 30px;
+          background: linear-gradient(90deg, #ff00cc 0%, #00ffff 100%);
           color: #fff;
           border: none;
           font-weight: bold;
-          box-shadow: 0 2px 12px #0004;
-          transition: all 0.2s;
+          box-shadow: 0 4px 24px #00ffff80, 0 0 8px #ff00cc80;
+          text-shadow: 0 2px 8px #000a;
+          letter-spacing: 2px;
+          cursor: pointer;
+          transition: all 0.2s, box-shadow 0.3s;
+          text-transform: uppercase;
         }
-        .send-btn.top-right:disabled {
+        .send-btn.top-right.neon-send:hover:not(:disabled) {
+          background: linear-gradient(90deg, #00ffff 0%, #ff00cc 100%);
+          box-shadow: 0 6px 32px #ff00cc80, 0 0 16px #00ffffcc;
+          color: #fff;
+        }
+        .send-btn.top-right.neon-send:disabled {
           opacity: 0.5;
           cursor: not-allowed;
+          background: #222;
+          box-shadow: none;
         }
 
         .success-toast {
