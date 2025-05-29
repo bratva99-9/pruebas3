@@ -279,15 +279,15 @@ export class User {
     return User.instance;
   }
 
-  // Obtener misiones del usuario desde la tabla 'missions'
+  // Obtener misiones del usuario desde la tabla 'missions' (scope global)
   async getUserMissions() {
     if (!this.authName) return [];
     try {
       const response = await this.rpc.get_table_rows({
         code: 'nightclubapp',
-        scope: this.authName,
+        scope: 'nightclubapp',
         table: 'missions',
-        limit: 100
+        limit: 1000
       });
       return response.rows || [];
     } catch (err) {

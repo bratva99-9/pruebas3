@@ -16,8 +16,9 @@ const MissionStatus = ({ onClose }) => {
           setLoading(false);
           return;
         }
-        // Obtener las misiones del usuario directamente de la tabla 'missions'
-        const userMissions = await UserService.getUserMissions();
+        // Obtener todas las misiones y filtrar por usuario
+        const allMissions = await UserService.getUserMissions();
+        const userMissions = allMissions.filter(m => m.user === currentUser);
         setMissions(userMissions);
       } catch (err) {
         console.error('Error al obtener misiones:', err);
