@@ -97,9 +97,25 @@ const MissionModal = ({ onClose }) => {
                     </div>
                   </div>
                   <div className="mission-stats-bottom">
-                    <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
-                    <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
-                    <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
+                    <div className="stat">
+                      <span className="stat-icon">
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8.5" stroke="#e0e0e0" strokeWidth="1.5"/><path d="M10 5.5V10L13 12" stroke="#e0e0e0" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                      </span>
+                      <span>{formatDuration(mission.duration_minutes)}</span>
+                    </div>
+                    <div className="stat-separator"></div>
+                    <div className="stat">
+                      <span className="stat-icon">
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8.5" stroke="#e0e0e0" strokeWidth="1.5"/><circle cx="10" cy="10" r="4" fill="#e0e0e0" fillOpacity="0.18"/></svg>
+                      </span>
+                      <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span>
+                    </div>
+                    <div className="stat">
+                      <span className="stat-icon">
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="8" width="14" height="8" rx="2" stroke="#e0e0e0" strokeWidth="1.5"/><path d="M3 10H17" stroke="#e0e0e0" strokeWidth="1.2"/><rect x="8.25" y="3.5" width="3.5" height="4.5" rx="1.5" stroke="#e0e0e0" strokeWidth="1.2"/><path d="M10 8V17" stroke="#e0e0e0" strokeWidth="1.2"/></svg>
+                      </span>
+                      <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -288,7 +304,7 @@ const MissionModal = ({ onClose }) => {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(18, 10, 40, 0.55);
+          background: rgba(30, 30, 50, 0.18);
           border-radius: 0 0 18px 18px;
           box-shadow: 0 2px 12px 0 #0002;
           padding-bottom: 18px;
@@ -300,18 +316,32 @@ const MissionModal = ({ onClose }) => {
         }
         .stat {
           color: #e0e0e0;
-          font-size: 14px;
+          font-size: 15px;
           display: flex;
           align-items: center;
           gap: 8px;
           font-weight: 500;
           text-shadow: 0 0 2px #000a;
+          margin-bottom: 4px;
         }
         .stat-icon {
-          font-size: 16px;
-          width: 20px;
+          font-size: 18px;
+          width: 22px;
           text-align: center;
-          filter: grayscale(1) brightness(1.5);
+          opacity: 0.55;
+          filter: grayscale(1) brightness(1.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: opacity 0.2s;
+        }
+        .stat-separator {
+          width: 60%;
+          height: 1.5px;
+          background: linear-gradient(90deg, #e0e0e055 0%, #fff0 100%);
+          margin: 2px auto 6px auto;
+          border: none;
+          border-radius: 1.5px;
         }
         .stat-prob {
           color: #ff36ba;
@@ -364,7 +394,7 @@ const MissionModal = ({ onClose }) => {
         .modal-fade-scale-front, .modal-fade-scale-back {
           position: absolute;
           top: 0; left: 0; width: 100vw; height: 100vh;
-          transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1);
+          transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
           will-change: opacity, transform;
           z-index: 2;
           pointer-events: all;
