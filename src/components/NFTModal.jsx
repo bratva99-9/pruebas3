@@ -138,26 +138,22 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         </div>
         {/* Botones superiores */}
-        <div className="nftmodal-top-buttons">
-          <div className="nftmodal-top-center">
-            <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
-          </div>
-          <div className="nftmodal-top-right">
-            <button 
-              className="btn-square send-btn-alt btn-small"
-              onClick={sendMission}
-              disabled={selectedNFTs.length === 0 || sending}>
-              {sending ? 'Sending...' : `Send Bitchs !`}
-            </button>
-          </div>
+        <div className="nftmodal-top-buttons unified-width">
+          <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
+          <button 
+            className="btn-square send-btn-alt btn-small"
+            onClick={sendMission}
+            disabled={selectedNFTs.length === 0 || sending}>
+            {sending ? 'Sending...' : `Send Bitchs !`}
+          </button>
         </div>
         {filteredNFTs.length === 0 ? (
-          <div className="no-nfts">
+          <div className="no-nfts unified-width">
             <p>No NFTs found in your collection</p>
             <p>Make sure you own NFTs from the 'nightclubnft' collection with schema 'girls'</p>
           </div>
         ) : (
-          <div className="nfts-grid" style={{marginTop: '12px'}}>
+          <div className="nfts-grid unified-width" style={{marginTop: '12px'}}>
             {filteredNFTs.slice(0, displayCount).map((nft) => {
               const isSelected = selectedNFTs.includes(nft.asset_id);
               const videoUrl = nft.data.video.startsWith('Qm')
@@ -224,7 +220,7 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         )}
         {/* Botones inferiores */}
-        <div className="nftmodal-bottom-buttons">
+        <div className="nftmodal-bottom-buttons unified-width">
           <button className="btn-square btn-select-mission" onClick={onClose}>Select Mission</button>
           <button className="btn-square btn-cancel-missionmodal" onClick={() => onClose && onClose()}>Cancel</button>
           {filteredNFTs.length > displayCount && (
@@ -457,6 +453,30 @@ const NFTModal = ({ mission, onClose }) => {
           border-color: #ff00ff;
           color: #fff;
           box-shadow: none;
+        }
+        .unified-width {
+          width: 1200px !important;
+          max-width: 1200px !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .nftmodal-top-buttons {
+          gap: 48px;
+        }
+        .nftmodal-bottom-buttons {
+          position: fixed;
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: 32px;
+          gap: 48px;
+          z-index: 10001;
+        }
+        .nfts-grid.unified-width {
+          gap: 36px;
+          justify-content: space-between;
         }
       `}</style>
     </div>
