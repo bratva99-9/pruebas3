@@ -50,6 +50,11 @@ const MissionModal = ({ onClose }) => {
     setShowNFTModal(true);
   };
 
+  const handleNFTModalClose = () => {
+    setShowNFTModal(false);
+    setSelectedMission(null);
+  };
+
   if (loading) {
     return (
       <div className="mission-modal-overlay">
@@ -98,11 +103,7 @@ const MissionModal = ({ onClose }) => {
         {showNFTModal && selectedMission && (
           <NFTModal 
             mission={selectedMission}
-            onClose={() => {
-              console.log('Closing NFT Modal');
-              setShowNFTModal(false);
-              onClose(); // Cierra también el mission modal después de enviar
-            }}
+            onClose={handleNFTModalClose}
           />
         )}
       </div>
