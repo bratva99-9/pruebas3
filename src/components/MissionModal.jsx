@@ -96,10 +96,12 @@ const MissionModal = ({ onClose }) => {
                       <div className="mission-description">{mission.description}</div>
                     </div>
                     <div className="mission-divider"></div>
-                    <div className="mission-stats-box">
-                      <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
-                      <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
-                      <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
+                    <div className="mission-stats-container">
+                      <div className="mission-stats-box">
+                        <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
+                        <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
+                        <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -199,18 +201,16 @@ const MissionModal = ({ onClose }) => {
           z-index: 3;
         }
         .mission-card:hover {
-          border: 2px solid #ff00ffcc;
+          border: 1.2px solid #ff00ffcc;
           transform: scale(1.08);
-          box-shadow: 0 0 32px 0 #00ffff44, 0 0 0 2px #ff00ff55;
+          box-shadow: 0 0 24px 0 #00ffff33, 0 0 0 1.2px #ff00ff55;
           z-index: 4;
         }
         .missions-row-scroll.focus-mode .mission-card:not(:hover) {
-          filter: blur(1.5px) grayscale(0.2) brightness(0.7);
           transform: scale(0.93);
           z-index: 2;
         }
         .missions-row-scroll.focus-mode .mission-card:hover {
-          filter: none;
           transform: scale(1.08);
           z-index: 5;
         }
@@ -267,7 +267,7 @@ const MissionModal = ({ onClose }) => {
           transition: color 0.25s;
         }
         .mission-description {
-          color: #e6f6ff;
+          color: #b0b0c3;
           font-size: 13px;
           margin-bottom: 0;
           margin-top: 0;
@@ -289,18 +289,20 @@ const MissionModal = ({ onClose }) => {
           width: 70%;
           height: 2px;
           background: linear-gradient(90deg, #ff00ff99 0%, #fff0 100%);
-          margin: 0 auto 12px auto;
+          margin: 0 auto 0 auto;
           border: none;
           border-radius: 2px;
         }
-        .mission-stats-fade {
-          position: absolute;
-          left: 0; right: 0;
-          bottom: 0;
-          height: 38%;
-          pointer-events: none;
-          background: linear-gradient(0deg, rgba(18,9,42,0.82) 0%, rgba(18,9,42,0.0) 100%);
-          z-index: 2;
+        .mission-stats-container {
+          width: 100%;
+          background: rgba(18, 9, 42, 0.72);
+          border-radius: 0 0 18px 18px;
+          box-shadow: 0 2px 12px 0 #0002;
+          padding-bottom: 18px;
+          padding-top: 8px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
         .mission-stats-box {
           width: 100%;
