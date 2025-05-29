@@ -105,22 +105,15 @@ const NFTModal = ({ mission, onClose }) => {
         <div className="mission-info-header">
           <div className="mission-name-glow">{mission.name}</div>
           <div className="mission-description">{mission.description}</div>
-          <div className="mission-details-card">
+          <div className="mission-details-card" style={{ display: 'flex', gap: 16, justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
             <span className="mission-badge duration">
-              <span role="img" aria-label="Duración">⏱️</span> {mission.duration ? `${mission.duration} min` : 'No disponible'}
+              <span role="img" aria-label="Duración">⏱️</span> {mission.duration_minutes ? `${mission.duration_minutes} min` : 'No disponible'}
             </span>
-            <span className="mission-badge mults">
-              <span role="img" aria-label="Multiplicadores">✨</span> {
-                Array.isArray(mission.multipliers) && mission.multipliers.length > 0
-                  ? mission.multipliers.map(m => {
-                      if (typeof m === 'string') {
-                        const match = m.match(/\d+/);
-                        return match ? match[0] : m;
-                      }
-                      return m;
-                    }).join(', ')
-                  : 'No disponible'
-              }
+            <span className="mission-badge sexy">
+              <span role="img" aria-label="SEXY">💰</span> {mission.reward_multiplier !== undefined ? `${Number(mission.reward_multiplier).toFixed(1)} SEXY` : 'No disponible'}
+            </span>
+            <span className="mission-badge gift-chance">
+              <span role="img" aria-label="Gift Chance">🎁</span> {mission.nft_drop_multiplier !== undefined ? `${Number(mission.nft_drop_multiplier).toFixed(1)}% Gift Chance` : 'No disponible'}
             </span>
           </div>
         </div>
@@ -132,7 +125,7 @@ const NFTModal = ({ mission, onClose }) => {
             className="send-btn-alt send-btn-align btn-small"
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}
-            style={{ position: 'absolute', right: '160px', top: '-54px', zIndex: 20 }}
+            style={{ position: 'absolute', right: 'calc(50vw - 600px + 36px)', top: '-54px', zIndex: 20 }}
           >
             {sending ? 'Sending...' : `Send Bitchs !`}
           </button>
@@ -210,14 +203,14 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         )}
         <div className="nft-modal-actions" style={{ display: 'flex', width: '100vw', maxWidth: '1200px', justifyContent: 'space-between', alignItems: 'center', position: 'fixed', left: 0, bottom: 38, padding: '0 32px', zIndex: 10001 }}>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', minWidth: 0, marginLeft: '-12px' }}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', minWidth: 0, marginLeft: 'calc(50vw - 600px + 36px)' }}>
             <button className="cancel-btn btn-small" onClick={onClose}>Cancel</button>
             <button className="select-mision-btn btn-small" style={{marginLeft: '-6px'}} onClick={() => {/* Acción de seleccionar misión */}}>
               Select Mision
             </button>
           </div>
           {filteredNFTs.length > displayCount && (
-            <button className="load-more-btn neon-load load-more-align btn-small" style={{right: '160px'}} onClick={() => setDisplayCount(displayCount + 5)}>
+            <button className="load-more-btn neon-load load-more-align btn-small" style={{right: 'calc(50vw - 600px + 36px)'}} onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
           )}
@@ -448,6 +441,12 @@ const NFTModal = ({ mission, onClose }) => {
           padding: 7px 18px !important;
           min-width: 80px !important;
           border-radius: 14px !important;
+        }
+        .mission-badge.sexy {
+          color: #ff6fff;
+        }
+        .mission-badge.gift-chance {
+          color: #00ffff;
         }
       `}</style>
     </div>
