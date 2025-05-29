@@ -112,11 +112,13 @@ const MissionModal = ({ onClose }) => {
                     </div>
                     <div className="stat">
                       <span className="stat-icon">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="3" y="8.5" width="14" height="7.5" rx="2" fill="#ffd6fa" fillOpacity="0.13" stroke="#ff36ba" strokeWidth="1.5"/>
-                          <rect x="8.25" y="3.5" width="3.5" height="4.5" rx="1.5" fill="#ffd6fa" fillOpacity="0.18" stroke="#ff36ba" strokeWidth="1.2"/>
-                          <path d="M3 10H17" stroke="#ff36ba" strokeWidth="1.2"/>
-                          <path d="M10 8.5V16" stroke="#ff36ba" strokeWidth="1.2"/>
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect x="3.5" y="9.5" width="15" height="7" rx="2" fill="#ffd6fa" fillOpacity="0.13" stroke="#ff36ba" strokeWidth="1.5"/>
+                          <rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ffd6fa" fillOpacity="0.18" stroke="#ff36ba" strokeWidth="1.2"/>
+                          <path d="M3.5 12H18.5" stroke="#ff36ba" strokeWidth="1.2"/>
+                          <path d="M11 9.5V17" stroke="#ff36ba" strokeWidth="1.2"/>
+                          <path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff36ba" strokeWidth="1.1" strokeLinecap="round"/>
+                          <path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff36ba" strokeWidth="1.1" strokeLinecap="round"/>
                         </svg>
                       </span>
                       <span className="stat-text stat-gift-chance">{Number.isInteger(Number(mission.nft_drop_multiplier)) ? Number(mission.nft_drop_multiplier) : Number(mission.nft_drop_multiplier).toFixed(1)}% gift chance</span>
@@ -192,7 +194,7 @@ const MissionModal = ({ onClose }) => {
           content: '';
           position: fixed;
           top: 0; left: 0; right: 0; bottom: 0;
-          background: rgba(10, 6, 22, 0.82);
+          background: rgba(10, 6, 22, 0.92);
           pointer-events: none;
           opacity: 0;
           transition: opacity 0.3s;
@@ -221,7 +223,7 @@ const MissionModal = ({ onClose }) => {
         .mission-card:hover {
           border: 1.2px solid #ff00ffcc;
           transform: scale(1.08);
-          box-shadow: 0 0 0 0 #ff00ff00, 0 0 32px 8px #ff36ba88, 0 0 0 1.2px #ff00ff99;
+          box-shadow: 0 0 0 0 #ff00ff00, 0 0 18px 4px #ff36ba66, 0 0 0 1.2px #ff00ff99;
           z-index: 4;
         }
         .mission-card:hover .mission-bg-gradient {
@@ -457,6 +459,8 @@ const MissionModal = ({ onClose }) => {
           font-weight: 400;
           opacity: 0.95;
           letter-spacing: 0.01em;
+          font-size: 15px;
+          text-shadow: none;
         }
         .modal-fade-scale-container::after {
           content: '';
