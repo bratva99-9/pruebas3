@@ -292,7 +292,7 @@ const MissionModal = ({ onClose }) => {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(18, 10, 40, 0.22);
+          background: rgba(18, 10, 40, 0.55);
           border-radius: 0 0 18px 18px;
           box-shadow: 0 2px 12px 0 #0002;
           padding-bottom: 18px;
