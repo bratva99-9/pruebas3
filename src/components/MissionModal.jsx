@@ -112,7 +112,7 @@ const MissionModal = ({ onClose }) => {
           width: 100vw;
           height: 100vh;
           z-index: 9999;
-          background: linear-gradient(135deg, #18132a 0%, #221a3a 100%);
+          background: #12092a;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -158,7 +158,7 @@ const MissionModal = ({ onClose }) => {
           max-width: 204px;
           width: 204px;
           height: 348px;
-          border: none;
+          border: 1.5px solid rgba(162,89,247,0.7);
           border-radius: 18px;
           box-shadow: none;
           background: none;
@@ -273,7 +273,7 @@ const MissionModal = ({ onClose }) => {
           background: rgba(255,0,255,0.13);
           border-color: #ff00ff;
           color: #fff;
-          box-shadow: 0 0 32px #ff00ff99, 0 0 8px #00ffff44;
+          box-shadow: none;
         }
       `}</style>
     </div>
