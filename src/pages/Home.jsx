@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import MissionModal from '../components/MissionModal';
 import ClaimActionButton from '../components/ClaimActionButton';
+import { UserService } from '../UserService';
+import fondo2 from '../images/fondo2.webp';
 
 // Toast reutilizable (igual que en ClaimActionButton)
 const Toast = ({ message, type, onClose }) => {
@@ -34,6 +37,7 @@ const Toast = ({ message, type, onClose }) => {
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
   const [toast, setToast] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
     const msg = sessionStorage.getItem('missionToast');
@@ -43,44 +47,70 @@ const Home = () => {
     }
   }, []);
 
+  const handleLogout = () => {
+    UserService.logout();
+    history.push('/');
+  };
+
   return (
-    <div className="home">
+    <div
+      className="home"
+      style={{
+        minHeight: '100vh',
+        width: '100vw',
+        backgroundImage: `url(${fondo2})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        color: 'white',
+        padding: 0,
+        margin: 0,
+        position: 'relative',
+        textAlign: 'center'
+      }}
+    >
       <h1>Welcome to Night Club App</h1>
-      
       <ClaimActionButton />
-      
-      <button 
+      <button
         className="mission-btn"
         onClick={() => setShowMission(true)}
       >
         Mission
       </button>
-
+      <button
+        className="logout-btn-home"
+        onClick={handleLogout}
+        style={{
+          marginTop: 24,
+          background: "linear-gradient(90deg,#ff36ba 40%,#5325e9 100%)",
+          color: "#fff",
+          fontWeight: "bold",
+          border: "none",
+          borderRadius: 16,
+          padding: "12px 38px",
+          fontSize: 20,
+          boxShadow: "0 1px 10px #ff36ba30",
+          display: "inline-flex",
+          alignItems: "center",
+          cursor: "pointer"
+        }}
+      >
+        Logout
+      </button>
       {showMission && (
-        <MissionModal 
-          onClose={() => setShowMission(false)} 
+        <MissionModal
+          onClose={() => setShowMission(false)}
           onForceCloseAll={() => setShowMission(false)}
         />
       )}
-
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-
       <style jsx>{`
-        .home {
-          padding: 40px;
-          text-align: center;
-          background: linear-gradient(135deg, #0a0a2e 0%, #16213e 100%);
-          min-height: 100vh;
-          color: white;
-        }
-
         .home h1 {
           font-size: 36px;
           color: #ff00ff;
           margin-bottom: 40px;
           text-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
         }
-
         .mission-btn {
           background: linear-gradient(45deg, #ff00ff, #00ffff);
           border: none;
@@ -95,7 +125,6 @@ const Home = () => {
           letter-spacing: 2px;
           box-shadow: 0 5px 15px rgba(255, 0, 255, 0.3);
         }
-
         .mission-btn:hover {
           transform: translateY(-3px);
           box-shadow: 0 10px 25px rgba(255, 0, 255, 0.5);
