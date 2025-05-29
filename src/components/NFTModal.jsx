@@ -219,7 +219,7 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         )}
         <div className="nft-modal-actions" style={{ display: 'flex', width: '100vw', maxWidth: '1200px', justifyContent: 'flex-start', alignItems: 'center', position: 'fixed', left: 0, bottom: 38, padding: '0 32px', zIndex: 10001 }}>
-          <button className="cancel-btn btn-xsmall btn-mission-left" style={{position: 'absolute', left: 'calc(50vw - 600px + 250px)', bottom: 38, padding: '5px 14px', fontSize: '12px'}} onClick={onClose}>Select Mission</button>
+          <button className="cancel-btn-missionmodal" onClick={onClose}>Cancel</button>
           {filteredNFTs.length > displayCount && (
             <button className="load-more-btn neon-load load-more-align btn-small btn-right" style={{position: 'absolute', right: 'calc(50vw - 600px + 250px)', bottom: 38}} onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
@@ -408,21 +408,26 @@ const NFTModal = ({ mission, onClose }) => {
           color: #fff;
           box-shadow: none;
         }
-        .cancel-btn {
-          font-size: 18px;
+        .cancel-btn-missionmodal {
+          position: fixed;
+          left: 50%;
+          bottom: 32px;
+          transform: translateX(-50%);
+          z-index: 10001;
+          font-size: 15px;
           font-weight: 500;
           color: #fff;
-          background: rgba(36,0,56,0.10);
-          border: 2.5px solid #00ffff;
+          background: rgba(0,255,255,0.10);
+          border: 2px solid #00ffff;
           border-radius: 14px;
-          padding: 10px 32px;
+          padding: 8px 32px;
           box-shadow: none;
           text-shadow: none;
           letter-spacing: 1px;
           cursor: pointer;
           transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
-        .cancel-btn:hover {
+        .cancel-btn-missionmodal:hover {
           background: rgba(255,0,255,0.13);
           border-color: #ff00ff;
           color: #fff;
