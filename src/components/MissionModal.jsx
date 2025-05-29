@@ -236,7 +236,7 @@ const MissionModal = ({ onClose }) => {
           transform: scale(1.08);
           z-index: 99999;
           transition: filter 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
-          box-shadow: 0 0 32px 12px #ff36ba66, 0 0 0 1.2px #ff00ff99;
+          box-shadow: 0 0 16px 4px #ff36ba55, 0 0 0 1.2px #ff00ff99;
         }
         .mission-bg-image {
           position: absolute;
