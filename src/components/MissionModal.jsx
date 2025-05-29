@@ -205,7 +205,7 @@ const MissionModal = ({ onClose }) => {
           pointer-events: none;
           opacity: 0;
           transition: opacity 0.3s;
-          z-index: 99999;
+          z-index: 20;
         }
         .missions-row-scroll.focus-mode::after {
           opacity: 1;
