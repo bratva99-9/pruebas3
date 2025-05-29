@@ -111,7 +111,10 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3500);
       setTimeout(() => {
-        setToast({ type: 'success', message: 'Mission sent successfully!' });
+        const girlsCount = selectedNFTs.length;
+        const msg = `${girlsCount} Girl${girlsCount === 1 ? '' : 's'} sent successfully!`;
+        sessionStorage.setItem('missionToast', msg);
+        setToast({ type: 'success', message: msg });
         setShowLoadingOverlay(false);
         setTimeout(() => {
           if (onForceCloseAll) onForceCloseAll();

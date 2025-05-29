@@ -1,9 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MissionModal from '../components/MissionModal';
 import ClaimActionButton from '../components/ClaimActionButton';
 
+// Toast reutilizable (igual que en ClaimActionButton)
+const Toast = ({ message, type, onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 2000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+  const backgroundColor = {
+    success: '#22c55e',
+    error: '#ef4444',
+    info: '#3b82f6'
+  }[type] || '#555';
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 100,
+      right: 20,
+      zIndex: 9999,
+      padding: '14px 22px',
+      borderRadius: 10,
+      backgroundColor,
+      color: '#fff',
+      boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+      fontSize: 16,
+      fontWeight: 600,
+      maxWidth: 280
+    }}>{message}</div>
+  );
+};
+
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  useEffect(() => {
+    const msg = sessionStorage.getItem('missionToast');
+    if (msg) {
+      setToast({ type: 'success', message: msg });
+      sessionStorage.removeItem('missionToast');
+    }
+  }, []);
 
   return (
     <div className="home">
@@ -24,6 +62,8 @@ const Home = () => {
           onForceCloseAll={() => setShowMission(false)}
         />
       )}
+
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
       <style jsx>{`
         .home {
