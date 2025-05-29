@@ -131,8 +131,8 @@ const NFTModal = ({ mission, onClose }) => {
       )}
       <div className="nft-modal-content">
         <div className="mission-info-header">
-          <h1 className="mission-title-nftmodal" style={{marginBottom: 0}}>{mission.name}</h1>
-          <div className="mission-description-large" style={{marginTop: '0px', marginBottom: '0px', paddingTop: 0}}>{mission.description}</div>
+          <h1 className="mission-title-nftmodal" style={{marginBottom: 10}}>{mission.name}</h1>
+          <div className="mission-description-large" style={{marginTop: 10, marginBottom: 0, paddingTop: 0}}>{mission.description}</div>
           <div className="mission-stats-horizontal">
             <div className="stat stat-large">
               <span className="stat-icon stat-icon-large">
@@ -295,7 +295,8 @@ const NFTModal = ({ mission, onClose }) => {
           scrollbar-width: thin;
           justify-content: center;
           width: 100vw;
-          max-width: 1200px;
+          max-width: 1440px;
+          min-width: 1200px;
           margin-left: auto;
           margin-right: auto;
         }
@@ -322,8 +323,8 @@ const NFTModal = ({ mission, onClose }) => {
           z-index: 99999;
           box-shadow: 0 0 14px 3px #ff36ba44 !important;
           background: hsl(245, 86.70%, 2.90%) !important;
-          border: none !important;
-          transition: box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), background 0.44s cubic-bezier(0.4,0,0.2,1);
+          border: 2px solid #ff36ba;
+          transition: box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), background 0.44s cubic-bezier(0.4,0,0.2,1), border 0.44s cubic-bezier(0.4,0,0.2,1);
         }
         .nft-card.selected video {
           border: none !important;
@@ -340,7 +341,7 @@ const NFTModal = ({ mission, onClose }) => {
           font-size: 38px;
           font-weight: 700;
           color: #ff6fff;
-          margin-bottom: -8px;
+          margin-bottom: 10px;
           text-shadow: 0 0 12px #ff00ff99;
           letter-spacing: 2px;
         }
@@ -349,7 +350,7 @@ const NFTModal = ({ mission, onClose }) => {
           color: #bfc2d1;
           text-align: center;
           margin-bottom: 0px;
-          margin-top: 0px;
+          margin-top: 10px;
           padding: 0 24px;
           line-height: 1.4;
           letter-spacing: 0.02em;
