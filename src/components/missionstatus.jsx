@@ -9,15 +9,40 @@ const MissionStatus = ({ onClose }) => {
     const fetchMissions = async () => {
       setLoading(true);
       try {
-        const data = await UserService.getUserActiveMissions();
-        if (data && Array.isArray(data)) {
-          setMissions(data);
-        } else {
-          console.error('Invalid missions data format:', data);
+        // Obtener el usuario actual
+        const currentUser = UserService.getName();
+        if (!currentUser) {
+          console.error('No hay usuario logueado');
           setMissions([]);
+          setLoading(false);
+          return;
         }
+
+        // Obtener las misiones activas del usuario
+        const activeMissions = await UserService.getUserActiveMissions();
+        console.log('Misiones activas:', activeMissions);
+
+        // Obtener los tipos de misiones para tener la información completa
+        const missionTypes = await UserService.getMissionTypes();
+        console.log('Tipos de misiones:', missionTypes);
+
+        // Combinar la información de las misiones activas con los tipos de misiones
+        const enrichedMissions = activeMissions.map(activeMission => {
+          const missionType = missionTypes.find(type => type.id === activeMission.mission_id);
+          return {
+            ...activeMission,
+            name: missionType?.name || 'Unknown Mission',
+            description: missionType?.description || 'No description available',
+            duration_minutes: missionType?.duration_minutes,
+            reward_multiplier: missionType?.reward_multiplier,
+            nft_drop_multiplier: missionType?.nft_drop_multiplier,
+            completed: activeMission.completed || false
+          };
+        });
+
+        setMissions(enrichedMissions);
       } catch (err) {
-        console.error('Error fetching missions:', err);
+        console.error('Error al obtener misiones:', err);
         setMissions([]);
       }
       setLoading(false);
