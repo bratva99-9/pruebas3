@@ -6,7 +6,6 @@ const NFTModal = ({ mission, onClose }) => {
   const [selectedNFTs, setSelectedNFTs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
-  const [displayCount, setDisplayCount] = useState(5);
   const [showSuccess, setShowSuccess] = useState(false);
 
   const MAX_SELECTED = 10;
@@ -148,7 +147,7 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         ) : (
           <div className="nfts-grid">
-            {filteredNFTs.slice(0, displayCount).map((nft) => {
+            {filteredNFTs.map((nft) => {
               const isSelected = selectedNFTs.includes(nft.asset_id);
               const videoUrl = nft.data.video.startsWith('Qm')
                 ? `https://ipfs.io/ipfs/${nft.data.video}`
