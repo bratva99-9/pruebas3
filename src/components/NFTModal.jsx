@@ -125,14 +125,14 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         </div>
         <div className="selected-count-badge" style={{ display: 'flex', justifyContent: 'center', margin: '18px 0 0 0', width: '100%' }}>
-          <span className="selected-count-style selected-count-btn small-selected">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
+          <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
         </div>
         <div className="nfts-header-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%', maxWidth: '1200px', margin: '0 auto', marginBottom: 0, marginTop: 0, position: 'relative' }}>
           <button 
-            className="send-btn-alt send-btn-align"
+            className="send-btn-alt send-btn-align btn-small"
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}
-            style={{ position: 'absolute', right: '0', top: '-54px', minWidth: 140, zIndex: 20 }}
+            style={{ position: 'absolute', right: '160px', top: '-54px', zIndex: 20 }}
           >
             {sending ? 'Sending...' : `Send Bitchs !`}
           </button>
@@ -210,14 +210,14 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         )}
         <div className="nft-modal-actions" style={{ display: 'flex', width: '100vw', maxWidth: '1200px', justifyContent: 'space-between', alignItems: 'center', position: 'fixed', left: 0, bottom: 38, padding: '0 32px', zIndex: 10001 }}>
-          <div style={{ display: 'flex', gap: '18px', alignItems: 'center', minWidth: 0 }}>
-            <button className="cancel-btn" onClick={onClose}>Cancel</button>
-            <button className="select-mision-btn" onClick={() => {/* Acción de seleccionar misión */}}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', minWidth: 0, marginLeft: '-12px' }}>
+            <button className="cancel-btn btn-small" onClick={onClose}>Cancel</button>
+            <button className="select-mision-btn btn-small" style={{marginLeft: '-6px'}} onClick={() => {/* Acción de seleccionar misión */}}>
               Select Mision
             </button>
           </div>
           {filteredNFTs.length > displayCount && (
-            <button className="load-more-btn neon-load load-more-align small-load" onClick={() => setDisplayCount(displayCount + 5)}>
+            <button className="load-more-btn neon-load load-more-align btn-small" style={{right: '160px'}} onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
           )}
@@ -421,39 +421,33 @@ const NFTModal = ({ mission, onClose }) => {
           min-width: 140px;
         }
         .load-more-align {
+          min-width: 80px;
+          font-size: 14px;
+          padding: 7px 18px;
+          border-radius: 14px;
           position: relative;
-          right: 0;
+          right: 160px;
         }
         .send-btn-align {
-          min-width: 140px;
-          font-size: 18px;
-          padding: 10px 32px;
+          min-width: 80px;
+          font-size: 14px;
+          padding: 7px 18px;
           border-radius: 14px;
           position: absolute;
-          right: 0;
+          right: 160px;
           top: -54px;
         }
         .select-mision-btn {
-          font-size: 18px;
-          font-weight: 500;
-          color: #fff;
-          background: rgba(36,0,56,0.10);
-          border: 2.5px solid #00ffff;
+          min-width: 80px;
+          font-size: 14px;
+          padding: 7px 18px;
           border-radius: 14px;
-          padding: 10px 32px;
-          box-shadow: none;
-          text-shadow: none;
-          letter-spacing: 1px;
-          cursor: pointer;
-          transition: background 0.2s, border-color 0.2s, color 0.2s;
-          margin-bottom: 0;
-          min-width: 140px;
         }
-        .select-mision-btn:hover {
-          background: rgba(255,0,255,0.13);
-          border-color: #ff00ff;
-          color: #fff;
-          box-shadow: none;
+        .btn-small {
+          font-size: 14px !important;
+          padding: 7px 18px !important;
+          min-width: 80px !important;
+          border-radius: 14px !important;
         }
       `}</style>
     </div>
