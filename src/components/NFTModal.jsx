@@ -126,6 +126,14 @@ const NFTModal = ({ mission, onClose }) => {
         </div>
         <div className="nfts-header-row">
           <span className="selected-count selected-style center-badge">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
+          <button 
+            className="send-btn selected-style send-style"
+            onClick={sendMission}
+            disabled={selectedNFTs.length === 0 || sending}
+            style={{ marginLeft: 18 }}
+          >
+            {sending ? 'Sending...' : `Send Bitchs !`}
+          </button>
         </div>
         {filteredNFTs.length === 0 ? (
           <div className="no-nfts">
@@ -146,10 +154,10 @@ const NFTModal = ({ mission, onClose }) => {
                     className={`nft-card${isSelected ? ' selected' : ''}`}
                     onClick={() => toggleNFTSelection(nft.asset_id)}
                     style={{
-                      minWidth: 204,
-                      maxWidth: 204,
-                      width: 204,
-                      height: 348,
+                      minWidth: 163,
+                      maxWidth: 163,
+                      width: 163,
+                      height: 278,
                       background: 'transparent',
                       border: 'none',
                       borderRadius: 18,
@@ -204,18 +212,12 @@ const NFTModal = ({ mission, onClose }) => {
         )}
         <div className="nft-modal-actions">
           <button className="cancel-btn" onClick={onClose}>Cancel</button>
+          <div style={{ flex: 1 }} />
           {filteredNFTs.length > displayCount && (
-            <button className="load-more-btn neon-load" onClick={() => setDisplayCount(displayCount + 5)}>
+            <button className="load-more-btn neon-load" style={{marginLeft: 'auto'}} onClick={() => setDisplayCount(displayCount + 5)}>
               Load More
             </button>
           )}
-          <button 
-            className="send-btn selected-style send-style"
-            onClick={sendMission}
-            disabled={selectedNFTs.length === 0 || sending}
-          >
-            {sending ? 'Sending...' : `Send Bitchs !`}
-          </button>
         </div>
       </div>
       <style jsx>{`
@@ -259,10 +261,10 @@ const NFTModal = ({ mission, onClose }) => {
           margin-right: auto;
         }
         .nft-card {
-          min-width: 204px;
-          max-width: 204px;
-          width: 204px;
-          height: 348px;
+          min-width: 163px;
+          max-width: 163px;
+          width: 163px;
+          height: 278px;
           border: none;
           border-radius: 18px;
           box-shadow: none;
