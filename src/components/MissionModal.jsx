@@ -95,8 +95,7 @@ const MissionModal = ({ onClose }) => {
                       <div className="mission-name neon-title">{mission.name}</div>
                       <div className="mission-description">{mission.description}</div>
                     </div>
-                    <div className="mission-stats-group">
-                      <div className="mission-divider"></div>
+                    <div className="mission-stats-overlay">
                       <div className="mission-stats-box">
                         <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
                         <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
@@ -170,17 +169,17 @@ const MissionModal = ({ onClose }) => {
           margin-right: auto;
           position: relative;
         }
-        .missions-row-scroll::before {
+        .missions-row-scroll::after {
           content: '';
-          position: absolute;
+          position: fixed;
           top: 0; left: 0; right: 0; bottom: 0;
-          background: rgba(18,9,42,0.3);
+          background: rgba(18,9,42,0.7);
           pointer-events: none;
           opacity: 0;
           transition: opacity 0.3s;
-          z-index: 2;
+          z-index: 10;
         }
-        .missions-row-scroll.focus-mode::before {
+        .missions-row-scroll.focus-mode::after {
           opacity: 1;
         }
         .mission-card {
@@ -207,12 +206,14 @@ const MissionModal = ({ onClose }) => {
           z-index: 4;
         }
         .missions-row-scroll.focus-mode .mission-card:not(:hover) {
+          filter: grayscale(0.2) brightness(0.7);
           transform: scale(0.93);
-          z-index: 2;
+          z-index: 20;
         }
         .missions-row-scroll.focus-mode .mission-card:hover {
+          filter: none;
           transform: scale(1.08);
-          z-index: 5;
+          z-index: 30;
         }
         .mission-bg-image {
           position: absolute;
@@ -285,25 +286,22 @@ const MissionModal = ({ onClose }) => {
         .mission-card:hover .mission-description {
           color: #ffe6ff;
         }
-        .mission-divider {
-          width: 70%;
-          height: 2px;
-          background: linear-gradient(90deg, #ff00ff99 0%, #fff0 100%);
-          margin: 0 auto 8px auto;
-          border: none;
-          border-radius: 2px;
-        }
-        .mission-stats-group {
-          width: 92%;
-          margin: 0 auto 0 auto;
-          background: rgba(18, 10, 40, 0.15);
-          border-radius: 12px;
+        .mission-stats-overlay {
+          width: 100%;
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(18, 10, 40, 0.22);
+          border-radius: 0 0 18px 18px;
           box-shadow: 0 2px 12px 0 #0002;
-          padding: 10px 0 14px 0;
+          padding-bottom: 18px;
+          padding-top: 10px;
           display: flex;
           flex-direction: column;
           align-items: center;
-          margin-top: 12px;
+          z-index: 15;
+          backdrop-filter: blur(1.5px);
         }
         .mission-stats-box {
           width: 100%;
