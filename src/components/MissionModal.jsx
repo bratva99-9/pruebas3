@@ -83,15 +83,15 @@ const MissionModal = ({ onClose }) => {
                 />
               </div>
               <div className="mission-content">
-                <div className="mission-title-box">
+                <div className="mission-header-box">
                   <div className="mission-name neon-title">{mission.name}</div>
                 </div>
                 <div className="mission-description">{mission.description}</div>
-                <div className="mission-stats-box">
-                  <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
-                  <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
-                  <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
-                </div>
+              </div>
+              <div className="mission-stats-box">
+                <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
+                <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
+                <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
               </div>
             </div>
           ))}
@@ -188,14 +188,16 @@ const MissionModal = ({ onClose }) => {
           left: 0; right: 0; top: 0; bottom: 0;
           display: flex;
           flex-direction: column;
-          justify-content: flex-end;
+          justify-content: space-between;
           align-items: center;
           height: 100%;
           width: 100%;
         }
-        .mission-title-box {
+        .mission-header-box {
           width: 100%;
-          padding: 12px 0 0 0;
+          padding: 18px 0 10px 0;
+          background: linear-gradient(180deg, rgba(10,10,46,0.65) 80%, rgba(10,10,46,0.0) 100%);
+          border-radius: 18px 18px 0 0;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -205,22 +207,22 @@ const MissionModal = ({ onClose }) => {
           font-weight: 700;
           color: #ff6fff;
           text-shadow: 0 0 6px #ff00ff55;
-          margin-bottom: 0;
+          margin-bottom: 6px;
           text-align: center;
           letter-spacing: 0.5px;
         }
         .mission-description {
           color: #b3b3ff;
           font-size: 13px;
-          margin-bottom: 38px;
-          margin-top: 10px;
+          margin-bottom: 0;
+          margin-top: 0;
           text-align: center;
           font-weight: 400;
           text-shadow: none;
         }
         .mission-stats-box {
           width: 100%;
-          background: rgba(10,10,46,0.30);
+          background: linear-gradient(0deg, rgba(10,10,46,0.65) 80%, rgba(10,10,46,0.0) 100%);
           border-radius: 0 0 18px 18px;
           padding: 18px 0 10px 0;
           box-shadow: none;
@@ -228,10 +230,6 @@ const MissionModal = ({ onClose }) => {
           flex-direction: column;
           gap: 8px;
           align-items: center;
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 0;
         }
         .stat {
           color: #e0e0e0;
@@ -247,6 +245,10 @@ const MissionModal = ({ onClose }) => {
           width: 20px;
           text-align: center;
           filter: grayscale(1) brightness(1.5);
+        }
+        .stat-prob {
+          color: #ff36ba;
+          font-weight: 700;
         }
         .cancel-btn {
           position: fixed;
