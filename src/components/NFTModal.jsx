@@ -104,7 +104,7 @@ const NFTModal = ({ mission, onClose }) => {
       <div className="nft-modal-content">
         <div className="mission-info-header">
           <h1 className="mission-title-nftmodal">{mission.name}</h1>
-          <div className="mission-description-large" style={{marginTop: '2px', marginBottom: '8px'}}>{mission.description}</div>
+          <div className="mission-description-large" style={{marginTop: '0px', marginBottom: '4px'}}>{mission.description}</div>
           <div className="mission-stats-horizontal">
             <div className="stat stat-large">
               <span className="stat-icon stat-icon-large">
@@ -137,13 +137,12 @@ const NFTModal = ({ mission, onClose }) => {
             </div>
           </div>
         </div>
-        <div className="selected-send-row" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '18px', width: '100%', margin: '8px 0 0 0'}}>
+        <div className="selected-send-row">
           <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           <button 
-            className="send-btn-alt btn-small"
+            className="send-btn-alt btn-small send-btn-left"
             onClick={sendMission}
-            disabled={selectedNFTs.length === 0 || sending}
-            style={{marginLeft: '0'}}>
+            disabled={selectedNFTs.length === 0 || sending}>
             {sending ? 'Sending...' : `Send Bitchs !`}
           </button>
         </div>
@@ -310,8 +309,8 @@ const NFTModal = ({ mission, onClose }) => {
           font-size: 1.2rem;
           color: #bfc2d1;
           text-align: center;
-          margin-bottom: 8px;
-          margin-top: 2px;
+          margin-bottom: 4px;
+          margin-top: 0px;
           padding: 0 24px;
           line-height: 1.4;
           letter-spacing: 0.02em;
@@ -465,9 +464,25 @@ const NFTModal = ({ mission, onClose }) => {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 18px;
+          gap: 0;
           width: 100%;
-          margin: 8px 0 0 0;
+          margin: 0 0 0 0;
+          position: relative;
+          top: -8px;
+          min-height: 48px;
+        }
+        .selected-count-style.selected-count-btn.btn-small {
+          margin: 0 auto;
+          display: block;
+          position: relative;
+          left: 0;
+          right: 0;
+        }
+        .send-btn-left {
+          position: absolute;
+          right: 80px;
+          top: 50%;
+          transform: translateY(-50%);
         }
       `}</style>
     </div>
