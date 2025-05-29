@@ -85,15 +85,14 @@ const MissionModal = ({ onClose }) => {
                   alt={mission.name}
                   className="mission-bg-img"
                 />
-                <div className="mission-gradient-overlay" />
               </div>
               <div className="mission-content">
                 <div className="mission-name neon-title">{mission.name}</div>
                 <div className="mission-description">{mission.description}</div>
-                <div className="mission-stats-row">
-                  <div className="stat"><span className="stat-icon">⏱️</span> {formatDuration(mission.duration_minutes)}</div>
-                  <div className="stat"><span className="stat-icon">🪙</span> {Number(mission.reward_multiplier).toFixed(1)} SEXXY</div>
-                  <div className="stat"><span className="stat-icon">🎁</span> {Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</div>
+                <div className="mission-stats-box">
+                  <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
+                  <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
+                  <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
                 </div>
               </div>
             </div>
@@ -186,18 +185,18 @@ const MissionModal = ({ onClose }) => {
         }
         .mission-card {
           position: relative;
-          background: rgba(10,10,46,0.92);
-          border: 3px solid #ff00ff;
+          background: transparent;
+          border: 4px solid #ff00ff;
           border-radius: 28px;
-          min-width: 260px;
-          max-width: 260px;
-          width: 260px;
-          height: 420px;
+          min-width: 320px;
+          max-width: 320px;
+          width: 320px;
+          height: 540px;
           padding: 0;
           cursor: pointer;
           transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s;
           overflow: hidden;
-          box-shadow: 0 0 32px 4px #ff00ff99, 0 0 0 4px #ff00ff33;
+          box-shadow: 0 0 32px 6px #ff00ffcc, 0 0 0 6px #ff00ff33;
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
@@ -211,7 +210,7 @@ const MissionModal = ({ onClose }) => {
 
         .mission-card.selected {
           border-color: #fff;
-          box-shadow: 0 0 40px 8px #ff00ffcc, 0 0 0 6px #fff2;
+          box-shadow: 0 0 40px 12px #ff00ffcc, 0 0 0 8px #fff2;
         }
 
         .mission-bg-image {
@@ -226,13 +225,7 @@ const MissionModal = ({ onClose }) => {
           height: 100%;
           object-fit: cover;
           display: block;
-          filter: brightness(0.95) contrast(1.08) saturate(1.2);
-        }
-        .mission-gradient-overlay {
-          position: absolute;
-          left: 0; right: 0; bottom: 0; top: 0;
-          background: linear-gradient(180deg, rgba(24,24,40,0.10) 0%, rgba(24,24,40,0.18) 60%, #181828 100%);
-          z-index: 2;
+          filter: brightness(1.08) contrast(1.12) saturate(1.18) blur(0.5px);
         }
         .mission-content {
           position: relative;
@@ -240,49 +233,49 @@ const MissionModal = ({ onClose }) => {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: flex-end;
+          justify-content: flex-start;
           height: 100%;
-          padding: 38px 18px 28px 18px;
+          padding: 44px 18px 32px 18px;
         }
         .mission-name.neon-title {
-          font-size: 32px;
+          font-size: 38px;
           font-weight: bold;
           color: #ff00ff;
-          text-shadow: 0 0 18px #ff00ff, 0 0 2px #fff;
+          text-shadow: 0 0 22px #ff00ff, 0 0 2px #fff;
           margin-bottom: 10px;
           text-align: center;
           letter-spacing: 1.5px;
         }
         .mission-description {
           color: #fff;
-          font-size: 20px;
-          margin-bottom: 32px;
+          font-size: 22px;
+          margin-bottom: 60px;
           text-align: center;
           text-shadow: 0 0 8px #000a;
         }
-        .mission-stats-row {
+        .mission-stats-box {
           width: 100%;
+          background: rgba(10,10,46,0.82);
+          border-radius: 18px;
+          padding: 32px 0 22px 0;
+          box-shadow: 0 0 18px #ff00ff55;
           display: flex;
           flex-direction: column;
-          gap: 16px;
+          gap: 22px;
           align-items: center;
-          background: rgba(10,10,46,0.85);
-          border-radius: 18px;
-          padding: 18px 0 10px 0;
-          box-shadow: 0 0 12px #ff00ff33;
         }
         .stat {
           color: #fff;
-          font-size: 22px;
+          font-size: 26px;
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 16px;
           font-weight: 600;
-          text-shadow: 0 0 8px #ff00ff99, 0 0 2px #fff;
+          text-shadow: 0 0 10px #ff00ff99, 0 0 2px #fff;
         }
         .stat-icon {
-          font-size: 26px;
-          width: 32px;
+          font-size: 32px;
+          width: 38px;
           text-align: center;
         }
 
