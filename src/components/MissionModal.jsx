@@ -207,7 +207,7 @@ const MissionModal = ({ onClose }) => {
         }
         .mission-header-box {
           width: 100%;
-          padding: 18px 0 10px 0;
+          padding: 18px 0 0 0;
           background: linear-gradient(180deg, rgba(10,10,46,0.65) 80%, rgba(10,10,46,0.0) 100%);
           border-radius: 18px 18px 0 0;
           display: flex;
@@ -219,7 +219,7 @@ const MissionModal = ({ onClose }) => {
           font-weight: 700;
           color: #ff6fff;
           text-shadow: 0 0 6px #ff00ff55;
-          margin-bottom: 6px;
+          margin-bottom: 2px;
           text-align: center;
           letter-spacing: 0.5px;
         }
@@ -231,6 +231,25 @@ const MissionModal = ({ onClose }) => {
           text-align: center;
           font-weight: 400;
           text-shadow: none;
+          line-height: 1.3;
+        }
+        .mission-divider {
+          width: 88%;
+          height: 1.5px;
+          background: linear-gradient(90deg, #ff00ff55 0%, #fff0 100%);
+          margin: 0 auto 0 auto;
+          border: none;
+          margin-top: 8px;
+          margin-bottom: 0;
+        }
+        .mission-stats-fade {
+          position: absolute;
+          left: 0; right: 0;
+          bottom: 0;
+          height: 38%;
+          pointer-events: none;
+          background: linear-gradient(0deg, rgba(18,9,42,0.82) 0%, rgba(18,9,42,0.0) 100%);
+          z-index: 2;
         }
         .mission-stats-box {
           width: 100%;
