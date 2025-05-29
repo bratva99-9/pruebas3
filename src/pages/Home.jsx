@@ -5,47 +5,8 @@ import ClaimActionButton from '../components/ClaimActionButton';
 import { UserService } from '../UserService';
 import fondo2 from '../images/fondo2.webp';
 
-// Toast reutilizable (igual que en ClaimActionButton)
-const Toast = ({ message, type, onClose }) => {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 2000);
-    return () => clearTimeout(timer);
-  }, [onClose]);
-  const backgroundColor = {
-    success: '#22c55e',
-    error: '#ef4444',
-    info: '#3b82f6'
-  }[type] || '#555';
-  return (
-    <div style={{
-      position: 'fixed',
-      top: 100,
-      right: 20,
-      zIndex: 9999,
-      padding: '14px 22px',
-      borderRadius: 10,
-      backgroundColor,
-      color: '#fff',
-      boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
-      fontSize: 16,
-      fontWeight: 600,
-      maxWidth: 280
-    }}>{message}</div>
-  );
-};
-
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
-  const [toast, setToast] = useState(null);
-  const history = useHistory();
-
-  useEffect(() => {
-    const msg = sessionStorage.getItem('missionToast');
-    if (msg) {
-      setToast({ type: 'success', message: msg });
-      sessionStorage.removeItem('missionToast');
-    }
-  }, []);
 
   const handleLogout = () => {
     UserService.logout();
@@ -70,40 +31,33 @@ const Home = () => {
       }}
     >
       <h1>Welcome to Night Club App</h1>
+      <div className="home-user-info">
+        <span className="home-user-name">{UserService.getName()}</span>
+        <span className="home-user-balance">{UserService.formatWAXOnly()} WAX</span>
+        <span className="home-user-sexy">{UserService.formatSEXYOnly()} SEXY</span>
+      </div>
       <ClaimActionButton />
-      <button
-        className="mission-btn"
-        onClick={() => setShowMission(true)}
-      >
-        Mission
-      </button>
-      <button
-        className="logout-btn-home"
-        onClick={handleLogout}
-        style={{
-          marginTop: 24,
-          background: "linear-gradient(90deg,#ff36ba 40%,#5325e9 100%)",
-          color: "#fff",
-          fontWeight: "bold",
-          border: "none",
-          borderRadius: 16,
-          padding: "12px 38px",
-          fontSize: 20,
-          boxShadow: "0 1px 10px #ff36ba30",
-          display: "inline-flex",
-          alignItems: "center",
-          cursor: "pointer"
-        }}
-      >
-        Logout
-      </button>
+      <div style={{display: 'flex', justifyContent: 'center', gap: 24, marginTop: 24}}>
+        <button
+          className="btn-square btn-small"
+          onClick={() => setShowMission(true)}
+        >
+          Mission
+        </button>
+        <button
+          className="btn-square btn-small"
+          onClick={handleLogout}
+          style={{padding: '8px 18px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
       {showMission && (
         <MissionModal
           onClose={() => setShowMission(false)}
           onForceCloseAll={() => setShowMission(false)}
         />
       )}
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       <style jsx>{`
         .home h1 {
           font-size: 36px;
@@ -111,23 +65,58 @@ const Home = () => {
           margin-bottom: 40px;
           text-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
         }
-        .mission-btn {
-          background: linear-gradient(45deg, #ff00ff, #00ffff);
-          border: none;
-          border-radius: 15px;
-          padding: 20px 40px;
-          font-size: 24px;
-          font-weight: bold;
-          color: white;
+        .btn-square {
+          font-size: 16px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(0,255,255,0.10);
+          border: 2px solid #00ffff;
+          border-radius: 12px;
+          padding: 10px 32px;
+          box-shadow: none;
+          text-shadow: none;
+          letter-spacing: 0.5px;
           cursor: pointer;
-          transition: all 0.3s ease;
-          text-transform: uppercase;
-          letter-spacing: 2px;
-          box-shadow: 0 5px 15px rgba(255, 0, 255, 0.3);
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
+          margin: 0 8px;
+          white-space: nowrap;
         }
-        .mission-btn:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 10px 25px rgba(255, 0, 255, 0.5);
+        .btn-square:hover {
+          background: rgba(255,0,255,0.13);
+          border-color: #ff00ff;
+          color: #fff;
+          box-shadow: none;
+        }
+        .btn-small {
+          font-size: 16px;
+          padding: 10px 32px;
+          min-width: 120px;
+        }
+        .home-user-info {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 32px;
+          margin-bottom: 18px;
+          font-size: 18px;
+          font-weight: 600;
+          color: #fff;
+          background: rgba(36,0,56,0.10);
+          border: 2px solid #00ffff;
+          border-radius: 14px;
+          padding: 10px 32px;
+          box-shadow: none;
+          text-shadow: none;
+          letter-spacing: 1px;
+        }
+        .home-user-name {
+          color: #ffb9fa;
+        }
+        .home-user-balance {
+          color: #00ffff;
+        }
+        .home-user-sexy {
+          color: #ff36ba;
         }
       `}</style>
     </div>
