@@ -295,10 +295,9 @@ const NFTModal = ({ mission, onClose }) => {
           scrollbar-width: thin;
           justify-content: center;
           width: 100vw;
-          max-width: 1440px;
-          min-width: 1200px;
-          margin-left: auto;
-          margin-right: auto;
+          max-width: 1200px;
+          padding-left: 32px;
+          padding-right: 32px;
         }
         .nft-card {
           min-width: 139px;
@@ -425,11 +424,12 @@ const NFTModal = ({ mission, onClose }) => {
           min-height: 48px;
         }
         .selected-count-style.selected-count-btn.btn-small {
-          margin: 0 auto;
+          margin: 0 auto 0 0;
           display: block;
           position: relative;
-          left: 0;
-          right: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 2;
         }
         .nftmodal-top-buttons-row {
           width: 100vw;
@@ -445,17 +445,9 @@ const NFTModal = ({ mission, onClose }) => {
         .nftmodal-top-spacer {
           flex: 1;
         }
-        .selected-count-style.selected-count-btn.btn-small {
-          margin: 0 auto;
-          display: block;
-          position: relative;
-          left: 0;
-          right: 0;
-          z-index: 2;
-        }
         .send-btn-alt {
-          margin-left: auto;
-          margin-right: 0;
+          margin-left: 32px;
+          margin-right: 24px;
           z-index: 2;
         }
         .nftmodal-bottom-buttons {
