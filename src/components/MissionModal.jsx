@@ -107,28 +107,22 @@ const MissionModal = ({ onClose }) => {
                     <div className="stat">
                       <span className="stat-icon">
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <ellipse cx="11" cy="16" rx="6" ry="3" fill="#bfc2d1" fillOpacity="0.18"/>
-                          <path d="M11 16c-3.3 0-6-1.34-6-3V9c0-1.66 2.7-3 6-3s6 1.34 6 3v4c0 1.66-2.7 3-6 3Z" stroke="#bfc2d1" strokeWidth="1.3" fill="#fff" fillOpacity="0.04"/>
-                          <ellipse cx="11" cy="8.5" rx="3.2" ry="1.2" fill="#bfc2d1" fillOpacity="0.22"/>
-                          <path d="M8.5 10.5c.5 1 4.5 1 5 0" stroke="#bfc2d1" strokeWidth="0.8" strokeLinecap="round"/>
-                          <circle cx="11" cy="13" r="2.1" fill="#fff" fillOpacity="0.18" stroke="#bfc2d1" strokeWidth="0.7"/>
-                          <text x="10.2" y="14.2" fontSize="1.5" fill="#bfc2d1" fontWeight="bold">$</text>
+                          <circle cx="11" cy="11" r="8" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="2"/>
+                          <circle cx="11" cy="11" r="5.2" fill="#ff00ff" fillOpacity="0.12"/>
+                          <text x="7.5" y="15" fontSize="7" fill="#ff00ff" fontWeight="bold">S</text>
                         </svg>
                       </span>
-                      <span className="stat-text">{Number.isInteger(Number(mission.reward_multiplier)) ? Number(mission.reward_multiplier) : Number(mission.reward_multiplier).toFixed(1)} SEXXY</span>
+                      <span className="stat-text">{Number.isInteger(Number(mission.reward_multiplier)) ? Number(mission.reward_multiplier) : Number(mission.reward_multiplier).toFixed(1)} SEXY</span>
                     </div>
                     <div className="stat">
                       <span className="stat-icon">
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="3.5" y="9.5" width="15" height="7" rx="2" fill="#ff00ff" fillOpacity="0.13" stroke="#ff00ff" strokeWidth="1.7"/>
-                          <rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="1.3"/>
-                          <path d="M3.5 12H18.5" stroke="#ff00ff" strokeWidth="1.3"/>
-                          <path d="M11 9.5V17" stroke="#ff00ff" strokeWidth="1.3"/>
-                          <path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
-                          <path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
+                          <rect x="4.5" y="6.5" width="13" height="9" rx="2" fill="#bfc2d1" fillOpacity="0.13" stroke="#bfc2d1" strokeWidth="1.5"/>
+                          <rect x="8" y="9" width="6" height="3" rx="0.8" fill="#bfc2d1" fillOpacity="0.18"/>
+                          <path d="M7 13l2-2 2 2 2-2 2 2" stroke="#bfc2d1" strokeWidth="1.1" strokeLinecap="round"/>
                         </svg>
                       </span>
-                      <span className="stat-text stat-gift-chance">{Number.isInteger(Number(mission.nft_drop_multiplier)) ? Number(mission.nft_drop_multiplier) : Number(mission.nft_drop_multiplier).toFixed(1)}% gift chance</span>
+                      <span className="stat-text stat-gift-chance">{Number.isInteger(Number(mission.nft_drop_multiplier)) ? Number(mission.nft_drop_multiplier) : Number(mission.nft_drop_multiplier).toFixed(1)}% Gift Chance</span>
                     </div>
                   </div>
                 </div>
@@ -225,28 +219,13 @@ const MissionModal = ({ onClose }) => {
           flex-direction: column;
           justify-content: flex-end;
           transition: border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), filter 0.44s cubic-bezier(0.4,0,0.2,1);
-          z-index: 3;
+          z-index: 21;
         }
         .mission-card:hover {
           border: 1.2px solid #ff00ffcc;
           transform: scale(1.08);
-          box-shadow: 0 0 0 0 #ff00ff00, 0 0 18px 4px #ff36ba66, 0 0 0 1.2px #ff00ff99;
+          box-shadow: 0 0 0 0 #ff00ff00, 0 0 32px 12px #ff36ba66, 0 0 0 1.2px #ff00ff99;
           z-index: 4;
-        }
-        .mission-card:hover .mission-bg-gradient {
-          background: linear-gradient(180deg, rgba(255,0,255,0.33) 0%, rgba(255,0,255,0.13) 100%);
-          height: 38%;
-          box-shadow: 0 0 32px 0 #ff00ff44;
-        }
-        .missions-row-scroll.focus-mode .mission-card:not(:hover) {
-          filter: grayscale(1) brightness(0.7);
-          transform: scale(0.93);
-          z-index: 20;
-        }
-        .missions-row-scroll.focus-mode .mission-card:hover {
-          filter: none;
-          transform: scale(1.08);
-          z-index: 30;
         }
         .mission-bg-image {
           position: absolute;
@@ -462,7 +441,7 @@ const MissionModal = ({ onClose }) => {
           opacity: 1;
         }
         .stat-gift-chance {
-          color: #ffd6fa;
+          color: #bfc2d1;
           font-weight: 400;
           opacity: 0.95;
           letter-spacing: 0.01em;
