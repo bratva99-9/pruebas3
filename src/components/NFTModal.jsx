@@ -82,7 +82,9 @@ const NFTModal = ({ mission, onClose }) => {
       setTimeout(() => {
         setShowLoadingOverlay(false);
         if (onClose) onClose();
-        history.push('/home');
+        setTimeout(() => {
+          history.push('/home');
+        }, 100);
       }, 1800);
     } catch (error) {
       console.error('Error sending mission:', error);
@@ -560,7 +562,7 @@ const NFTModal = ({ mission, onClose }) => {
           left: 0;
           width: 100vw;
           height: 100vh;
-          background: rgba(20, 0, 40, 0.82);
+          background: linear-gradient(135deg, rgba(40,40,50,0.82) 0%, rgba(80,80,90,0.72) 100%);
           z-index: 100000;
           display: flex;
           align-items: center;
