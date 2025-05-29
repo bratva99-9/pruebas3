@@ -9,6 +9,7 @@ const NFTModal = ({ mission, onClose }) => {
   const [sending, setSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [displayCount, setDisplayCount] = useState(5);
+  const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
 
   const MAX_SELECTED = 10;
   const history = useHistory();
@@ -71,6 +72,7 @@ const NFTModal = ({ mission, onClose }) => {
     if (selectedNFTs.length === 0) return;
 
     setSending(true);
+    setShowLoadingOverlay(true);
     try {
       const memo = `mission:${mission.id}`;
       console.log('Sending mission with NFTs:', selectedNFTs, 'memo:', memo);
@@ -78,11 +80,14 @@ const NFTModal = ({ mission, onClose }) => {
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3500);
       setTimeout(() => {
-        setTimeout(() => onClose(), 500);
-      }, 1200);
+        setShowLoadingOverlay(false);
+        if (onClose) onClose();
+        history.push('/home');
+      }, 1800);
     } catch (error) {
       console.error('Error sending mission:', error);
       alert('Error: ' + error.message);
+      setShowLoadingOverlay(false);
     } finally {
       setSending(false);
     }
@@ -126,6 +131,14 @@ const NFTModal = ({ mission, onClose }) => {
 
   return (
     <div className="nft-modal-fullscreen">
+      {showLoadingOverlay && (
+        <div className="nftmodal-loading-overlay">
+          <div className="nftmodal-loading-spinner">
+            <div className="spinner"></div>
+            <div className="loading-text">Cargando...</div>
+          </div>
+        </div>
+      )}
       {showSuccess && (
         <div className="success-toast">¡Misión enviada con éxito!</div>
       )}
@@ -277,6 +290,8 @@ const NFTModal = ({ mission, onClose }) => {
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
+          scrollbar-color: #ff00ff #181828;
+          scrollbar-width: thin;
         }
         .nft-modal-content {
           width: 100vw;
@@ -527,6 +542,56 @@ const NFTModal = ({ mission, onClose }) => {
           color: #ff36ba !important;
           background: rgba(255,0,255,0.10) !important;
           box-shadow: 0 0 8px 2px #ff36ba55 !important;
+        }
+        .nft-modal-fullscreen::-webkit-scrollbar {
+          width: 8px;
+          background: #181828;
+        }
+        .nft-modal-fullscreen::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #ff00ff 0%, #00ffff 100%);
+          border-radius: 8px;
+        }
+        .nft-modal-fullscreen::-webkit-scrollbar-track {
+          background: #181828;
+        }
+        .nftmodal-loading-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(20, 0, 40, 0.82);
+          z-index: 100000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        }
+        .nftmodal-loading-spinner {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .spinner {
+          width: 64px;
+          height: 64px;
+          border: 6px solid #ff36ba44;
+          border-top: 6px solid #ff00ff;
+          border-radius: 50%;
+          animation: spin 1.1s linear infinite;
+          margin-bottom: 18px;
+          box-shadow: 0 0 24px 4px #ff36ba55;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+          color: #ff6fff;
+          font-size: 1.5rem;
+          font-weight: 600;
+          letter-spacing: 1.5px;
+          text-shadow: 0 0 12px #ff00ff99;
         }
       `}</style>
     </div>
