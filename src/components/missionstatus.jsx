@@ -10,8 +10,14 @@ const MissionStatus = ({ onClose }) => {
       setLoading(true);
       try {
         const data = await UserService.getUserActiveMissions();
-        setMissions(data || []);
+        if (data && Array.isArray(data)) {
+          setMissions(data);
+        } else {
+          console.error('Invalid missions data format:', data);
+          setMissions([]);
+        }
       } catch (err) {
+        console.error('Error fetching missions:', err);
         setMissions([]);
       }
       setLoading(false);
@@ -150,6 +156,7 @@ const MissionStatus = ({ onClose }) => {
           align-items: center;
           justify-content: flex-start;
           padding-top: 12px;
+          overflow-y: auto;
         }
         .mission-title-nftmodal {
           text-align: center;
@@ -162,6 +169,9 @@ const MissionStatus = ({ onClose }) => {
         }
         .mission-status-section {
           margin-bottom: 32px;
+          width: 100%;
+          max-width: 900px;
+          padding: 0 20px;
         }
         .mission-status-title {
           color: #00ffff;
@@ -257,6 +267,20 @@ const MissionStatus = ({ onClose }) => {
           font-size: 16px;
           padding: 10px 32px;
           min-width: 120px;
+        }
+        .loading {
+          color: #fff;
+          font-size: 1.2rem;
+          margin-top: 40px;
+        }
+        .no-missions {
+          color: #bfc2d1;
+          font-size: 1rem;
+          text-align: center;
+          padding: 20px;
+          background: rgba(36,0,56,0.05);
+          border-radius: 12px;
+          border: 1px solid rgba(0,255,255,0.1);
         }
       `}</style>
     </div>
