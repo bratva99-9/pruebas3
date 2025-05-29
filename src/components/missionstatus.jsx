@@ -69,6 +69,7 @@ const MissionStatus = ({ onClose }) => {
           <div className="loading">Cargando misiones...</div>
         ) : (
           <div className="mission-status-section">
+            <span style={{display: 'none'}}>{now}</span>
             {missions.length === 0 ? (
               <div className="no-missions">No tienes misiones activas</div>
             ) : (
