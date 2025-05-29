@@ -117,6 +117,7 @@ const MissionModal = ({ onClose }) => {
                       <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span>
                     </div>
                   </div>
+                  <div className="mission-card-hover-overlay"></div>
                 </div>
               ))}
             </div>
@@ -421,6 +422,22 @@ const MissionModal = ({ onClose }) => {
           transform: scale(1);
           pointer-events: all;
           z-index: 4;
+        }
+        .mission-card-hover-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 18px;
+          pointer-events: none;
+          background: linear-gradient(180deg, rgba(255,0,255,0.13) 0%, rgba(255,0,255,0.09) 100%);
+          opacity: 0;
+          transition: opacity 0.3s;
+          z-index: 5;
+        }
+        .mission-card:hover .mission-card-hover-overlay {
+          opacity: 1;
         }
       `}</style>
     </div>
