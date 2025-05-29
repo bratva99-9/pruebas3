@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { UserService } from '../UserService';
+import { useNavigate } from 'react-router-dom';
 
 const NFTModal = ({ mission, onClose }) => {
   const [nfts, setNfts] = useState([]);
@@ -10,6 +11,7 @@ const NFTModal = ({ mission, onClose }) => {
   const [displayCount, setDisplayCount] = useState(5);
 
   const MAX_SELECTED = 10;
+  const navigate = useNavigate();
 
   const fetchNFTs = useCallback(async () => {
     try {
@@ -86,6 +88,12 @@ const NFTModal = ({ mission, onClose }) => {
     }
   };
 
+  // Botón Cancelar: cerrar modal y redirigir a home
+  const handleCancel = () => {
+    if (onClose) onClose();
+    navigate('/home');
+  };
+
   // Utilidad para mostrar minutos en horas si es posible
   const formatDuration = (minutes) => {
     if (!minutes) return 'No disponible';
@@ -158,11 +166,11 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         </div>
         {/* Botones superiores */}
-        <div className="nftmodal-top-buttons unified-width compact-width" style={{position: 'relative', justifyContent: 'center', gap: '16px', paddingLeft: 0, paddingRight: 0}}>
+        <div className="nftmodal-top-buttons-row">
+          <div className="nftmodal-top-spacer" />
           <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           <button 
             className="btn-square btn-small send-btn-alt"
-            style={{marginLeft: '24px'}}
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}>
             {sending ? 'Sending...' : `Send Bitchs !`}
@@ -243,7 +251,7 @@ const NFTModal = ({ mission, onClose }) => {
         {/* Botones inferiores */}
         <div className="nftmodal-bottom-buttons unified-width compact-width">
           <button className="btn-square btn-small btn-select-mission" onClick={onClose}>Select Mission</button>
-          <button className="btn-square btn-small btn-cancel-missionmodal" onClick={() => onClose && onClose()}>Cancel</button>
+          <button className="btn-square btn-small btn-cancel-missionmodal" onClick={handleCancel}>Cancel</button>
           {filteredNFTs.length > displayCount && (
             <button className="btn-square btn-small btn-load-more" onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
@@ -422,37 +430,32 @@ const NFTModal = ({ mission, onClose }) => {
           left: 0;
           right: 0;
         }
-        .nftmodal-top-buttons {
+        .nftmodal-top-buttons-row {
           width: 100vw;
           max-width: 1200px;
           margin: 0 auto 18px auto;
           display: flex;
           flex-direction: row;
           align-items: center;
-          justify-content: space-between;
-          padding-left: 260px;
-          padding-right: 260px;
-          gap: 32px;
+          justify-content: center;
+          gap: 0;
           position: relative;
         }
-        .selected-count-style {
-          position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
+        .nftmodal-top-spacer {
+          flex: 1;
+        }
+        .selected-count-style.selected-count-btn.btn-small {
+          margin: 0 auto;
+          display: block;
+          position: relative;
+          left: 0;
+          right: 0;
+          z-index: 2;
         }
         .send-btn-alt {
-          position: absolute;
-          right: 260px;
-          bottom: -60px;
-        }
-        .nftmodal-top-center {
-          flex: 1;
-          display: flex;
-          justify-content: center;
-        }
-        .nftmodal-top-right {
-          display: flex;
-          justify-content: flex-end;
+          margin-left: auto;
+          margin-right: 0;
+          z-index: 2;
         }
         .nftmodal-bottom-buttons {
           position: fixed;
