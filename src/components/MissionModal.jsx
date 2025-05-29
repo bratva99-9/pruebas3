@@ -83,7 +83,9 @@ const MissionModal = ({ onClose }) => {
                 />
               </div>
               <div className="mission-content">
-                <div className="mission-name neon-title">{mission.name}</div>
+                <div className="mission-title-box">
+                  <div className="mission-name neon-title">{mission.name}</div>
+                </div>
                 <div className="mission-description">{mission.description}</div>
                 <div className="mission-stats-box">
                   <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
@@ -152,19 +154,97 @@ const MissionModal = ({ onClose }) => {
           margin-right: auto;
         }
         .mission-card {
-          min-width: 240px;
-          max-width: 240px;
-          width: 240px;
-          height: 410px;
-          border: 2.5px solid #ff00ff;
-          border-radius: 22px;
-          box-shadow: 0 0 18px #ff00ff99;
-          background: rgba(10,10,46,0.92);
+          min-width: 204px;
+          max-width: 204px;
+          width: 204px;
+          height: 348px;
+          border: none;
+          border-radius: 18px;
+          box-shadow: none;
+          background: none;
           overflow: hidden;
           position: relative;
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
+        }
+        .mission-bg-image {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+        }
+        .mission-bg-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          border-radius: 18px;
+        }
+        .mission-content {
+          position: absolute;
+          z-index: 2;
+          left: 0; right: 0; top: 0; bottom: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          align-items: center;
+          height: 100%;
+          width: 100%;
+        }
+        .mission-title-box {
+          width: 100%;
+          padding: 18px 0 0 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .mission-name.neon-title {
+          font-size: 19px;
+          font-weight: bold;
+          color: #ff6fff;
+          text-shadow: 0 0 8px #ff00ff99;
+          margin-bottom: 2px;
+          text-align: center;
+          letter-spacing: 0.5px;
+        }
+        .mission-description {
+          color: #b3b3ff;
+          font-size: 13px;
+          margin-bottom: 0;
+          text-align: center;
+          font-weight: 400;
+          text-shadow: none;
+        }
+        .mission-stats-box {
+          width: 100%;
+          background: rgba(10,10,46,0.15);
+          border-radius: 0 0 18px 18px;
+          padding: 18px 0 10px 0;
+          box-shadow: none;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          align-items: center;
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+        }
+        .stat {
+          color: #fff;
+          font-size: 15px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-weight: 500;
+          text-shadow: 0 0 4px #000a;
+        }
+        .stat-icon {
+          font-size: 18px;
+          width: 22px;
+          text-align: center;
         }
         .cancel-btn {
           position: fixed;
