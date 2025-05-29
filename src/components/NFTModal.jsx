@@ -128,7 +128,14 @@ const NFTModal = ({ mission, onClose }) => {
           <span className="selected-count-style selected-count-btn small-selected">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
         </div>
         <div className="nfts-header-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%', maxWidth: '1200px', margin: '0 auto', marginBottom: 0, marginTop: 0, position: 'relative' }}>
-          {/* Botón Send Bitchs se moverá abajo */}
+          <button 
+            className="send-btn-alt send-btn-align"
+            onClick={sendMission}
+            disabled={selectedNFTs.length === 0 || sending}
+            style={{ position: 'absolute', right: '0', top: '-54px', minWidth: 140, zIndex: 20 }}
+          >
+            {sending ? 'Sending...' : `Send Bitchs !`}
+          </button>
         </div>
         {filteredNFTs.length === 0 ? (
           <div className="no-nfts">
@@ -203,22 +210,16 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         )}
         <div className="nft-modal-actions">
-          <div style={{ display: 'flex', gap: '18px' }}>
-            <button className="cancel-btn" onClick={onClose}>Cancel</button>
-            <button 
-              className="send-btn-alt send-btn-bottom"
-              onClick={sendMission}
-              disabled={selectedNFTs.length === 0 || sending}
-            >
-              {sending ? 'Sending...' : `Send Bitchs !`}
-            </button>
-          </div>
+          <button className="cancel-btn" onClick={onClose}>Cancel</button>
           <div style={{ flex: 1 }} />
           {filteredNFTs.length > displayCount && (
             <button className="load-more-btn neon-load load-more-align small-load" onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
           )}
+          <button className="select-mision-btn" style={{marginLeft: '18px'}} onClick={() => {/* Acción de seleccionar misión */}}>
+            Select Mision
+          </button>
         </div>
       </div>
       <style jsx>{`
@@ -422,23 +423,36 @@ const NFTModal = ({ mission, onClose }) => {
           position: relative;
           right: 0;
         }
-        .send-btn-bottom {
-          min-width: 120px;
-          font-size: 16px;
-          padding: 8px 22px;
+        .send-btn-align {
+          min-width: 140px;
+          font-size: 18px;
+          padding: 10px 32px;
           border-radius: 14px;
-          position: static;
+          position: absolute;
+          right: 0;
+          top: -54px;
         }
-        .small-selected {
-          font-size: 14px;
-          padding: 5px 18px;
-          min-width: 80px;
+        .select-mision-btn {
+          font-size: 18px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(36,0,56,0.10);
+          border: 2.5px solid #00ffff;
+          border-radius: 14px;
+          padding: 10px 32px;
+          box-shadow: none;
+          text-shadow: none;
+          letter-spacing: 1px;
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
+          margin-bottom: 0;
+          min-width: 140px;
         }
-        .small-load {
-          font-size: 14px;
-          padding: 7px 18px;
-          min-width: 80px;
-          right: 0 !important;
+        .select-mision-btn:hover {
+          background: rgba(255,0,255,0.13);
+          border-color: #ff00ff;
+          color: #fff;
+          box-shadow: none;
         }
       `}</style>
     </div>
