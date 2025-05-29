@@ -147,10 +147,20 @@ const MissionModal = ({ onClose }) => {
           scrollbar-width: thin;
           justify-content: center;
           width: 100vw;
+          max-width: 1100px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .mission-card {
+          min-width: 230px;
+          max-width: 230px;
+          width: 230px;
+          height: 370px;
         }
         .cancel-btn {
           margin: 0 auto;
-          margin-top: 24px;
+          margin-top: 32px;
+          margin-bottom: 32px;
           display: block;
           font-size: 28px;
           font-weight: 600;

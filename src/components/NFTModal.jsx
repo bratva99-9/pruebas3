@@ -230,9 +230,33 @@ const NFTModal = ({ mission, onClose }) => {
           justify-content: flex-start;
           padding-top: 48px;
         }
+        .nfts-grid {
+          display: flex;
+          flex-direction: row;
+          gap: 30px;
+          overflow-x: auto;
+          padding-bottom: 18px;
+          margin-bottom: 40px;
+          margin-top: 32px;
+          padding-top: 16px;
+          scrollbar-color: #ff00ff #181828;
+          scrollbar-width: thin;
+          justify-content: center;
+          width: 100vw;
+          max-width: 1100px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .nft-card {
+          min-width: 230px !important;
+          max-width: 230px !important;
+          width: 230px !important;
+          height: 370px !important;
+        }
         .cancel-btn {
           margin: 0 auto;
-          margin-top: 24px;
+          margin-top: 32px;
+          margin-bottom: 32px;
           display: block;
           font-size: 28px;
           font-weight: 600;
