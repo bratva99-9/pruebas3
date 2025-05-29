@@ -168,6 +168,8 @@ const MissionModal = ({ onClose }) => {
           overflow-x: auto;
           padding-bottom: 18px;
           margin-bottom: 40px;
+          margin-top: 32px;
+          padding-top: 16px;
           scrollbar-color: #ff00ff #181828;
           scrollbar-width: thin;
         }
@@ -188,10 +190,10 @@ const MissionModal = ({ onClose }) => {
           background: transparent;
           border: 4px solid #ff00ff;
           border-radius: 28px;
-          min-width: 320px;
-          max-width: 320px;
-          width: 320px;
-          height: 540px;
+          min-width: 250px;
+          max-width: 250px;
+          width: 250px;
+          height: 420px;
           padding: 0;
           cursor: pointer;
           transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s;
