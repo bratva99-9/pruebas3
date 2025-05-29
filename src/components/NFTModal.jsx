@@ -128,7 +128,15 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         </div>
         <div className="nfts-header-row">
-          <button className="back-btn selected-style back-style" onClick={onClose} aria-label="Volver a seleccionar misión">Select Mission</button>
+          <button className="back-btn selected-style back-style" onClick={() => {
+            onClose();
+            setTimeout(() => {
+              const missionModal = document.querySelector('.mission-modal-overlay');
+              if (missionModal) {
+                missionModal.style.display = 'flex';
+              }
+            }, 100);
+          }} aria-label="Volver a seleccionar misión">Select Mission</button>
           <span className="selected-count selected-style center-badge">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           <button 
             className="send-btn selected-style send-style"
@@ -163,10 +171,10 @@ const NFTModal = ({ mission, onClose }) => {
                       borderRadius: '18px',
                       overflow: 'hidden',
                       boxShadow: '0 2px 12px #0004',
-                      minWidth: 80,
-                      maxWidth: 120,
-                      minHeight: 140,
-                      maxHeight: 220,
+                      minWidth: 88,
+                      maxWidth: 132,
+                      minHeight: 154,
+                      maxHeight: 242,
                       background: 'transparent',
                       border: isSelected ? '3px solid #ff00ff' : '2px solid #00ffff',
                       display: 'flex',
@@ -548,6 +556,8 @@ const NFTModal = ({ mission, onClose }) => {
           gap: 10px;
           min-height: 90px;
           position: relative;
+          max-width: 1200px;
+          margin: 0 auto 30px auto;
         }
         .center-badge {
           margin: 0 auto;
