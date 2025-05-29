@@ -82,9 +82,7 @@ const NFTModal = ({ mission, onClose }) => {
       setTimeout(() => {
         setShowLoadingOverlay(false);
         if (onClose) onClose();
-        setTimeout(() => {
-          window.location.href = '/home';
-        }, 100);
+        history.push('/home');
       }, 1800);
     } catch (error) {
       console.error('Error sending mission:', error);
