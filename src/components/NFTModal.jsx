@@ -124,13 +124,19 @@ const NFTModal = ({ mission, onClose }) => {
             </span>
           </div>
         </div>
-        <div className="nfts-header-row">
-          <span className="selected-count selected-style center-badge">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
+        <div className="nfts-header-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%', maxWidth: '1200px', margin: '0 auto', marginBottom: 0, marginTop: 0, position: 'relative' }}>
+          <span className="selected-count selected-style center-badge" style={{marginLeft: 8}}>Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           <button 
             className="send-btn-alt"
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}
-            style={{ marginLeft: 'auto', minWidth: 140 }}
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: '-54px',
+              minWidth: 140,
+              zIndex: 20
+            }}
           >
             {sending ? 'Sending...' : `Send Bitchs !`}
           </button>
@@ -154,10 +160,10 @@ const NFTModal = ({ mission, onClose }) => {
                     className={`nft-card${isSelected ? ' selected' : ''}`}
                     onClick={() => toggleNFTSelection(nft.asset_id)}
                     style={{
-                      minWidth: 163,
-                      maxWidth: 163,
-                      width: 163,
-                      height: 278,
+                      minWidth: 139,
+                      maxWidth: 139,
+                      width: 139,
+                      height: 236,
                       background: 'transparent',
                       border: 'none',
                       borderRadius: 18,
@@ -167,7 +173,7 @@ const NFTModal = ({ mission, onClose }) => {
                       margin: 0,
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
+                      justify-content: 'center',
                       position: 'relative',
                       transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1)',
                       zIndex: isSelected ? 99999 : 21,
@@ -188,15 +194,37 @@ const NFTModal = ({ mission, onClose }) => {
                         borderRadius: 18,
                         margin: 0,
                         padding: 0,
-                        boxShadow: isSelected ? '0 0 14px 3px #ff36ba44, 0 0 0 2.5px #ff00ff99' : 'none',
-                        border: isSelected ? '2.5px solid #ff00ffcc' : 'none',
-                        transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1)',
+                        boxShadow: (isSelected || isSelected) ? '0 0 14px 3px #ff36ba44, 0 0 0 2.5px #ff00ff99' : 'none',
+                        border: (isSelected || isSelected) ? '2.5px solid #ff00ffcc' : 'none',
+                        backgroundColor: (isSelected || isSelected) ? 'hsl(245, 86.70%, 2.90%)' : 'black',
+                        filter: (isSelected || isSelected) ? 'none' : undefined,
+                        transform: (isSelected || isSelected) ? 'scale(1.08)' : undefined,
+                        transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), background 0.3s',
+                        zIndex: (isSelected || isSelected) ? 99999 : 21,
                       }}
                       preload="none"
                       controls={false}
                       onError={e => {
                         console.error('Video error:', e);
                         e.target.style.display = 'none';
+                      }}
+                      onMouseEnter={e => {
+                        if (!isSelected) {
+                          e.target.style.transform = 'scale(1.08)';
+                          e.target.style.boxShadow = '0 0 14px 3px #ff36ba44, 0 0 0 2.5px #ff00ff99';
+                          e.target.style.border = '2.5px solid #ff00ffcc';
+                          e.target.style.backgroundColor = 'hsl(245, 86.70%, 2.90%)';
+                          e.target.style.zIndex = 99999;
+                        }
+                      }}
+                      onMouseLeave={e => {
+                        if (!isSelected) {
+                          e.target.style.transform = '';
+                          e.target.style.boxShadow = 'none';
+                          e.target.style.border = 'none';
+                          e.target.style.backgroundColor = 'black';
+                          e.target.style.zIndex = 21;
+                        }
                       }}
                     />
                   </div>
@@ -261,10 +289,10 @@ const NFTModal = ({ mission, onClose }) => {
           margin-right: auto;
         }
         .nft-card {
-          min-width: 163px;
-          max-width: 163px;
-          width: 163px;
-          height: 278px;
+          min-width: 139px;
+          max-width: 139px;
+          width: 139px;
+          height: 236px;
           border: none;
           border-radius: 18px;
           box-shadow: none;
