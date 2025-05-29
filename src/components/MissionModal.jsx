@@ -99,25 +99,24 @@ const MissionModal = ({ onClose }) => {
                   <div className="mission-stats-bottom">
                     <div className="stat">
                       <span className="stat-icon">
-                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8.5" stroke="#e0e0e0" strokeWidth="1.5"/><path d="M10 5.5V10L13 12" stroke="#e0e0e0" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8.5" stroke="#bfc2d1" strokeWidth="1.5"/><path d="M10 5.5V10L13 12" stroke="#bfc2d1" strokeWidth="1.5" strokeLinecap="round"/></svg>
                       </span>
-                      <span>{formatDuration(mission.duration_minutes)}</span>
+                      <span className="stat-text">{formatDuration(mission.duration_minutes)}</span>
                     </div>
                     <div className="stat-separator"></div>
                     <div className="stat">
                       <span className="stat-icon">
-                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8.5" stroke="#e0e0e0" strokeWidth="1.5"/><circle cx="10" cy="10" r="4" fill="#e0e0e0" fillOpacity="0.18"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="10" cy="15" rx="6" ry="3" fill="#bfc2d1" fillOpacity="0.18"/><path d="M10 15c-3.3 0-6-1.34-6-3V8c0-1.66 2.7-3 6-3s6 1.34 6 3v4c0 1.66-2.7 3-6 3Z" stroke="#bfc2d1" strokeWidth="1.2"/><path d="M10 5V3.5" stroke="#bfc2d1" strokeWidth="1.2" strokeLinecap="round"/></svg>
                       </span>
-                      <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span>
+                      <span className="stat-text">{Number.isInteger(Number(mission.reward_multiplier)) ? Number(mission.reward_multiplier) : Number(mission.reward_multiplier).toFixed(1)} SEXXY</span>
                     </div>
                     <div className="stat">
                       <span className="stat-icon">
-                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="8" width="14" height="8" rx="2" stroke="#e0e0e0" strokeWidth="1.5"/><path d="M3 10H17" stroke="#e0e0e0" strokeWidth="1.2"/><rect x="8.25" y="3.5" width="3.5" height="4.5" rx="1.5" stroke="#e0e0e0" strokeWidth="1.2"/><path d="M10 8V17" stroke="#e0e0e0" strokeWidth="1.2"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="8" width="14" height="8" rx="2" stroke="#ff36ba" strokeWidth="1.5"/><path d="M3 10H17" stroke="#ff36ba" strokeWidth="1.2"/><rect x="8.25" y="3.5" width="3.5" height="4.5" rx="1.5" stroke="#ff36ba" strokeWidth="1.2"/><path d="M10 8V17" stroke="#ff36ba" strokeWidth="1.2"/></svg>
                       </span>
-                      <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span>
+                      <span className="stat-text">{Number.isInteger(Number(mission.nft_drop_multiplier)) ? Number(mission.nft_drop_multiplier) : Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span>
                     </div>
                   </div>
-                  <div className="mission-card-hover-overlay"></div>
                 </div>
               ))}
             </div>
@@ -316,14 +315,23 @@ const MissionModal = ({ onClose }) => {
           z-index: 15;
         }
         .stat {
-          color: #e0e0e0;
+          color: #bfc2d1;
           font-size: 15px;
           display: flex;
           align-items: center;
           gap: 8px;
-          font-weight: 500;
-          text-shadow: 0 0 2px #000a;
+          font-weight: 400;
+          text-shadow: none;
           margin-bottom: 4px;
+          letter-spacing: 0.01em;
+        }
+        .stat-text {
+          color: #bfc2d1;
+          font-size: 15px;
+          font-weight: 400;
+          letter-spacing: 0.01em;
+          text-shadow: none;
+          opacity: 0.85;
         }
         .stat-icon {
           font-size: 18px;
