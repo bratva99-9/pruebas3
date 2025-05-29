@@ -1,9 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { UserService } from '../UserService';
 
+function formatReward(reward) {
+  if (!reward) return '0';
+  const [num] = reward.split(' ');
+  return Number(num) % 1 === 0 ? parseInt(num) : Number(num);
+}
+
+function formatDropChance(chance) {
+  if (!chance) return '0%';
+  return `${parseInt(Number(chance))}%`;
+}
+
+function getTimeLeft(endTime) {
+  const now = Math.floor(Date.now() / 1000);
+  const diff = endTime - now;
+  if (diff <= 0) return '¡Completada!';
+  const h = Math.floor(diff / 3600);
+  const m = Math.floor((diff % 3600) / 60);
+  const s = diff % 60;
+  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+}
+
 const MissionStatus = ({ onClose }) => {
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [now, setNow] = useState(Math.floor(Date.now() / 1000));
 
   useEffect(() => {
     const fetchMissions = async () => {
@@ -29,6 +51,14 @@ const MissionStatus = ({ onClose }) => {
     fetchMissions();
   }, []);
 
+  // Actualizar cada segundo para la cuenta regresiva
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(Math.floor(Date.now() / 1000));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Puedes separar en completadas/pendientes si tienes ese campo, si no, muestra todas
 
   return (
@@ -43,19 +73,11 @@ const MissionStatus = ({ onClose }) => {
               <div className="no-missions">No tienes misiones activas</div>
             ) : (
               missions.map(mission => (
-                <div key={mission.id} className="mission-status-card">
-                  <div className="mission-status-header">
-                    <span className="mission-status-name">ID: {mission.id}</span>
-                    <span className="mission-status-desc">Usuario: {mission.user}</span>
-                  </div>
+                <div key={mission.asset_id} className="mission-status-card">
                   <div className="mission-status-fields">
-                    <div>Asset ID: {mission.asset_id}</div>
-                    <div>Template ID: {mission.template_id}</div>
-                    <div>Mission Type ID: {mission.mission_type_id}</div>
-                    <div>Start Time: {mission.start_time}</div>
-                    <div>End Time: {mission.end_time}</div>
-                    <div>Reward: {mission.reward}</div>
-                    <div>NFT Drop Chance: {mission.nft_drop_chance}</div>
+                    <div><b>Reward:</b> {formatReward(mission.reward)} SEXY</div>
+                    <div><b>NFT Drop Chance:</b> {formatDropChance(mission.nft_drop_chance)}</div>
+                    <div><b>Tiempo restante:</b> {getTimeLeft(Number(mission.end_time))}</div>
                   </div>
                 </div>
               ))
@@ -115,28 +137,13 @@ const MissionStatus = ({ onClose }) => {
           margin-bottom: 18px;
           box-shadow: 0 2px 12px #ff36ba22;
         }
-        .mission-status-header {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          margin-bottom: 8px;
-        }
-        .mission-status-name {
-          font-size: 1.2rem;
-          font-weight: 700;
-          color: #ffb9fa;
-        }
-        .mission-status-desc {
-          font-size: 1rem;
-          color: #bfc2d1;
-        }
         .mission-status-fields {
           color: #bfc2d1;
-          font-size: 1rem;
+          font-size: 1.1rem;
           margin-top: 8px;
           display: flex;
           flex-direction: column;
-          gap: 2px;
+          gap: 8px;
         }
         .nftmodal-bottom-buttons {
           position: fixed;
