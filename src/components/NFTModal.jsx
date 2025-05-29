@@ -254,12 +254,12 @@ const NFTModal = ({ mission, onClose }) => {
         {/* Botones inferiores */}
         <div className="nftmodal-bottom-buttons unified-width compact-width fixed-bottom-btns">
           <button className="btn-square btn-small btn-select-mission" onClick={onClose}>Select Mission</button>
-          <button className="btn-square btn-small btn-cancel-missionmodal" onClick={handleCancel}>Cancel</button>
-          {filteredNFTs.length > displayCount && (
+          {filteredNFTs.length > displayCount ? (
             <button className="btn-square btn-small btn-load-more" onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
-          )}
+          ) : <div style={{width: 160}}></div>}
+          <button className="btn-square btn-small btn-cancel-missionmodal" onClick={handleCancel}>Cancel</button>
         </div>
       </div>
       <style jsx>{`
@@ -293,7 +293,7 @@ const NFTModal = ({ mission, onClose }) => {
           padding-bottom: 18px;
           margin-bottom: 0;
           margin-top: 32px;
-          padding-top: 16px;
+          padding-top: 48px;
           scrollbar-color: #ff00ff #181828;
           scrollbar-width: thin;
           justify-content: center;
