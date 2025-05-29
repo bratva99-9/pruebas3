@@ -104,7 +104,7 @@ const NFTModal = ({ mission, onClose }) => {
       <div className="nft-modal-content">
         <div className="mission-info-header">
           <h1 className="mission-title-nftmodal">{mission.name}</h1>
-          <div className="mission-description-large">{mission.description}</div>
+          <div className="mission-description-large" style={{marginTop: '2px', marginBottom: '8px'}}>{mission.description}</div>
           <div className="mission-stats-horizontal">
             <div className="stat stat-large">
               <span className="stat-icon stat-icon-large">
@@ -137,16 +137,13 @@ const NFTModal = ({ mission, onClose }) => {
             </div>
           </div>
         </div>
-        <div className="selected-count-badge" style={{ display: 'flex', justifyContent: 'center', margin: '18px 0 0 0', width: '100%' }}>
+        <div className="selected-send-row" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '18px', width: '100%', margin: '8px 0 0 0'}}>
           <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
-        </div>
-        <div className="nfts-header-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%', maxWidth: '1200px', margin: '0 auto', marginBottom: 0, marginTop: 0, position: 'relative' }}>
           <button 
-            className="send-btn-alt send-btn-align btn-small"
+            className="send-btn-alt btn-small"
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}
-            style={{ position: 'absolute', right: 'calc(50vw - 600px + 36px)', top: '-54px', zIndex: 20 }}
-          >
+            style={{marginLeft: '0'}}>
             {sending ? 'Sending...' : `Send Bitchs !`}
           </button>
         </div>
@@ -222,8 +219,8 @@ const NFTModal = ({ mission, onClose }) => {
             })}
           </div>
         )}
-        <div className="nft-modal-actions" style={{ display: 'flex', width: '100vw', maxWidth: '1200px', justifyContent: 'space-between', alignItems: 'center', position: 'fixed', left: 0, bottom: 38, padding: '0 32px', zIndex: 10001 }}>
-          <button className="cancel-btn btn-small" style={{position: 'absolute', right: 'calc(50vw - 600px + 36px)', bottom: 38}} onClick={onClose}>Select Mission</button>
+        <div className="nft-modal-actions" style={{ display: 'flex', width: '100vw', maxWidth: '1200px', justifyContent: 'flex-end', alignItems: 'center', position: 'fixed', left: 0, bottom: 38, padding: '0 32px', zIndex: 10001 }}>
+          <button className="cancel-btn btn-small btn-xsmall" style={{position: 'absolute', right: 'calc(50vw - 600px + 36px)', bottom: 38, padding: '6px 18px', fontSize: '13px'}} onClick={onClose}>Select Mission</button>
           {filteredNFTs.length > displayCount && (
             <button className="load-more-btn neon-load load-more-align btn-small" style={{position: 'absolute', right: 'calc(50vw - 600px + 36px)', bottom: 38, marginRight: '120px'}} onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
@@ -313,7 +310,8 @@ const NFTModal = ({ mission, onClose }) => {
           font-size: 1.2rem;
           color: #bfc2d1;
           text-align: center;
-          margin-bottom: 12px;
+          margin-bottom: 8px;
+          margin-top: 2px;
           padding: 0 24px;
           line-height: 1.4;
           letter-spacing: 0.02em;
@@ -342,12 +340,6 @@ const NFTModal = ({ mission, onClose }) => {
           color: #fff;
           letter-spacing: 0.03em;
           text-shadow: 0 0 8px #ff00ff44;
-        }
-        .selected-count-badge {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          margin-bottom: 0;
         }
         .selected-count-style {
           font-size: 18px;
@@ -462,6 +454,20 @@ const NFTModal = ({ mission, onClose }) => {
           padding: 7px 18px !important;
           min-width: 80px !important;
           border-radius: 14px !important;
+        }
+        .btn-xsmall {
+          font-size: 13px !important;
+          padding: 6px 18px !important;
+          min-width: 70px !important;
+          border-radius: 12px !important;
+        }
+        .selected-send-row {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 18px;
+          width: 100%;
+          margin: 8px 0 0 0;
         }
       `}</style>
     </div>
