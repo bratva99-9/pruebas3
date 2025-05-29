@@ -9,7 +9,6 @@ const MissionStatus = ({ onClose }) => {
     const fetchMissions = async () => {
       setLoading(true);
       try {
-        // Obtener el usuario actual
         const currentUser = UserService.getName();
         if (!currentUser) {
           console.error('No hay usuario logueado');
@@ -17,30 +16,9 @@ const MissionStatus = ({ onClose }) => {
           setLoading(false);
           return;
         }
-
-        // Obtener las misiones activas del usuario
-        const activeMissions = await UserService.getUserActiveMissions();
-        console.log('Misiones activas:', activeMissions);
-
-        // Obtener los tipos de misiones para tener la información completa
-        const missionTypes = await UserService.getMissionTypes();
-        console.log('Tipos de misiones:', missionTypes);
-
-        // Combinar la información de las misiones activas con los tipos de misiones
-        const enrichedMissions = activeMissions.map(activeMission => {
-          const missionType = missionTypes.find(type => type.id === activeMission.mission_id);
-          return {
-            ...activeMission,
-            name: missionType?.name || 'Unknown Mission',
-            description: missionType?.description || 'No description available',
-            duration_minutes: missionType?.duration_minutes,
-            reward_multiplier: missionType?.reward_multiplier,
-            nft_drop_multiplier: missionType?.nft_drop_multiplier,
-            completed: activeMission.completed || false
-          };
-        });
-
-        setMissions(enrichedMissions);
+        // Obtener las misiones del usuario directamente de la tabla 'missions'
+        const userMissions = await UserService.getUserMissions();
+        setMissions(userMissions);
       } catch (err) {
         console.error('Error al obtener misiones:', err);
         setMissions([]);
@@ -50,108 +28,38 @@ const MissionStatus = ({ onClose }) => {
     fetchMissions();
   }, []);
 
-  const pendingMissions = missions.filter(m => !m.completed);
-  const completedMissions = missions.filter(m => m.completed);
-
-  const renderNFTCard = (nft) => (
-    <div
-      key={nft.asset_id}
-      className="nft-card"
-      style={{
-        minWidth: 139,
-        maxWidth: 139,
-        width: 139,
-        height: 236,
-        background: 'transparent',
-        border: 'none',
-        borderRadius: 18,
-        boxShadow: 'none',
-        overflow: 'hidden',
-        padding: 0,
-        margin: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        zIndex: 21,
-      }}
-    >
-      <video
-        src={nft.data && nft.data.video ? (nft.data.video.startsWith('Qm') ? `https://ipfs.io/ipfs/${nft.data.video}` : nft.data.video) : ''}
-        loop
-        muted
-        playsInline
-        autoPlay
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          display: 'block',
-          background: 'black',
-          borderRadius: 18,
-          margin: 0,
-          padding: 0,
-          boxShadow: 'none',
-          border: 'none',
-          backgroundColor: 'black',
-          filter: 'none',
-          transform: 'none',
-          zIndex: 21,
-        }}
-        preload="none"
-        controls={false}
-        onError={e => {
-          e.target.style.display = 'none';
-        }}
-      />
-    </div>
-  );
+  // Puedes separar en completadas/pendientes si tienes ese campo, si no, muestra todas
 
   return (
     <div className="nft-modal-fullscreen">
       <div className="nft-modal-content">
-        <h1 className="mission-title-nftmodal">Mission Status</h1>
+        <h1 className="mission-title-nftmodal">Misiones activas</h1>
         {loading ? (
-          <div className="loading">Loading missions...</div>
+          <div className="loading">Cargando misiones...</div>
         ) : (
-          <>
-            <div className="mission-status-section">
-              <h2 className="mission-status-title">Pending Missions</h2>
-              {pendingMissions.length === 0 ? (
-                <div className="no-missions">No pending missions</div>
-              ) : (
-                pendingMissions.map(mission => (
-                  <div key={mission.id} className="mission-status-card">
-                    <div className="mission-status-header">
-                      <span className="mission-status-name">{mission.name}</span>
-                      <span className="mission-status-desc">{mission.description}</span>
-                    </div>
-                    <div className="nfts-grid unified-width compact-width" style={{gap: 18, marginTop: 12}}>
-                      {mission.nfts && mission.nfts.length > 0 ? mission.nfts.map(renderNFTCard) : <span>No NFTs</span>}
-                    </div>
+          <div className="mission-status-section">
+            {missions.length === 0 ? (
+              <div className="no-missions">No tienes misiones activas</div>
+            ) : (
+              missions.map(mission => (
+                <div key={mission.id} className="mission-status-card">
+                  <div className="mission-status-header">
+                    <span className="mission-status-name">ID: {mission.id}</span>
+                    <span className="mission-status-desc">Usuario: {mission.user}</span>
                   </div>
-                ))
-              )}
-            </div>
-            <div className="mission-status-section">
-              <h2 className="mission-status-title">Completed Missions</h2>
-              {completedMissions.length === 0 ? (
-                <div className="no-missions">No completed missions</div>
-              ) : (
-                completedMissions.map(mission => (
-                  <div key={mission.id} className="mission-status-card completed">
-                    <div className="mission-status-header">
-                      <span className="mission-status-name">{mission.name}</span>
-                      <span className="mission-status-desc">{mission.description}</span>
-                    </div>
-                    <div className="nfts-grid unified-width compact-width" style={{gap: 18, marginTop: 12}}>
-                      {mission.nfts && mission.nfts.length > 0 ? mission.nfts.map(renderNFTCard) : <span>No NFTs</span>}
-                    </div>
+                  <div className="mission-status-fields">
+                    <div>Asset ID: {mission.asset_id}</div>
+                    <div>Template ID: {mission.template_id}</div>
+                    <div>Mission Type ID: {mission.mission_type_id}</div>
+                    <div>Start Time: {mission.start_time}</div>
+                    <div>End Time: {mission.end_time}</div>
+                    <div>Reward: {mission.reward}</div>
+                    <div>NFT Drop Chance: {mission.nft_drop_chance}</div>
                   </div>
-                ))
-              )}
-            </div>
-          </>
+                </div>
+              ))
+            )}
+          </div>
         )}
         <div className="nftmodal-bottom-buttons unified-width compact-width fixed-bottom-btns">
           <button className="btn-square btn-small" onClick={onClose}>Back</button>
@@ -198,12 +106,6 @@ const MissionStatus = ({ onClose }) => {
           max-width: 900px;
           padding: 0 20px;
         }
-        .mission-status-title {
-          color: #00ffff;
-          font-size: 1.5rem;
-          margin-bottom: 8px;
-          margin-top: 18px;
-        }
         .mission-status-card {
           background: rgba(36,0,56,0.10);
           border: 2px solid #00ffff;
@@ -211,10 +113,6 @@ const MissionStatus = ({ onClose }) => {
           padding: 18px 24px;
           margin-bottom: 18px;
           box-shadow: 0 2px 12px #ff36ba22;
-        }
-        .mission-status-card.completed {
-          border: 2px solid #ff36ba;
-          background: rgba(255,0,255,0.07);
         }
         .mission-status-header {
           display: flex;
@@ -231,24 +129,13 @@ const MissionStatus = ({ onClose }) => {
           font-size: 1rem;
           color: #bfc2d1;
         }
-        .nft-card {
-          min-width: 139px;
-          max-width: 139px;
-          width: 139px;
-          height: 236px;
-          border: 1.2px solid #ff36ba99;
-          border-radius: 18px;
-          box-shadow: 0 0 14px 3px #ff36ba33, 0 0 0 1.2px #ff00ff33;
-          background: transparent;
-          overflow: hidden;
-          padding: 0;
-          margin: 0;
+        .mission-status-fields {
+          color: #bfc2d1;
+          font-size: 1rem;
+          margin-top: 8px;
           display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          transition: box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1);
-          z-index: 21;
+          flex-direction: column;
+          gap: 2px;
         }
         .nftmodal-bottom-buttons {
           position: fixed;

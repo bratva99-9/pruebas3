@@ -278,6 +278,23 @@ export class User {
     }
     return User.instance;
   }
+
+  // Obtener misiones del usuario desde la tabla 'missions'
+  async getUserMissions() {
+    if (!this.authName) return [];
+    try {
+      const response = await this.rpc.get_table_rows({
+        code: 'nightclubapp',
+        scope: this.authName,
+        table: 'missions',
+        limit: 100
+      });
+      return response.rows || [];
+    } catch (err) {
+      console.error("Error al obtener misiones:", err);
+      return [];
+    }
+  }
 }
 
 // Exporta la instancia única
