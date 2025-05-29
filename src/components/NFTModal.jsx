@@ -166,17 +166,15 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         </div>
         {/* Botones superiores */}
-        <div className="nftmodal-top-buttons-flex">
-          <div style={{flex: 1}}></div>
+        <div className="nftmodal-top-buttons-bar compact-width">
+          <button className="btn-square btn-small btn-status-mission">Mission Status</button>
           <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
-          <div style={{flex: 1, display: 'flex', justifyContent: 'flex-end'}}>
-            <button 
-              className="btn-square btn-small send-btn-alt"
-              onClick={sendMission}
-              disabled={selectedNFTs.length === 0 || sending}>
-              {sending ? 'Sending...' : `Send Bitchs !`}
-            </button>
-          </div>
+          <button 
+            className="btn-square btn-small send-btn-alt"
+            onClick={sendMission}
+            disabled={selectedNFTs.length === 0 || sending}>
+            {sending ? 'Sending...' : `Send Bitchs !`}
+          </button>
         </div>
         {filteredNFTs.length === 0 ? (
           <div className="no-nfts unified-width compact-width">
@@ -433,24 +431,20 @@ const NFTModal = ({ mission, onClose }) => {
           transform: translateX(-50%);
           z-index: 2;
         }
-        .nftmodal-top-buttons-flex {
-          width: 100vw;
-          max-width: 1200px;
-          margin: 0 auto 18px auto;
+        .nftmodal-top-buttons-bar {
+          width: 900px !important;
+          max-width: 900px !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
           display: flex;
           flex-direction: row;
           align-items: center;
-          justify-content: center;
-          gap: 0;
-          position: relative;
+          justify-content: space-between;
+          gap: 32px;
+          margin-bottom: 8px;
         }
-        .nftmodal-top-spacer {
-          flex: 1;
-        }
-        .send-btn-alt {
-          margin-left: 32px;
-          margin-right: 24px;
-          z-index: 2;
+        .btn-status-mission {
+          min-width: 140px;
         }
         .nftmodal-bottom-buttons {
           position: fixed;
@@ -486,10 +480,6 @@ const NFTModal = ({ mission, onClose }) => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
-        .nftmodal-top-buttons {
-          gap: 32px;
-          margin-bottom: 8px;
         }
         .nfts-grid.unified-width.compact-width {
           gap: 10px;
