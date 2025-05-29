@@ -114,7 +114,7 @@ const MissionModal = ({ onClose }) => {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-start;
         }
         .mission-modal-content {
           width: 100vw;
@@ -137,31 +137,41 @@ const MissionModal = ({ onClose }) => {
         .missions-row-scroll {
           display: flex;
           flex-direction: row;
-          gap: 30px;
+          gap: 36px;
           overflow-x: auto;
           padding-bottom: 18px;
-          margin-bottom: 40px;
+          margin-bottom: 0;
           margin-top: 32px;
           padding-top: 16px;
           scrollbar-color: #ff00ff #181828;
           scrollbar-width: thin;
           justify-content: center;
           width: 100vw;
-          max-width: 1100px;
+          max-width: 1200px;
           margin-left: auto;
           margin-right: auto;
         }
         .mission-card {
-          min-width: 230px;
-          max-width: 230px;
-          width: 230px;
-          height: 370px;
+          min-width: 240px;
+          max-width: 240px;
+          width: 240px;
+          height: 410px;
+          border: 2.5px solid #ff00ff;
+          border-radius: 22px;
+          box-shadow: 0 0 18px #ff00ff99;
+          background: rgba(10,10,46,0.92);
+          overflow: hidden;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
         }
         .cancel-btn {
-          margin: 0 auto;
-          margin-top: 32px;
-          margin-bottom: 32px;
-          display: block;
+          position: fixed;
+          left: 50%;
+          bottom: 38px;
+          transform: translateX(-50%);
+          z-index: 10001;
           font-size: 28px;
           font-weight: 600;
           color: #fff;
