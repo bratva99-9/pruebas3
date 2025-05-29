@@ -164,6 +164,7 @@ const NFTModal = ({ mission, onClose }) => {
               <span className="stat-text stat-text-large stat-gift-chance">{mission.nft_drop_multiplier !== undefined ? formatNumber(mission.nft_drop_multiplier, '% Gift Chance') : 'No disponible'}</span>
             </div>
           </div>
+          <div className="nftmodal-divider" />
         </div>
         {/* Botones superiores */}
         <div className="nftmodal-top-buttons-bar compact-width">
@@ -251,7 +252,7 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         )}
         {/* Botones inferiores */}
-        <div className="nftmodal-bottom-buttons unified-width compact-width">
+        <div className="nftmodal-bottom-buttons unified-width compact-width fixed-bottom-btns">
           <button className="btn-square btn-small btn-select-mission" onClick={onClose}>Select Mission</button>
           <button className="btn-square btn-small btn-cancel-missionmodal" onClick={handleCancel}>Cancel</button>
           {filteredNFTs.length > displayCount && (
@@ -260,7 +261,6 @@ const NFTModal = ({ mission, onClose }) => {
             </button>
           )}
         </div>
-        <div className="nftmodal-divider" />
       </div>
       <style jsx>{`
         .nft-modal-fullscreen {
@@ -288,7 +288,7 @@ const NFTModal = ({ mission, onClose }) => {
         .nfts-grid {
           display: flex;
           flex-direction: row;
-          gap: 36px;
+          gap: 36px !important;
           overflow-x: auto;
           padding-bottom: 18px;
           margin-bottom: 0;
@@ -309,7 +309,7 @@ const NFTModal = ({ mission, onClose }) => {
           max-width: 139px;
           width: 139px;
           height: 236px;
-          border: none;
+          border: 1.2px solid #ff36ba55;
           border-radius: 18px;
           box-shadow: none;
           background: transparent;
@@ -317,22 +317,14 @@ const NFTModal = ({ mission, onClose }) => {
           padding: 0;
           margin: 0;
           display: flex;
-          alignItems: center;
-          justifyContent: center;
+          align-items: center;
+          justify-content: center;
           position: relative;
           transition: box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1);
           z-index: 21;
         }
         .nft-card.selected {
-          z-index: 99999;
-          box-shadow: 0 0 14px 3px #ff36ba44 !important;
-          background: hsl(245, 86.70%, 2.90%) !important;
           border: 2px solid #ff36ba;
-          transition: box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), background 0.44s cubic-bezier(0.4,0,0.2,1), border 0.44s cubic-bezier(0.4,0,0.2,1);
-        }
-        .nft-card.selected video {
-          border: none !important;
-          box-shadow: 0 0 18px 4px #ff36ba66 !important;
         }
         .nft-card:hover {
           box-shadow: 0 0 20px 0px rgba(255, 0, 255, 0.4);
@@ -502,12 +494,28 @@ const NFTModal = ({ mission, onClose }) => {
           margin-left: auto !important;
           margin-right: auto !important;
         }
+        .fixed-bottom-btns {
+          position: fixed;
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: 32px;
+          gap: 32px;
+          z-index: 10001;
+          width: 900px !important;
+          max-width: 900px !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+        }
         .nftmodal-divider {
           width: 900px;
           max-width: 900px;
           height: 2px;
           background: linear-gradient(90deg, rgba(255,0,255,0.12) 0%, rgba(0,255,255,0.12) 100%);
-          margin: 18px auto 0 auto;
+          margin: 18px auto 18px auto;
           border-radius: 2px;
         }
       `}</style>
