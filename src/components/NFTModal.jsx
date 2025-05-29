@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { UserService } from '../UserService';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const NFTModal = ({ mission, onClose }) => {
   const [nfts, setNfts] = useState([]);
@@ -11,7 +11,7 @@ const NFTModal = ({ mission, onClose }) => {
   const [displayCount, setDisplayCount] = useState(5);
 
   const MAX_SELECTED = 10;
-  const navigate = useNavigate();
+  const history = useHistory();
 
   const fetchNFTs = useCallback(async () => {
     try {
@@ -91,7 +91,7 @@ const NFTModal = ({ mission, onClose }) => {
   // Botón Cancelar: cerrar modal y redirigir a home
   const handleCancel = () => {
     if (onClose) onClose();
-    navigate('/home');
+    history.push('/home');
   };
 
   // Utilidad para mostrar minutos en horas si es posible
