@@ -107,9 +107,8 @@ const MissionModal = ({ onClose }) => {
                     <div className="stat">
                       <span className="stat-icon">
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <circle cx="11" cy="11" r="8" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="2"/>
-                          <circle cx="11" cy="11" r="5.2" fill="#ff00ff" fillOpacity="0.12"/>
-                          <text x="7.5" y="15" fontSize="7" fill="#ff00ff" fontWeight="bold">S</text>
+                          <circle cx="11" cy="11" r="9" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="2"/>
+                          <text x="7.2" y="15.2" fontSize="9" fill="#ff00ff" fontWeight="bold">$</text>
                         </svg>
                       </span>
                       <span className="stat-text">{Number.isInteger(Number(mission.reward_multiplier)) ? Number(mission.reward_multiplier) : Number(mission.reward_multiplier).toFixed(1)} SEXY</span>
@@ -206,7 +205,7 @@ const MissionModal = ({ onClose }) => {
           opacity: 1;
         }
         .missions-row-scroll.focus-mode .mission-card:not(:hover) {
-          filter: grayscale(0.5) brightness(0.88);
+          filter: grayscale(1);
           transform: scale(0.93);
           z-index: 21;
         }
@@ -228,10 +227,9 @@ const MissionModal = ({ onClose }) => {
           z-index: 21;
         }
         .mission-card:hover {
-          border: 1.2px solid #ff00ffcc;
+          filter: none !important;
           transform: scale(1.08);
-          box-shadow: 0 0 0 0 #ff00ff00, 0 0 32px 12px #ff36ba66, 0 0 0 1.2px #ff00ff99;
-          z-index: 4;
+          z-index: 99999;
         }
         .mission-bg-image {
           position: absolute;
