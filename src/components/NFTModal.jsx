@@ -8,7 +8,6 @@ const NFTModal = ({ mission, onClose }) => {
   const [sending, setSending] = useState(false);
   const [displayCount, setDisplayCount] = useState(5);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
 
   const MAX_SELECTED = 10;
 
@@ -77,7 +76,6 @@ const NFTModal = ({ mission, onClose }) => {
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3500);
       setTimeout(() => {
-        setIsClosing(true);
         setTimeout(() => onClose(), 500);
       }, 1200);
     } catch (error) {
