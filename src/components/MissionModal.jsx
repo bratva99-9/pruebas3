@@ -112,9 +112,14 @@ const MissionModal = ({ onClose }) => {
                     </div>
                     <div className="stat">
                       <span className="stat-icon">
-                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="8" width="14" height="8" rx="2" stroke="#ff36ba" strokeWidth="1.5"/><path d="M3 10H17" stroke="#ff36ba" strokeWidth="1.2"/><rect x="8.25" y="3.5" width="3.5" height="4.5" rx="1.5" stroke="#ff36ba" strokeWidth="1.2"/><path d="M10 8V17" stroke="#ff36ba" strokeWidth="1.2"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect x="3" y="8.5" width="14" height="7.5" rx="2" fill="#ffd6fa" fillOpacity="0.13" stroke="#ff36ba" strokeWidth="1.5"/>
+                          <rect x="8.25" y="3.5" width="3.5" height="4.5" rx="1.5" fill="#ffd6fa" fillOpacity="0.18" stroke="#ff36ba" strokeWidth="1.2"/>
+                          <path d="M3 10H17" stroke="#ff36ba" strokeWidth="1.2"/>
+                          <path d="M10 8.5V16" stroke="#ff36ba" strokeWidth="1.2"/>
+                        </svg>
                       </span>
-                      <span className="stat-text">{Number.isInteger(Number(mission.nft_drop_multiplier)) ? Number(mission.nft_drop_multiplier) : Number(mission.nft_drop_multiplier).toFixed(1)}% gift chance</span>
+                      <span className="stat-text stat-gift-chance">{Number.isInteger(Number(mission.nft_drop_multiplier)) ? Number(mission.nft_drop_multiplier) : Number(mission.nft_drop_multiplier).toFixed(1)}% gift chance</span>
                     </div>
                   </div>
                 </div>
@@ -304,7 +309,7 @@ const MissionModal = ({ onClose }) => {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(30, 30, 50, 0.18);
+          background: rgba(30, 30, 50, 0.05);
           border-radius: 0 0 18px 18px;
           box-shadow: 0 2px 12px 0 #0002;
           padding-bottom: 18px;
@@ -445,6 +450,25 @@ const MissionModal = ({ onClose }) => {
           z-index: 5;
         }
         .mission-card:hover .mission-card-hover-overlay {
+          opacity: 1;
+        }
+        .stat-gift-chance {
+          color: #ffd6fa;
+          font-weight: 400;
+          opacity: 0.95;
+          letter-spacing: 0.01em;
+        }
+        .modal-fade-scale-container::after {
+          content: '';
+          position: fixed;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(10, 6, 22, 0.92);
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.4s;
+          z-index: 9;
+        }
+        .modal-fade-scale-back.fade-scale-in ~ .modal-fade-scale-container::after {
           opacity: 1;
         }
       `}</style>
