@@ -221,10 +221,10 @@ const NFTModal = ({ mission, onClose }) => {
         )}
         {/* Botones inferiores */}
         <div className="nftmodal-bottom-buttons unified-width">
-          <button className="btn-square btn-select-mission" onClick={onClose}>Select Mission</button>
-          <button className="btn-square btn-cancel-missionmodal" onClick={() => onClose && onClose()}>Cancel</button>
+          <button className="btn-square btn-small btn-select-mission" onClick={onClose}>Select Mission</button>
+          <button className="btn-square btn-small btn-cancel-missionmodal" onClick={() => onClose && onClose()}>Cancel</button>
           {filteredNFTs.length > displayCount && (
-            <button className="btn-square btn-load-more" onClick={() => setDisplayCount(displayCount + 5)}>
+            <button className="btn-square btn-small btn-load-more" onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
           )}
@@ -316,7 +316,7 @@ const NFTModal = ({ mission, onClose }) => {
           font-size: 1.2rem;
           color: #bfc2d1;
           text-align: center;
-          margin-bottom: 4px;
+          margin-bottom: 2px;
           margin-top: 0px;
           padding: 0 24px;
           line-height: 1.4;
@@ -328,8 +328,8 @@ const NFTModal = ({ mission, onClose }) => {
           flex-direction: row;
           justify-content: center;
           align-items: center;
-          gap: 48px;
-          margin: 12px 0 18px 0;
+          gap: 36px;
+          margin: 6px 0 10px 0;
         }
         .stat-large {
           font-size: 2.1rem;
@@ -461,6 +461,7 @@ const NFTModal = ({ mission, onClose }) => {
         .nfts-grid.unified-width {
           gap: 16px;
           justify-content: space-between;
+          margin-top: 8px !important;
         }
       `}</style>
     </div>
