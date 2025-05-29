@@ -2,35 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { UserService } from '../UserService';
 import { useHistory } from 'react-router-dom';
 
-// Toast reutilizable
-const Toast = ({ message, type, onClose }) => {
-  React.useEffect(() => {
-    const timer = setTimeout(onClose, 2000);
-    return () => clearTimeout(timer);
-  }, [onClose]);
-  const backgroundColor = {
-    success: '#22c55e',
-    error: '#ef4444',
-    info: '#3b82f6'
-  }[type] || '#555';
-  return (
-    <div style={{
-      position: 'fixed',
-      top: 100,
-      right: 20,
-      zIndex: 9999,
-      padding: '14px 22px',
-      borderRadius: 10,
-      backgroundColor,
-      color: '#fff',
-      boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
-      fontSize: 16,
-      fontWeight: 600,
-      maxWidth: 280
-    }}>{message}</div>
-  );
-};
-
 const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNFTs, setSelectedNFTs] = useState([]);
@@ -39,7 +10,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [displayCount, setDisplayCount] = useState(5);
   const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
-  const [toast, setToast] = useState(null);
 
   const MAX_SELECTED = 10;
   const history = useHistory();
@@ -103,7 +73,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
 
     setSending(true);
     setShowLoadingOverlay(true);
-    setToast({ type: 'info', message: 'Sending NFTs...' });
     try {
       const memo = `mission:${mission.id}`;
       console.log('Sending mission with NFTs:', selectedNFTs, 'memo:', memo);
@@ -114,7 +83,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
         const girlsCount = selectedNFTs.length;
         const msg = `${girlsCount} Girl${girlsCount === 1 ? '' : 's'} sent successfully!`;
         sessionStorage.setItem('missionToast', msg);
-        setToast({ type: 'success', message: msg });
         setShowLoadingOverlay(false);
         setTimeout(() => {
           if (onForceCloseAll) onForceCloseAll();
@@ -163,7 +131,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
 
   return (
     <div className="nft-modal-fullscreen" style={showLoadingOverlay ? { filter: 'grayscale(1)', pointerEvents: 'none' } : {}}>
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       {showLoadingOverlay && (
         <div className="nftmodal-loading-overlay">
           <div className="nftmodal-loading-spinner">
