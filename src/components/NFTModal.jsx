@@ -291,24 +291,27 @@ const NFTModal = ({ mission, onClose }) => {
         }
         .nft-card.selected {
           z-index: 99999;
-          box-shadow: 0 0 14px 3px #ff36ba44, 0 0 0 1.2px #ff00ff99 !important;
+          box-shadow: 0 0 14px 3px #ff36ba44 !important;
           background: hsl(245, 86.70%, 2.90%) !important;
-          border: 1.2px solid #ff00ff99 !important;
-          transition: box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), border 0.44s cubic-bezier(0.4,0,0.2,1), background 0.44s cubic-bezier(0.4,0,0.2,1);
+          border: none !important;
+          transition: box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), background 0.44s cubic-bezier(0.4,0,0.2,1);
         }
         .nft-card.selected video {
-          border: 4px solid #ff00ffcc !important;
+          border: none !important;
           box-shadow: 0 0 18px 4px #ff36ba66 !important;
         }
         .nft-card:hover {
-          /* Sin efecto de hover */
+          box-shadow: 0 0 20px 0px rgba(255, 0, 255, 0.4);
+          border: 1px solid rgba(255, 0, 255, 0.6);
+          background: linear-gradient(45deg, rgba(255, 0, 255, 0.1), rgba(0, 255, 255, 0.1));
+          transform: translateY(-2px);
         }
         .mission-title-nftmodal {
           text-align: center;
           font-size: 38px;
           font-weight: 700;
           color: #ff6fff;
-          margin-bottom: 0px;
+          margin-bottom: -8px;
           text-shadow: 0 0 12px #ff00ff99;
           letter-spacing: 2px;
         }
@@ -417,8 +420,9 @@ const NFTModal = ({ mission, onClose }) => {
           transform: translateX(-50%);
         }
         .send-btn-alt {
-          margin-left: auto;
-          margin-right: 0;
+          position: absolute;
+          right: 260px;
+          bottom: -60px;
         }
         .nftmodal-top-center {
           flex: 1;
