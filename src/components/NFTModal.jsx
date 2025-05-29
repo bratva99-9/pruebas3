@@ -153,22 +153,20 @@ const NFTModal = ({ mission, onClose }) => {
                     className={`nft-card ${isSelected ? 'selected' : ''}`}
                     onClick={() => toggleNFTSelection(nft.asset_id)}
                     style={{
-                      aspectRatio: '9/16',
-                      borderRadius: '18px',
-                      overflow: 'hidden',
-                      boxShadow: '0 2px 12px #0004',
-                      minWidth: 88,
-                      maxWidth: 132,
-                      minHeight: 154,
-                      maxHeight: 242,
-                      background: 'transparent',
-                      border: isSelected ? '3px solid #ff00ff' : '2px solid #00ffff',
+                      aspectRatio: '1/2',
+                      minWidth: 160,
+                      maxWidth: 160,
+                      width: 160,
+                      height: 320,
+                      border: none,
+                      borderRadius: 18,
+                      boxShadow: '0 2px 12px #0002',
+                      background: 'rgba(18, 10, 40, 0.92)',
+                      overflow: 'visible',
+                      position: 'relative',
                       display: 'flex',
                       flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      margin: '0 auto',
-                      padding: 0
+                      justifyContent: 'flex-end',
                     }}
                   >
                     <video
@@ -248,13 +246,14 @@ const NFTModal = ({ mission, onClose }) => {
           margin-right: auto;
         }
         .nft-card {
-          min-width: 240px !important;
-          max-width: 240px !important;
-          width: 240px !important;
-          height: 410px !important;
-          border: 2.5px solid #ff00ff;
+          aspect-ratio: 1/2;
+          min-width: 160px !important;
+          max-width: 160px !important;
+          width: 160px !important;
+          height: 320px !important;
+          border: none;
           border-radius: 18px;
-          box-shadow: 0 0 10px 2px #ff36ba44, 0 0 0 1.2px #ff00ff99;
+          box-shadow: 0 2px 12px #0002;
           background: rgba(18, 10, 40, 0.92);
           overflow: visible;
           position: relative;
@@ -286,6 +285,25 @@ const NFTModal = ({ mission, onClose }) => {
           border-color: #ff00ff;
           color: #ff00ff;
           box-shadow: 0 0 32px #ff00ff99, 0 0 8px #00ffff44;
+        }
+        .mission-info-header .mission-name-glow {
+          font-size: 2.1rem;
+          font-weight: 700;
+          color: #ff6fff;
+          text-shadow: 0 0 12px #ff00ff99;
+          margin-bottom: 8px;
+          letter-spacing: 1.5px;
+        }
+        .mission-info-header .mission-description {
+          color: #b0b0c3;
+          font-size: 1.25rem;
+          margin-bottom: 8px;
+          margin-top: 0;
+          text-align: center;
+          font-weight: 400;
+          text-shadow: none;
+          line-height: 1.4;
+          letter-spacing: 0.01em;
         }
       `}</style>
     </div>
