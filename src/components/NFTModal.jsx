@@ -133,7 +133,7 @@ const NFTModal = ({ mission, onClose }) => {
         <div className="mission-info-header">
           <h1 className="mission-title-nftmodal" style={{marginBottom: 10}}>{mission.name}</h1>
           <div className="mission-description-large" style={{marginTop: 10, marginBottom: 0, paddingTop: 0}}>{mission.description}</div>
-          <div className="mission-stats-horizontal">
+          <div className="mission-stats-horizontal" style={{marginBottom: '11px'}}>
             <div className="stat stat-large">
               <span className="stat-icon stat-icon-large">
                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" stroke="#bfc2d1" strokeWidth="2.5"/><path d="M18 9.5V18L24 22" stroke="#bfc2d1" strokeWidth="2.5" strokeLinecap="round"/></svg>
@@ -167,7 +167,7 @@ const NFTModal = ({ mission, onClose }) => {
           <div className="nftmodal-divider" />
         </div>
         {/* Botones superiores */}
-        <div className="nftmodal-top-buttons-bar compact-width">
+        <div className="nftmodal-top-buttons-bar compact-width" style={{marginBottom: '6px'}}>
           <button className="btn-square btn-small btn-status-mission">Mission Status</button>
           <div className="nftmodal-top-center-btns">
             <span className={`selected-count-style selected-count-btn btn-small${selectedNFTs.length === MAX_SELECTED ? ' maxed' : ''}`}>Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
@@ -185,7 +185,7 @@ const NFTModal = ({ mission, onClose }) => {
             <p>Make sure you own NFTs from the 'nightclubnft' collection with schema 'girls'</p>
           </div>
         ) : (
-          <div className="nfts-grid unified-width compact-width" style={{marginTop: '-16px'}}>
+          <div className="nfts-grid unified-width compact-width" style={{marginTop: '-11px'}}>
             {filteredNFTs.slice(0, displayCount).map((nft) => {
               const isSelected = selectedNFTs.includes(nft.asset_id);
               const videoUrl = nft.data.video.startsWith('Qm')
@@ -255,11 +255,13 @@ const NFTModal = ({ mission, onClose }) => {
         <div className="nftmodal-bottom-buttons unified-width compact-width fixed-bottom-btns">
           <button className="btn-square btn-small btn-select-mission" onClick={onClose}>Select Mission</button>
           {filteredNFTs.length > displayCount ? (
+            <button className="btn-square btn-small btn-cancel-missionmodal" onClick={handleCancel}>Cancel</button>
+          ) : <div style={{width: 160}}></div>}
+          {filteredNFTs.length > displayCount ? (
             <button className="btn-square btn-small btn-load-more" onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
-          ) : <div style={{width: 160}}></div>}
-          <button className="btn-square btn-small btn-cancel-missionmodal" onClick={handleCancel}>Cancel</button>
+          ) : <button className="btn-square btn-small btn-cancel-missionmodal" onClick={handleCancel}>Cancel</button>}
         </div>
       </div>
       <style jsx>{`
@@ -292,8 +294,8 @@ const NFTModal = ({ mission, onClose }) => {
           overflow-x: auto;
           padding-bottom: 18px;
           margin-bottom: 0;
-          margin-top: 32px;
-          padding-top: 48px;
+          margin-top: 22px;
+          padding-top: 34px;
           scrollbar-color: #ff00ff #181828;
           scrollbar-width: thin;
           justify-content: center;
@@ -517,7 +519,7 @@ const NFTModal = ({ mission, onClose }) => {
           max-width: 900px;
           height: 2px;
           background: linear-gradient(90deg, rgba(255,0,255,0.12) 0%, rgba(0,255,255,0.12) 100%);
-          margin: 18px auto 18px auto;
+          margin: 11px auto 11px auto;
           border-radius: 2px;
         }
         .selected-count-style.selected-count-btn.btn-small.maxed {
