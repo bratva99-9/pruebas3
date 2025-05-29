@@ -83,7 +83,7 @@ const NFTModal = ({ mission, onClose }) => {
         setShowLoadingOverlay(false);
         if (onClose) onClose();
         setTimeout(() => {
-          history.push('/home');
+          window.location.href = '/home';
         }, 100);
       }, 1800);
     } catch (error) {
@@ -136,8 +136,7 @@ const NFTModal = ({ mission, onClose }) => {
       {showLoadingOverlay && (
         <div className="nftmodal-loading-overlay">
           <div className="nftmodal-loading-spinner">
-            <div className="spinner spinner-pink"></div>
-            <div className="loading-text">Cargando...</div>
+            <div className="spinner spinner-pink-slow"></div>
           </div>
         </div>
       )}
@@ -588,19 +587,12 @@ const NFTModal = ({ mission, onClose }) => {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-        .loading-text {
-          color: #ff6fff;
-          font-size: 1.5rem;
-          font-weight: 600;
-          letter-spacing: 1.5px;
-          text-shadow: 0 0 12px #ff00ff99;
-        }
-        .spinner-pink {
+        .spinner-pink-slow {
           border: 6px solid #ff36ba33;
           border-top: 6px solid #ff36ba;
-          border-right: 6px solid #ff6fff;
+          border-right: 6px solid #b266ff;
           border-radius: 50%;
-          animation: spin 1.1s linear infinite;
+          animation: spin 2.2s cubic-bezier(0.4,0,0.2,1) infinite;
           width: 64px;
           height: 64px;
           margin-bottom: 18px;
