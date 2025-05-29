@@ -419,18 +419,10 @@ const NFTModal = ({ mission, onClose }) => {
         }
         .nftmodal-bottom-buttons {
           position: fixed;
-          left: 0;
+          left: 50%;
+          transform: translateX(-50%);
           bottom: 32px;
-          width: 100vw;
-          max-width: 1200px;
-          margin: 0 auto;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-between;
-          padding-left: 260px;
-          padding-right: 260px;
-          gap: 32px;
+          gap: 48px;
           z-index: 10001;
         }
         .btn-square {
@@ -455,8 +447,8 @@ const NFTModal = ({ mission, onClose }) => {
           box-shadow: none;
         }
         .unified-width {
-          width: 1200px !important;
-          max-width: 1200px !important;
+          width: 900px !important;
+          max-width: 900px !important;
           margin-left: auto !important;
           margin-right: auto !important;
           display: flex;
@@ -466,16 +458,8 @@ const NFTModal = ({ mission, onClose }) => {
         .nftmodal-top-buttons {
           gap: 48px;
         }
-        .nftmodal-bottom-buttons {
-          position: fixed;
-          left: 50%;
-          transform: translateX(-50%);
-          bottom: 32px;
-          gap: 48px;
-          z-index: 10001;
-        }
         .nfts-grid.unified-width {
-          gap: 36px;
+          gap: 16px;
           justify-content: space-between;
         }
       `}</style>
