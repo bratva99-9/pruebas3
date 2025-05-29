@@ -125,14 +125,14 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         </div>
         <div className="selected-count-badge" style={{ display: 'flex', justifyContent: 'center', margin: '18px 0 0 0', width: '100%' }}>
-          <span className="selected-count-style">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
+          <span className="selected-count-style selected-count-btn">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
         </div>
         <div className="nfts-header-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%', maxWidth: '1200px', margin: '0 auto', marginBottom: 0, marginTop: 0, position: 'relative' }}>
           <button 
-            className="send-btn-alt"
+            className="send-btn-alt send-btn-align"
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}
-            style={{ position: 'absolute', right: 0, top: '-54px', minWidth: 140, zIndex: 20 }}
+            style={{ position: 'absolute', right: '180px', top: '-54px', minWidth: 140, zIndex: 20 }}
           >
             {sending ? 'Sending...' : `Send Bitchs !`}
           </button>
@@ -213,7 +213,7 @@ const NFTModal = ({ mission, onClose }) => {
           <button className="cancel-btn" onClick={onClose}>Cancel</button>
           <div style={{ flex: 1 }} />
           {filteredNFTs.length > displayCount && (
-            <button className="load-more-btn neon-load" style={{marginLeft: 'auto'}} onClick={() => setDisplayCount(displayCount + 5)}>
+            <button className="load-more-btn neon-load load-more-align" onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
           )}
@@ -399,6 +399,38 @@ const NFTModal = ({ mission, onClose }) => {
           cursor: default;
           transition: background 0.2s, border-color 0.2s, color 0.2s;
           margin-bottom: 0;
+        }
+        .selected-count-btn {
+          font-size: 18px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(36,0,56,0.10);
+          border: 2.5px solid #00ffff;
+          border-radius: 14px;
+          padding: 10px 32px;
+          box-shadow: none;
+          text-shadow: none;
+          letter-spacing: 1px;
+          cursor: default;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
+          margin-bottom: 0;
+          min-width: 140px;
+        }
+        .load-more-align {
+          min-width: 140px;
+          font-size: 18px;
+          padding: 10px 32px;
+          border-radius: 14px;
+          position: relative;
+          right: 180px;
+        }
+        .send-btn-align {
+          min-width: 140px;
+          font-size: 18px;
+          padding: 10px 32px;
+          border-radius: 14px;
+          position: absolute;
+          right: 180px;
         }
       `}</style>
     </div>
