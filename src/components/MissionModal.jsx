@@ -85,13 +85,14 @@ const MissionModal = ({ onClose }) => {
               <div className="mission-content">
                 <div className="mission-header-box">
                   <div className="mission-name neon-title">{mission.name}</div>
+                  <div className="mission-description">{mission.description}</div>
                 </div>
-                <div className="mission-description">{mission.description}</div>
-              </div>
-              <div className="mission-stats-box">
-                <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
-                <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
-                <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
+                <div className="mission-divider"></div>
+                <div className="mission-stats-box">
+                  <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
+                  <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
+                  <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
+                </div>
               </div>
             </div>
           ))}
@@ -99,10 +100,12 @@ const MissionModal = ({ onClose }) => {
         <button className="cancel-btn" onClick={onClose}>Cancelar</button>
       </div>
       {showNFTModal && selectedMission && (
-        <NFTModal 
-          mission={selectedMission}
-          onClose={handleNFTModalClose}
-        />
+        <div className="modal-transition">
+          <NFTModal 
+            mission={selectedMission}
+            onClose={handleNFTModalClose}
+          />
+        </div>
       )}
       <style jsx>{`
         .mission-modal-fullscreen {
@@ -112,11 +115,12 @@ const MissionModal = ({ onClose }) => {
           width: 100vw;
           height: 100vh;
           z-index: 9999;
-          background:hsl(250, 74.50%, 9.20%);
+          background:hsl(249, 76.00%, 4.90%);
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
+          animation: fadeInModal 0.5s cubic-bezier(0.4,0,0.2,1);
         }
         .mission-modal-content {
           width: 100vw;
@@ -219,7 +223,7 @@ const MissionModal = ({ onClose }) => {
           font-weight: 700;
           color: #ff6fff;
           text-shadow: 0 0 6px #ff00ff55;
-          margin-bottom: 2px;
+          margin-bottom: 6px;
           text-align: center;
           letter-spacing: 0.5px;
         }
@@ -232,15 +236,15 @@ const MissionModal = ({ onClose }) => {
           font-weight: 400;
           text-shadow: none;
           line-height: 1.3;
+          margin-bottom: 8px;
         }
         .mission-divider {
-          width: 88%;
-          height: 1.5px;
-          background: linear-gradient(90deg, #ff00ff55 0%, #fff0 100%);
-          margin: 0 auto 0 auto;
+          width: 80%;
+          height: 2px;
+          background: linear-gradient(90deg, #ff00ff99 0%, #fff0 100%);
+          margin: 0 auto 10px auto;
           border: none;
-          margin-top: 8px;
-          margin-bottom: 0;
+          border-radius: 2px;
         }
         .mission-stats-fade {
           position: absolute;
@@ -308,6 +312,14 @@ const MissionModal = ({ onClose }) => {
           border-color: #ff00ff;
           color: #fff;
           box-shadow: none;
+        }
+        /* Animaciones para los modales */
+        .modal-transition {
+          animation: scaleInModal 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        @keyframes scaleInModal {
+          from { opacity: 0; transform: scale(0.92); }
+          to { opacity: 1; transform: scale(1); }
         }
       `}</style>
     </div>
