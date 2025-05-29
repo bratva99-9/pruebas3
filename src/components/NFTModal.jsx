@@ -105,36 +105,35 @@ const NFTModal = ({ mission, onClose }) => {
         <div className="mission-info-header">
           <h1 className="mission-title-nftmodal">{mission.name}</h1>
           <div className="mission-description">{mission.description}</div>
-          <div className="mission-stats-bottom-nftmodal">
-            <div className="stat">
-              <span className="stat-icon">
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8.5" stroke="#bfc2d1" strokeWidth="1.5"/><path d="M10 5.5V10L13 12" stroke="#bfc2d1" strokeWidth="1.5" strokeLinecap="round"/></svg>
+          <div className="mission-stats-horizontal">
+            <div className="stat stat-large">
+              <span className="stat-icon stat-icon-large">
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" stroke="#bfc2d1" strokeWidth="2.5"/><path d="M18 9.5V18L24 22" stroke="#bfc2d1" strokeWidth="2.5" strokeLinecap="round"/></svg>
               </span>
-              <span className="stat-text">{mission.duration_minutes ? `${mission.duration_minutes} min` : 'No disponible'}</span>
+              <span className="stat-text stat-text-large">{mission.duration_minutes ? `${mission.duration_minutes} min` : 'No disponible'}</span>
             </div>
-            <div className="stat-separator"></div>
-            <div className="stat">
-              <span className="stat-icon">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="11" cy="11" r="9" fill="#ffe066" stroke="#ff00ff" strokeWidth="2"/>
-                  <circle cx="11" cy="11" r="7" fill="#fffbe6" fillOpacity="0.7"/>
-                  <path d="M11 15.2c-2.2-1.6-4-3.1-4-4.7a2 2 0 0 1 4-1.1A2 2 0 0 1 15 10.5c0 1.6-1.8 3.1-4 4.7z" fill="#ff00ff" stroke="#ff00ff" strokeWidth="0.7"/>
+            <div className="stat stat-large">
+              <span className="stat-icon stat-icon-large">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="22" cy="22" r="18" fill="#ffe066" stroke="#ff00ff" strokeWidth="3"/>
+                  <circle cx="22" cy="22" r="14" fill="#fffbe6" fillOpacity="0.7"/>
+                  <path d="M22 30.4c-4.4-3.2-8-6.2-8-9.4a4 4 0 0 1 8-2.2A4 4 0 0 1 30 21c0 3.2-3.6 6.2-8 9.4z" fill="#ff00ff" stroke="#ff00ff" strokeWidth="1.2"/>
                 </svg>
               </span>
-              <span className="stat-text">{mission.reward_multiplier !== undefined ? `${Number(mission.reward_multiplier).toFixed(1)} SEXY` : 'No disponible'}</span>
+              <span className="stat-text stat-text-large">{mission.reward_multiplier !== undefined ? `${Number(mission.reward_multiplier).toFixed(1)} SEXY` : 'No disponible'}</span>
             </div>
-            <div className="stat">
-              <span className="stat-icon">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="4.5" y="9.5" width="13" height="7" rx="2" fill="#ff00ff" fillOpacity="0.13" stroke="#ff00ff" strokeWidth="1.7"/>
-                  <rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="1.3"/>
-                  <path d="M4.5 12H17.5" stroke="#ff00ff" strokeWidth="1.3"/>
-                  <path d="M11 9.5V16" stroke="#ff00ff" strokeWidth="1.3"/>
-                  <path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
-                  <path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
+            <div className="stat stat-large">
+              <span className="stat-icon stat-icon-large">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="9" y="19" width="26" height="14" rx="4" fill="#ff00ff" fillOpacity="0.13" stroke="#ff00ff" strokeWidth="2.5"/>
+                  <rect x="17" y="9" width="10" height="10" rx="3" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="2"/>
+                  <path d="M9 24H35" stroke="#ff00ff" strokeWidth="2"/>
+                  <path d="M22 19V33" stroke="#ff00ff" strokeWidth="2"/>
+                  <path d="M17 14C15 11 20 8 22 14" stroke="#ff00ff" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M27 14C29 11 24 8 22 14" stroke="#ff00ff" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
               </span>
-              <span className="stat-text stat-gift-chance">{mission.nft_drop_multiplier !== undefined ? `${Number(mission.nft_drop_multiplier).toFixed(1)}% Gift Chance` : 'No disponible'}</span>
+              <span className="stat-text stat-text-large stat-gift-chance">{mission.nft_drop_multiplier !== undefined ? `${Number(mission.nft_drop_multiplier).toFixed(1)}% Gift Chance` : 'No disponible'}</span>
             </div>
           </div>
         </div>
@@ -224,9 +223,7 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         )}
         <div className="nft-modal-actions" style={{ display: 'flex', width: '100vw', maxWidth: '1200px', justifyContent: 'space-between', alignItems: 'center', position: 'fixed', left: 0, bottom: 38, padding: '0 32px', zIndex: 10001 }}>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', minWidth: 0, marginLeft: 'calc(50vw - 600px + 0px)' }}>
-            <button className="cancel-btn btn-small" onClick={onClose}>Cancel</button>
-          </div>
+          <button className="cancel-btn btn-small" style={{position: 'absolute', left: 'calc(50vw - 600px + 0px)', bottom: 38}} onClick={onClose}>Cancel</button>
           {filteredNFTs.length > displayCount && (
             <button className="load-more-btn neon-load load-more-align btn-small" style={{right: 'calc(50vw - 600px + 36px)'}} onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
@@ -312,64 +309,30 @@ const NFTModal = ({ mission, onClose }) => {
           text-shadow: 0 0 12px #ff00ff99;
           letter-spacing: 2px;
         }
-        .mission-stats-bottom-nftmodal {
+        .mission-stats-horizontal {
           width: 100%;
-          background: rgba(30, 30, 50, 0.30);
-          border-radius: 0 0 18px 18px;
-          box-shadow: 0 2px 12px 0 #0002;
-          padding-bottom: 18px;
-          padding-top: 10px;
           display: flex;
-          flex-direction: column;
-          align-items: center;
-          z-index: 15;
-          margin-bottom: 18px;
-        }
-        .stat {
-          color: #bfc2d1;
-          font-size: 15px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-weight: 400;
-          text-shadow: none;
-          margin-bottom: 4px;
-          letter-spacing: 0.01em;
-        }
-        .stat-text {
-          color: #bfc2d1;
-          font-size: 15px;
-          font-weight: 400;
-          letter-spacing: 0.01em;
-          text-shadow: none;
-          opacity: 0.85;
-        }
-        .stat-icon {
-          font-size: 18px;
-          width: 22px;
-          text-align: center;
-          opacity: 0.55;
-          filter: grayscale(1) brightness(1.2);
-          display: flex;
-          align-items: center;
+          flex-direction: row;
           justify-content: center;
-          transition: opacity 0.2s;
+          align-items: center;
+          gap: 48px;
+          margin: 18px 0 24px 0;
         }
-        .stat-separator {
-          width: 60%;
-          height: 1.5px;
-          background: linear-gradient(90deg, #e0e0e055 0%, #fff0 100%);
-          margin: 2px auto 6px auto;
-          border: none;
-          border-radius: 1.5px;
+        .stat-large {
+          font-size: 2.1rem;
+          gap: 18px;
         }
-        .stat-gift-chance {
-          color: #bfc2d1;
-          font-weight: 400;
-          opacity: 0.95;
-          letter-spacing: 0.01em;
-          font-size: 15px;
-          text-shadow: none;
+        .stat-icon-large {
+          font-size: 2.1rem;
+          width: 44px;
+          height: 44px;
+        }
+        .stat-text-large {
+          font-size: 2.1rem;
+          font-weight: 700;
+          color: #fff;
+          letter-spacing: 0.03em;
+          text-shadow: 0 0 8px #ff00ff44;
         }
         .selected-count-badge {
           width: 100%;
