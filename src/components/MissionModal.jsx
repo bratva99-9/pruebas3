@@ -89,20 +89,17 @@ const MissionModal = ({ onClose }) => {
                       alt={mission.name}
                       className="mission-bg-img"
                     />
-                    <div className="mission-bg-gradient"></div>
                   </div>
                   <div className="mission-content">
                     <div className="mission-header-box">
                       <div className="mission-name neon-title">{mission.name}</div>
                       <div className="mission-description">{mission.description}</div>
                     </div>
-                    <div className="mission-stats-overlay">
-                      <div className="mission-stats-box">
-                        <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
-                        <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
-                        <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
-                      </div>
-                    </div>
+                  </div>
+                  <div className="mission-stats-bottom">
+                    <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
+                    <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
+                    <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
                   </div>
                 </div>
               ))}
@@ -236,15 +233,6 @@ const MissionModal = ({ onClose }) => {
           display: block;
           border-radius: 18px;
         }
-        .mission-bg-gradient {
-          position: absolute;
-          left: 0; right: 0; top: 0;
-          height: 33%;
-          background: linear-gradient(180deg, rgba(255,0,255,0.22) 0%, rgba(255,0,255,0.09) 100%);
-          z-index: 2;
-          pointer-events: none;
-          border-radius: 18px 18px 0 0;
-        }
         .mission-content {
           position: absolute;
           z-index: 2;
@@ -294,7 +282,7 @@ const MissionModal = ({ onClose }) => {
         .mission-card:hover .mission-description {
           color: #ffe6ff;
         }
-        .mission-stats-overlay {
+        .mission-stats-bottom {
           width: 100%;
           position: absolute;
           left: 0;
@@ -309,21 +297,6 @@ const MissionModal = ({ onClose }) => {
           flex-direction: column;
           align-items: center;
           z-index: 15;
-          backdrop-filter: blur(1.5px);
-        }
-        .mission-stats-box {
-          width: 100%;
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          padding-bottom: 18px;
-          padding-top: 12px;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          align-items: center;
-          z-index: 3;
         }
         .stat {
           color: #e0e0e0;
@@ -368,6 +341,12 @@ const MissionModal = ({ onClose }) => {
           border-color: #ff00ff;
           color: #fff;
           box-shadow: none;
+        }
+        .missions-row-scroll.focus-mode ~ .cancel-btn {
+          opacity: 0.4;
+          filter: blur(1px);
+          pointer-events: none;
+          transition: opacity 0.3s, filter 0.3s;
         }
         /* Animaciones para los modales */
         .modal-transition {
