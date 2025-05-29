@@ -88,8 +88,8 @@ const MissionModal = ({ onClose }) => {
                     <div className="mission-header-box">
                       <div className="mission-name neon-title">{mission.name}</div>
                       <div className="mission-description">{mission.description}</div>
+                      <div className="mission-divider"></div>
                     </div>
-                    <div className="mission-divider"></div>
                     <div className="mission-stats-box">
                       <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
                       <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
@@ -119,7 +119,7 @@ const MissionModal = ({ onClose }) => {
           width: 100vw;
           height: 100vh;
           z-index: 9999;
-          background:hsl(249, 76.00%, 4.90%);
+          background:hsl(245, 84.60%, 2.50%);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -215,7 +215,7 @@ const MissionModal = ({ onClose }) => {
         }
         .mission-header-box {
           width: 100%;
-          padding: 18px 0 0 0;
+          padding: 10px 0 0 0;
           background: linear-gradient(180deg, rgba(10,10,46,0.65) 80%, rgba(10,10,46,0.0) 100%);
           border-radius: 18px 18px 0 0;
           display: flex;
@@ -227,7 +227,7 @@ const MissionModal = ({ onClose }) => {
           font-weight: 700;
           color: #ff6fff;
           text-shadow: 0 0 6px #ff00ff55;
-          margin-bottom: 6px;
+          margin-bottom: 2px;
           text-align: center;
           letter-spacing: 0.5px;
         }
@@ -240,13 +240,13 @@ const MissionModal = ({ onClose }) => {
           font-weight: 400;
           text-shadow: none;
           line-height: 1.3;
-          margin-bottom: 8px;
+          margin-bottom: 6px;
         }
         .mission-divider {
-          width: 80%;
+          width: 70%;
           height: 2px;
           background: linear-gradient(90deg, #ff00ff99 0%, #fff0 100%);
-          margin: 12px auto 18px auto;
+          margin: 8px auto 12px auto;
           border: none;
           border-radius: 2px;
         }
