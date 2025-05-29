@@ -186,18 +186,21 @@ const MissionModal = ({ onClose }) => {
         }
         .mission-card {
           position: relative;
-          background: transparent;
-          border: 2px solid #ff00ff;
-          border-radius: 18px;
-          min-width: 224px;
-          max-width: 224px;
-          width: 224px;
-          height: 390px;
+          background: rgba(10,10,46,0.92);
+          border: 3px solid #ff00ff;
+          border-radius: 28px;
+          min-width: 260px;
+          max-width: 260px;
+          width: 260px;
+          height: 420px;
           padding: 0;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s;
           overflow: hidden;
-          box-shadow: 0 0 24px #ff00ff44;
+          box-shadow: 0 0 32px 4px #ff00ff99, 0 0 0 4px #ff00ff33;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
         }
 
         .mission-card:hover {
@@ -207,9 +210,8 @@ const MissionModal = ({ onClose }) => {
         }
 
         .mission-card.selected {
-          border-color: #00ffff;
-          box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-          background: rgba(0, 255, 255, 0.1);
+          border-color: #fff;
+          box-shadow: 0 0 40px 8px #ff00ffcc, 0 0 0 6px #fff2;
         }
 
         .mission-bg-image {
@@ -224,56 +226,63 @@ const MissionModal = ({ onClose }) => {
           height: 100%;
           object-fit: cover;
           display: block;
+          filter: brightness(0.95) contrast(1.08) saturate(1.2);
         }
         .mission-gradient-overlay {
           position: absolute;
-          left: 0; right: 0; bottom: 0;
-          height: 55%;
-          background: linear-gradient(0deg, #181828 90%, rgba(24,24,40,0.1) 100%, transparent 100%);
+          left: 0; right: 0; bottom: 0; top: 0;
+          background: linear-gradient(180deg, rgba(24,24,40,0.10) 0%, rgba(24,24,40,0.18) 60%, #181828 100%);
           z-index: 2;
         }
         .mission-content {
-          position: absolute;
+          position: relative;
           z-index: 3;
-          left: 0; right: 0; bottom: 0; top: 0;
           display: flex;
           flex-direction: column;
-          justify-content: flex-end;
           align-items: center;
-          padding: 24px 12px 18px 12px;
+          justify-content: flex-end;
+          height: 100%;
+          padding: 38px 18px 28px 18px;
         }
         .mission-name.neon-title {
-          font-size: 22px;
+          font-size: 32px;
           font-weight: bold;
           color: #ff00ff;
-          text-shadow: 0 0 12px #ff00ff, 0 0 2px #fff;
-          margin-bottom: 6px;
+          text-shadow: 0 0 18px #ff00ff, 0 0 2px #fff;
+          margin-bottom: 10px;
           text-align: center;
+          letter-spacing: 1.5px;
         }
         .mission-description {
-          color: #b3b3ff;
-          font-size: 15px;
-          margin-bottom: 18px;
+          color: #fff;
+          font-size: 20px;
+          margin-bottom: 32px;
           text-align: center;
+          text-shadow: 0 0 8px #000a;
         }
         .mission-stats-row {
           width: 100%;
           display: flex;
           flex-direction: column;
-          gap: 8px;
-          align-items: flex-start;
+          gap: 16px;
+          align-items: center;
+          background: rgba(10,10,46,0.85);
+          border-radius: 18px;
+          padding: 18px 0 10px 0;
+          box-shadow: 0 0 12px #ff00ff33;
         }
         .stat {
           color: #fff;
-          font-size: 16px;
+          font-size: 22px;
           display: flex;
           align-items: center;
-          gap: 8px;
-          font-weight: 500;
+          gap: 12px;
+          font-weight: 600;
+          text-shadow: 0 0 8px #ff00ff99, 0 0 2px #fff;
         }
         .stat-icon {
-          font-size: 18px;
-          width: 24px;
+          font-size: 26px;
+          width: 32px;
           text-align: center;
         }
 
