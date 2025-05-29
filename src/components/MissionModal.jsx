@@ -8,6 +8,7 @@ const MissionModal = ({ onClose }) => {
   const [selectedMission, setSelectedMission] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showNFTModal, setShowNFTModal] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
 
   const fetchMissions = useCallback(async () => {
     try {
@@ -54,6 +55,9 @@ const MissionModal = ({ onClose }) => {
     setSelectedMission(null);
   };
 
+  const handleRowMouseEnter = () => setFocusMode(true);
+  const handleRowMouseLeave = () => setFocusMode(false);
+
   if (loading) {
     return (
       <div className="mission-modal-fullscreen">
@@ -70,7 +74,9 @@ const MissionModal = ({ onClose }) => {
         <div className="modal-flip3d-front">
           <div className="mission-modal-content">
             <h1 className="mission-title">MISSION SELECTION</h1>
-            <div className="missions-row-scroll">
+            <div className={`missions-row-scroll${focusMode ? ' focus-mode' : ''}`}
+                 onMouseEnter={handleRowMouseEnter}
+                 onMouseLeave={handleRowMouseLeave}>
               {missions.map((mission) => (
                 <div 
                   key={mission.id} 
@@ -160,6 +166,20 @@ const MissionModal = ({ onClose }) => {
           max-width: 1200px;
           margin-left: auto;
           margin-right: auto;
+          position: relative;
+        }
+        .missions-row-scroll::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(18,9,42,0.3);
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.3s;
+          z-index: 2;
+        }
+        .missions-row-scroll.focus-mode::before {
+          opacity: 1;
         }
         .mission-card {
           min-width: 204px;
@@ -175,10 +195,24 @@ const MissionModal = ({ onClose }) => {
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
-          transition: border 0.2s;
+          transition: border 0.2s, transform 0.32s cubic-bezier(0.4,0,0.2,1), box-shadow 0.32s, filter 0.32s;
+          z-index: 3;
         }
         .mission-card:hover {
           border: 2px solid #ff00ffcc;
+          transform: scale(1.08);
+          box-shadow: 0 0 32px 0 #00ffff44, 0 0 0 2px #ff00ff55;
+          z-index: 4;
+        }
+        .missions-row-scroll.focus-mode .mission-card:not(:hover) {
+          filter: blur(1.5px) grayscale(0.2) brightness(0.7);
+          transform: scale(0.93);
+          z-index: 2;
+        }
+        .missions-row-scroll.focus-mode .mission-card:hover {
+          filter: none;
+          transform: scale(1.08);
+          z-index: 5;
         }
         .mission-bg-image {
           position: absolute;
