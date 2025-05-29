@@ -212,7 +212,7 @@ const MissionModal = ({ onClose }) => {
           filter: grayscale(1);
           transform: scale(0.93);
           z-index: 21;
-          transition: filter 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+          transition: filter 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1);
         }
         .mission-card {
           min-width: 204px;
@@ -235,8 +235,8 @@ const MissionModal = ({ onClose }) => {
           filter: none !important;
           transform: scale(1.08);
           z-index: 99999;
-          transition: filter 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
-          box-shadow: 0 0 10px 2px #ff36ba44, 0 0 0 1.2px #ff00ff99;
+          transition: filter 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1);
+          box-shadow: 0 0 14px 3px #ff36ba44, 0 0 0 1.2px #ff00ff99;
         }
         .mission-bg-image {
           position: absolute;
@@ -308,7 +308,7 @@ const MissionModal = ({ onClose }) => {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(30, 30, 50, 0.20);
+          background: rgba(30, 30, 50, 0.30);
           border-radius: 0 0 18px 18px;
           box-shadow: 0 2px 12px 0 #0002;
           padding-bottom: 18px;
