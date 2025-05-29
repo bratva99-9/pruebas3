@@ -497,4 +497,3 @@ const NFTModal = ({ mission, onClose }) => {
 };
 
 export default NFTModal;
-export default NFTModal;
