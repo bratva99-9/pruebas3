@@ -215,7 +215,7 @@ const NFTModal = ({ mission, onClose }) => {
           width: 100vw;
           height: 100vh;
           z-index: 9999;
-          background: linear-gradient(135deg, #0a0a2e 0%, #16213e 50%, #0f3460 100%);
+          background: rgba(18, 10, 40, 0.92);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -253,10 +253,10 @@ const NFTModal = ({ mission, onClose }) => {
           width: 240px !important;
           height: 410px !important;
           border: 2.5px solid #ff00ff;
-          border-radius: 22px;
-          box-shadow: 0 0 18px #ff00ff99;
-          background: rgba(10,10,46,0.92);
-          overflow: hidden;
+          border-radius: 18px;
+          box-shadow: 0 0 10px 2px #ff36ba44, 0 0 0 1.2px #ff00ff99;
+          background: rgba(18, 10, 40, 0.92);
+          overflow: visible;
           position: relative;
           display: flex;
           flex-direction: column;
