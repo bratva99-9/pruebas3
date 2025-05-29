@@ -141,7 +141,7 @@ const NFTModal = ({ mission, onClose }) => {
         <div className="nftmodal-top-buttons unified-width compact-width">
           <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           <button 
-            className="btn-square send-btn-alt btn-small"
+            className="btn-square btn-small send-btn-alt"
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}>
             {sending ? 'Sending...' : `Send Bitchs !`}
@@ -153,7 +153,7 @@ const NFTModal = ({ mission, onClose }) => {
             <p>Make sure you own NFTs from the 'nightclubnft' collection with schema 'girls'</p>
           </div>
         ) : (
-          <div className="nfts-grid unified-width compact-width" style={{marginTop: '0px'}}>
+          <div className="nfts-grid unified-width compact-width" style={{marginTop: '-16px'}}>
             {filteredNFTs.slice(0, displayCount).map((nft) => {
               const isSelected = selectedNFTs.includes(nft.asset_id);
               const videoUrl = nft.data.video.startsWith('Qm')
