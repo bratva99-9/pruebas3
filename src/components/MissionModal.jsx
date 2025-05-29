@@ -95,8 +95,8 @@ const MissionModal = ({ onClose }) => {
                       <div className="mission-name neon-title">{mission.name}</div>
                       <div className="mission-description">{mission.description}</div>
                     </div>
-                    <div className="mission-divider"></div>
-                    <div className="mission-stats-container">
+                    <div className="mission-stats-group">
+                      <div className="mission-divider"></div>
                       <div className="mission-stats-box">
                         <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
                         <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
@@ -191,7 +191,7 @@ const MissionModal = ({ onClose }) => {
           border: none;
           border-radius: 18px;
           box-shadow: none;
-          background: none;
+          background: rgba(18, 10, 40, 0.92);
           overflow: hidden;
           position: relative;
           display: flex;
@@ -289,20 +289,21 @@ const MissionModal = ({ onClose }) => {
           width: 70%;
           height: 2px;
           background: linear-gradient(90deg, #ff00ff99 0%, #fff0 100%);
-          margin: 0 auto 0 auto;
+          margin: 0 auto 8px auto;
           border: none;
           border-radius: 2px;
         }
-        .mission-stats-container {
-          width: 100%;
-          background: rgba(18, 9, 42, 0.72);
-          border-radius: 0 0 18px 18px;
+        .mission-stats-group {
+          width: 92%;
+          margin: 0 auto 0 auto;
+          background: rgba(18, 10, 40, 0.15);
+          border-radius: 12px;
           box-shadow: 0 2px 12px 0 #0002;
-          padding-bottom: 18px;
-          padding-top: 8px;
+          padding: 10px 0 14px 0;
           display: flex;
           flex-direction: column;
           align-items: center;
+          margin-top: 12px;
         }
         .mission-stats-box {
           width: 100%;
