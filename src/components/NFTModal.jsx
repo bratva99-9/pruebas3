@@ -2,6 +2,35 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { UserService } from '../UserService';
 import { useHistory } from 'react-router-dom';
 
+// Toast reutilizable
+const Toast = ({ message, type, onClose }) => {
+  React.useEffect(() => {
+    const timer = setTimeout(onClose, 2000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+  const backgroundColor = {
+    success: '#22c55e',
+    error: '#ef4444',
+    info: '#3b82f6'
+  }[type] || '#555';
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 100,
+      right: 20,
+      zIndex: 9999,
+      padding: '14px 22px',
+      borderRadius: 10,
+      backgroundColor,
+      color: '#fff',
+      boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+      fontSize: 16,
+      fontWeight: 600,
+      maxWidth: 280
+    }}>{message}</div>
+  );
+};
+
 const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNFTs, setSelectedNFTs] = useState([]);
@@ -10,6 +39,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [displayCount, setDisplayCount] = useState(5);
   const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const MAX_SELECTED = 10;
   const history = useHistory();
@@ -73,6 +103,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
 
     setSending(true);
     setShowLoadingOverlay(true);
+    setToast({ type: 'info', message: 'Sending NFTs...' });
     try {
       const memo = `mission:${mission.id}`;
       console.log('Sending mission with NFTs:', selectedNFTs, 'memo:', memo);
@@ -80,11 +111,14 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3500);
       setTimeout(() => {
+        setToast({ type: 'success', message: 'Mission sent successfully!' });
         setShowLoadingOverlay(false);
-        if (onForceCloseAll) onForceCloseAll();
-        else if (onClose) onClose();
-        history.push('/home');
-      }, 1800);
+        setTimeout(() => {
+          if (onForceCloseAll) onForceCloseAll();
+          else if (onClose) onClose();
+          history.push('/home');
+        }, 2000);
+      }, 2000);
     } catch (error) {
       console.error('Error sending mission:', error);
       alert('Error: ' + error.message);
@@ -132,6 +166,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
 
   return (
     <div className="nft-modal-fullscreen" style={showLoadingOverlay ? { filter: 'grayscale(1)', pointerEvents: 'none' } : {}}>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       {showLoadingOverlay && (
         <div className="nftmodal-loading-overlay">
           <div className="nftmodal-loading-spinner">
@@ -268,13 +303,10 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
         <div className="nftmodal-bottom-buttons unified-width compact-width fixed-bottom-btns">
           <button className="btn-square btn-small btn-select-mission" onClick={onClose}>Select Mission</button>
           {filteredNFTs.length > displayCount ? (
-            <button className="btn-square btn-small btn-cancel-missionmodal" onClick={handleCancel}>Cancel</button>
-          ) : <div style={{width: 160}}></div>}
-          {filteredNFTs.length > displayCount ? (
             <button className="btn-square btn-small btn-load-more" onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
-          ) : <button className="btn-square btn-small btn-cancel-missionmodal" onClick={handleCancel}>Cancel</button>}
+          ) : <button className="btn-square btn-small btn-load-more" disabled style={{opacity:0.5, cursor:'not-allowed'}}>Load More NFTs</button>}
         </div>
       </div>
       <style jsx>{`
