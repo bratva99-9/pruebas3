@@ -86,6 +86,26 @@ const NFTModal = ({ mission, onClose }) => {
     }
   };
 
+  // Utilidad para mostrar minutos en horas si es posible
+  const formatDuration = (minutes) => {
+    if (!minutes) return 'No disponible';
+    if (minutes % 60 === 0) {
+      return `${minutes / 60}h`;
+    }
+    if (minutes > 60) {
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
+      return `${h}h ${m}min`;
+    }
+    return `${minutes} min`;
+  };
+
+  // Utilidad para mostrar enteros si no hay decimales
+  const formatNumber = (num, suffix = '') => {
+    if (num === undefined || num === null) return 'No disponible';
+    return Number(num) % 1 === 0 ? `${Number(num)}${suffix}` : `${Number(num).toFixed(1)}${suffix}`;
+  };
+
   if (loading) {
     return (
       <div className="nft-modal-fullscreen">
@@ -103,14 +123,14 @@ const NFTModal = ({ mission, onClose }) => {
       )}
       <div className="nft-modal-content">
         <div className="mission-info-header">
-          <h1 className="mission-title-nftmodal">{mission.name}</h1>
-          <div className="mission-description-large" style={{marginTop: '0px', marginBottom: '-6px'}}>{mission.description}</div>
+          <h1 className="mission-title-nftmodal" style={{marginBottom: 0}}>{mission.name}</h1>
+          <div className="mission-description-large" style={{marginTop: '0px', marginBottom: '0px', paddingTop: 0}}>{mission.description}</div>
           <div className="mission-stats-horizontal">
             <div className="stat stat-large">
               <span className="stat-icon stat-icon-large">
                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" stroke="#bfc2d1" strokeWidth="2.5"/><path d="M18 9.5V18L24 22" stroke="#bfc2d1" strokeWidth="2.5" strokeLinecap="round"/></svg>
               </span>
-              <span className="stat-text stat-text-large">{mission.duration_minutes ? `${mission.duration_minutes} min` : 'No disponible'}</span>
+              <span className="stat-text stat-text-large">{mission.duration_minutes ? formatDuration(mission.duration_minutes) : 'No disponible'}</span>
             </div>
             <div className="stat stat-large">
               <span className="stat-icon stat-icon-large">
@@ -120,7 +140,7 @@ const NFTModal = ({ mission, onClose }) => {
                   <path d="M22 30.4c-4.4-3.2-8-6.2-8-9.4a4 4 0 0 1 8-2.2A4 4 0 0 1 30 21c0 3.2-3.6 6.2-8 9.4z" fill="#ff00ff" stroke="#ff00ff" strokeWidth="1.2"/>
                 </svg>
               </span>
-              <span className="stat-text stat-text-large">{mission.reward_multiplier !== undefined ? `${Number(mission.reward_multiplier).toFixed(1)} SEXY` : 'No disponible'}</span>
+              <span className="stat-text stat-text-large">{mission.reward_multiplier !== undefined ? formatNumber(mission.reward_multiplier, ' SEXY') : 'No disponible'}</span>
             </div>
             <div className="stat stat-large">
               <span className="stat-icon stat-icon-large">
@@ -133,15 +153,16 @@ const NFTModal = ({ mission, onClose }) => {
                   <path d="M27 14C29 11 24 8 22 14" stroke="#ff00ff" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
               </span>
-              <span className="stat-text stat-text-large stat-gift-chance">{mission.nft_drop_multiplier !== undefined ? `${Number(mission.nft_drop_multiplier).toFixed(1)}% Gift Chance` : 'No disponible'}</span>
+              <span className="stat-text stat-text-large stat-gift-chance">{mission.nft_drop_multiplier !== undefined ? formatNumber(mission.nft_drop_multiplier, '% Gift Chance') : 'No disponible'}</span>
             </div>
           </div>
         </div>
         {/* Botones superiores */}
-        <div className="nftmodal-top-buttons unified-width compact-width">
+        <div className="nftmodal-top-buttons unified-width compact-width" style={{position: 'relative', justifyContent: 'center', gap: '16px', paddingLeft: 0, paddingRight: 0}}>
           <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           <button 
             className="btn-square btn-small send-btn-alt"
+            style={{marginLeft: '24px'}}
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}>
             {sending ? 'Sending...' : `Send Bitchs !`}
