@@ -66,47 +66,51 @@ const MissionModal = ({ onClose }) => {
 
   return (
     <div className="mission-modal-fullscreen">
-      <div className="mission-modal-content">
-        <h1 className="mission-title">MISSION SELECTION</h1>
-        <div className="missions-row-scroll">
-          {missions.map((mission) => (
-            <div 
-              key={mission.id} 
-              className={`mission-card ${selectedMission?.id === mission.id ? 'selected' : ''}`}
-              onClick={() => handleMissionSelect(mission)}
-            >
-              <div className="mission-bg-image">
-                <img 
-                  src={missionImg} 
-                  alt={mission.name}
-                  className="mission-bg-img"
-                />
-              </div>
-              <div className="mission-content">
-                <div className="mission-header-box">
-                  <div className="mission-name neon-title">{mission.name}</div>
-                  <div className="mission-description">{mission.description}</div>
+      <div className={`modal-flip3d-container${showNFTModal ? ' flipped' : ''}`}>
+        <div className="modal-flip3d-front">
+          <div className="mission-modal-content">
+            <h1 className="mission-title">MISSION SELECTION</h1>
+            <div className="missions-row-scroll">
+              {missions.map((mission) => (
+                <div 
+                  key={mission.id} 
+                  className={`mission-card ${selectedMission?.id === mission.id ? 'selected' : ''}`}
+                  onClick={() => handleMissionSelect(mission)}
+                >
+                  <div className="mission-bg-image">
+                    <img 
+                      src={missionImg} 
+                      alt={mission.name}
+                      className="mission-bg-img"
+                    />
+                  </div>
+                  <div className="mission-content">
+                    <div className="mission-header-box">
+                      <div className="mission-name neon-title">{mission.name}</div>
+                      <div className="mission-description">{mission.description}</div>
+                    </div>
+                    <div className="mission-divider"></div>
+                    <div className="mission-stats-box">
+                      <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
+                      <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
+                      <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
+                    </div>
+                  </div>
                 </div>
-                <div className="mission-divider"></div>
-                <div className="mission-stats-box">
-                  <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
-                  <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
-                  <div className="stat"><span className="stat-icon">🎁</span> <span>{Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span></div>
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
+            <button className="cancel-btn" onClick={onClose}>Cancelar</button>
+          </div>
         </div>
-        <button className="cancel-btn" onClick={onClose}>Cancelar</button>
+        <div className="modal-flip3d-back">
+          {showNFTModal && selectedMission && (
+            <NFTModal 
+              mission={selectedMission}
+              onClose={handleNFTModalClose}
+            />
+          )}
+        </div>
       </div>
-      {showNFTModal && selectedMission && (
-        <div className="modal-transition">
-          <NFTModal 
-            mission={selectedMission}
-            onClose={handleNFTModalClose}
-          />
-        </div>
-      )}
       <style jsx>{`
         .mission-modal-fullscreen {
           position: fixed;
@@ -242,7 +246,7 @@ const MissionModal = ({ onClose }) => {
           width: 80%;
           height: 2px;
           background: linear-gradient(90deg, #ff00ff99 0%, #fff0 100%);
-          margin: 0 auto 10px auto;
+          margin: 12px auto 18px auto;
           border: none;
           border-radius: 2px;
         }
@@ -320,6 +324,61 @@ const MissionModal = ({ onClose }) => {
         @keyframes scaleInModal {
           from { opacity: 0; transform: scale(0.92); }
           to { opacity: 1; transform: scale(1); }
+        }
+        /* Flip 3D elegante para transición de modales */
+        .modal-flip3d-container {
+          perspective: 1200px;
+          width: 100vw;
+          height: 100vh;
+          position: fixed;
+          top: 0;
+          left: 0;
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(18,9,42,0.85);
+          backdrop-filter: blur(6px);
+          transition: background 0.5s;
+        }
+        .modal-flip3d-front, .modal-flip3d-back {
+          width: 100vw;
+          height: 100vh;
+          position: absolute;
+          top: 0;
+          left: 0;
+          backface-visibility: hidden;
+          box-shadow: 0 8px 48px 0 #0008, 0 1.5px 0 #ff00ff33;
+          border-radius: 24px;
+          overflow: hidden;
+        }
+        .modal-flip3d-front {
+          background: none;
+          z-index: 2;
+          transform: rotateY(0deg);
+          transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+        .modal-flip3d-back {
+          background: none;
+          z-index: 3;
+          transform: rotateY(180deg);
+          transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+          box-shadow: 0 8px 48px 0 #000a, 0 1.5px 0 #00fff033;
+        }
+        .modal-flip3d-container.flipped .modal-flip3d-front {
+          transform: rotateY(-180deg);
+        }
+        .modal-flip3d-container.flipped .modal-flip3d-back {
+          transform: rotateY(0deg);
+        }
+        /* Brillo elegante al finalizar el giro */
+        .modal-flip3d-back {
+          animation: flipShine 0.8s 0.6s both;
+        }
+        @keyframes flipShine {
+          0% { box-shadow: 0 8px 48px 0 #000a, 0 1.5px 0 #00fff033; }
+          60% { box-shadow: 0 0 80px 16px #ff6fff66, 0 1.5px 0 #00fff033; }
+          100% { box-shadow: 0 8px 48px 0 #000a, 0 1.5px 0 #00fff033; }
         }
       `}</style>
     </div>
