@@ -89,6 +89,7 @@ const MissionModal = ({ onClose }) => {
                       alt={mission.name}
                       className="mission-bg-img"
                     />
+                    <div className="mission-bg-gradient"></div>
                   </div>
                   <div className="mission-content">
                     <div className="mission-header-box">
@@ -196,14 +197,19 @@ const MissionModal = ({ onClose }) => {
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
-          transition: border 0.2s, transform 0.32s cubic-bezier(0.4,0,0.2,1), box-shadow 0.32s, filter 0.32s;
+          transition: border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), filter 0.44s cubic-bezier(0.4,0,0.2,1);
           z-index: 3;
         }
         .mission-card:hover {
           border: 1.2px solid #ff00ffcc;
           transform: scale(1.08);
-          box-shadow: 0 0 24px 0 #00ffff33, 0 0 0 1.2px #ff00ff55;
+          box-shadow: 0 0 24px 0 #ff00ff55, 0 0 0 1.2px #ff00ff99;
           z-index: 4;
+        }
+        .mission-card:hover .mission-bg-gradient {
+          background: linear-gradient(180deg, rgba(255,0,255,0.33) 0%, rgba(255,0,255,0.13) 100%);
+          height: 38%;
+          box-shadow: 0 0 32px 0 #ff00ff44;
         }
         .missions-row-scroll.focus-mode .mission-card:not(:hover) {
           filter: grayscale(0.2) brightness(0.7);
@@ -221,6 +227,7 @@ const MissionModal = ({ onClose }) => {
           width: 100%;
           height: 100%;
           z-index: 1;
+          overflow: hidden;
         }
         .mission-bg-img {
           width: 100%;
@@ -229,13 +236,14 @@ const MissionModal = ({ onClose }) => {
           display: block;
           border-radius: 18px;
         }
-        .mission-gradient-bottom {
+        .mission-bg-gradient {
           position: absolute;
-          left: 0; right: 0; bottom: 0;
-          height: 34%;
-          background: linear-gradient(0deg, rgba(10,10,46,0.10) 90%, rgba(10,10,46,0.0) 100%);
+          left: 0; right: 0; top: 0;
+          height: 33%;
+          background: linear-gradient(180deg, rgba(255,0,255,0.22) 0%, rgba(255,0,255,0.09) 100%);
           z-index: 2;
-          border-radius: 0 0 18px 18px;
+          pointer-events: none;
+          border-radius: 18px 18px 0 0;
         }
         .mission-content {
           position: absolute;
