@@ -109,7 +109,7 @@ const MissionModal = ({ onClose }) => {
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <circle cx="11" cy="11" r="9" fill="#ffe066" stroke="#ff00ff" strokeWidth="2"/>
                           <circle cx="11" cy="11" r="7" fill="#fffbe6" fillOpacity="0.7"/>
-                          <text x="6.5" y="15.2" fontSize="10" fill="#ff00ff" fontWeight="bold" style={{filter:'drop-shadow(0 0 2px #ff00ff)'}}>₿</text>
+                          <path d="M11 15.2c-2.2-1.6-4-3.1-4-4.7a2 2 0 0 1 4-1.1A2 2 0 0 1 15 10.5c0 1.6-1.8 3.1-4 4.7z" fill="#ff00ff" stroke="#ff00ff" strokeWidth="0.7"/>
                         </svg>
                       </span>
                       <span className="stat-text">{Number.isInteger(Number(mission.reward_multiplier)) ? Number(mission.reward_multiplier) : Number(mission.reward_multiplier).toFixed(1)} SEXY</span>
@@ -117,9 +117,12 @@ const MissionModal = ({ onClose }) => {
                     <div className="stat">
                       <span className="stat-icon">
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="5.5" y="6.5" width="11" height="9" rx="2" fill="#bfc2d1" fillOpacity="0.13" stroke="#bfc2d1" strokeWidth="1.5"/>
-                          <rect x="8.5" y="9" width="5" height="3" rx="0.8" fill="#bfc2d1" fillOpacity="0.18"/>
-                          <path d="M11 9.5l-1.5 2h2l-1.5 2" stroke="#ff00ff" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                          <rect x="4.5" y="9.5" width="13" height="7" rx="2" fill="#ff00ff" fillOpacity="0.13" stroke="#ff00ff" strokeWidth="1.7"/>
+                          <rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="1.3"/>
+                          <path d="M4.5 12H17.5" stroke="#ff00ff" strokeWidth="1.3"/>
+                          <path d="M11 9.5V16" stroke="#ff00ff" strokeWidth="1.3"/>
+                          <path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
+                          <path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
                         </svg>
                       </span>
                       <span className="stat-text stat-gift-chance">{Number.isInteger(Number(mission.nft_drop_multiplier)) ? Number(mission.nft_drop_multiplier) : Number(mission.nft_drop_multiplier).toFixed(1)}% Gift Chance</span>
@@ -233,6 +236,7 @@ const MissionModal = ({ onClose }) => {
           transform: scale(1.08);
           z-index: 99999;
           transition: filter 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+          box-shadow: 0 0 32px 12px #ff36ba66, 0 0 0 1.2px #ff00ff99;
         }
         .mission-bg-image {
           position: absolute;
@@ -304,7 +308,7 @@ const MissionModal = ({ onClose }) => {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(30, 30, 50, 0.05);
+          background: rgba(30, 30, 50, 0.20);
           border-radius: 0 0 18px 18px;
           box-shadow: 0 2px 12px 0 #0002;
           padding-bottom: 18px;
