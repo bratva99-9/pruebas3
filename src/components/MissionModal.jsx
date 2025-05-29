@@ -188,17 +188,16 @@ const MissionModal = ({ onClose }) => {
         .mission-card {
           position: relative;
           background: transparent;
-          border: 4px solid #ff00ff;
-          border-radius: 28px;
-          min-width: 250px;
-          max-width: 250px;
-          width: 250px;
-          height: 420px;
+          border: 2px solid #ff00ff;
+          border-radius: 22px;
+          min-width: 230px;
+          max-width: 230px;
+          width: 230px;
+          height: 370px;
           padding: 0;
           cursor: pointer;
-          transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s;
+          transition: border-color 0.3s, transform 0.3s;
           overflow: hidden;
-          box-shadow: 0 0 32px 6px #ff00ffcc, 0 0 0 6px #ff00ff33;
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
@@ -212,7 +211,6 @@ const MissionModal = ({ onClose }) => {
 
         .mission-card.selected {
           border-color: #fff;
-          box-shadow: 0 0 40px 12px #ff00ffcc, 0 0 0 8px #fff2;
         }
 
         .mission-bg-image {
@@ -240,44 +238,49 @@ const MissionModal = ({ onClose }) => {
           padding: 44px 18px 32px 18px;
         }
         .mission-name.neon-title {
-          font-size: 38px;
-          font-weight: bold;
+          font-size: 22px;
+          font-weight: 600;
           color: #ff00ff;
-          text-shadow: 0 0 22px #ff00ff, 0 0 2px #fff;
-          margin-bottom: 10px;
+          text-shadow: 0 0 6px #ff00ff99;
+          margin-bottom: 4px;
           text-align: center;
-          letter-spacing: 1.5px;
+          letter-spacing: 0.5px;
         }
         .mission-description {
-          color: #fff;
-          font-size: 22px;
-          margin-bottom: 60px;
+          color: #b3b3ff;
+          font-size: 15px;
+          margin-bottom: 32px;
           text-align: center;
-          text-shadow: 0 0 8px #000a;
+          font-weight: 400;
+          text-shadow: none;
         }
         .mission-stats-box {
           width: 100%;
           background: rgba(10,10,46,0.82);
-          border-radius: 18px;
-          padding: 32px 0 22px 0;
-          box-shadow: 0 0 18px #ff00ff55;
+          border-radius: 0 0 18px 18px;
+          padding: 18px 0 10px 0;
+          box-shadow: none;
           display: flex;
           flex-direction: column;
-          gap: 22px;
+          gap: 12px;
           align-items: center;
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
         }
         .stat {
           color: #fff;
-          font-size: 26px;
+          font-size: 18px;
           display: flex;
           align-items: center;
-          gap: 16px;
-          font-weight: 600;
-          text-shadow: 0 0 10px #ff00ff99, 0 0 2px #fff;
+          gap: 10px;
+          font-weight: 500;
+          text-shadow: 0 0 4px #ff00ff44;
         }
         .stat-icon {
-          font-size: 32px;
-          width: 38px;
+          font-size: 22px;
+          width: 28px;
           text-align: center;
         }
 
