@@ -287,14 +287,18 @@ const NFTModal = ({ mission, onClose }) => {
           padding: 0;
           margin: 0;
           display: flex;
-          align-items: center;
-          justify-content: center;
+          alignItems: center;
+          justifyContent: center;
           position: relative;
           transition: box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1);
           z-index: 21;
         }
         .nft-card.selected {
           z-index: 99999;
+          box-shadow: 0 0 14px 3px #ff36ba44, 0 0 0 1.2px #ff00ff99 !important;
+          background: hsl(245, 86.70%, 2.90%) !important;
+          border: 1.2px solid #ff00ff99 !important;
+          transition: box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), border 0.44s cubic-bezier(0.4,0,0.2,1), background 0.44s cubic-bezier(0.4,0,0.2,1);
         }
         .nft-card.selected video {
           border: 4px solid #ff00ffcc !important;
@@ -399,13 +403,14 @@ const NFTModal = ({ mission, onClose }) => {
         .nftmodal-top-buttons {
           width: 100vw;
           max-width: 1200px;
-          margin: 0 auto 8px auto;
+          margin: 0 auto 18px auto;
           display: flex;
           flex-direction: row;
           align-items: center;
           justify-content: space-between;
           padding-left: 260px;
           padding-right: 260px;
+          gap: 32px;
         }
         .nftmodal-top-center {
           flex: 1;
@@ -417,15 +422,20 @@ const NFTModal = ({ mission, onClose }) => {
           justify-content: flex-end;
         }
         .nftmodal-bottom-buttons {
+          position: fixed;
+          left: 0;
+          bottom: 32px;
           width: 100vw;
           max-width: 1200px;
-          margin: 12px auto 0 auto;
+          margin: 0 auto;
           display: flex;
           flex-direction: row;
           align-items: center;
           justify-content: space-between;
           padding-left: 260px;
           padding-right: 260px;
+          gap: 32px;
+          z-index: 10001;
         }
         .btn-square {
           font-size: 15px;
