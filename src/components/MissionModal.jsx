@@ -190,6 +190,7 @@ const MissionModal = ({ onClose }) => {
           margin-left: auto;
           margin-right: auto;
           position: relative;
+          overflow: visible;
         }
         .missions-row-scroll::after {
           content: '';
@@ -203,6 +204,11 @@ const MissionModal = ({ onClose }) => {
         }
         .missions-row-scroll.focus-mode::after {
           opacity: 1;
+        }
+        .missions-row-scroll.focus-mode .mission-card:not(:hover) {
+          filter: grayscale(0.5) brightness(0.88);
+          transform: scale(0.93);
+          z-index: 21;
         }
         .mission-card {
           min-width: 204px;
@@ -233,7 +239,7 @@ const MissionModal = ({ onClose }) => {
           width: 100%;
           height: 100%;
           z-index: 1;
-          overflow: hidden;
+          overflow: visible;
         }
         .mission-bg-img {
           width: 100%;
