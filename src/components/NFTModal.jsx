@@ -132,11 +132,11 @@ const NFTModal = ({ mission, onClose }) => {
   }
 
   return (
-    <div className="nft-modal-fullscreen">
+    <div className="nft-modal-fullscreen" style={showLoadingOverlay ? { filter: 'grayscale(1)', pointerEvents: 'none' } : {}}>
       {showLoadingOverlay && (
         <div className="nftmodal-loading-overlay">
           <div className="nftmodal-loading-spinner">
-            <div className="spinner"></div>
+            <div className="spinner spinner-pink"></div>
             <div className="loading-text">Cargando...</div>
           </div>
         </div>
@@ -594,6 +594,17 @@ const NFTModal = ({ mission, onClose }) => {
           font-weight: 600;
           letter-spacing: 1.5px;
           text-shadow: 0 0 12px #ff00ff99;
+        }
+        .spinner-pink {
+          border: 6px solid #ff36ba33;
+          border-top: 6px solid #ff36ba;
+          border-right: 6px solid #ff6fff;
+          border-radius: 50%;
+          animation: spin 1.1s linear infinite;
+          width: 64px;
+          height: 64px;
+          margin-bottom: 18px;
+          box-shadow: 0 0 24px 4px #ff36ba55;
         }
       `}</style>
     </div>
