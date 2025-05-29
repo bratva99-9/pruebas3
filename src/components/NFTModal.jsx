@@ -170,7 +170,7 @@ const NFTModal = ({ mission, onClose }) => {
         <div className="nftmodal-top-buttons-bar compact-width">
           <button className="btn-square btn-small btn-status-mission">Mission Status</button>
           <div className="nftmodal-top-center-btns">
-            <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
+            <span className={`selected-count-style selected-count-btn btn-small${selectedNFTs.length === MAX_SELECTED ? ' maxed' : ''}`}>Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           </div>
           <button 
             className="btn-square btn-small send-btn-alt"
@@ -309,22 +309,24 @@ const NFTModal = ({ mission, onClose }) => {
           max-width: 139px;
           width: 139px;
           height: 236px;
-          border: 1.2px solid #ff36ba55;
+          border: 1.2px solid #ff36ba99;
           border-radius: 18px;
-          box-shadow: none;
+          box-shadow: 0 0 14px 3px #ff36ba33, 0 0 0 1.2px #ff00ff33;
           background: transparent;
           overflow: hidden;
           padding: 0;
           margin: 0;
           display: flex;
-          align-items: center;
-          justify-content: center;
+          alignItems: center;
+          justifyContent: center;
           position: relative;
           transition: box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1);
           z-index: 21;
         }
         .nft-card.selected {
           border: 2px solid #ff36ba;
+          box-shadow: 0 0 18px 4px #ff36ba66, 0 0 0 2.5px #ff00ff99 !important;
+          background: linear-gradient(135deg, rgba(255,0,255,0.08) 0%, rgba(0,255,255,0.08) 100%) !important;
         }
         .nft-card:hover {
           box-shadow: 0 0 20px 0px rgba(255, 0, 255, 0.4);
@@ -517,6 +519,12 @@ const NFTModal = ({ mission, onClose }) => {
           background: linear-gradient(90deg, rgba(255,0,255,0.12) 0%, rgba(0,255,255,0.12) 100%);
           margin: 18px auto 18px auto;
           border-radius: 2px;
+        }
+        .selected-count-style.selected-count-btn.btn-small.maxed {
+          border-color: #ff36ba !important;
+          color: #ff36ba !important;
+          background: rgba(255,0,255,0.10) !important;
+          box-shadow: 0 0 8px 2px #ff36ba55 !important;
         }
       `}</style>
     </div>
