@@ -128,12 +128,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
     }
   };
 
-  // Botón Cancelar: cerrar modal y redirigir a home
-  const handleCancel = () => {
-    if (onClose) onClose();
-    history.push('/home');
-  };
-
   // Utilidad para mostrar minutos en horas si es posible
   const formatDuration = (minutes) => {
     if (!minutes) return 'No disponible';
