@@ -214,8 +214,8 @@ const NFTModal = ({ mission, onClose }) => {
           left: 0;
           width: 100vw;
           height: 100vh;
-          background: none;
-          z-index: 1001;
+          z-index: 9999;
+          background: linear-gradient(135deg, #0a0a2e 0%, #16213e 50%, #0f3460 100%);
           display: flex;
           flex-direction: column;
           align-items: center;

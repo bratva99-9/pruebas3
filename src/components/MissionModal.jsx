@@ -66,7 +66,7 @@ const MissionModal = ({ onClose }) => {
 
   return (
     <div className="mission-modal-fullscreen">
-      <div className="mission-modal-content" style={{ display: showNFTModal ? 'none' : 'flex' }}>
+      <div className="mission-modal-content">
         <h1 className="mission-title">MISSION SELECTION</h1>
         <div className="missions-row-scroll">
           {missions.map((mission) => (
@@ -109,8 +109,8 @@ const MissionModal = ({ onClose }) => {
           left: 0;
           width: 100vw;
           height: 100vh;
-          background: none;
-          z-index: 1000;
+          z-index: 9999;
+          background: linear-gradient(135deg, #0a0a2e 0%, #16213e 50%, #0f3460 100%);
           display: flex;
           flex-direction: column;
           align-items: center;
