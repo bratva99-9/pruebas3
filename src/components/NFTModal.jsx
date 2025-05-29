@@ -209,17 +209,18 @@ const NFTModal = ({ mission, onClose }) => {
             })}
           </div>
         )}
-        <div className="nft-modal-actions">
-          <button className="cancel-btn" onClick={onClose}>Cancel</button>
-          <div style={{ flex: 1 }} />
+        <div className="nft-modal-actions" style={{ display: 'flex', width: '100vw', maxWidth: '1200px', justifyContent: 'space-between', alignItems: 'center', position: 'fixed', left: 0, bottom: 38, padding: '0 32px', zIndex: 10001 }}>
+          <div style={{ display: 'flex', gap: '18px', alignItems: 'center', minWidth: 0 }}>
+            <button className="cancel-btn" onClick={onClose}>Cancel</button>
+            <button className="select-mision-btn" onClick={() => {/* Acción de seleccionar misión */}}>
+              Select Mision
+            </button>
+          </div>
           {filteredNFTs.length > displayCount && (
             <button className="load-more-btn neon-load load-more-align small-load" onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
           )}
-          <button className="select-mision-btn" style={{marginLeft: '18px'}} onClick={() => {/* Acción de seleccionar misión */}}>
-            Select Mision
-          </button>
         </div>
       </div>
       <style jsx>{`
