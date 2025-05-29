@@ -205,7 +205,7 @@ const MissionModal = ({ onClose }) => {
           border-radius: 18px;
           box-shadow: none;
           background: rgba(18, 10, 40, 0.92);
-          overflow: hidden;
+          overflow: visible;
           position: relative;
           display: flex;
           flex-direction: column;
@@ -216,7 +216,7 @@ const MissionModal = ({ onClose }) => {
         .mission-card:hover {
           border: 1.2px solid #ff00ffcc;
           transform: scale(1.08);
-          box-shadow: 0 0 24px 0 #ff00ff55, 0 0 0 1.2px #ff00ff99;
+          box-shadow: 0 0 0 0 #ff00ff00, 0 0 32px 8px #ff36ba88, 0 0 0 1.2px #ff00ff99;
           z-index: 4;
         }
         .mission-card:hover .mission-bg-gradient {
