@@ -168,7 +168,9 @@ const NFTModal = ({ mission, onClose }) => {
         {/* Botones superiores */}
         <div className="nftmodal-top-buttons-bar compact-width">
           <button className="btn-square btn-small btn-status-mission">Mission Status</button>
-          <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
+          <div className="nftmodal-top-center-btns">
+            <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
+          </div>
           <button 
             className="btn-square btn-small send-btn-alt"
             onClick={sendMission}
@@ -258,6 +260,7 @@ const NFTModal = ({ mission, onClose }) => {
             </button>
           )}
         </div>
+        <div className="nftmodal-divider" />
       </div>
       <style jsx>{`
         .nft-modal-fullscreen {
@@ -298,6 +301,8 @@ const NFTModal = ({ mission, onClose }) => {
           max-width: 1200px;
           padding-left: 32px;
           padding-right: 32px;
+          margin-left: auto;
+          margin-right: auto;
         }
         .nft-card {
           min-width: 139px;
@@ -440,8 +445,13 @@ const NFTModal = ({ mission, onClose }) => {
           flex-direction: row;
           align-items: center;
           justify-content: space-between;
-          gap: 32px;
+          gap: 0;
           margin-bottom: 8px;
+        }
+        .nftmodal-top-center-btns {
+          flex: 1;
+          display: flex;
+          justify-content: center;
         }
         .btn-status-mission {
           min-width: 140px;
@@ -491,6 +501,14 @@ const NFTModal = ({ mission, onClose }) => {
           max-width: 900px !important;
           margin-left: auto !important;
           margin-right: auto !important;
+        }
+        .nftmodal-divider {
+          width: 900px;
+          max-width: 900px;
+          height: 2px;
+          background: linear-gradient(90deg, rgba(255,0,255,0.12) 0%, rgba(0,255,255,0.12) 100%);
+          margin: 18px auto 0 auto;
+          border-radius: 2px;
         }
       `}</style>
     </div>
