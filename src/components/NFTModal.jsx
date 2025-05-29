@@ -127,10 +127,10 @@ const NFTModal = ({ mission, onClose }) => {
         <div className="nfts-header-row">
           <span className="selected-count selected-style center-badge">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           <button 
-            className="send-btn selected-style send-style"
+            className="send-btn-alt"
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}
-            style={{ marginLeft: 18 }}
+            style={{ marginLeft: 'auto', minWidth: 140 }}
           >
             {sending ? 'Sending...' : `Send Bitchs !`}
           </button>
@@ -241,7 +241,7 @@ const NFTModal = ({ mission, onClose }) => {
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
-          padding-top: 48px;
+          padding-top: 18px;
         }
         .nfts-grid {
           display: flex;
@@ -368,24 +368,25 @@ const NFTModal = ({ mission, onClose }) => {
           color: #fff;
           box-shadow: none;
         }
-        .send-btn {
+        .send-btn-alt {
           font-size: 18px;
           font-weight: 500;
           color: #fff;
-          background: linear-gradient(90deg, #ff6fd8, #f32cfc 80%);
-          border: none;
+          background: rgba(36,0,56,0.10);
+          border: 2.5px solid #00ffff;
           border-radius: 14px;
           padding: 10px 32px;
-          box-shadow: 0 2px 14px #d43d9360;
+          box-shadow: none;
           text-shadow: none;
           letter-spacing: 1px;
           cursor: pointer;
-          transition: background 0.2s, filter 0.2s;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
-        .send-btn:hover {
-          background: linear-gradient(90deg, #ff43c0, #d43d93 85%);
-          filter: brightness(1.06);
+        .send-btn-alt:hover {
+          background: rgba(255,0,255,0.13);
+          border-color: #ff00ff;
           color: #fff;
+          box-shadow: none;
         }
       `}</style>
     </div>
