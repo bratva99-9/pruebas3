@@ -45,7 +45,6 @@ const MissionModal = ({ onClose }) => {
   };
 
   const handleMissionSelect = (mission) => {
-    console.log('Mission selected:', mission);
     setSelectedMission(mission);
     setShowNFTModal(true);
   };
@@ -57,8 +56,8 @@ const MissionModal = ({ onClose }) => {
 
   if (loading) {
     return (
-      <div className="mission-modal-overlay">
-        <div className="mission-modal">
+      <div className="mission-modal-fullscreen">
+        <div className="mission-modal-content">
           <div className="loading">Loading missions...</div>
         </div>
       </div>
@@ -67,7 +66,7 @@ const MissionModal = ({ onClose }) => {
 
   return (
     <div className="mission-modal-fullscreen">
-      <div className="mission-modal-content">
+      <div className="mission-modal-content" style={{ display: showNFTModal ? 'none' : 'flex' }}>
         <h1 className="mission-title">MISSION SELECTION</h1>
         <div className="missions-row-scroll">
           {missions.map((mission) => (
@@ -97,6 +96,12 @@ const MissionModal = ({ onClose }) => {
         </div>
         <button className="cancel-btn" onClick={onClose}>Cancelar</button>
       </div>
+      {showNFTModal && selectedMission && (
+        <NFTModal 
+          mission={selectedMission}
+          onClose={handleNFTModalClose}
+        />
+      )}
       <style jsx>{`
         .mission-modal-fullscreen {
           position: fixed;

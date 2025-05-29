@@ -90,8 +90,8 @@ const NFTModal = ({ mission, onClose }) => {
 
   if (loading) {
     return (
-      <div className="nft-modal-overlay">
-        <div className="nft-modal">
+      <div className="nft-modal-fullscreen">
+        <div className="nft-modal-content">
           <div className="loading">Loading NFTs...</div>
         </div>
       </div>
@@ -99,12 +99,11 @@ const NFTModal = ({ mission, onClose }) => {
   }
 
   return (
-    <div className="nft-modal-overlay">
+    <div className="nft-modal-fullscreen">
       {showSuccess && (
         <div className="success-toast">¡Misión enviada con éxito!</div>
       )}
-      <div className={`nft-modal${isClosing ? ' closing' : ''}`}>
-        <button className="close-btn neon-x" onClick={onClose} aria-label="Cerrar modal">×</button>
+      <div className="nft-modal-content">
         <div className="mission-info-header">
           <div className="mission-name-glow">{mission.name}</div>
           <div className="mission-description">{mission.description}</div>
@@ -128,12 +127,6 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         </div>
         <div className="nfts-header-row">
-          <button className="back-btn selected-style back-style" onClick={() => {
-            setIsClosing(true);
-            setTimeout(() => {
-              onClose();
-            }, 500);
-          }} aria-label="Volver a seleccionar misión">Select Mission</button>
           <span className="selected-count selected-style center-badge">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           <button 
             className="send-btn selected-style send-style"
@@ -143,7 +136,6 @@ const NFTModal = ({ mission, onClose }) => {
             {sending ? 'Sending...' : `Send Bitchs !`}
           </button>
         </div>
-
         {filteredNFTs.length === 0 ? (
           <div className="no-nfts">
             <p>No NFTs found in your collection</p>
@@ -157,7 +149,6 @@ const NFTModal = ({ mission, onClose }) => {
                 const videoUrl = nft.data.video.startsWith('Qm')
                   ? `https://ipfs.io/ipfs/${nft.data.video}`
                   : nft.data.video;
-                
                 return (
                   <div 
                     key={nft.asset_id}
@@ -209,7 +200,6 @@ const NFTModal = ({ mission, onClose }) => {
                 );
               })}
             </div>
-
             {filteredNFTs.length > displayCount && (
               <button className="load-more-btn neon-load" onClick={() => setDisplayCount(displayCount + 5)}>
                 Load More
@@ -217,441 +207,53 @@ const NFTModal = ({ mission, onClose }) => {
             )}
           </>
         )}
+        <button className="cancel-btn" onClick={onClose}>Cancelar</button>
       </div>
-
       <style jsx>{`
-        .nft-modal-overlay {
+        .nft-modal-fullscreen {
           position: fixed;
           top: 0;
           left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.9);
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          width: 100vw;
+          height: 100vh;
+          background: none;
           z-index: 1001;
-        }
-
-        .nft-modal {
-          background: linear-gradient(135deg, #0a0a2e 0%, #16213e 50%, #0f3460 100%);
-          border-radius: 20px;
-          padding: 30px;
-          max-width: 1400px;
-          width: 95%;
-          max-height: 90vh;
-          overflow-y: auto;
-          position: relative;
-          border: 2px solid #ff00ff;
-          box-shadow: 0 0 50px rgba(255, 0, 255, 0.3);
-          opacity: 1;
-          transform: scale(1);
-          transition: opacity 0.5s cubic-bezier(.4,0,.2,1), transform 0.5s cubic-bezier(.4,0,.2,1);
-        }
-
-        .nft-modal.closing {
-          opacity: 0;
-          transform: scale(0.96);
-        }
-
-        .close-btn.neon-x {
-          position: absolute;
-          top: 18px;
-          right: 28px;
-          width: 48px;
-          height: 48px;
-          background: linear-gradient(135deg, #ff00cc 0%, #a259f7 100%);
-          color: #fff;
-          border: none;
-          border-radius: 50%;
-          font-size: 32px;
-          font-weight: bold;
-          box-shadow: 0 2px 16px #a259f780, 0 0 8px #ff00cc80;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: box-shadow 0.2s, background 0.2s, color 0.2s;
-          outline: none;
-        }
-        .close-btn.neon-x:hover {
-          background: linear-gradient(135deg, #a259f7 0%, #ff00cc 100%);
-          color: #fff;
-          box-shadow: 0 4px 32px #ff00cc80, 0 0 16px #a259f7cc;
-        }
-
-        .mission-header {
-          text-align: center;
-          margin-bottom: 30px;
-          color: white;
-        }
-
-        .mission-header h2 {
-          font-size: 32px;
-          color: #00ffff;
-          margin-bottom: 15px;
-          text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
-        }
-
-        .mission-info h3 {
-          font-size: 24px;
-          color: #ff00ff;
-          margin-bottom: 10px;
-        }
-
-        .mission-info p {
-          color: #ccc;
-          margin-bottom: 10px;
-        }
-
-        .selected-count {
-          font-size: 18px;
-          font-weight: bold;
-          color: #00ffff;
-          background: rgba(0, 255, 255, 0.1);
-          padding: 8px 16px;
-          border-radius: 20px;
-          display: inline-block;
-          border: 1px solid rgba(0, 255, 255, 0.3);
-        }
-
-        .no-nfts {
-          text-align: center;
-          color: #ccc;
-          padding: 40px;
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 15px;
-          border: 2px dashed #666;
-        }
-
-        .no-nfts p {
-          margin-bottom: 10px;
-          font-size: 16px;
-        }
-
-        .nfts-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-          gap: 20px;
-          margin-bottom: 30px;
-        }
-
-        .nft-card {
-          background: rgba(255, 255, 255, 0.05);
-          border: 2px solid #444;
-          border-radius: 15px;
-          padding: 15px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          backdrop-filter: blur(10px);
-          position: relative;
-        }
-
-        .nft-card:hover {
-          transform: translateY(-5px);
-          border-color: #00ffff;
-          box-shadow: 0 10px 25px rgba(0, 255, 255, 0.3);
-        }
-
-        .nft-card.selected {
-          border-color: #ff00ff;
-          box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
-          background: rgba(255, 0, 255, 0.1);
-        }
-
-        .nft-media {
-          width: 100%;
-          height: 200px;
-          border-radius: 10px;
-          overflow: hidden;
-          margin-bottom: 15px;
-          background: #333;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .nft-media img,
-        .nft-media video {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .no-media {
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          height: 100%;
-          color: #666;
         }
-
-        .no-media-icon {
-          font-size: 48px;
-          margin-bottom: 10px;
-        }
-
-        .no-media-text {
-          font-size: 14px;
-        }
-
-        .nft-info {
-          color: white;
-          text-align: center;
-        }
-
-        .nft-name {
-          font-weight: bold;
-          margin-bottom: 5px;
-          font-size: 16px;
-          line-height: 1.2;
-        }
-
-        .nft-id {
-          color: #aaa;
-          font-size: 14px;
-        }
-
-        .selected-indicator {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background: #ff00ff;
-          color: white;
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
+        .nft-modal-content {
+          width: 100vw;
+          height: 100vh;
           display: flex;
+          flex-direction: column;
           align-items: center;
-          justify-content: center;
-          font-weight: bold;
-          font-size: 18px;
-          animation: pulse 1s infinite;
+          justify-content: flex-start;
+          padding-top: 48px;
         }
-
-        @keyframes pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.1); }
-          100% { transform: scale(1); }
-        }
-
-        .load-more-btn.neon-load {
-          display: block;
-          margin: 30px auto 0 auto;
-          background: #181828;
-          border: 2px solid #a259f7;
-          border-radius: 18px;
-          padding: 14px 38px;
-          color: #a259f7;
-          font-size: 18px;
-          font-weight: bold;
-          letter-spacing: 1px;
-          cursor: pointer;
-          box-shadow: 0 2px 12px #a259f780;
-          transition: all 0.2s;
-        }
-        .load-more-btn.neon-load:hover:not(:disabled) {
-          background: #a259f7;
-          color: #fff;
-          box-shadow: 0 4px 24px #ff00cc80;
-        }
-
-        .send-btn.neon-send {
-          padding: 16px 38px;
-          font-size: 20px;
-          border-radius: 30px;
-          background: linear-gradient(90deg, #ff00cc 0%, #a259f7 100%);
-          color: #fff;
-          border: none;
-          font-weight: bold;
-          box-shadow: 0 4px 24px #a259f780, 0 0 8px #ff00cc80;
-          text-shadow: 0 2px 8px #000a;
-          letter-spacing: 2px;
-          cursor: pointer;
-          transition: all 0.2s, box-shadow 0.3s;
-          text-transform: uppercase;
-          margin-right: 10px;
-        }
-        .send-btn.neon-send:hover:not(:disabled) {
-          background: linear-gradient(90deg, #a259f7 0%, #ff00cc 100%);
-          box-shadow: 0 6px 32px #ff00cc80, 0 0 16px #a259f7cc;
-          color: #fff;
-        }
-        .send-btn.neon-send:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-          background: #222;
-          box-shadow: none;
-        }
-
-        .success-toast {
-          position: fixed;
-          top: 24px;
-          right: 32px;
-          z-index: 2000;
-          background: #1ed760;
-          color: #fff;
-          padding: 18px 32px;
-          border-radius: 12px;
-          font-size: 18px;
-          font-weight: bold;
-          box-shadow: 0 4px 24px #0006;
-          animation: fadeInOut 3.5s;
-        }
-        @keyframes fadeInOut {
-          0% { opacity: 0; transform: translateY(-20px); }
-          10% { opacity: 1; transform: translateY(0); }
-          90% { opacity: 1; transform: translateY(0); }
-          100% { opacity: 0; transform: translateY(-20px); }
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-          .nft-modal {
-            padding: 20px;
-            width: 95%;
-          }
-          
-          .mission-header h2 {
-            font-size: 24px;
-          }
-          
-          .nfts-grid {
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-          }
-          
-          .nft-media {
-            height: 150px;
-          }
-        }
-
-        /* Scrollbar elegante para el modal */
-        .nft-modal::-webkit-scrollbar {
-          width: 12px;
-          background: rgba(0, 255, 255, 0.08);
-          border-radius: 10px;
-        }
-        .nft-modal::-webkit-scrollbar-thumb {
-          background: linear-gradient(135deg, #00ffff 0%, #ff00ff 100%);
-          border-radius: 10px;
-          box-shadow: 0 2px 8px #0006;
-        }
-        .nft-modal::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
-        }
-
-        .nfts-header-row {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-between;
-          margin: 0 0 30px 0;
-          width: 100%;
-          padding: 0 10px;
-          gap: 10px;
-          min-height: 90px;
-          position: relative;
-          max-width: 1200px;
-          margin: 0 auto 30px auto;
-        }
-        .center-badge {
+        .cancel-btn {
           margin: 0 auto;
-          font-size: 20px;
-          min-width: 200px;
-          text-align: center;
-        }
-        .selected-style {
-          font-size: 18px;
-          font-weight: bold;
-          border-radius: 20px;
-          padding: 8px 24px;
-          border: 2px solid #00ffff;
-          background: rgba(0,255,255,0.08);
-          color: #00ffff;
-          box-shadow: 0 2px 12px #00ffff33;
-          display: inline-block;
-          transition: all 0.2s;
-        }
-        .back-style {
-          border: 2px solid #444;
-          background: #181828;
+          margin-top: 24px;
+          display: block;
+          font-size: 28px;
+          font-weight: 600;
           color: #fff;
-          box-shadow: 0 2px 12px #2228;
-        }
-        .back-style:hover {
-          background: #333;
-          color: #fff;
-          border-color: #888;
-        }
-        .send-style {
-          border: 2px solid #1ed760;
-          background: #1ed76022;
-          color: #1ed760;
-          box-shadow: 0 2px 12px #1ed76044;
-        }
-        .send-style:hover:not(:disabled) {
-          background: #1ed760;
-          color: #fff;
-          border-color: #1ed760;
-        }
-        .send-style:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .mission-info-header {
-          text-align: center;
-          margin-bottom: 18px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-        .mission-name-glow {
-          font-size: 44px;
-          color: #fff;
-          font-weight: bold;
-          margin-bottom: 8px;
-          text-shadow: 0 0 32px #00fff7, 0 0 8px #ff00ff, 0 0 2px #fff;
-          letter-spacing: 2px;
-          font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif;
-          text-transform: uppercase;
-        }
-        .mission-description {
-          color: #ccc;
-          font-size: 18px;
-          margin-bottom: 12px;
-          max-width: 80%;
-        }
-        .mission-details-card {
-          display: flex;
-          gap: 18px;
-          justify-content: center;
-          margin-bottom: 2px;
-          background: rgba(0,255,255,0.07);
+          background: rgba(36,0,56,0.10);
+          border: 2.5px solid #00ffff;
           border-radius: 18px;
-          padding: 12px 32px;
-          box-shadow: 0 2px 16px #00fff733;
+          padding: 18px 64px;
+          box-shadow: 0 0 18px #00ffff55, 0 0 8px #ff00ff44;
+          text-shadow: 0 0 8px #00ffff99;
+          letter-spacing: 1.5px;
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
-        .mission-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 17px;
-          font-weight: 500;
-          border-radius: 16px;
-          padding: 6px 18px;
-          background: rgba(255,255,255,0.08);
-          box-shadow: 0 2px 8px #00fff733;
-        }
-        .mission-badge.duration {
-          color: #00fff7;
-          border: 1.5px solid #00fff7;
-        }
-        .mission-badge.mults {
+        .cancel-btn:hover {
+          background: rgba(36,0,56,0.18);
+          border-color: #ff00ff;
           color: #ff00ff;
-          border: 1.5px solid #ff00ff;
+          box-shadow: 0 0 32px #ff00ff99, 0 0 8px #00ffff44;
         }
       `}</style>
     </div>
