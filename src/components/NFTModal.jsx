@@ -138,18 +138,32 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         </div>
         <div className="nftmodal-button-square">
-          <div className="nftmodal-button-row nftmodal-button-row-top">
-            <div></div>
-            <div className="nftmodal-btn-center">
+          <div className="nftmodal-button-row-top">
+            <div className="nftmodal-btn-top-center">
               <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
             </div>
-            <div className="nftmodal-btn-right">
+            <div className="nftmodal-btn-top-right">
               <button 
                 className="btn-square send-btn-alt btn-small"
                 onClick={sendMission}
                 disabled={selectedNFTs.length === 0 || sending}>
                 {sending ? 'Sending...' : `Send Bitchs !`}
               </button>
+            </div>
+          </div>
+          <div className="nftmodal-button-row-bottom">
+            <div className="nftmodal-btn-bottom-left">
+              <button className="btn-square btn-select-mission" onClick={onClose}>Select Mission</button>
+            </div>
+            <div className="nftmodal-btn-bottom-center">
+              <button className="btn-square btn-cancel-missionmodal" onClick={() => onClose && onClose()}>Cancel</button>
+            </div>
+            <div className="nftmodal-btn-bottom-right">
+              {filteredNFTs.length > displayCount && (
+                <button className="btn-square btn-load-more" onClick={() => setDisplayCount(displayCount + 5)}>
+                  Load More NFTs
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -225,21 +239,6 @@ const NFTModal = ({ mission, onClose }) => {
             })}
           </div>
         )}
-        <div className="nftmodal-button-row nftmodal-button-row-bottom">
-          <div className="nftmodal-btn-left">
-            <button className="btn-square btn-select-mission" onClick={onClose}>Select Mission</button>
-          </div>
-          <div className="nftmodal-btn-center">
-            <button className="btn-square btn-cancel-missionmodal" onClick={() => onClose && onClose()}>Cancel</button>
-          </div>
-          <div className="nftmodal-btn-right">
-            {filteredNFTs.length > displayCount && (
-              <button className="btn-square btn-load-more" onClick={() => setDisplayCount(displayCount + 5)}>
-                Load More NFTs
-              </button>
-            )}
-          </div>
-        </div>
       </div>
       <style jsx>{`
         .nft-modal-fullscreen {
@@ -502,27 +501,6 @@ const NFTModal = ({ mission, onClose }) => {
           justify-content: flex-end;
           margin-right: 32px;
         }
-        .btn-square {
-          font-size: 15px;
-          font-weight: 500;
-          color: #fff;
-          background: rgba(0,255,255,0.10);
-          border: 2px solid #00ffff;
-          border-radius: 14px;
-          padding: 8px 32px;
-          box-shadow: none;
-          text-shadow: none;
-          letter-spacing: 1px;
-          cursor: pointer;
-          transition: background 0.2s, border-color 0.2s, color 0.2s;
-          margin: 0 8px;
-        }
-        .btn-square:hover {
-          background: rgba(255,0,255,0.13);
-          border-color: #ff00ff;
-          color: #fff;
-          box-shadow: none;
-        }
         .nftmodal-button-square {
           width: 100vw;
           max-width: 1200px;
@@ -534,31 +512,48 @@ const NFTModal = ({ mission, onClose }) => {
           position: relative;
           z-index: 10001;
         }
-        .nftmodal-button-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
+        .nftmodal-button-row-top {
           width: 100%;
           max-width: 1200px;
+          display: flex;
+          flex-direction: row;
           align-items: center;
-          margin: 0;
-        }
-        .nftmodal-button-row-top {
+          justify-content: space-between;
           margin-bottom: 8px;
         }
-        .nftmodal-button-row-bottom {
-          margin-top: 12px;
-        }
-        .nftmodal-btn-left {
-          display: flex;
-          justify-content: flex-start;
-        }
-        .nftmodal-btn-center {
+        .nftmodal-btn-top-center {
+          flex: 1;
           display: flex;
           justify-content: center;
         }
-        .nftmodal-btn-right {
+        .nftmodal-btn-top-right {
           display: flex;
           justify-content: flex-end;
+          min-width: 139px;
+        }
+        .nftmodal-button-row-bottom {
+          width: 100%;
+          max-width: 1200px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          margin-top: 12px;
+        }
+        .nftmodal-btn-bottom-left {
+          display: flex;
+          justify-content: flex-start;
+          min-width: 139px;
+        }
+        .nftmodal-btn-bottom-center {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+        }
+        .nftmodal-btn-bottom-right {
+          display: flex;
+          justify-content: flex-end;
+          min-width: 139px;
         }
         .btn-square {
           font-size: 15px;
