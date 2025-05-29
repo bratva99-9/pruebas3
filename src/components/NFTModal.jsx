@@ -158,7 +158,7 @@ const NFTModal = ({ mission, onClose }) => {
                       maxWidth: 160,
                       width: 160,
                       height: 320,
-                      border: none,
+                      border: 'none',
                       borderRadius: 18,
                       boxShadow: '0 2px 12px #0002',
                       background: 'rgba(18, 10, 40, 0.92)',
