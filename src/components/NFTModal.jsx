@@ -173,7 +173,7 @@ const NFTModal = ({ mission, onClose }) => {
                       margin: 0,
                       display: 'flex',
                       alignItems: 'center',
-                      justify-content: 'center',
+                      justifycontent: 'center',
                       position: 'relative',
                       transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1)',
                       zIndex: isSelected ? 99999 : 21,
