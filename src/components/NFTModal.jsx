@@ -409,6 +409,16 @@ const NFTModal = ({ mission, onClose }) => {
           padding-left: 260px;
           padding-right: 260px;
           gap: 32px;
+          position: relative;
+        }
+        .selected-count-style {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+        .send-btn-alt {
+          margin-left: auto;
+          margin-right: 0;
         }
         .nftmodal-top-center {
           flex: 1;
