@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import MissionModal from '../components/MissionModal';
+import MissionStatus from '../components/missionstatus';
 import ClaimActionButton from '../components/ClaimActionButton';
 import { UserService } from '../UserService';
 import fondo2 from '../images/fondo2.webp';
 
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
+  const [showMissionStatus, setShowMissionStatus] = useState(false);
   const navigate = useHistory();
 
   const handleLogout = () => {
@@ -52,11 +54,22 @@ const Home = () => {
         >
           Mission
         </button>
+        <button
+          className="btn-square btn-small"
+          onClick={() => setShowMissionStatus(true)}
+        >
+          Mission Status
+        </button>
       </div>
       {showMission && (
         <MissionModal
           onClose={() => setShowMission(false)}
           onForceCloseAll={() => setShowMission(false)}
+        />
+      )}
+      {showMissionStatus && (
+        <MissionStatus
+          onClose={() => setShowMissionStatus(false)}
         />
       )}
       <style jsx>{`
