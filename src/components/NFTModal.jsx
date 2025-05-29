@@ -237,8 +237,8 @@ const NFTModal = ({ mission, onClose }) => {
           max-height: 90vh;
           overflow-y: auto;
           position: relative;
-          border: 2px solid #00ffff;
-          box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+          border: 2px solid #ff00ff;
+          box-shadow: 0 0 50px rgba(255, 0, 255, 0.3);
           opacity: 1;
           transform: scale(1);
           transition: opacity 0.5s cubic-bezier(.4,0,.2,1), transform 0.5s cubic-bezier(.4,0,.2,1);

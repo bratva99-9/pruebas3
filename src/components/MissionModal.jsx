@@ -130,8 +130,8 @@ const MissionModal = ({ onClose }) => {
           max-height: 90vh;
           overflow-y: auto;
           position: relative;
-          border: 2px solid #0f3460;
-          box-shadow: 0 0 50px rgba(15, 52, 96, 0.3);
+          border: 2px solid #ff00ff;
+          box-shadow: 0 0 50px rgba(255, 0, 255, 0.3);
         }
 
         .close-btn {

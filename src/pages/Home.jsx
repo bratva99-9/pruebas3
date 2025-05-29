@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import MissionModal from '../components/MissionModal';
+import ClaimActionButton from '../components/ClaimActionButton';
 
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
@@ -7,6 +8,8 @@ const Home = () => {
   return (
     <div className="home">
       <h1>Welcome to Night Club App</h1>
+      
+      <ClaimActionButton />
       
       <button 
         className="mission-btn"
