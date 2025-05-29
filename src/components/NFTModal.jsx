@@ -308,7 +308,7 @@ const NFTModal = ({ mission, onClose }) => {
           font-size: 38px;
           font-weight: 700;
           color: #ff6fff;
-          margin-bottom: 4px;
+          margin-bottom: 0px;
           text-shadow: 0 0 12px #ff00ff99;
           letter-spacing: 2px;
         }
@@ -348,35 +348,37 @@ const NFTModal = ({ mission, onClose }) => {
           text-shadow: 0 0 8px #ff00ff44;
         }
         .selected-count-style {
-          font-size: 18px;
+          font-size: 14px;
           font-weight: 500;
           color: #fff;
           background: rgba(36,0,56,0.10);
-          border: 2.5px solid #00ffff;
-          border-radius: 14px;
-          padding: 10px 32px;
+          border: 2px solid #00ffff;
+          border-radius: 12px;
+          padding: 6px 20px;
           box-shadow: none;
           text-shadow: none;
-          letter-spacing: 1px;
+          letter-spacing: 0.5px;
           cursor: default;
           transition: background 0.2s, border-color 0.2s, color 0.2s;
           margin-bottom: 0;
+          white-space: nowrap;
         }
         .selected-count-btn {
-          font-size: 18px;
+          font-size: 14px;
           font-weight: 500;
           color: #fff;
           background: rgba(36,0,56,0.10);
-          border: 2.5px solid #00ffff;
-          border-radius: 14px;
-          padding: 10px 32px;
+          border: 2px solid #00ffff;
+          border-radius: 12px;
+          padding: 6px 20px;
           box-shadow: none;
           text-shadow: none;
-          letter-spacing: 1px;
+          letter-spacing: 0.5px;
           cursor: default;
           transition: background 0.2s, border-color 0.2s, color 0.2s;
           margin-bottom: 0;
-          min-width: 140px;
+          min-width: 120px;
+          white-space: nowrap;
         }
         .selected-send-row {
           display: flex;
@@ -426,19 +428,20 @@ const NFTModal = ({ mission, onClose }) => {
           z-index: 10001;
         }
         .btn-square {
-          font-size: 15px;
+          font-size: 14px;
           font-weight: 500;
           color: #fff;
           background: rgba(0,255,255,0.10);
           border: 2px solid #00ffff;
-          border-radius: 14px;
-          padding: 8px 32px;
+          border-radius: 12px;
+          padding: 6px 20px;
           box-shadow: none;
           text-shadow: none;
-          letter-spacing: 1px;
+          letter-spacing: 0.5px;
           cursor: pointer;
           transition: background 0.2s, border-color 0.2s, color 0.2s;
           margin: 0 8px;
+          white-space: nowrap;
         }
         .btn-square:hover {
           background: rgba(255,0,255,0.13);
