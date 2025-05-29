@@ -104,7 +104,7 @@ const NFTModal = ({ mission, onClose }) => {
       <div className="nft-modal-content">
         <div className="mission-info-header">
           <h1 className="mission-title-nftmodal">{mission.name}</h1>
-          <div className="mission-description-large" style={{marginTop: '0px', marginBottom: '0px'}}>{mission.description}</div>
+          <div className="mission-description-large" style={{marginTop: '0px', marginBottom: '-6px'}}>{mission.description}</div>
           <div className="mission-stats-horizontal">
             <div className="stat stat-large">
               <span className="stat-icon stat-icon-large">
@@ -140,7 +140,7 @@ const NFTModal = ({ mission, onClose }) => {
         <div className="selected-send-row">
           <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           <button 
-            className="send-btn-alt btn-small send-btn-left"
+            className="send-btn-alt btn-small send-btn-right"
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}>
             {sending ? 'Sending...' : `Send Bitchs !`}
@@ -218,10 +218,10 @@ const NFTModal = ({ mission, onClose }) => {
             })}
           </div>
         )}
-        <div className="nft-modal-actions" style={{ display: 'flex', width: '100vw', maxWidth: '1200px', justifyContent: 'flex-end', alignItems: 'center', position: 'fixed', left: 0, bottom: 38, padding: '0 32px', zIndex: 10001 }}>
-          <button className="cancel-btn btn-small btn-xsmall" style={{position: 'absolute', right: 'calc(50vw - 600px + 160px)', bottom: 38, padding: '6px 18px', fontSize: '13px'}} onClick={onClose}>Select Mission</button>
+        <div className="nft-modal-actions" style={{ display: 'flex', width: '100vw', maxWidth: '1200px', justifyContent: 'flex-start', alignItems: 'center', position: 'fixed', left: 0, bottom: 38, padding: '0 32px', zIndex: 10001 }}>
+          <button className="cancel-btn btn-xsmall btn-mission-left" style={{position: 'absolute', left: 'calc(50vw - 600px + 250px)', bottom: 38, padding: '5px 14px', fontSize: '12px'}} onClick={onClose}>Select Mission</button>
           {filteredNFTs.length > displayCount && (
-            <button className="load-more-btn neon-load load-more-align btn-small" style={{position: 'absolute', right: 'calc(50vw - 600px + 160px)', bottom: 38}} onClick={() => setDisplayCount(displayCount + 5)}>
+            <button className="load-more-btn neon-load load-more-align btn-small btn-right" style={{position: 'absolute', right: 'calc(50vw - 600px + 250px)', bottom: 38}} onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
           )}
@@ -478,11 +478,21 @@ const NFTModal = ({ mission, onClose }) => {
           left: 0;
           right: 0;
         }
-        .send-btn-left {
+        .send-btn-right {
           position: absolute;
-          right: 160px;
+          right: 250px;
           top: 50%;
           transform: translateY(-50%);
+        }
+        .btn-right {
+          right: 250px !important;
+        }
+        .btn-mission-left {
+          left: 250px !important;
+          min-width: 60px !important;
+          font-size: 12px !important;
+          padding: 5px 14px !important;
+          border-radius: 10px !important;
         }
       `}</style>
     </div>
