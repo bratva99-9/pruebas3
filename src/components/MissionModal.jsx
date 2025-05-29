@@ -88,8 +88,8 @@ const MissionModal = ({ onClose }) => {
                     <div className="mission-header-box">
                       <div className="mission-name neon-title">{mission.name}</div>
                       <div className="mission-description">{mission.description}</div>
-                      <div className="mission-divider"></div>
                     </div>
+                    <div className="mission-divider"></div>
                     <div className="mission-stats-box">
                       <div className="stat"><span className="stat-icon">⏱️</span> <span>{formatDuration(mission.duration_minutes)}</span></div>
                       <div className="stat"><span className="stat-icon">🪙</span> <span>{Number(mission.reward_multiplier).toFixed(1)} SEXXY</span></div>
@@ -119,7 +119,7 @@ const MissionModal = ({ onClose }) => {
           width: 100vw;
           height: 100vh;
           z-index: 9999;
-          background:hsl(245, 84.60%, 2.50%);
+          background:hsl(245, 86.70%, 2.90%);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -225,14 +225,15 @@ const MissionModal = ({ onClose }) => {
         .mission-name.neon-title {
           font-size: 17px;
           font-weight: 700;
-          color: #ff6fff;
-          text-shadow: 0 0 6px #ff00ff55;
+          color: #00ffff;
+          text-shadow: 0 0 6px #00ffff55;
           margin-bottom: 2px;
           text-align: center;
           letter-spacing: 0.5px;
+          transition: color 0.25s;
         }
         .mission-description {
-          color: #b3b3ff;
+          color: #e6f6ff;
           font-size: 13px;
           margin-bottom: 0;
           margin-top: 0;
@@ -241,12 +242,20 @@ const MissionModal = ({ onClose }) => {
           text-shadow: none;
           line-height: 1.3;
           margin-bottom: 6px;
+          transition: color 0.25s;
+        }
+        .mission-card:hover .mission-name.neon-title {
+          color: #ff00ff;
+          text-shadow: 0 0 8px #ff00ffcc;
+        }
+        .mission-card:hover .mission-description {
+          color: #ffe6ff;
         }
         .mission-divider {
           width: 70%;
           height: 2px;
           background: linear-gradient(90deg, #ff00ff99 0%, #fff0 100%);
-          margin: 8px auto 12px auto;
+          margin: 0 auto 12px auto;
           border: none;
           border-radius: 2px;
         }
