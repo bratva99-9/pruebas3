@@ -106,19 +106,26 @@ const MissionModal = ({ onClose }) => {
                     <div className="stat-separator"></div>
                     <div className="stat">
                       <span className="stat-icon">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="10" cy="15.2" rx="5.5" ry="2.8" fill="#bfc2d1" fillOpacity="0.18"/><path d="M10 15c-3.3 0-6-1.34-6-3V8c0-1.66 2.7-3 6-3s6 1.34 6 3v4c0 1.66-2.7 3-6 3Z" stroke="#bfc2d1" strokeWidth="1.3" fill="#fff" fillOpacity="0.04"/><path d="M10 5V3.2" stroke="#bfc2d1" strokeWidth="1.3" strokeLinecap="round"/><ellipse cx="10" cy="7.2" rx="3.2" ry="1.2" fill="#bfc2d1" fillOpacity="0.22"/><path d="M7.5 8.5c.5 1 4.5 1 5 0" stroke="#bfc2d1" strokeWidth="0.8" strokeLinecap="round"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <ellipse cx="11" cy="16" rx="6" ry="3" fill="#bfc2d1" fillOpacity="0.18"/>
+                          <path d="M11 16c-3.3 0-6-1.34-6-3V9c0-1.66 2.7-3 6-3s6 1.34 6 3v4c0 1.66-2.7 3-6 3Z" stroke="#bfc2d1" strokeWidth="1.3" fill="#fff" fillOpacity="0.04"/>
+                          <ellipse cx="11" cy="8.5" rx="3.2" ry="1.2" fill="#bfc2d1" fillOpacity="0.22"/>
+                          <path d="M8.5 10.5c.5 1 4.5 1 5 0" stroke="#bfc2d1" strokeWidth="0.8" strokeLinecap="round"/>
+                          <circle cx="11" cy="13" r="2.1" fill="#fff" fillOpacity="0.18" stroke="#bfc2d1" strokeWidth="0.7"/>
+                          <text x="10.2" y="14.2" fontSize="1.5" fill="#bfc2d1" fontWeight="bold">$</text>
+                        </svg>
                       </span>
                       <span className="stat-text">{Number.isInteger(Number(mission.reward_multiplier)) ? Number(mission.reward_multiplier) : Number(mission.reward_multiplier).toFixed(1)} SEXXY</span>
                     </div>
                     <div className="stat">
                       <span className="stat-icon">
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="3.5" y="9.5" width="15" height="7" rx="2" fill="#ffd6fa" fillOpacity="0.13" stroke="#ff36ba" strokeWidth="1.5"/>
-                          <rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ffd6fa" fillOpacity="0.18" stroke="#ff36ba" strokeWidth="1.2"/>
-                          <path d="M3.5 12H18.5" stroke="#ff36ba" strokeWidth="1.2"/>
-                          <path d="M11 9.5V17" stroke="#ff36ba" strokeWidth="1.2"/>
-                          <path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff36ba" strokeWidth="1.1" strokeLinecap="round"/>
-                          <path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff36ba" strokeWidth="1.1" strokeLinecap="round"/>
+                          <rect x="3.5" y="9.5" width="15" height="7" rx="2" fill="#ff00ff" fillOpacity="0.13" stroke="#ff00ff" strokeWidth="1.7"/>
+                          <rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="1.3"/>
+                          <path d="M3.5 12H18.5" stroke="#ff00ff" strokeWidth="1.3"/>
+                          <path d="M11 9.5V17" stroke="#ff00ff" strokeWidth="1.3"/>
+                          <path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
+                          <path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
                         </svg>
                       </span>
                       <span className="stat-text stat-gift-chance">{Number.isInteger(Number(mission.nft_drop_multiplier)) ? Number(mission.nft_drop_multiplier) : Number(mission.nft_drop_multiplier).toFixed(1)}% gift chance</span>
@@ -194,11 +201,11 @@ const MissionModal = ({ onClose }) => {
           content: '';
           position: fixed;
           top: 0; left: 0; right: 0; bottom: 0;
-          background: rgba(10, 6, 22, 0.92);
+          background: rgba(10, 6, 22, 0.92) !important;
           pointer-events: none;
           opacity: 0;
           transition: opacity 0.3s;
-          z-index: 10;
+          z-index: 99999;
         }
         .missions-row-scroll.focus-mode::after {
           opacity: 1;
