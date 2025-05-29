@@ -104,7 +104,7 @@ const NFTModal = ({ mission, onClose }) => {
       <div className="nft-modal-content">
         <div className="mission-info-header">
           <h1 className="mission-title-nftmodal">{mission.name}</h1>
-          <div className="mission-description">{mission.description}</div>
+          <div className="mission-description-large">{mission.description}</div>
           <div className="mission-stats-horizontal">
             <div className="stat stat-large">
               <span className="stat-icon stat-icon-large">
@@ -223,9 +223,9 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         )}
         <div className="nft-modal-actions" style={{ display: 'flex', width: '100vw', maxWidth: '1200px', justifyContent: 'space-between', alignItems: 'center', position: 'fixed', left: 0, bottom: 38, padding: '0 32px', zIndex: 10001 }}>
-          <button className="cancel-btn btn-small" style={{position: 'absolute', left: 'calc(50vw - 600px + 0px)', bottom: 38}} onClick={onClose}>Cancel</button>
+          <button className="cancel-btn btn-small" style={{position: 'absolute', right: 'calc(50vw - 600px + 36px)', bottom: 38}} onClick={onClose}>Select Mission</button>
           {filteredNFTs.length > displayCount && (
-            <button className="load-more-btn neon-load load-more-align btn-small" style={{right: 'calc(50vw - 600px + 36px)'}} onClick={() => setDisplayCount(displayCount + 5)}>
+            <button className="load-more-btn neon-load load-more-align btn-small" style={{position: 'absolute', right: 'calc(50vw - 600px + 36px)', bottom: 38, marginRight: '120px'}} onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
           )}
@@ -252,7 +252,7 @@ const NFTModal = ({ mission, onClose }) => {
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
-          padding-top: 18px;
+          padding-top: 12px;
         }
         .nfts-grid {
           display: flex;
@@ -305,9 +305,18 @@ const NFTModal = ({ mission, onClose }) => {
           font-size: 38px;
           font-weight: 700;
           color: #ff6fff;
-          margin-bottom: 18px;
+          margin-bottom: 8px;
           text-shadow: 0 0 12px #ff00ff99;
           letter-spacing: 2px;
+        }
+        .mission-description-large {
+          font-size: 1.2rem;
+          color: #bfc2d1;
+          text-align: center;
+          margin-bottom: 12px;
+          padding: 0 24px;
+          line-height: 1.4;
+          letter-spacing: 0.02em;
         }
         .mission-stats-horizontal {
           width: 100%;
@@ -316,7 +325,7 @@ const NFTModal = ({ mission, onClose }) => {
           justify-content: center;
           align-items: center;
           gap: 48px;
-          margin: 18px 0 24px 0;
+          margin: 12px 0 18px 0;
         }
         .stat-large {
           font-size: 2.1rem;
