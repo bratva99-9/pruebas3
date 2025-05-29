@@ -126,13 +126,6 @@ const NFTModal = ({ mission, onClose }) => {
         </div>
         <div className="nfts-header-row">
           <span className="selected-count selected-style center-badge">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
-          <button 
-            className="send-btn selected-style send-style"
-            onClick={sendMission}
-            disabled={selectedNFTs.length === 0 || sending}
-          >
-            {sending ? 'Sending...' : `Send Bitchs !`}
-          </button>
         </div>
         {filteredNFTs.length === 0 ? (
           <div className="no-nfts">
@@ -154,19 +147,20 @@ const NFTModal = ({ mission, onClose }) => {
                     onClick={() => toggleNFTSelection(nft.asset_id)}
                     style={{
                       aspectRatio: '1/2',
-                      minWidth: 160,
-                      maxWidth: 160,
-                      width: 160,
-                      height: 320,
+                      minWidth: 204,
+                      maxWidth: 204,
+                      width: 204,
+                      height: 348,
                       border: 'none',
                       borderRadius: 18,
-                      boxShadow: '0 2px 12px #0002',
+                      boxShadow: 'none',
                       background: 'rgba(18, 10, 40, 0.92)',
                       overflow: 'visible',
                       position: 'relative',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'flex-end',
+                      transition: 'border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), filter 0.44s cubic-bezier(0.4,0,0.2,1)',
                     }}
                   >
                     <video
@@ -203,7 +197,21 @@ const NFTModal = ({ mission, onClose }) => {
             )}
           </>
         )}
-        <button className="cancel-btn" onClick={onClose}>Cancelar</button>
+        <div className="nft-modal-actions">
+          <button className="cancel-btn" onClick={onClose}>Cancel</button>
+          {filteredNFTs.length > displayCount && (
+            <button className="load-more-btn neon-load" onClick={() => setDisplayCount(displayCount + 5)}>
+              Load More
+            </button>
+          )}
+          <button 
+            className="send-btn selected-style send-style"
+            onClick={sendMission}
+            disabled={selectedNFTs.length === 0 || sending}
+          >
+            {sending ? 'Sending...' : `Send Bitchs !`}
+          </button>
+        </div>
       </div>
       <style jsx>{`
         .nft-modal-fullscreen {
@@ -247,44 +255,25 @@ const NFTModal = ({ mission, onClose }) => {
         }
         .nft-card {
           aspect-ratio: 1/2;
-          min-width: 160px !important;
-          max-width: 160px !important;
-          width: 160px !important;
-          height: 320px !important;
+          min-width: 204px !important;
+          max-width: 204px !important;
+          width: 204px !important;
+          height: 348px !important;
           border: none;
           border-radius: 18px;
-          box-shadow: 0 2px 12px #0002;
+          box-shadow: none;
           background: rgba(18, 10, 40, 0.92);
           overflow: visible;
           position: relative;
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
+          transition: border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), filter 0.44s cubic-bezier(0.4,0,0.2,1);
         }
-        .cancel-btn {
-          position: fixed;
-          left: 50%;
-          bottom: 38px;
-          transform: translateX(-50%);
-          z-index: 10001;
-          font-size: 28px;
-          font-weight: 600;
-          color: #fff;
-          background: rgba(36,0,56,0.10);
-          border: 2.5px solid #00ffff;
-          border-radius: 18px;
-          padding: 18px 64px;
-          box-shadow: 0 0 18px #00ffff55, 0 0 8px #ff00ff44;
-          text-shadow: 0 0 8px #00ffff99;
-          letter-spacing: 1.5px;
-          cursor: pointer;
-          transition: background 0.2s, border-color 0.2s, color 0.2s;
-        }
-        .cancel-btn:hover {
-          background: rgba(36,0,56,0.18);
-          border-color: #ff00ff;
-          color: #ff00ff;
-          box-shadow: 0 0 32px #ff00ff99, 0 0 8px #00ffff44;
+        .nft-card.selected {
+          border: 1.2px solid #ff00ffcc;
+          box-shadow: 0 0 10px 2px #ff36ba44, 0 0 0 1.2px #ff00ff99;
+          z-index: 4;
         }
         .mission-info-header .mission-name-glow {
           font-size: 2.1rem;
@@ -304,6 +293,77 @@ const NFTModal = ({ mission, onClose }) => {
           text-shadow: none;
           line-height: 1.4;
           letter-spacing: 0.01em;
+        }
+        .nft-modal-actions {
+          width: 100vw;
+          max-width: 1200px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          position: fixed;
+          left: 0;
+          bottom: 38px;
+          padding: 0 32px;
+          z-index: 10001;
+        }
+        .cancel-btn {
+          font-size: 18px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(36,0,56,0.10);
+          border: 2.5px solid #00ffff;
+          border-radius: 14px;
+          padding: 10px 32px;
+          box-shadow: none;
+          text-shadow: none;
+          letter-spacing: 1px;
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+        .cancel-btn:hover {
+          background: rgba(255,0,255,0.13);
+          border-color: #ff00ff;
+          color: #fff;
+          box-shadow: none;
+        }
+        .load-more-btn {
+          font-size: 18px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(0,255,255,0.10);
+          border: 2px solid #00ffff;
+          border-radius: 14px;
+          padding: 10px 32px;
+          box-shadow: none;
+          text-shadow: none;
+          letter-spacing: 1px;
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+        .load-more-btn:hover {
+          background: rgba(255,0,255,0.13);
+          border-color: #ff00ff;
+          color: #fff;
+          box-shadow: none;
+        }
+        .send-btn {
+          font-size: 18px;
+          font-weight: 500;
+          color: #fff;
+          background: linear-gradient(90deg, #ff6fd8, #f32cfc 80%);
+          border: none;
+          border-radius: 14px;
+          padding: 10px 32px;
+          box-shadow: 0 2px 14px #d43d9360;
+          text-shadow: none;
+          letter-spacing: 1px;
+          cursor: pointer;
+          transition: background 0.2s, filter 0.2s;
+        }
+        .send-btn:hover {
+          background: linear-gradient(90deg, #ff43c0, #d43d93 85%);
+          filter: brightness(1.06);
+          color: #fff;
         }
       `}</style>
     </div>
