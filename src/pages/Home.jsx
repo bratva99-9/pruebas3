@@ -7,10 +7,11 @@ import fondo2 from '../images/fondo2.webp';
 
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
+  const navigate = useHistory();
 
   const handleLogout = () => {
     UserService.logout();
-    history.push('/');
+    navigate.push('/');
   };
 
   return (
