@@ -3,7 +3,7 @@ import { UserService } from '../UserService';
 import NFTModal from './NFTModal';
 import missionImg from '../images/1.webp';
 
-const MissionModal = ({ onClose }) => {
+const MissionModal = ({ onClose, onForceCloseAll }) => {
   const [missions, setMissions] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -139,6 +139,7 @@ const MissionModal = ({ onClose }) => {
             <NFTModal 
               mission={selectedMission}
               onClose={handleNFTModalClose}
+              onForceCloseAll={onForceCloseAll}
             />
           )}
         </div>

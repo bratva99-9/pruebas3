@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { UserService } from '../UserService';
 import { useHistory } from 'react-router-dom';
 
-const NFTModal = ({ mission, onClose }) => {
+const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNFTs, setSelectedNFTs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -81,7 +81,8 @@ const NFTModal = ({ mission, onClose }) => {
       setTimeout(() => setShowSuccess(false), 3500);
       setTimeout(() => {
         setShowLoadingOverlay(false);
-        if (onClose) onClose();
+        if (onForceCloseAll) onForceCloseAll();
+        else if (onClose) onClose();
         history.push('/home');
       }, 1800);
     } catch (error) {

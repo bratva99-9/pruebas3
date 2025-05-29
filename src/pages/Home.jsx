@@ -19,7 +19,10 @@ const Home = () => {
       </button>
 
       {showMission && (
-        <MissionModal onClose={() => setShowMission(false)} />
+        <MissionModal 
+          onClose={() => setShowMission(false)} 
+          onForceCloseAll={() => setShowMission(false)}
+        />
       )}
 
       <style jsx>{`
