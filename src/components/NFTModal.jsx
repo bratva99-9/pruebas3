@@ -104,7 +104,7 @@ const NFTModal = ({ mission, onClose }) => {
       <div className="nft-modal-content">
         <div className="mission-info-header">
           <h1 className="mission-title-nftmodal">{mission.name}</h1>
-          <div className="mission-description-large" style={{marginTop: '0px', marginBottom: '4px'}}>{mission.description}</div>
+          <div className="mission-description-large" style={{marginTop: '0px', marginBottom: '0px'}}>{mission.description}</div>
           <div className="mission-stats-horizontal">
             <div className="stat stat-large">
               <span className="stat-icon stat-icon-large">
@@ -152,7 +152,7 @@ const NFTModal = ({ mission, onClose }) => {
             <p>Make sure you own NFTs from the 'nightclubnft' collection with schema 'girls'</p>
           </div>
         ) : (
-          <div className="nfts-grid">
+          <div className="nfts-grid" style={{marginTop: '12px'}}>
             {filteredNFTs.slice(0, displayCount).map((nft) => {
               const isSelected = selectedNFTs.includes(nft.asset_id);
               const videoUrl = nft.data.video.startsWith('Qm')
@@ -219,9 +219,9 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         )}
         <div className="nft-modal-actions" style={{ display: 'flex', width: '100vw', maxWidth: '1200px', justifyContent: 'flex-end', alignItems: 'center', position: 'fixed', left: 0, bottom: 38, padding: '0 32px', zIndex: 10001 }}>
-          <button className="cancel-btn btn-small btn-xsmall" style={{position: 'absolute', right: 'calc(50vw - 600px + 36px)', bottom: 38, padding: '6px 18px', fontSize: '13px'}} onClick={onClose}>Select Mission</button>
+          <button className="cancel-btn btn-small btn-xsmall" style={{position: 'absolute', right: 'calc(50vw - 600px + 160px)', bottom: 38, padding: '6px 18px', fontSize: '13px'}} onClick={onClose}>Select Mission</button>
           {filteredNFTs.length > displayCount && (
-            <button className="load-more-btn neon-load load-more-align btn-small" style={{position: 'absolute', right: 'calc(50vw - 600px + 36px)', bottom: 38, marginRight: '120px'}} onClick={() => setDisplayCount(displayCount + 5)}>
+            <button className="load-more-btn neon-load load-more-align btn-small" style={{position: 'absolute', right: 'calc(50vw - 600px + 160px)', bottom: 38}} onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
             </button>
           )}
@@ -480,7 +480,7 @@ const NFTModal = ({ mission, onClose }) => {
         }
         .send-btn-left {
           position: absolute;
-          right: 80px;
+          right: 160px;
           top: 50%;
           transform: translateY(-50%);
         }
