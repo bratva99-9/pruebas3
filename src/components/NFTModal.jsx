@@ -166,15 +166,17 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         </div>
         {/* Botones superiores */}
-        <div className="nftmodal-top-buttons-row">
-          <div className="nftmodal-top-spacer" />
+        <div className="nftmodal-top-buttons-flex">
+          <div style={{flex: 1}}></div>
           <span className="selected-count-style selected-count-btn btn-small">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
-          <button 
-            className="btn-square btn-small send-btn-alt"
-            onClick={sendMission}
-            disabled={selectedNFTs.length === 0 || sending}>
-            {sending ? 'Sending...' : `Send Bitchs !`}
-          </button>
+          <div style={{flex: 1, display: 'flex', justifyContent: 'flex-end'}}>
+            <button 
+              className="btn-square btn-small send-btn-alt"
+              onClick={sendMission}
+              disabled={selectedNFTs.length === 0 || sending}>
+              {sending ? 'Sending...' : `Send Bitchs !`}
+            </button>
+          </div>
         </div>
         {filteredNFTs.length === 0 ? (
           <div className="no-nfts unified-width compact-width">
@@ -431,7 +433,7 @@ const NFTModal = ({ mission, onClose }) => {
           transform: translateX(-50%);
           z-index: 2;
         }
-        .nftmodal-top-buttons-row {
+        .nftmodal-top-buttons-flex {
           width: 100vw;
           max-width: 1200px;
           margin: 0 auto 18px auto;
