@@ -112,7 +112,7 @@ const MissionModal = ({ onClose }) => {
           width: 100vw;
           height: 100vh;
           z-index: 9999;
-          background: linear-gradient(135deg, #0a0a2e 0%, #16213e 50%, #0f3460 100%);
+          background: linear-gradient(135deg, #18132a 0%, #221a3a 100%);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -259,21 +259,21 @@ const MissionModal = ({ onClose }) => {
           font-size: 18px;
           font-weight: 500;
           color: #fff;
-          background: rgba(36,0,56,0.30);
-          border: 1.5px solid #444;
-          border-radius: 14px;
-          padding: 10px 38px;
-          box-shadow: 0 0 8px #0004;
-          text-shadow: none;
-          letter-spacing: 1px;
+          background: rgba(0,255,255,0.10);
+          border: 2.5px solid #00ffff;
+          border-radius: 16px;
+          padding: 14px 54px;
+          box-shadow: 0 0 18px #00ffff55, 0 0 8px #ff00ff44;
+          text-shadow: 0 0 8px #00ffff99;
+          letter-spacing: 1.5px;
           cursor: pointer;
           transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
         .cancel-btn:hover {
-          background: rgba(36,0,56,0.45);
-          border-color: #888;
-          color: #ff6fff;
-          box-shadow: 0 0 16px #0006;
+          background: rgba(255,0,255,0.13);
+          border-color: #ff00ff;
+          color: #fff;
+          box-shadow: 0 0 32px #ff00ff99, 0 0 8px #00ffff44;
         }
       `}</style>
     </div>
