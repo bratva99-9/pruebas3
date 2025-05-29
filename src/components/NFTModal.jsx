@@ -143,24 +143,26 @@ const NFTModal = ({ mission, onClose }) => {
                 return (
                   <div 
                     key={nft.asset_id}
-                    className={`nft-card ${isSelected ? 'selected' : ''}`}
+                    className={`nft-card${isSelected ? ' selected' : ''}`}
                     onClick={() => toggleNFTSelection(nft.asset_id)}
                     style={{
                       minWidth: 204,
                       maxWidth: 204,
                       width: 204,
                       height: 348,
+                      background: 'transparent',
                       border: 'none',
                       borderRadius: 18,
                       boxShadow: 'none',
-                      background: 'rgba(18, 10, 40, 0.92)',
-                      overflow: 'visible',
-                      position: 'relative',
+                      overflow: 'hidden',
+                      padding: 0,
+                      margin: 0,
                       display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'flex-end',
-                      transition: 'border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), filter 0.44s cubic-bezier(0.4,0,0.2,1)',
-                      zIndex: 21,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                      transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1)',
+                      zIndex: isSelected ? 99999 : 21,
                     }}
                   >
                     <video
@@ -175,9 +177,12 @@ const NFTModal = ({ mission, onClose }) => {
                         objectFit: 'cover',
                         display: 'block',
                         background: 'black',
-                        borderRadius: '0',
+                        borderRadius: 18,
                         margin: 0,
-                        padding: 0
+                        padding: 0,
+                        boxShadow: isSelected ? '0 0 14px 3px #ff36ba44, 0 0 0 2.5px #ff00ff99' : 'none',
+                        border: isSelected ? '2.5px solid #ff00ffcc' : 'none',
+                        transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1)',
                       }}
                       preload="none"
                       controls={false}
@@ -261,26 +266,24 @@ const NFTModal = ({ mission, onClose }) => {
           border: none;
           border-radius: 18px;
           box-shadow: none;
-          background: rgba(18, 10, 40, 0.92);
-          overflow: visible;
-          position: relative;
+          background: transparent;
+          overflow: hidden;
+          padding: 0;
+          margin: 0;
           display: flex;
-          flex-direction: column;
-          justifyContent: flex-end;
-          transition: border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), filter 0.44s cubic-bezier(0.4,0,0.2,1);
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          transition: box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1);
           z-index: 21;
         }
         .nft-card.selected {
-          border: 1.2px solid #ff00ffcc;
-          box-shadow: 0 0 14px 3px #ff36ba44, 0 0 0 1.2px #ff00ff99;
           z-index: 99999;
         }
         .nft-card:hover {
           filter: none !important;
           transform: scale(1.08);
           z-index: 99999;
-          transition: filter 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1);
-          box-shadow: 0 0 14px 3px #ff36ba44, 0 0 0 1.2px #ff00ff99;
         }
         .nft-card video {
           width: 100%;
