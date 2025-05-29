@@ -146,7 +146,6 @@ const NFTModal = ({ mission, onClose }) => {
                     className={`nft-card ${isSelected ? 'selected' : ''}`}
                     onClick={() => toggleNFTSelection(nft.asset_id)}
                     style={{
-                      aspectRatio: '1/2',
                       minWidth: 204,
                       maxWidth: 204,
                       width: 204,
@@ -161,6 +160,7 @@ const NFTModal = ({ mission, onClose }) => {
                       flexDirection: 'column',
                       justifyContent: 'flex-end',
                       transition: 'border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), filter 0.44s cubic-bezier(0.4,0,0.2,1)',
+                      zIndex: 21,
                     }}
                   >
                     <video
@@ -221,7 +221,7 @@ const NFTModal = ({ mission, onClose }) => {
           width: 100vw;
           height: 100vh;
           z-index: 9999;
-          background: rgba(18, 10, 40, 0.92);
+          background: hsl(245, 86.70%, 2.90%);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -254,11 +254,10 @@ const NFTModal = ({ mission, onClose }) => {
           margin-right: auto;
         }
         .nft-card {
-          aspect-ratio: 1/2;
-          min-width: 204px !important;
-          max-width: 204px !important;
-          width: 204px !important;
-          height: 348px !important;
+          min-width: 204px;
+          max-width: 204px;
+          width: 204px;
+          height: 348px;
           border: none;
           border-radius: 18px;
           box-shadow: none;
@@ -267,13 +266,31 @@ const NFTModal = ({ mission, onClose }) => {
           position: relative;
           display: flex;
           flex-direction: column;
-          justify-content: flex-end;
+          justifyContent: flex-end;
           transition: border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), box-shadow 0.44s cubic-bezier(0.4,0,0.2,1), filter 0.44s cubic-bezier(0.4,0,0.2,1);
+          z-index: 21;
         }
         .nft-card.selected {
           border: 1.2px solid #ff00ffcc;
-          box-shadow: 0 0 10px 2px #ff36ba44, 0 0 0 1.2px #ff00ff99;
-          z-index: 4;
+          box-shadow: 0 0 14px 3px #ff36ba44, 0 0 0 1.2px #ff00ff99;
+          z-index: 99999;
+        }
+        .nft-card:hover {
+          filter: none !important;
+          transform: scale(1.08);
+          z-index: 99999;
+          transition: filter 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1);
+          box-shadow: 0 0 14px 3px #ff36ba44, 0 0 0 1.2px #ff00ff99;
+        }
+        .nft-card video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          border-radius: 18px;
+          margin: 0;
+          padding: 0;
+          background: black;
         }
         .mission-info-header .mission-name-glow {
           font-size: 2.1rem;
