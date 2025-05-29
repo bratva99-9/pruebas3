@@ -125,16 +125,16 @@ const MissionModal = ({ onClose }) => {
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
-          padding-top: 48px;
+          padding-top: 24px;
         }
         .mission-title {
           text-align: center;
-          font-size: 54px;
-          font-weight: bold;
-          color: #ff00ff;
-          margin-bottom: 36px;
-          text-shadow: 0 0 24px #ff00ff, 0 0 2px #fff;
-          letter-spacing: 3px;
+          font-size: 38px;
+          font-weight: 700;
+          color: #ff6fff;
+          margin-bottom: 18px;
+          text-shadow: 0 0 12px #ff00ff99;
+          letter-spacing: 2px;
         }
         .missions-row-scroll {
           display: flex;
@@ -143,7 +143,7 @@ const MissionModal = ({ onClose }) => {
           overflow-x: auto;
           padding-bottom: 18px;
           margin-bottom: 0;
-          margin-top: 32px;
+          margin-top: 8px;
           padding-top: 16px;
           scrollbar-color: #ff00ff #181828;
           scrollbar-width: thin;
@@ -195,31 +195,32 @@ const MissionModal = ({ onClose }) => {
         }
         .mission-title-box {
           width: 100%;
-          padding: 18px 0 0 0;
+          padding: 12px 0 0 0;
           display: flex;
           flex-direction: column;
           align-items: center;
         }
         .mission-name.neon-title {
-          font-size: 19px;
-          font-weight: bold;
+          font-size: 17px;
+          font-weight: 700;
           color: #ff6fff;
-          text-shadow: 0 0 8px #ff00ff99;
-          margin-bottom: 2px;
+          text-shadow: 0 0 6px #ff00ff55;
+          margin-bottom: 0;
           text-align: center;
           letter-spacing: 0.5px;
         }
         .mission-description {
           color: #b3b3ff;
           font-size: 13px;
-          margin-bottom: 0;
+          margin-bottom: 38px;
+          margin-top: 10px;
           text-align: center;
           font-weight: 400;
           text-shadow: none;
         }
         .mission-stats-box {
           width: 100%;
-          background: rgba(10,10,46,0.15);
+          background: rgba(10,10,46,0.30);
           border-radius: 0 0 18px 18px;
           padding: 18px 0 10px 0;
           box-shadow: none;
@@ -233,43 +234,44 @@ const MissionModal = ({ onClose }) => {
           bottom: 0;
         }
         .stat {
-          color: #fff;
-          font-size: 15px;
+          color: #e0e0e0;
+          font-size: 14px;
           display: flex;
           align-items: center;
           gap: 8px;
           font-weight: 500;
-          text-shadow: 0 0 4px #000a;
+          text-shadow: 0 0 2px #000a;
         }
         .stat-icon {
-          font-size: 18px;
-          width: 22px;
+          font-size: 16px;
+          width: 20px;
           text-align: center;
+          filter: grayscale(1) brightness(1.5);
         }
         .cancel-btn {
           position: fixed;
           left: 50%;
-          bottom: 38px;
+          bottom: 32px;
           transform: translateX(-50%);
           z-index: 10001;
-          font-size: 28px;
-          font-weight: 600;
+          font-size: 18px;
+          font-weight: 500;
           color: #fff;
-          background: rgba(36,0,56,0.10);
-          border: 2.5px solid #00ffff;
-          border-radius: 18px;
-          padding: 18px 64px;
-          box-shadow: 0 0 18px #00ffff55, 0 0 8px #ff00ff44;
-          text-shadow: 0 0 8px #00ffff99;
-          letter-spacing: 1.5px;
+          background: rgba(36,0,56,0.30);
+          border: 1.5px solid #444;
+          border-radius: 14px;
+          padding: 10px 38px;
+          box-shadow: 0 0 8px #0004;
+          text-shadow: none;
+          letter-spacing: 1px;
           cursor: pointer;
           transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
         .cancel-btn:hover {
-          background: rgba(36,0,56,0.18);
-          border-color: #ff00ff;
-          color: #ff00ff;
-          box-shadow: 0 0 32px #ff00ff99, 0 0 8px #00ffff44;
+          background: rgba(36,0,56,0.45);
+          border-color: #888;
+          color: #ff6fff;
+          box-shadow: 0 0 16px #0006;
         }
       `}</style>
     </div>
