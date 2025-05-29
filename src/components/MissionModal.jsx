@@ -256,16 +256,16 @@ const MissionModal = ({ onClose }) => {
           bottom: 32px;
           transform: translateX(-50%);
           z-index: 10001;
-          font-size: 18px;
+          font-size: 15px;
           font-weight: 500;
           color: #fff;
           background: rgba(0,255,255,0.10);
-          border: 2.5px solid #00ffff;
-          border-radius: 16px;
-          padding: 14px 54px;
-          box-shadow: 0 0 18px #00ffff55, 0 0 8px #ff00ff44;
-          text-shadow: 0 0 8px #00ffff99;
-          letter-spacing: 1.5px;
+          border: 2px solid #00ffff;
+          border-radius: 14px;
+          padding: 8px 32px;
+          box-shadow: none;
+          text-shadow: none;
+          letter-spacing: 1px;
           cursor: pointer;
           transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
