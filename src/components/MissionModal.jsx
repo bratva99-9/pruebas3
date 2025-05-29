@@ -112,7 +112,7 @@ const MissionModal = ({ onClose }) => {
           width: 100vw;
           height: 100vh;
           z-index: 9999;
-          background: #12092a;
+          background:hsl(250, 74.50%, 9.20%);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -158,7 +158,7 @@ const MissionModal = ({ onClose }) => {
           max-width: 204px;
           width: 204px;
           height: 348px;
-          border: 1.5px solid rgba(162,89,247,0.7);
+          border: none;
           border-radius: 18px;
           box-shadow: none;
           background: none;
@@ -167,6 +167,10 @@ const MissionModal = ({ onClose }) => {
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
+          transition: border 0.2s;
+        }
+        .mission-card:hover {
+          border: 2px solid #ff00ffcc;
         }
         .mission-bg-image {
           position: absolute;
@@ -181,6 +185,14 @@ const MissionModal = ({ onClose }) => {
           object-fit: cover;
           display: block;
           border-radius: 18px;
+        }
+        .mission-gradient-bottom {
+          position: absolute;
+          left: 0; right: 0; bottom: 0;
+          height: 34%;
+          background: linear-gradient(0deg, rgba(10,10,46,0.10) 90%, rgba(10,10,46,0.0) 100%);
+          z-index: 2;
+          border-radius: 0 0 18px 18px;
         }
         .mission-content {
           position: absolute;
@@ -222,14 +234,17 @@ const MissionModal = ({ onClose }) => {
         }
         .mission-stats-box {
           width: 100%;
-          background: linear-gradient(0deg, rgba(10,10,46,0.65) 80%, rgba(10,10,46,0.0) 100%);
-          border-radius: 0 0 18px 18px;
-          padding: 18px 0 10px 0;
-          box-shadow: none;
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding-bottom: 18px;
+          padding-top: 12px;
           display: flex;
           flex-direction: column;
           gap: 8px;
           align-items: center;
+          z-index: 3;
         }
         .stat {
           color: #e0e0e0;
