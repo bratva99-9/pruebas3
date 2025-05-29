@@ -70,8 +70,8 @@ const MissionModal = ({ onClose }) => {
 
   return (
     <div className="mission-modal-fullscreen">
-      <div className={`modal-flip3d-container${showNFTModal ? ' flipped' : ''}`}>
-        <div className="modal-flip3d-front">
+      <div className="modal-fade-scale-container">
+        <div className={`modal-fade-scale-front${showNFTModal ? ' fade-scale-out' : ''}`}>
           <div className="mission-modal-content">
             <h1 className="mission-title">MISSION SELECTION</h1>
             <div className={`missions-row-scroll${focusMode ? ' focus-mode' : ''}`}
@@ -107,7 +107,7 @@ const MissionModal = ({ onClose }) => {
             <button className="cancel-btn" onClick={onClose}>Cancelar</button>
           </div>
         </div>
-        <div className="modal-flip3d-back">
+        <div className={`modal-fade-scale-back${showNFTModal ? ' fade-scale-in' : ''}`}>
           {showNFTModal && selectedMission && (
             <NFTModal 
               mission={selectedMission}
@@ -209,7 +209,7 @@ const MissionModal = ({ onClose }) => {
           box-shadow: 0 0 32px 0 #ff00ff44;
         }
         .missions-row-scroll.focus-mode .mission-card:not(:hover) {
-          filter: grayscale(0.2) brightness(0.7);
+          filter: grayscale(1) brightness(0.7);
           transform: scale(0.93);
           z-index: 20;
         }
@@ -343,10 +343,9 @@ const MissionModal = ({ onClose }) => {
           box-shadow: none;
         }
         .missions-row-scroll.focus-mode ~ .cancel-btn {
-          opacity: 0.4;
-          filter: blur(1px);
-          pointer-events: none;
-          transition: opacity 0.3s, filter 0.3s;
+          filter: grayscale(1) brightness(0.7);
+          opacity: 0.7;
+          transition: filter 0.4s, opacity 0.4s;
         }
         /* Animaciones para los modales */
         .modal-transition {
@@ -356,60 +355,42 @@ const MissionModal = ({ onClose }) => {
           from { opacity: 0; transform: scale(0.92); }
           to { opacity: 1; transform: scale(1); }
         }
-        /* Flip 3D elegante para transición de modales */
-        .modal-flip3d-container {
-          perspective: 1200px;
+        /* Fade + Scale para transición de modales */
+        .modal-fade-scale-container {
+          position: relative;
           width: 100vw;
           height: 100vh;
-          position: fixed;
-          top: 0;
-          left: 0;
-          z-index: 9999;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: rgba(18,9,42,0.85);
-          backdrop-filter: blur(6px);
-          transition: background 0.5s;
         }
-        .modal-flip3d-front, .modal-flip3d-back {
-          width: 100vw;
-          height: 100vh;
+        .modal-fade-scale-front, .modal-fade-scale-back {
           position: absolute;
-          top: 0;
-          left: 0;
-          backface-visibility: hidden;
-          box-shadow: 0 8px 48px 0 #0008, 0 1.5px 0 #ff00ff33;
-          border-radius: 24px;
-          overflow: hidden;
-        }
-        .modal-flip3d-front {
-          background: none;
+          top: 0; left: 0; width: 100vw; height: 100vh;
+          transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1);
+          will-change: opacity, transform;
           z-index: 2;
-          transform: rotateY(0deg);
-          transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+          pointer-events: all;
         }
-        .modal-flip3d-back {
-          background: none;
+        .modal-fade-scale-front {
+          opacity: 1;
+          transform: scale(1);
           z-index: 3;
-          transform: rotateY(180deg);
-          transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
-          box-shadow: 0 8px 48px 0 #000a, 0 1.5px 0 #00fff033;
         }
-        .modal-flip3d-container.flipped .modal-flip3d-front {
-          transform: rotateY(-180deg);
+        .modal-fade-scale-front.fade-scale-out {
+          opacity: 0;
+          transform: scale(0.93);
+          pointer-events: none;
+          z-index: 2;
         }
-        .modal-flip3d-container.flipped .modal-flip3d-back {
-          transform: rotateY(0deg);
+        .modal-fade-scale-back {
+          opacity: 0;
+          transform: scale(1.07);
+          z-index: 2;
+          pointer-events: none;
         }
-        /* Brillo elegante al finalizar el giro */
-        .modal-flip3d-back {
-          animation: flipShine 0.8s 0.6s both;
-        }
-        @keyframes flipShine {
-          0% { box-shadow: 0 8px 48px 0 #000a, 0 1.5px 0 #00fff033; }
-          60% { box-shadow: 0 0 80px 16px #ff6fff66, 0 1.5px 0 #00fff033; }
-          100% { box-shadow: 0 8px 48px 0 #000a, 0 1.5px 0 #00fff033; }
+        .modal-fade-scale-back.fade-scale-in {
+          opacity: 1;
+          transform: scale(1);
+          pointer-events: all;
+          z-index: 4;
         }
       `}</style>
     </div>
