@@ -147,105 +147,75 @@ const NFTModal = ({ mission, onClose }) => {
             <p>Make sure you own NFTs from the 'nightclubnft' collection with schema 'girls'</p>
           </div>
         ) : (
-          <>
-            <div className="nfts-grid">
-              {filteredNFTs.slice(0, displayCount).map((nft) => {
-                const isSelected = selectedNFTs.includes(nft.asset_id);
-                const videoUrl = nft.data.video.startsWith('Qm')
-                  ? `https://ipfs.io/ipfs/${nft.data.video}`
-                  : nft.data.video;
-                return (
-                  <div 
-                    key={nft.asset_id}
-                    className={`nft-card${isSelected ? ' selected' : ''}`}
-                    onClick={() => toggleNFTSelection(nft.asset_id)}
+          <div className="nfts-grid">
+            {filteredNFTs.slice(0, displayCount).map((nft) => {
+              const isSelected = selectedNFTs.includes(nft.asset_id);
+              const videoUrl = nft.data.video.startsWith('Qm')
+                ? `https://ipfs.io/ipfs/${nft.data.video}`
+                : nft.data.video;
+              return (
+                <div 
+                  key={nft.asset_id}
+                  className={`nft-card${isSelected ? ' selected' : ''}`}
+                  onClick={() => toggleNFTSelection(nft.asset_id)}
+                  style={{
+                    minWidth: 139,
+                    maxWidth: 139,
+                    width: 139,
+                    height: 236,
+                    background: 'transparent',
+                    border: 'none',
+                    borderRadius: 18,
+                    boxShadow: 'none',
+                    overflow: 'hidden',
+                    padding: 0,
+                    margin: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'relative',
+                    transition: 'border 0.32s cubic-bezier(0.4,0,0.2,1)',
+                    zIndex: isSelected ? 99999 : 21,
+                  }}
+                >
+                  <video
+                    src={videoUrl}
+                    loop
+                    muted
+                    playsInline
+                    autoPlay
                     style={{
-                      minWidth: 139,
-                      maxWidth: 139,
-                      width: 139,
-                      height: 236,
-                      background: 'transparent',
-                      border: 'none',
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block',
+                      background: 'black',
                       borderRadius: 18,
-                      boxShadow: 'none',
-                      overflow: 'hidden',
-                      padding: 0,
                       margin: 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifycontent: 'center',
-                      position: 'relative',
-                      transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1)',
+                      padding: 0,
+                      boxShadow: 'none',
+                      border: isSelected ? '2.5px solid #ff00ffcc' : 'none',
+                      backgroundColor: 'black',
+                      filter: 'none',
+                      transform: 'none',
+                      transition: 'border 0.32s cubic-bezier(0.4,0,0.2,1)',
                       zIndex: isSelected ? 99999 : 21,
                     }}
-                  >
-                    <video
-                      src={videoUrl}
-                      loop
-                      muted
-                      playsInline
-                      autoPlay
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
-                        background: 'black',
-                        borderRadius: 18,
-                        margin: 0,
-                        padding: 0,
-                        boxShadow: (isSelected || isSelected) ? '0 0 14px 3px #ff36ba44, 0 0 0 2.5px #ff00ff99' : 'none',
-                        border: (isSelected || isSelected) ? '2.5px solid #ff00ffcc' : 'none',
-                        backgroundColor: (isSelected || isSelected) ? 'hsl(245, 86.70%, 2.90%)' : 'black',
-                        filter: (isSelected || isSelected) ? 'none' : undefined,
-                        transform: (isSelected || isSelected) ? 'scale(1.08)' : undefined,
-                        transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), background 0.3s',
-                        zIndex: (isSelected || isSelected) ? 99999 : 21,
-                      }}
-                      preload="none"
-                      controls={false}
-                      onError={e => {
-                        console.error('Video error:', e);
-                        e.target.style.display = 'none';
-                      }}
-                      onMouseEnter={e => {
-                        if (!isSelected) {
-                          e.target.style.transform = 'scale(1.08)';
-                          e.target.style.boxShadow = '0 0 14px 3px #ff36ba44, 0 0 0 2.5px #ff00ff99';
-                          e.target.style.border = '2.5px solid #ff00ffcc';
-                          e.target.style.backgroundColor = 'hsl(245, 86.70%, 2.90%)';
-                          e.target.style.zIndex = 99999;
-                        }
-                      }}
-                      onMouseLeave={e => {
-                        if (!isSelected) {
-                          e.target.style.transform = '';
-                          e.target.style.boxShadow = 'none';
-                          e.target.style.border = 'none';
-                          e.target.style.backgroundColor = 'black';
-                          e.target.style.zIndex = 21;
-                        }
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            {filteredNFTs.length > displayCount && (
-              <button className="load-more-btn neon-load" onClick={() => setDisplayCount(displayCount + 5)}>
-                Load More
-              </button>
-            )}
-          </>
+                    preload="none"
+                    controls={false}
+                    onError={e => {
+                      console.error('Video error:', e);
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
         )}
         <div className="nft-modal-actions">
           <button className="cancel-btn" onClick={onClose}>Cancel</button>
           <div style={{ flex: 1 }} />
-          {filteredNFTs.length > displayCount && (
-            <button className="load-more-btn neon-load" style={{marginLeft: 'auto'}} onClick={() => setDisplayCount(displayCount + 5)}>
-              Load More
-            </button>
-          )}
         </div>
       </div>
       <style jsx>{`
@@ -310,20 +280,11 @@ const NFTModal = ({ mission, onClose }) => {
         .nft-card.selected {
           z-index: 99999;
         }
-        .nft-card:hover {
-          filter: none !important;
-          transform: scale(1.08);
-          z-index: 99999;
+        .nft-card.selected video {
+          border: 2.5px solid #ff00ffcc !important;
         }
-        .nft-card video {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          display: block;
-          border-radius: 18px;
-          margin: 0;
-          padding: 0;
-          background: black;
+        .nft-card:hover {
+          /* Sin efecto de hover */
         }
         .mission-info-header .mission-name-glow {
           font-size: 2.1rem;
