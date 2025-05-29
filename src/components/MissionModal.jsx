@@ -106,7 +106,7 @@ const MissionModal = ({ onClose }) => {
                     <div className="stat-separator"></div>
                     <div className="stat">
                       <span className="stat-icon">
-                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="10" cy="15" rx="6" ry="3" fill="#bfc2d1" fillOpacity="0.18"/><path d="M10 15c-3.3 0-6-1.34-6-3V8c0-1.66 2.7-3 6-3s6 1.34 6 3v4c0 1.66-2.7 3-6 3Z" stroke="#bfc2d1" strokeWidth="1.2"/><path d="M10 5V3.5" stroke="#bfc2d1" strokeWidth="1.2" strokeLinecap="round"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="10" cy="15.2" rx="5.5" ry="2.8" fill="#bfc2d1" fillOpacity="0.18"/><path d="M10 15c-3.3 0-6-1.34-6-3V8c0-1.66 2.7-3 6-3s6 1.34 6 3v4c0 1.66-2.7 3-6 3Z" stroke="#bfc2d1" strokeWidth="1.3" fill="#fff" fillOpacity="0.04"/><path d="M10 5V3.2" stroke="#bfc2d1" strokeWidth="1.3" strokeLinecap="round"/><ellipse cx="10" cy="7.2" rx="3.2" ry="1.2" fill="#bfc2d1" fillOpacity="0.22"/><path d="M7.5 8.5c.5 1 4.5 1 5 0" stroke="#bfc2d1" strokeWidth="0.8" strokeLinecap="round"/></svg>
                       </span>
                       <span className="stat-text">{Number.isInteger(Number(mission.reward_multiplier)) ? Number(mission.reward_multiplier) : Number(mission.reward_multiplier).toFixed(1)} SEXXY</span>
                     </div>
@@ -114,7 +114,7 @@ const MissionModal = ({ onClose }) => {
                       <span className="stat-icon">
                         <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="8" width="14" height="8" rx="2" stroke="#ff36ba" strokeWidth="1.5"/><path d="M3 10H17" stroke="#ff36ba" strokeWidth="1.2"/><rect x="8.25" y="3.5" width="3.5" height="4.5" rx="1.5" stroke="#ff36ba" strokeWidth="1.2"/><path d="M10 8V17" stroke="#ff36ba" strokeWidth="1.2"/></svg>
                       </span>
-                      <span className="stat-text">{Number.isInteger(Number(mission.nft_drop_multiplier)) ? Number(mission.nft_drop_multiplier) : Number(mission.nft_drop_multiplier).toFixed(1)}% probabilidad</span>
+                      <span className="stat-text">{Number.isInteger(Number(mission.nft_drop_multiplier)) ? Number(mission.nft_drop_multiplier) : Number(mission.nft_drop_multiplier).toFixed(1)}% gift chance</span>
                     </div>
                   </div>
                 </div>
@@ -187,7 +187,7 @@ const MissionModal = ({ onClose }) => {
           content: '';
           position: fixed;
           top: 0; left: 0; right: 0; bottom: 0;
-          background: rgba(18,9,42,0.7);
+          background: rgba(10, 6, 22, 0.82);
           pointer-events: none;
           opacity: 0;
           transition: opacity 0.3s;
