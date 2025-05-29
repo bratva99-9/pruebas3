@@ -7,6 +7,7 @@ const NFTModal = ({ mission, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [displayCount, setDisplayCount] = useState(5);
 
   const MAX_SELECTED = 10;
 
@@ -123,19 +124,15 @@ const NFTModal = ({ mission, onClose }) => {
             </span>
           </div>
         </div>
+        <div className="selected-count-badge" style={{ display: 'flex', justifyContent: 'center', margin: '18px 0 0 0', width: '100%' }}>
+          <span className="selected-count-style">Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
+        </div>
         <div className="nfts-header-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%', maxWidth: '1200px', margin: '0 auto', marginBottom: 0, marginTop: 0, position: 'relative' }}>
-          <span className="selected-count selected-style center-badge" style={{marginLeft: 8}}>Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           <button 
             className="send-btn-alt"
             onClick={sendMission}
             disabled={selectedNFTs.length === 0 || sending}
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: '-54px',
-              minWidth: 140,
-              zIndex: 20
-            }}
+            style={{ position: 'absolute', right: 0, top: '-54px', minWidth: 140, zIndex: 20 }}
           >
             {sending ? 'Sending...' : `Send Bitchs !`}
           </button>
@@ -147,7 +144,7 @@ const NFTModal = ({ mission, onClose }) => {
           </div>
         ) : (
           <div className="nfts-grid">
-            {filteredNFTs.map((nft) => {
+            {filteredNFTs.slice(0, displayCount).map((nft) => {
               const isSelected = selectedNFTs.includes(nft.asset_id);
               const videoUrl = nft.data.video.startsWith('Qm')
                 ? `https://ipfs.io/ipfs/${nft.data.video}`
@@ -192,12 +189,12 @@ const NFTModal = ({ mission, onClose }) => {
                       borderRadius: 18,
                       margin: 0,
                       padding: 0,
-                      boxShadow: 'none',
-                      border: isSelected ? '2.5px solid #ff00ffcc' : 'none',
+                      boxShadow: isSelected ? '0 0 18px 4px #ff36ba66' : 'none',
+                      border: isSelected ? '4px solid #ff00ffcc' : 'none',
                       backgroundColor: 'black',
                       filter: 'none',
                       transform: 'none',
-                      transition: 'border 0.32s cubic-bezier(0.4,0,0.2,1)',
+                      transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1)',
                       zIndex: isSelected ? 99999 : 21,
                     }}
                     preload="none"
@@ -215,6 +212,11 @@ const NFTModal = ({ mission, onClose }) => {
         <div className="nft-modal-actions">
           <button className="cancel-btn" onClick={onClose}>Cancel</button>
           <div style={{ flex: 1 }} />
+          {filteredNFTs.length > displayCount && (
+            <button className="load-more-btn neon-load" style={{marginLeft: 'auto'}} onClick={() => setDisplayCount(displayCount + 5)}>
+              Load More NFTs
+            </button>
+          )}
         </div>
       </div>
       <style jsx>{`
@@ -280,7 +282,8 @@ const NFTModal = ({ mission, onClose }) => {
           z-index: 99999;
         }
         .nft-card.selected video {
-          border: 2.5px solid #ff00ffcc !important;
+          border: 4px solid #ff00ffcc !important;
+          box-shadow: 0 0 18px 4px #ff36ba66 !important;
         }
         .nft-card:hover {
           /* Sin efecto de hover */
@@ -375,6 +378,27 @@ const NFTModal = ({ mission, onClose }) => {
           border-color: #ff00ff;
           color: #fff;
           box-shadow: none;
+        }
+        .selected-count-badge {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          margin-bottom: 0;
+        }
+        .selected-count-style {
+          font-size: 18px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(36,0,56,0.10);
+          border: 2.5px solid #00ffff;
+          border-radius: 14px;
+          padding: 10px 32px;
+          box-shadow: none;
+          text-shadow: none;
+          letter-spacing: 1px;
+          cursor: default;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
+          margin-bottom: 0;
         }
       `}</style>
     </div>
