@@ -131,6 +131,10 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
     );
   }
 
+  if (showMissionStatus) {
+    return <MissionStatus onClose={() => setShowMissionStatus(false)} />;
+  }
+
   return (
     <div className="nft-modal-fullscreen" style={showLoadingOverlay ? { filter: 'grayscale(1)', pointerEvents: 'none' } : {}}>
       {showLoadingOverlay && (
@@ -280,11 +284,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
           ) : <button className="btn-square btn-small btn-load-more" disabled style={{opacity:0.5, cursor:'not-allowed'}}>Load More NFTs</button>}
         </div>
       </div>
-      {showMissionStatus && (
-        <MissionStatus
-          onClose={() => setShowMissionStatus(false)}
-        />
-      )}
       <style jsx>{`
         .nft-modal-fullscreen {
           position: fixed;
