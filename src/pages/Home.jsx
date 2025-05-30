@@ -110,14 +110,14 @@ const Home = () => {
         .mission-button {
           width: 200px;
           height: 60px;
-          background: url(${missionButton}) no-repeat center center;
-          background-size: contain;
+          background: url(${missionButton}) no-repeat left center;
+          background-size: 200% auto;
           border: none;
           cursor: pointer;
-          transition: background-image 0.2s;
+          transition: background-position 0.2s;
         }
         .mission-button:hover {
-          background-image: url(${missionButtonHover});
+          background-position: right center;
         }
         .home-user-name {
           color: #ffb9fa;
