@@ -111,8 +111,8 @@ const Home = () => {
           background-size: 200% auto;
           border: none;
           cursor: pointer;
-          transition: background-position 0.2s;
           padding: 0;
+          outline: none;
         }
         .mission-button:hover {
           background-position: right center;
