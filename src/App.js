@@ -1,7 +1,6 @@
 // src/App.js
 
 import './App.scss';
-import { Menu } from './components/Menu';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import Page2 from './pages/Page2';
@@ -14,7 +13,6 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Menu />
         <Switch>
           <Route exact path="/" component={LandingPage} />
           <ProtectedRoute exact path="/page2" component={Page2} />
