@@ -48,7 +48,7 @@ const Home = () => {
       </div>
       <ClaimActionButton />
       <div style={{display: 'flex', justifyContent: 'center', gap: 24, marginTop: 24}}>
-        <button
+        <div
           className="mission-button"
           onClick={() => setShowMission(true)}
         />
@@ -109,10 +109,7 @@ const Home = () => {
           height: 120px;
           background: url(${missionButton}) no-repeat left center;
           background-size: 200% auto;
-          border: none;
           cursor: pointer;
-          padding: 0;
-          outline: none;
         }
         .mission-button:hover {
           background-position: right center;
