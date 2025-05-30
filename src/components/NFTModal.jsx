@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { UserService } from '../UserService';
 import { useHistory } from 'react-router-dom';
+import MissionStatus from './missionstatus';
 
 const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   const [nfts, setNfts] = useState([]);
@@ -10,6 +11,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [displayCount, setDisplayCount] = useState(5);
   const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
+  const [showMissionStatus, setShowMissionStatus] = useState(false);
 
   const MAX_SELECTED = 10;
   const history = useHistory();
@@ -180,7 +182,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
         </div>
         {/* Botones superiores */}
         <div className="nftmodal-top-buttons-bar compact-width" style={{marginBottom: '6px'}}>
-          <button className="btn-square btn-small btn-status-mission">Mission Status</button>
+          <button className="btn-square btn-small btn-status-mission" onClick={() => setShowMissionStatus(true)}>Mission Status</button>
           <div className="nftmodal-top-center-btns">
             <span className={`selected-count-style selected-count-btn btn-small${selectedNFTs.length === MAX_SELECTED ? ' maxed' : ''}`}>Selected: {selectedNFTs.length}/{MAX_SELECTED}</span>
           </div>
@@ -266,6 +268,11 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
         {/* Botones inferiores */}
         <div className="nftmodal-bottom-buttons unified-width compact-width fixed-bottom-btns">
           <button className="btn-square btn-small btn-select-mission" onClick={onClose}>Select Mission</button>
+          <button className="btn-square btn-small btn-cancel" onClick={() => {
+            if (onForceCloseAll) onForceCloseAll();
+            else if (onClose) onClose();
+            history.push('/home');
+          }}>Cancel</button>
           {filteredNFTs.length > displayCount ? (
             <button className="btn-square btn-small btn-load-more" onClick={() => setDisplayCount(displayCount + 5)}>
               Load More NFTs
@@ -273,6 +280,11 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
           ) : <button className="btn-square btn-small btn-load-more" disabled style={{opacity:0.5, cursor:'not-allowed'}}>Load More NFTs</button>}
         </div>
       </div>
+      {showMissionStatus && (
+        <MissionStatus
+          onClose={() => setShowMissionStatus(false)}
+        />
+      )}
       <style jsx>{`
         .nft-modal-fullscreen {
           position: fixed;
