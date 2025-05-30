@@ -4,7 +4,6 @@ import MissionModal from '../components/MissionModal';
 import MissionStatus from '../components/missionstatus';
 import ClaimActionButton from '../components/ClaimActionButton';
 import { UserService } from '../UserService';
-import fondo2 from '../images/fondo2.webp';
 import missionButton from '../images/missionboton.webp';
 import missionButton2 from '../images/missionboton2.webp';
 import missionButton3 from '../images/missionboton3.webp';
@@ -26,10 +25,7 @@ const Home = () => {
       style={{
         minHeight: '100vh',
         width: '100vw',
-        backgroundImage: `url(${fondo2})`,
-        backgroundSize: 'contain',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        backgroundColor: '#240038',
         color: 'white',
         padding: 0,
         margin: 0,
