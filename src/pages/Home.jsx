@@ -6,7 +6,6 @@ import ClaimActionButton from '../components/ClaimActionButton';
 import { UserService } from '../UserService';
 import fondo2 from '../images/fondo2.webp';
 import missionButton from '../images/missionboton.webp';
-import missionButtonHover from '../images/missionboton1.webp';
 
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
