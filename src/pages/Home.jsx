@@ -51,9 +51,7 @@ const Home = () => {
         <button
           className="mission-button"
           onClick={() => setShowMission(true)}
-        >
-          Mission
-        </button>
+        />
         <button
           className="btn-square btn-small"
           onClick={() => setShowMissionStatus(true)}
@@ -107,13 +105,14 @@ const Home = () => {
           transform: scale(1.1);
         }
         .mission-button {
-          width: 200px;
-          height: 60px;
+          width: 120px;
+          height: 120px;
           background: url(${missionButton}) no-repeat left center;
           background-size: 200% auto;
           border: none;
           cursor: pointer;
           transition: background-position 0.2s;
+          padding: 0;
         }
         .mission-button:hover {
           background-position: right center;
