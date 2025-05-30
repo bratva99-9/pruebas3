@@ -59,8 +59,6 @@ const MissionStatus = ({ onClose }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // Puedes separar en completadas/pendientes si tienes ese campo, si no, muestra todas
-
   return (
     <div className="nft-modal-fullscreen">
       <div className="nft-modal-content">
@@ -75,10 +73,51 @@ const MissionStatus = ({ onClose }) => {
             ) : (
               missions.map(mission => (
                 <div key={mission.asset_id} className="mission-status-card">
-                  <div className="mission-status-fields">
-                    <div><b>Reward:</b> {formatReward(mission.reward)} SEXY</div>
-                    <div><b>NFT Drop Chance:</b> {formatDropChance(mission.nft_drop_chance)}</div>
-                    <div><b>Tiempo restante:</b> {getTimeLeft(Number(mission.end_time))}</div>
+                  <div className="mission-video-container">
+                    <video 
+                      className="mission-video"
+                      src={mission.video_url || 'https://example.com/default-video.mp4'}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    />
+                    <div className="mission-info-overlay">
+                      <div className="mission-info-content">
+                        <div className="mission-stat">
+                          <span className="stat-icon">
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="11" cy="11" r="9" fill="#ffe066" stroke="#ff00ff" strokeWidth="2"/>
+                              <circle cx="11" cy="11" r="7" fill="#fffbe6" fillOpacity="0.7"/>
+                              <path d="M11 15.2c-2.2-1.6-4-3.1-4-4.7a2 2 0 0 1 4-1.1A2 2 0 0 1 15 10.5c0 1.6-1.8 3.1-4 4.7z" fill="#ff00ff" stroke="#ff00ff" strokeWidth="0.7"/>
+                            </svg>
+                          </span>
+                          <span className="stat-text">{formatReward(mission.reward)} SEXY</span>
+                        </div>
+                        <div className="mission-stat">
+                          <span className="stat-icon">
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect x="4.5" y="9.5" width="13" height="7" rx="2" fill="#ff00ff" fillOpacity="0.13" stroke="#ff00ff" strokeWidth="1.7"/>
+                              <rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="1.3"/>
+                              <path d="M4.5 12H17.5" stroke="#ff00ff" strokeWidth="1.3"/>
+                              <path d="M11 9.5V16" stroke="#ff00ff" strokeWidth="1.3"/>
+                              <path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
+                              <path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
+                            </svg>
+                          </span>
+                          <span className="stat-text">{formatDropChance(mission.nft_drop_chance)}</span>
+                        </div>
+                        <div className="mission-stat">
+                          <span className="stat-icon">
+                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="10" cy="10" r="8.5" stroke="#bfc2d1" strokeWidth="1.5"/>
+                              <path d="M10 5.5V10L13 12" stroke="#bfc2d1" strokeWidth="1.5" strokeLinecap="round"/>
+                            </svg>
+                          </span>
+                          <span className="stat-text">{getTimeLeft(Number(mission.end_time))}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))
@@ -137,14 +176,52 @@ const MissionStatus = ({ onClose }) => {
           padding: 18px 24px;
           margin-bottom: 18px;
           box-shadow: 0 2px 12px #ff36ba22;
+          overflow: hidden;
         }
-        .mission-status-fields {
-          color: #bfc2d1;
-          font-size: 1.1rem;
-          margin-top: 8px;
+        .mission-video-container {
+          position: relative;
+          width: 100%;
+          height: 300px;
+          border-radius: 12px;
+          overflow: hidden;
+        }
+        .mission-video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .mission-info-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          background: linear-gradient(180deg, rgba(10,10,46,0.85) 0%, rgba(10,10,46,0.0) 100%);
+          padding: 20px;
+          border-radius: 12px 12px 0 0;
+        }
+        .mission-info-content {
           display: flex;
-          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          gap: 20px;
+        }
+        .mission-stat {
+          display: flex;
+          align-items: center;
           gap: 8px;
+          color: #fff;
+        }
+        .stat-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.8;
+        }
+        .stat-text {
+          font-size: 16px;
+          font-weight: 500;
+          color: #fff;
+          text-shadow: 0 0 8px rgba(255,0,255,0.5);
         }
         .nftmodal-bottom-buttons {
           position: fixed;
