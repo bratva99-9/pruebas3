@@ -6,6 +6,9 @@ import ClaimActionButton from '../components/ClaimActionButton';
 import { UserService } from '../UserService';
 import fondo2 from '../images/fondo2.webp';
 import missionButton from '../images/missionboton.webp';
+import missionButton2 from '../images/missionboton2.webp';
+import missionButton3 from '../images/missionboton3.webp';
+import missionButton4 from '../images/missionboton4.webp';
 
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
@@ -52,12 +55,18 @@ const Home = () => {
           className="mission-button"
           onClick={() => setShowMission(true)}
         />
-        <button
-          className="btn-square btn-small"
-          onClick={() => setShowMissionStatus(true)}
-        >
-          Mission Status
-        </button>
+        <div
+          className="mission-button"
+          onClick={() => setShowMission(true)}
+        />
+        <div
+          className="mission-button"
+          onClick={() => setShowMission(true)}
+        />
+        <div
+          className="mission-button"
+          onClick={() => setShowMission(true)}
+        />
       </div>
       {showMission && (
         <MissionModal
@@ -110,6 +119,18 @@ const Home = () => {
           background: url(${missionButton}) no-repeat left center;
           background-size: 200% auto;
           cursor: pointer;
+        }
+        .mission-button:nth-child(1) {
+          background-image: url(${missionButton});
+        }
+        .mission-button:nth-child(2) {
+          background-image: url(${missionButton2});
+        }
+        .mission-button:nth-child(3) {
+          background-image: url(${missionButton3});
+        }
+        .mission-button:nth-child(4) {
+          background-image: url(${missionButton4});
         }
         .mission-button:hover {
           background-position: right center;
