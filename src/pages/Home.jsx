@@ -5,6 +5,8 @@ import MissionStatus from '../components/missionstatus';
 import ClaimActionButton from '../components/ClaimActionButton';
 import { UserService } from '../UserService';
 import fondo2 from '../images/fondo2.webp';
+import missionButton from '../images/missionboton.webp';
+import missionButtonHover from '../images/missionboton1.webp';
 
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
@@ -39,9 +41,8 @@ const Home = () => {
         <span className="home-user-balance">{UserService.formatWAXOnly()} WAX</span>
         <span className="home-user-sexy">{UserService.formatSEXYOnly()} SEXY</span>
         <button
-          className="btn-square btn-small home-logout-btn"
+          className="home-logout-btn"
           onClick={handleLogout}
-          style={{padding: '8px 18px', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 0, marginLeft: 18}}
         >
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         </button>
@@ -49,7 +50,7 @@ const Home = () => {
       <ClaimActionButton />
       <div style={{display: 'flex', justifyContent: 'center', gap: 24, marginTop: 24}}>
         <button
-          className="btn-square btn-small"
+          className="mission-button"
           onClick={() => setShowMission(true)}
         >
           Mission
@@ -77,55 +78,46 @@ const Home = () => {
           display: flex;
           justify-content: center;
           align-items: center;
-          gap: 32px;
+          gap: 24px;
           margin-bottom: 18px;
-          font-size: 18px;
+          font-size: 16px;
           font-weight: 600;
           color: #fff;
-          background: rgba(36,0,56,0.10);
-          border: 2px solid #00ffff;
-          border-radius: 14px;
-          padding: 10px 32px;
-          box-shadow: none;
-          text-shadow: none;
-          letter-spacing: 1px;
-          margin-top: 32px;
+          background: linear-gradient(90deg, rgba(36,0,56,0.7) 0%, rgba(36,0,56,0.3) 100%);
+          border-radius: 12px;
+          padding: 8px 24px;
+          box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+          text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+          letter-spacing: 0.5px;
+          margin-top: 24px;
           width: fit-content;
           margin-left: auto;
           margin-right: auto;
         }
-        .home h1 {
-          font-size: 36px;
-          color: #ff00ff;
-          margin-bottom: 40px;
-          text-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
-        }
-        .btn-square {
-          font-size: 16px;
-          font-weight: 500;
-          color: #fff;
-          background: rgba(0,255,255,0.10);
-          border: 2px solid #00ffff;
-          border-radius: 12px;
-          padding: 10px 32px;
-          box-shadow: none;
-          text-shadow: none;
-          letter-spacing: 0.5px;
+        .home-logout-btn {
+          background: none;
+          border: none;
+          padding: 8px;
           cursor: pointer;
-          transition: background 0.2s, border-color 0.2s, color 0.2s;
-          margin: 0 8px;
-          white-space: nowrap;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: transform 0.2s;
         }
-        .btn-square:hover {
-          background: rgba(255,0,255,0.13);
-          border-color: #ff00ff;
-          color: #fff;
-          box-shadow: none;
+        .home-logout-btn:hover {
+          transform: scale(1.1);
         }
-        .btn-small {
-          font-size: 16px;
-          padding: 10px 32px;
-          min-width: 120px;
+        .mission-button {
+          width: 200px;
+          height: 60px;
+          background: url(${missionButton}) no-repeat center center;
+          background-size: contain;
+          border: none;
+          cursor: pointer;
+          transition: background-image 0.2s;
+        }
+        .mission-button:hover {
+          background-image: url(${missionButtonHover});
         }
         .home-user-name {
           color: #ffb9fa;
