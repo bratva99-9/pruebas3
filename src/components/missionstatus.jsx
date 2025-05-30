@@ -41,7 +41,25 @@ const MissionStatus = ({ onClose }) => {
         // Obtener todas las misiones y filtrar por usuario
         const allMissions = await UserService.getUserMissions();
         const userMissions = allMissions.filter(m => m.user === currentUser);
-        setMissions(userMissions);
+        
+        // Obtener información de los NFTs para cada misión
+        const missionsWithNFTs = await Promise.all(userMissions.map(async (mission) => {
+          try {
+            const response = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${mission.asset_id}`);
+            const data = await response.json();
+            if (data.data && data.data.data && data.data.data.video) {
+              return {
+                ...mission,
+                video_url: data.data.data.video
+              };
+            }
+          } catch (err) {
+            console.error('Error al obtener información del NFT:', err);
+          }
+          return mission;
+        }));
+
+        setMissions(missionsWithNFTs);
       } catch (err) {
         console.error('Error al obtener misiones:', err);
         setMissions([]);
@@ -74,14 +92,24 @@ const MissionStatus = ({ onClose }) => {
               missions.map(mission => (
                 <div key={mission.asset_id} className="mission-status-card">
                   <div className="mission-video-container">
-                    <video 
-                      className="mission-video"
-                      src={mission.video_url || 'https://example.com/default-video.mp4'}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                    />
+                    {mission.video_url ? (
+                      <video 
+                        className="mission-video"
+                        src={mission.video_url}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        onError={(e) => {
+                          console.error('Error al cargar el video:', e);
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <div className="mission-video-placeholder">
+                        <span>Video no disponible</span>
+                      </div>
+                    )}
                     <div className="mission-info-overlay">
                       <div className="mission-info-content">
                         <div className="mission-stat">
@@ -143,6 +171,7 @@ const MissionStatus = ({ onClose }) => {
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
+          overflow: hidden;
         }
         .nft-modal-content {
           width: 100vw;
@@ -153,6 +182,8 @@ const MissionStatus = ({ onClose }) => {
           justify-content: flex-start;
           padding-top: 12px;
           overflow-y: auto;
+          position: relative;
+          z-index: 10000;
         }
         .mission-title-nftmodal {
           text-align: center;
@@ -162,12 +193,16 @@ const MissionStatus = ({ onClose }) => {
           margin-bottom: 10px;
           text-shadow: 0 0 12px #ff00ff99;
           letter-spacing: 2px;
+          position: relative;
+          z-index: 10001;
         }
         .mission-status-section {
           margin-bottom: 32px;
           width: 100%;
           max-width: 900px;
           padding: 0 20px;
+          position: relative;
+          z-index: 10001;
         }
         .mission-status-card {
           background: rgba(36,0,56,0.10);
@@ -177,6 +212,8 @@ const MissionStatus = ({ onClose }) => {
           margin-bottom: 18px;
           box-shadow: 0 2px 12px #ff36ba22;
           overflow: hidden;
+          position: relative;
+          z-index: 10001;
         }
         .mission-video-container {
           position: relative;
@@ -184,11 +221,27 @@ const MissionStatus = ({ onClose }) => {
           height: 300px;
           border-radius: 12px;
           overflow: hidden;
+          background: rgba(0,0,0,0.3);
+          z-index: 10001;
         }
         .mission-video {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          position: relative;
+          z-index: 10001;
+        }
+        .mission-video-placeholder {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #bfc2d1;
+          font-size: 1.1rem;
+          background: rgba(0,0,0,0.2);
+          position: relative;
+          z-index: 10001;
         }
         .mission-info-overlay {
           position: absolute;
@@ -198,30 +251,39 @@ const MissionStatus = ({ onClose }) => {
           background: linear-gradient(180deg, rgba(10,10,46,0.85) 0%, rgba(10,10,46,0.0) 100%);
           padding: 20px;
           border-radius: 12px 12px 0 0;
+          z-index: 10002;
         }
         .mission-info-content {
           display: flex;
           justify-content: space-between;
           align-items: center;
           gap: 20px;
+          position: relative;
+          z-index: 10002;
         }
         .mission-stat {
           display: flex;
           align-items: center;
           gap: 8px;
           color: #fff;
+          position: relative;
+          z-index: 10002;
         }
         .stat-icon {
           display: flex;
           align-items: center;
           justify-content: center;
           opacity: 0.8;
+          position: relative;
+          z-index: 10002;
         }
         .stat-text {
           font-size: 16px;
           font-weight: 500;
           color: #fff;
           text-shadow: 0 0 8px rgba(255,0,255,0.5);
+          position: relative;
+          z-index: 10002;
         }
         .nftmodal-bottom-buttons {
           position: fixed;
@@ -229,7 +291,7 @@ const MissionStatus = ({ onClose }) => {
           transform: translateX(-50%);
           bottom: 32px;
           gap: 32px;
-          z-index: 10001;
+          z-index: 10002;
           width: 900px !important;
           max-width: 900px !important;
           margin-left: auto !important;
@@ -254,6 +316,8 @@ const MissionStatus = ({ onClose }) => {
           transition: background 0.2s, border-color 0.2s, color 0.2s;
           margin: 0 8px;
           white-space: nowrap;
+          position: relative;
+          z-index: 10002;
         }
         .btn-square:hover {
           background: rgba(255,0,255,0.13);
@@ -270,6 +334,8 @@ const MissionStatus = ({ onClose }) => {
           color: #fff;
           font-size: 1.2rem;
           margin-top: 40px;
+          position: relative;
+          z-index: 10001;
         }
         .no-missions {
           color: #bfc2d1;
@@ -279,6 +345,8 @@ const MissionStatus = ({ onClose }) => {
           background: rgba(36,0,56,0.05);
           border-radius: 12px;
           border: 1px solid rgba(0,255,255,0.1);
+          position: relative;
+          z-index: 10001;
         }
       `}</style>
     </div>
