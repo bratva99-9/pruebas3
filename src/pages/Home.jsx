@@ -32,12 +32,13 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-image-row">
-        <div className="oreja-tap">Info</div>
         <div className="home-image-container">
+          <div className="user-tap">
+            <span className="user-tap-name">{UserService.getName()}</span>
+            <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX</span>
+          </div>
           <img src={home1} alt="Home Background" className="home-image" />
           <div className="user-info">
-            <span className="home-user-name">{UserService.getName()}</span>
-            <span className="home-user-balance">{UserService.formatWAXOnly()} WAX</span>
             <span className="home-user-sexy">{UserService.formatSEXYOnly()} SEXY</span>
             <button className="btn-logout" onClick={handleLogout}>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -86,25 +87,6 @@ const Home = () => {
           width: 100%;
           margin-bottom: 32px;
         }
-        .oreja-tap {
-          height: 180px;
-          width: 44px;
-          background: #ff36ba;
-          color: #fff;
-          font-weight: 700;
-          font-size: 1.1rem;
-          border-radius: 18px 0 0 18px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-right: -18px;
-          z-index: 3;
-          box-shadow: 0 2px 12px #ff36ba55;
-          border: 2px solid #ff36ba;
-          border-right: none;
-          cursor: pointer;
-          user-select: none;
-        }
         .home-image-container {
           position: relative;
           border-radius: 28px;
@@ -115,7 +97,7 @@ const Home = () => {
           display: flex;
           align-items: flex-start;
           justify-content: center;
-          width: 900px;
+          width: 855px;
           aspect-ratio: 3/2;
           min-width: 320px;
           height: auto;
@@ -126,11 +108,39 @@ const Home = () => {
           object-fit: contain;
           display: block;
         }
+        .user-tap {
+          position: absolute;
+          left: -8px;
+          top: 32px;
+          min-width: 210px;
+          height: 44px;
+          background: #181828;
+          border: 2.5px solid #00ffff;
+          border-radius: 18px 0 0 18px;
+          border-right: 0;
+          box-shadow: 0 0 16px #00ffff44;
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          padding: 0 22px 0 18px;
+          font-size: 1.15rem;
+          font-weight: 600;
+          color: #fff;
+          z-index: 4;
+          letter-spacing: 0.5px;
+        }
+        .user-tap-name {
+          color: #6ffcff;
+          font-weight: 700;
+        }
+        .user-tap-wax {
+          color: #00ffff;
+          font-weight: 700;
+        }
         .user-info {
           position: absolute;
           top: 18px;
-          left: 50%;
-          transform: translateX(-50%);
+          right: 24px;
           background: rgba(0, 255, 255, 0.13);
           border: 2px solid #00ffff;
           border-radius: 12px;
@@ -179,12 +189,6 @@ const Home = () => {
         }
         .building-btn:hover {
           background-position: right center;
-        }
-        .home-user-name {
-          color: #ffb9fa;
-        }
-        .home-user-balance {
-          color: #00ffff;
         }
         .home-user-sexy {
           color: #ff36ba;
