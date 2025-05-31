@@ -13,6 +13,7 @@ import missionButton6 from '../images/missionboton6.webp';
 import missionButton7 from '../images/missionboton7.webp';
 import missionButton8 from '../images/missionboton8.webp';
 import missionButton9 from '../images/missionboton9.webp';
+import home1 from '../images/home1.png';
 
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
@@ -27,7 +28,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-image-container">
-        <img src="/home1.png" alt="Home Background" className="home-image" />
+        <img src={home1} alt="Home Background" className="home-image" />
       </div>
       <div className="home-user-bar user-info">
         <span className="home-user-name">{UserService.getName()}</span>
@@ -73,8 +74,6 @@ const Home = () => {
           overflow: hidden;
         }
         .home-image-container {
-          width: 80%;
-          max-width: 800px;
           margin: 32px auto 24px auto;
           border-radius: 20px;
           border: 2px solid #ff36ba;
@@ -84,11 +83,13 @@ const Home = () => {
           display: flex;
           align-items: center;
           justify-content: center;
+          width: auto;
+          max-width: 100vw;
         }
         .home-image {
-          width: 100%;
-          height: auto;
           display: block;
+          max-width: 100%;
+          height: auto;
         }
         .user-info {
           background: rgba(0, 255, 255, 0.13);
