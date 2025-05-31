@@ -49,6 +49,12 @@ const Home = () => {
             </button>
           </div>
           <img src="/mapa1.svg" alt="Mapa" className="home-image" />
+          <div
+            className="sprite-edificio1"
+            onClick={() => setShowMission(true)}
+            title="Edificio principal"
+            style={{ backgroundImage: 'url(/edifico1.svg)' }}
+          />
         </div>
       </div>
       <div className="buildings-row">
@@ -242,8 +248,8 @@ const Home = () => {
           position: absolute;
           left: 177.7px;
           top: 234.9px;
-          width: 100px;
-          height: 100px;
+          width: 440px;
+          height: 293px;
           background-size: 200% 100%;
           background-position: left center;
           background-repeat: no-repeat;
