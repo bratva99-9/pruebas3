@@ -152,6 +152,10 @@ const MissionStatus = ({ onClose }) => {
                         </div>
                       </div>
                     </div>
+                    <div className="mission-status-actions">
+                      <button className="btn-mission-action">Claim</button>
+                      <button className="btn-mission-action">Cancel</button>
+                    </div>
                   </div>
                 );
               })
@@ -366,6 +370,36 @@ const MissionStatus = ({ onClose }) => {
           border: 1px solid rgba(0,255,255,0.1);
           position: relative;
           z-index: 10001;
+        }
+        .mission-status-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 7px;
+          align-items: center;
+          width: 100%;
+          margin-top: 6px;
+        }
+        .btn-mission-action {
+          font-size: 13px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(0,255,255,0.10);
+          border: 2px solid #00ffff;
+          border-radius: 10px;
+          padding: 5px 0;
+          min-width: 80px;
+          box-shadow: none;
+          text-shadow: none;
+          letter-spacing: 0.5px;
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
+          margin: 0;
+          white-space: nowrap;
+        }
+        .btn-mission-action:hover {
+          background: rgba(255,0,255,0.13);
+          border-color: #ff00ff;
+          color: #fff;
         }
       `}</style>
     </div>
