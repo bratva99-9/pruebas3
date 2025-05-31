@@ -30,7 +30,7 @@ const Home = () => {
       style={{
         minHeight: '100vh',
         width: '100vw',
-        backgroundColor: '#240038',
+        backgroundColor: 'hsl(245, 86.70%, 2.90%)',
         color: 'white',
         padding: 0,
         margin: 0,

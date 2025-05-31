@@ -209,26 +209,37 @@ const MissionStatus = ({ onClose }) => {
           padding: 0 20px;
           position: relative;
           z-index: 10001;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 18px;
+          justify-content: flex-start;
         }
         .mission-status-card {
-          background: rgba(36,0,56,0.10);
-          border: 2px solid #00ffff;
-          border-radius: 14px;
-          padding: 18px 24px;
+          background: rgba(36,0,56,0.22);
+          border: none;
+          border-radius: 22px;
+          padding: 8px 8px 18px 8px;
           margin-bottom: 18px;
-          box-shadow: 0 2px 12px #ff36ba22;
+          box-shadow: 0 2px 18px 0 #0008, 0 0 0 1.5px #ff36ba22;
           overflow: hidden;
           position: relative;
           z-index: 10001;
+          width: 180px;
+          height: 320px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
         }
         .mission-video-container {
           position: relative;
-          width: 100%;
-          height: 300px;
-          border-radius: 12px;
+          width: 162px;
+          height: 288px;
+          border-radius: 18px;
           overflow: hidden;
-          background: rgba(0,0,0,0.3);
+          background: rgba(0,0,0,0.32);
           z-index: 10001;
+          margin-bottom: 8px;
         }
         .mission-video {
           width: 100%;
@@ -236,6 +247,7 @@ const MissionStatus = ({ onClose }) => {
           object-fit: cover;
           position: relative;
           z-index: 10001;
+          border-radius: 18px;
         }
         .mission-video-placeholder {
           width: 100%;
@@ -251,29 +263,30 @@ const MissionStatus = ({ onClose }) => {
         }
         .mission-info-overlay {
           position: absolute;
-          top: 0;
+          bottom: 0;
           left: 0;
           right: 0;
-          background: linear-gradient(180deg, rgba(10,10,46,0.85) 0%, rgba(10,10,46,0.0) 100%);
-          padding: 20px;
-          border-radius: 12px 12px 0 0;
+          background: linear-gradient(0deg, rgba(10,10,46,0.92) 80%, rgba(10,10,46,0.0) 100%);
+          padding: 14px 10px 10px 10px;
+          border-radius: 0 0 18px 18px;
           z-index: 10002;
         }
         .mission-info-content {
           display: flex;
-          justify-content: space-between;
-          align-items: center;
-          gap: 20px;
+          flex-direction: column;
+          gap: 7px;
+          align-items: flex-start;
           position: relative;
           z-index: 10002;
         }
         .mission-stat {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 7px;
           color: #fff;
           position: relative;
           z-index: 10002;
+          font-size: 15px;
         }
         .stat-icon {
           display: flex;
@@ -284,10 +297,10 @@ const MissionStatus = ({ onClose }) => {
           z-index: 10002;
         }
         .stat-text {
-          font-size: 16px;
+          font-size: 15px;
           font-weight: 500;
           color: #fff;
-          text-shadow: 0 0 8px rgba(255,0,255,0.5);
+          text-shadow: 0 0 8px rgba(255,0,255,0.3);
           position: relative;
           z-index: 10002;
         }
