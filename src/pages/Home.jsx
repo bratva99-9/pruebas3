@@ -53,7 +53,7 @@ const Home = () => {
             className="sprite-edificio1"
             onClick={() => setShowMission(true)}
             title="Edificio principal"
-            style={{ backgroundImage: 'url(/edifico1.svg)' }}
+            style={{ backgroundImage: 'url(/edificio1.svg)' }}
           />
         </div>
       </div>
