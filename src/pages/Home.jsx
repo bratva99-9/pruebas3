@@ -13,6 +13,7 @@ import missionButton7 from '../images/missionboton7.webp';
 import missionButton8 from '../images/missionboton8.webp';
 import missionButton9 from '../images/missionboton9.webp';
 import mapa1 from '../images/mapa1.svg';
+import edifico1 from '../images/edifico1.svg';
 
 const buildingSprites = [
   missionButton, missionButton2, missionButton3, missionButton4, missionButton5,
@@ -50,10 +51,12 @@ const Home = () => {
             </button>
           </div>
           <img src={mapa1} alt="Mapa" className="home-image" />
-          <div
-            className="sprite-edificio1"
+          <img
+            src={edifico1}
+            alt="Edificio principal"
+            className="img-edificio1"
+            style={{ position: 'absolute', left: '252.3px', top: '339.1px' }}
             onClick={() => setShowMission(true)}
-            title="Edificio principal"
           />
           <div
             className="mission-button main-building second-building"
@@ -239,7 +242,7 @@ const Home = () => {
           height: 389.1px;
           z-index: 4;
         }
-        .sprite-edificio1 {
+        .img-edificio1 {
           position: absolute;
           left: 252.3px;
           top: 339.1px;
@@ -253,7 +256,7 @@ const Home = () => {
           z-index: 10;
           transition: none;
         }
-        .sprite-edificio1:hover {
+        .img-edificio1:hover {
           background-position: right center;
         }
       `}</style>
