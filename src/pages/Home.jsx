@@ -49,22 +49,6 @@ const Home = () => {
             </button>
           </div>
           <img src="/mapa1.svg" alt="Mapa" className="home-image" />
-          <div
-            className="mission-button main-building second-building"
-            style={{ backgroundImage: `url(${missionButton8})` }}
-            onClick={() => setShowMission(true)}
-          />
-          <div
-            className="mission-button map-building-7"
-            style={{ backgroundImage: `url(${missionButton7})` }}
-            onClick={() => setShowMission(true)}
-          />
-          <div
-            className="sprite-edificio1"
-            onClick={() => setShowMission(true)}
-            title="Edificio principal"
-            style={{ backgroundImage: 'url(/edifico1.svg)' }}
-          />
         </div>
       </div>
       <div className="buildings-row">
