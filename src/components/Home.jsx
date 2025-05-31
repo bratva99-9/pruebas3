@@ -9,43 +9,44 @@
       </svg>
     </button>
   </div>
-</div>
-
-.home-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 20px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  position: relative;
-  overflow: hidden;
-}
-.home-background-image {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  max-width: 800px;
-  height: auto;
-  border-radius: 20px;
-  border: 2px solid #ff36ba;
-  box-shadow: 0 0 20px rgba(255, 54, 186, 0.5);
-  z-index: 1;
-  object-fit: contain;
-}
-.btn-logout {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s;
-}
-.btn-logout:hover {
-  transform: scale(1.1);
-} 
+  <style jsx>{`
+    .home-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .home-background-image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      max-width: 800px;
+      height: auto;
+      border-radius: 20px;
+      border: 2px solid #ff36ba;
+      box-shadow: 0 0 20px rgba(255, 54, 186, 0.5);
+      z-index: 1;
+      object-fit: contain;
+    }
+    .btn-logout {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    .btn-logout:hover {
+      transform: scale(1.1);
+    }
+  `}</style>
+</div> 
