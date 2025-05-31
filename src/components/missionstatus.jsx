@@ -162,10 +162,8 @@ const MissionStatus = ({ onClose }) => {
             )}
           </div>
         )}
-        <div className="nftmodal-bottom-buttons unified-width compact-width fixed-bottom-btns">
-          <button className="btn-square btn-small" onClick={onClose}>Back</button>
-          <button className="btn-square btn-small">Refresh</button>
-          <button className="btn-square btn-small">Claim All</button>
+        <div className="nftmodal-bottom-buttons unified-width compact-width fixed-bottom-btns" style={{justifyContent: 'center'}}>
+          <button className="btn-square btn-small" onClick={() => { if (typeof onForceCloseAll === 'function') { onForceCloseAll(); } else if (typeof onClose === 'function') { onClose(); } window.location.href = '/home'; }}>Close Status</button>
         </div>
       </div>
       <style jsx>{`
@@ -209,26 +207,26 @@ const MissionStatus = ({ onClose }) => {
         .mission-status-section {
           margin-bottom: 32px;
           width: 100%;
-          max-width: 900px;
+          max-width: 1100px;
           padding: 0 20px;
           position: relative;
           z-index: 10001;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 18px;
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 28px 18px;
           justify-content: flex-start;
         }
         .mission-status-card {
           background: rgba(36,0,56,0.22);
           border: none;
           border-radius: 22px;
-          padding: 8px 8px 18px 8px;
-          margin-bottom: 18px;
+          padding: 16px 10px 18px 10px;
+          margin-bottom: 0;
           box-shadow: 0 2px 18px 0 #0008, 0 0 0 1.5px #ff36ba22;
           overflow: hidden;
           position: relative;
           z-index: 10001;
-          width: 162px;
+          width: 180px;
           height: 320px;
           display: flex;
           flex-direction: column;
@@ -236,22 +234,25 @@ const MissionStatus = ({ onClose }) => {
           justify-content: flex-end;
         }
         .mission-video-container {
-          position: relative;
-          width: 108px;
-          height: 192px;
-          border-radius: 18px;
+          width: 100%;
+          height: 210px;
+          border-radius: 16px;
           overflow: hidden;
           background: rgba(0,0,0,0.32);
           z-index: 10001;
-          margin-bottom: 8px;
+          margin-bottom: 10px;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
         }
         .mission-video {
-          width: 100%;
-          height: 100%;
+          width: 94%;
+          height: 96%;
           object-fit: cover;
           position: relative;
           z-index: 10001;
-          border-radius: 18px;
+          border-radius: 14px;
+          margin-top: 2px;
         }
         .mission-video-placeholder {
           width: 100%;
@@ -267,11 +268,11 @@ const MissionStatus = ({ onClose }) => {
         }
         .mission-info-overlay {
           position: absolute;
-          bottom: 0;
+          bottom: 48px;
           left: 0;
           right: 0;
           background: linear-gradient(0deg, rgba(10,10,46,0.92) 80%, rgba(10,10,46,0.0) 100%);
-          padding: 14px 10px 10px 10px;
+          padding: 10px 10px 8px 10px;
           border-radius: 0 0 18px 18px;
           z-index: 10002;
         }
