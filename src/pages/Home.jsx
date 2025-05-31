@@ -61,6 +61,11 @@ const Home = () => {
             style={{ backgroundImage: `url(${missionButton7})` }}
             onClick={() => setShowMission(true)}
           />
+          <div
+            className="sprite-edificio1"
+            onClick={() => setShowMission(true)}
+            title="Edificio principal"
+          />
         </div>
       </div>
       <div className="buildings-row">
@@ -69,7 +74,7 @@ const Home = () => {
             key={idx}
             className="mission-button"
             style={{ backgroundImage: `url(${sprite})` }}
-            onClick={() => setShowMission(true)}
+          onClick={() => setShowMission(true)}
           />
         ))}
       </div>
@@ -248,6 +253,23 @@ const Home = () => {
           transition: none;
         }
         .img-edificio1:hover {
+          background-position: right center;
+        }
+        .sprite-edificio1 {
+          position: absolute;
+          left: 177.7px;
+          top: 234.9px;
+          width: 100px;
+          height: 100px;
+          background-image: url('../images/edifico1.svg');
+          background-size: 200% 100%;
+          background-position: left center;
+          background-repeat: no-repeat;
+          cursor: pointer;
+          z-index: 10;
+          transition: none;
+        }
+        .sprite-edificio1:hover {
           background-position: right center;
         }
       `}</style>
