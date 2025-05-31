@@ -80,14 +80,14 @@ const MissionStatus = ({ onClose }) => {
   return (
     <div className="nft-modal-fullscreen">
       <div className="nft-modal-content">
-        <h1 className="mission-title-nftmodal">Misiones activas</h1>
+        <h1 className="mission-title-nftmodal">Active Missions</h1>
         {loading ? (
-          <div className="loading">Cargando misiones...</div>
+          <div className="loading">Loading missions...</div>
         ) : (
           <div className="mission-status-section">
             <span style={{display: 'none'}}>{now}</span>
             {missions.length === 0 ? (
-              <div className="no-missions">No tienes misiones activas</div>
+              <div className="no-missions">You have no active missions</div>
             ) : (
               missions.map(mission => {
                 let videoUrl = mission.video_url;
@@ -147,7 +147,7 @@ const MissionStatus = ({ onClose }) => {
                                 <path d="M10 5.5V10L13 12" stroke="#bfc2d1" strokeWidth="1.5" strokeLinecap="round"/>
                               </svg>
                             </span>
-                            <span className="stat-text">{getTimeLeft(Number(mission.end_time))}</span>
+                            <span className="stat-text">{getTimeLeft(Number(mission.end_time)) === '¡Completada!' ? 'Completed!' : getTimeLeft(Number(mission.end_time))}</span>
                           </div>
                         </div>
                       </div>
@@ -163,7 +163,7 @@ const MissionStatus = ({ onClose }) => {
           </div>
         )}
         <div className="nftmodal-bottom-buttons unified-width compact-width fixed-bottom-btns" style={{justifyContent: 'center'}}>
-          <button className="btn-square btn-small" onClick={() => { if (typeof onForceCloseAll === 'function') { onForceCloseAll(); } else if (typeof onClose === 'function') { onClose(); } window.location.href = '/home'; }}>Close Status</button>
+          <button className="btn-square btn-small" onClick={() => { if (typeof onClose === 'function') { onClose(); } window.location.href = '/home'; }}>Close Status</button>
         </div>
       </div>
       <style jsx>{`
