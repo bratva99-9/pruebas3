@@ -22,7 +22,7 @@ function getTimeLeft(endTime) {
   return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
-const MissionStatus = ({ onClose }) => {
+const MissionStatus = ({ onClose, onForceCloseAll }) => {
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [now, setNow] = useState(Math.floor(Date.now() / 1000));
@@ -163,7 +163,7 @@ const MissionStatus = ({ onClose }) => {
           </div>
         )}
         <div className="nftmodal-bottom-buttons unified-width compact-width fixed-bottom-btns" style={{justifyContent: 'center'}}>
-          <button className="btn-square btn-small" onClick={() => { if (typeof onClose === 'function') { onClose(); } window.location.href = '/home'; }}>Close Status</button>
+          <button className="btn-square btn-small" onClick={() => { if (typeof onForceCloseAll === 'function') { onForceCloseAll(); } else if (typeof onClose === 'function') { onClose(); } }}>Close Status</button>
         </div>
       </div>
       <style jsx>{`
@@ -220,14 +220,14 @@ const MissionStatus = ({ onClose }) => {
           background: rgba(36,0,56,0.22);
           border: none;
           border-radius: 22px;
-          padding: 16px 10px 18px 10px;
+          padding: 12px 8px 16px 8px;
           margin-bottom: 0;
           box-shadow: 0 2px 18px 0 #0008, 0 0 0 1.5px #ff36ba22;
           overflow: hidden;
           position: relative;
           z-index: 10001;
-          width: 180px;
-          height: 320px;
+          width: 150px;
+          height: 270px;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -246,13 +246,15 @@ const MissionStatus = ({ onClose }) => {
           justify-content: center;
         }
         .mission-video {
-          width: 94%;
-          height: 96%;
+          width: 100%;
+          height: 100%;
+          aspect-ratio: 9/16;
           object-fit: cover;
           position: relative;
           z-index: 10001;
           border-radius: 14px;
-          margin-top: 2px;
+          margin-top: 0;
+          background: #181828;
         }
         .mission-video-placeholder {
           width: 100%;
