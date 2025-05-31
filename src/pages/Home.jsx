@@ -32,30 +32,29 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-image-row">
-        <div className="user-taps-vertical">
-          <div className="user-tap user-tap-block">
+        <div className="user-taps-vertical small-ears">
+          <div className="user-tap user-tap-block small-ear">
             <span className="user-tap-name">{UserService.getName()}</span>
           </div>
-          <div className="user-tap user-tap-block">
+          <div className="user-tap user-tap-block small-ear">
             <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX</span>
           </div>
-          <div className="user-tap user-tap-block">
+          <div className="user-tap user-tap-block small-ear">
             <span className="user-tap-sexy">{UserService.formatSEXYOnly()} SEXY</span>
           </div>
         </div>
         <div className="home-image-container">
+          <div className="logout-ear small-ear">
+            <button className="btn-logout" onClick={handleLogout}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+          </div>
           <img src={home1} alt="Home Background" className="home-image" />
           <div
             className="mission-button main-building"
             style={{ backgroundImage: `url(${missionButton})` }}
             onClick={() => setShowMission(true)}
           />
-          <div className="user-info">
-            <span className="home-user-sexy">{UserService.formatSEXYOnly()} SEXY</span>
-            <button className="btn-logout" onClick={handleLogout}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            </button>
-          </div>
         </div>
       </div>
       <div className="buildings-row">
@@ -85,7 +84,7 @@ const Home = () => {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: flex-start;
+          justify-content: center;
           padding: 20px;
           background: hsl(245, 86.70%, 2.90%);
           position: relative;
@@ -94,48 +93,48 @@ const Home = () => {
         .home-image-row {
           display: flex;
           flex-direction: row;
-          align-items: center;
+          align-items: flex-start;
           justify-content: center;
           width: 100%;
           margin-bottom: 32px;
         }
-        .user-taps-vertical {
+        .user-taps-vertical.small-ears {
           display: flex;
           flex-direction: column;
           align-items: flex-end;
-          gap: 12px;
-          height: 100%;
+          gap: 8px;
+          margin-top: 8px;
           margin-right: 0;
           z-index: 4;
         }
-        .user-tap.user-tap-block {
-          min-width: 210px;
-          height: 44px;
+        .user-tap.user-tap-block.small-ear {
+          min-width: 140px;
+          height: 30px;
           background: #181828;
-          border: 2.5px solid #ff36ba;
-          border-radius: 18px 0 0 18px;
+          border: 2px solid #ff36ba;
+          border-radius: 12px 0 0 12px;
           border-right: 0;
-          box-shadow: 0 0 16px #ff36ba44;
+          box-shadow: 0 0 8px #ff36ba33;
           display: flex;
           align-items: center;
-          gap: 18px;
-          padding: 0 22px 0 18px;
-          font-size: 1.15rem;
-          font-weight: 600;
+          gap: 10px;
+          padding: 0 14px 0 10px;
+          font-size: 0.95rem;
+          font-weight: 500;
           color: #fff;
-          letter-spacing: 0.5px;
+          letter-spacing: 0.2px;
         }
         .user-tap-name {
           color: #ffb9fa;
-          font-weight: 700;
+          font-weight: 600;
         }
         .user-tap-wax {
           color: #00ffff;
-          font-weight: 700;
+          font-weight: 600;
         }
         .user-tap-sexy {
           color: #ff36ba;
-          font-weight: 700;
+          font-weight: 600;
         }
         .home-image-container {
           position: relative;
@@ -152,6 +151,34 @@ const Home = () => {
           min-width: 320px;
           height: auto;
         }
+        .logout-ear.small-ear {
+          position: absolute;
+          top: 12px;
+          right: -142px;
+          min-width: 38px;
+          height: 30px;
+          background: #181828;
+          border: 2px solid #ff36ba;
+          border-radius: 0 12px 12px 0;
+          border-left: 0;
+          box-shadow: 0 0 8px #ff36ba33;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 5;
+        }
+        .btn-logout {
+          background: none;
+          border: none;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          outline: none;
+          box-shadow: none;
+          margin: 0;
+          cursor: pointer;
+        }
         .home-image {
           width: 100%;
           height: 100%;
@@ -165,37 +192,6 @@ const Home = () => {
           width: 180px;
           height: 180px;
           z-index: 3;
-        }
-        .user-info {
-          position: absolute;
-          top: 18px;
-          right: 24px;
-          background: rgba(0, 255, 255, 0.13);
-          border: 2px solid #00ffff;
-          border-radius: 12px;
-          padding: 6px 12px;
-          text-align: center;
-          color: #fff;
-          font-weight: 500;
-          font-size: 0.95rem;
-          box-shadow: 0 2px 12px 0 #00ffff22;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          gap: 10px;
-          z-index: 2;
-        }
-        .btn-logout {
-          background: none;
-          border: none;
-          padding: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          outline: none;
-          box-shadow: none;
-          margin-left: 8px;
-          cursor: default;
         }
         .buildings-row {
           display: flex;
@@ -218,9 +214,6 @@ const Home = () => {
         }
         .mission-button:hover {
           background-position: right center;
-        }
-        .home-user-sexy {
-          color: #ff36ba;
         }
       `}</style>
     </div>
