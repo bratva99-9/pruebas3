@@ -154,7 +154,7 @@ const MissionStatus = ({ onClose }) => {
                     </div>
                     <div className="mission-status-actions">
                       <button className="btn-mission-action">Claim</button>
-                      <button className="btn-mission-action">Cancel</button>
+                      <button className="btn-mission-action btn-mission-cancel">Cancel</button>
                     </div>
                   </div>
                 );
@@ -228,7 +228,7 @@ const MissionStatus = ({ onClose }) => {
           overflow: hidden;
           position: relative;
           z-index: 10001;
-          width: 180px;
+          width: 162px;
           height: 320px;
           display: flex;
           flex-direction: column;
@@ -237,8 +237,8 @@ const MissionStatus = ({ onClose }) => {
         }
         .mission-video-container {
           position: relative;
-          width: 162px;
-          height: 288px;
+          width: 108px;
+          height: 192px;
           border-radius: 18px;
           overflow: hidden;
           background: rgba(0,0,0,0.32);
@@ -373,11 +373,12 @@ const MissionStatus = ({ onClose }) => {
         }
         .mission-status-actions {
           display: flex;
-          flex-direction: column;
-          gap: 7px;
+          flex-direction: row;
+          gap: 8px;
           align-items: center;
           width: 100%;
-          margin-top: 6px;
+          margin-top: 10px;
+          justify-content: center;
         }
         .btn-mission-action {
           font-size: 13px;
@@ -387,7 +388,7 @@ const MissionStatus = ({ onClose }) => {
           border: 2px solid #00ffff;
           border-radius: 10px;
           padding: 5px 0;
-          min-width: 80px;
+          min-width: 60px;
           box-shadow: none;
           text-shadow: none;
           letter-spacing: 0.5px;
@@ -399,6 +400,16 @@ const MissionStatus = ({ onClose }) => {
         .btn-mission-action:hover {
           background: rgba(255,0,255,0.13);
           border-color: #ff00ff;
+          color: #fff;
+        }
+        .btn-mission-cancel {
+          background: rgba(255,0,0,0.13);
+          border: 2px solid #ff0033;
+          color: #fff;
+        }
+        .btn-mission-cancel:hover {
+          background: rgba(255,0,0,0.22);
+          border-color: #ff0033;
           color: #fff;
         }
       `}</style>
