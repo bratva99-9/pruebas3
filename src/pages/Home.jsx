@@ -196,12 +196,12 @@ const Home = () => {
           position: absolute;
           left: 60px;
           bottom: 40px;
-          width: 360px;
-          height: 360px;
+          width: 720px;
+          height: 720px;
           z-index: 3;
         }
         .second-building {
-          left: 260px;
+          left: 400px;
           bottom: 40px;
         }
         .buildings-row {
