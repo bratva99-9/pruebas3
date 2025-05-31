@@ -55,6 +55,11 @@ const Home = () => {
             style={{ backgroundImage: `url(${missionButton})` }}
             onClick={() => setShowMission(true)}
           />
+          <div
+            className="mission-button main-building second-building"
+            style={{ backgroundImage: `url(${missionButton8})` }}
+            onClick={() => setShowMission(true)}
+          />
         </div>
       </div>
       <div className="buildings-row">
@@ -103,7 +108,7 @@ const Home = () => {
           flex-direction: column;
           align-items: flex-end;
           gap: 8px;
-          margin-top: 8px;
+          margin-top: 38px;
           margin-right: 0;
           z-index: 4;
         }
@@ -117,12 +122,14 @@ const Home = () => {
           box-shadow: 0 0 8px #ff36ba33;
           display: flex;
           align-items: center;
+          justify-content: center;
           gap: 10px;
           padding: 0 14px 0 10px;
           font-size: 0.95rem;
           font-weight: 500;
           color: #fff;
           letter-spacing: 0.2px;
+          text-align: center;
         }
         .user-tap-name {
           color: #ffb9fa;
@@ -153,7 +160,7 @@ const Home = () => {
         }
         .logout-ear.small-ear {
           position: absolute;
-          top: 12px;
+          top: 38px;
           right: -142px;
           min-width: 38px;
           height: 30px;
@@ -187,11 +194,15 @@ const Home = () => {
         }
         .main-building {
           position: absolute;
-          left: 40px;
+          left: 60px;
           bottom: 40px;
-          width: 180px;
-          height: 180px;
+          width: 360px;
+          height: 360px;
           z-index: 3;
+        }
+        .second-building {
+          left: 260px;
+          bottom: 40px;
         }
         .buildings-row {
           display: flex;
