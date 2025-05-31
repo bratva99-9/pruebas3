@@ -1,5 +1,7 @@
 <div className="home-container">
-  <img src="/home1.png" alt="Home Background" className="home-background-image" />
+  <div className="home-image-container">
+    <img src="/home1.png" alt="Home Background" className="home-image" />
+  </div>
   <div className="user-info">
     <h1>Welcome, {userName}</h1>
     <p>Balance: {balance} SEXY</p>
@@ -21,19 +23,27 @@
       position: relative;
       overflow: hidden;
     }
-    .home-background-image {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    .home-image-container {
       width: 80%;
       max-width: 800px;
-      height: auto;
+      margin: 20px auto;
       border-radius: 20px;
       border: 2px solid #ff36ba;
       box-shadow: 0 0 20px rgba(255, 54, 186, 0.5);
-      z-index: 1;
-      object-fit: contain;
+      overflow: hidden;
+    }
+    .home-image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .user-info {
+      background: rgba(0, 255, 255, 0.1);
+      border: 2px solid #00ffff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
     }
     .btn-logout {
       background: none;
@@ -43,10 +53,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s;
-    }
-    .btn-logout:hover {
-      transform: scale(1.1);
     }
   `}</style>
 </div> 
