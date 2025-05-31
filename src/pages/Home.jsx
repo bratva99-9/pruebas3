@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import MissionModal from '../components/MissionModal';
 import MissionStatus from '../components/missionstatus';
-import ClaimActionButton from '../components/ClaimActionButton';
 import { UserService } from '../UserService';
 import missionButton from '../images/missionboton.webp';
 import missionButton2 from '../images/missionboton2.webp';
@@ -49,7 +48,6 @@ const Home = () => {
           <div className="mission-button" style={{ left: '25%', top: '13%' }} onClick={() => setShowMission(true)} />
         </div>
       </div>
-      <ClaimActionButton />
       {showMission && (
         <MissionModal
           onClose={() => setShowMission(false)}
@@ -84,11 +82,10 @@ const Home = () => {
           display: flex;
           align-items: flex-start;
           justify-content: center;
-          width: 70vw;
-          max-width: 560px;
+          width: 90vw;
+          max-width: 900px;
           min-width: 320px;
           height: auto;
-          transform: scale(0.7);
         }
         .home-image {
           width: 100%;
@@ -103,7 +100,7 @@ const Home = () => {
           background: rgba(0, 255, 255, 0.13);
           border: 2px solid #00ffff;
           border-radius: 12px;
-          padding: 7px 18px;
+          padding: 6px 12px;
           text-align: center;
           color: #fff;
           font-weight: 500;
@@ -145,7 +142,7 @@ const Home = () => {
           border-radius: 50%;
           border: 2px solid #ff36ba44;
           box-shadow: 0 2px 12px #0006;
-          transition: none;
+          transition: background-position 0.18s;
         }
         .mission-button:nth-child(1) { background-image: url(${missionButton}); }
         .mission-button:nth-child(2) { background-image: url(${missionButton2}); }
@@ -156,6 +153,9 @@ const Home = () => {
         .mission-button:nth-child(7) { background-image: url(${missionButton7}); }
         .mission-button:nth-child(8) { background-image: url(${missionButton8}); }
         .mission-button:nth-child(9) { background-image: url(${missionButton9}); }
+        .mission-button:hover {
+          background-position: right center;
+        }
         .home-user-name {
           color: #ffb9fa;
         }
