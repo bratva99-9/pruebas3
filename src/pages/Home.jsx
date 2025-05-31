@@ -263,7 +263,7 @@ const Home = () => {
           position: absolute;
           left: 177.7px;
           top: 234.9px;
-          width: 440px;
+          width: 214.7px;
           height: 293px;
           background-image: url(/edificio1.svg);
           background-size: 200% auto;
