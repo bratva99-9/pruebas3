@@ -106,13 +106,13 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
                           muted
                           playsInline
                           onError={(e) => {
-                            console.error('Error al cargar el video:', e);
+                            console.error('Error loading video:', e);
                             e.target.style.display = 'none';
                           }}
                         />
                       ) : (
                         <div className="mission-video-placeholder">
-                          <span>Video no disponible</span>
+                          <span>Video not available</span>
                         </div>
                       )}
                       <div className="mission-info-overlay">
@@ -213,7 +213,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           z-index: 10001;
           display: grid;
           grid-template-columns: repeat(5, 1fr);
-          gap: 28px 18px;
+          gap: 18px 10px;
           justify-content: flex-start;
         }
         .mission-status-card {
@@ -232,6 +232,12 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           flex-direction: column;
           align-items: center;
           justify-content: flex-end;
+          transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s, border 0.22s;
+        }
+        .mission-status-card:hover {
+          transform: scale(1.07);
+          box-shadow: 0 0 24px 6px #ff36ba88, 0 0 0 2.5px #b266ffcc;
+          border: 2.5px solid #ff36ba;
         }
         .mission-video-container {
           width: 100%;
@@ -242,8 +248,9 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           z-index: 10001;
           margin-bottom: 10px;
           display: flex;
-          align-items: flex-start;
+          align-items: flex-end;
           justify-content: center;
+          position: relative;
         }
         .mission-video {
           width: 100%;
@@ -270,13 +277,14 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
         }
         .mission-info-overlay {
           position: absolute;
-          bottom: 48px;
           left: 0;
           right: 0;
-          background: linear-gradient(0deg, rgba(10,10,46,0.92) 80%, rgba(10,10,46,0.0) 100%);
+          bottom: 0;
+          background: linear-gradient(0deg, rgba(10,10,46,0.92) 90%, rgba(10,10,46,0.0) 100%);
           padding: 10px 10px 8px 10px;
           border-radius: 0 0 18px 18px;
           z-index: 10002;
+          width: 100%;
         }
         .mission-info-content {
           display: flex;
