@@ -51,13 +51,6 @@ const Home = () => {
             </button>
           </div>
           <img src={mapa1} alt="Mapa" className="home-image" />
-          <img
-            src={edifico1}
-            alt="Edificio principal"
-            className="img-edificio1"
-            style={{ position: 'absolute', left: '252.3px', top: '339.1px' }}
-            onClick={() => setShowMission(true)}
-          />
           <div
             className="mission-button main-building second-building"
             style={{ backgroundImage: `url(${missionButton8})` }}
@@ -162,9 +155,7 @@ const Home = () => {
           align-items: flex-start;
           justify-content: center;
           width: 855px;
-          aspect-ratio: 3/2;
-          min-width: 320px;
-          height: auto;
+          height: 570px;
         }
         .logout-ear.small-ear {
           position: absolute;
