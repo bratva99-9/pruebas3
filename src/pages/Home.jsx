@@ -32,11 +32,13 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-image-row">
-        <div className="home-image-container">
+        <div className="user-tap-outer">
           <div className="user-tap">
             <span className="user-tap-name">{UserService.getName()}</span>
             <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX</span>
           </div>
+        </div>
+        <div className="home-image-container">
           <img src={home1} alt="Home Background" className="home-image" />
           <div className="user-info">
             <span className="home-user-sexy">{UserService.formatSEXYOnly()} SEXY</span>
@@ -50,7 +52,7 @@ const Home = () => {
         {buildingSprites.map((sprite, idx) => (
           <div
             key={idx}
-            className="building-btn"
+            className="mission-button"
             style={{ backgroundImage: `url(${sprite})` }}
             onClick={() => setShowMission(true)}
           />
@@ -87,6 +89,38 @@ const Home = () => {
           width: 100%;
           margin-bottom: 32px;
         }
+        .user-tap-outer {
+          display: flex;
+          align-items: center;
+          height: 100%;
+          margin-right: -18px;
+          z-index: 4;
+        }
+        .user-tap {
+          min-width: 210px;
+          height: 44px;
+          background: #181828;
+          border: 2.5px solid #ff36ba;
+          border-radius: 18px 0 0 18px;
+          border-right: 0;
+          box-shadow: 0 0 16px #ff36ba44;
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          padding: 0 22px 0 18px;
+          font-size: 1.15rem;
+          font-weight: 600;
+          color: #fff;
+          letter-spacing: 0.5px;
+        }
+        .user-tap-name {
+          color: #ffb9fa;
+          font-weight: 700;
+        }
+        .user-tap-wax {
+          color: #00ffff;
+          font-weight: 700;
+        }
         .home-image-container {
           position: relative;
           border-radius: 28px;
@@ -107,35 +141,6 @@ const Home = () => {
           height: 100%;
           object-fit: contain;
           display: block;
-        }
-        .user-tap {
-          position: absolute;
-          left: -8px;
-          top: 32px;
-          min-width: 210px;
-          height: 44px;
-          background: #181828;
-          border: 2.5px solid #00ffff;
-          border-radius: 18px 0 0 18px;
-          border-right: 0;
-          box-shadow: 0 0 16px #00ffff44;
-          display: flex;
-          align-items: center;
-          gap: 18px;
-          padding: 0 22px 0 18px;
-          font-size: 1.15rem;
-          font-weight: 600;
-          color: #fff;
-          z-index: 4;
-          letter-spacing: 0.5px;
-        }
-        .user-tap-name {
-          color: #6ffcff;
-          font-weight: 700;
-        }
-        .user-tap-wax {
-          color: #00ffff;
-          font-weight: 700;
         }
         .user-info {
           position: absolute;
@@ -176,18 +181,18 @@ const Home = () => {
           gap: 32px;
           margin-top: 36px;
         }
-        .building-btn {
+        .mission-button {
           width: 120px;
           height: 120px;
           background-repeat: no-repeat;
-          background-size: 200% 100%;
+          background-size: 200% auto;
           background-position: left center;
           cursor: pointer;
           border: none;
           outline: none;
           transition: none;
         }
-        .building-btn:hover {
+        .mission-button:hover {
           background-position: right center;
         }
         .home-user-sexy {
