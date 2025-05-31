@@ -232,16 +232,17 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           flex-direction: column;
           align-items: center;
           justify-content: flex-end;
-          transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s, border 0.22s;
+          transition: transform 0.18s cubic-bezier(0.4,0,0.2,1), box-shadow 0.18s, border 0.18s;
         }
         .mission-status-card:hover {
-          transform: scale(1.07);
-          box-shadow: 0 0 24px 6px #ff36ba88, 0 0 0 2.5px #b266ffcc;
-          border: 2.5px solid #ff36ba;
+          transform: scale(1.05);
+          box-shadow: 0 0 12px 2px #ff36ba55, 0 0 0 1.2px #b266ff99;
+          border: 1.2px solid #ff36ba;
         }
         .mission-video-container {
           width: 100%;
-          height: 210px;
+          height: 220px;
+          aspect-ratio: 1080/1930;
           border-radius: 16px;
           overflow: hidden;
           background: rgba(0,0,0,0.32);
@@ -255,7 +256,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
         .mission-video {
           width: 100%;
           height: 100%;
-          aspect-ratio: 9/16;
+          aspect-ratio: 1080/1930;
           object-fit: cover;
           position: relative;
           z-index: 10001;
@@ -280,28 +281,36 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(0deg, rgba(10,10,46,0.92) 90%, rgba(10,10,46,0.0) 100%);
-          padding: 10px 10px 8px 10px;
+          background: linear-gradient(0deg, rgba(10,10,46,0.92) 95%, rgba(10,10,46,0.0) 100%);
+          padding: 4px 0 4px 0;
           border-radius: 0 0 18px 18px;
           z-index: 10002;
           width: 100%;
+          display: flex;
+          justify-content: center;
         }
         .mission-info-content {
           display: flex;
-          flex-direction: column;
-          gap: 7px;
-          align-items: flex-start;
+          flex-direction: row;
+          gap: 8px;
+          align-items: center;
+          justify-content: center;
           position: relative;
           z-index: 10002;
+          font-size: 11px;
+          padding: 0 2px;
+          min-width: 0;
+          background: none;
         }
         .mission-stat {
           display: flex;
           align-items: center;
-          gap: 7px;
+          gap: 4px;
           color: #fff;
           position: relative;
           z-index: 10002;
-          font-size: 15px;
+          font-size: 11px;
+          padding: 0 2px;
         }
         .stat-icon {
           display: flex;
@@ -310,12 +319,13 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           opacity: 0.8;
           position: relative;
           z-index: 10002;
+          font-size: 11px;
         }
         .stat-text {
-          font-size: 15px;
+          font-size: 11px;
           font-weight: 500;
           color: #fff;
-          text-shadow: 0 0 8px rgba(255,0,255,0.3);
+          text-shadow: 0 0 4px rgba(255,0,255,0.18);
           position: relative;
           z-index: 10002;
         }
