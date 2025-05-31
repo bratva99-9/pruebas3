@@ -14,6 +14,11 @@ import missionButton8 from '../images/missionboton8.webp';
 import missionButton9 from '../images/missionboton9.webp';
 import home1 from '../images/home1.webp';
 
+const buildingSprites = [
+  missionButton, missionButton2, missionButton3, missionButton4, missionButton5,
+  missionButton6, missionButton7, missionButton8, missionButton9
+];
+
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
   const [showMissionStatus, setShowMissionStatus] = useState(false);
@@ -26,32 +31,29 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <div className="ear-button" title="Menu">
-        <svg width="38" height="80" viewBox="0 0 38 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M38 0C17 0 0 17.9 0 40C0 62.1 17 80 38 80" fill="#ff36ba"/>
-        </svg>
+      <div className="home-image-row">
+        <div className="oreja-tap">Info</div>
+        <div className="home-image-container">
+          <img src={home1} alt="Home Background" className="home-image" />
+          <div className="user-info">
+            <span className="home-user-name">{UserService.getName()}</span>
+            <span className="home-user-balance">{UserService.formatWAXOnly()} WAX</span>
+            <span className="home-user-sexy">{UserService.formatSEXYOnly()} SEXY</span>
+            <button className="btn-logout" onClick={handleLogout}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="home-image-container">
-        <img src={home1} alt="Home Background" className="home-image" />
-        <div className="user-info">
-          <span className="home-user-name">{UserService.getName()}</span>
-          <span className="home-user-balance">{UserService.formatWAXOnly()} WAX</span>
-          <span className="home-user-sexy">{UserService.formatSEXYOnly()} SEXY</span>
-          <button className="btn-logout" onClick={handleLogout}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          </button>
-        </div>
-        <div className="mission-buttons-overlay">
-          <div className="mission-button" style={{ left: '7%', bottom: '8%' }} onClick={() => setShowMission(true)} />
-          <div className="mission-button" style={{ left: '19%', bottom: '12%' }} onClick={() => setShowMission(true)} />
-          <div className="mission-button" style={{ left: '32%', bottom: '7%' }} onClick={() => setShowMission(true)} />
-          <div className="mission-button" style={{ left: '45%', bottom: '13%' }} onClick={() => setShowMission(true)} />
-          <div className="mission-button" style={{ left: '58%', bottom: '8%' }} onClick={() => setShowMission(true)} />
-          <div className="mission-button" style={{ left: '70%', bottom: '12%' }} onClick={() => setShowMission(true)} />
-          <div className="mission-button" style={{ left: '82%', bottom: '7%' }} onClick={() => setShowMission(true)} />
-          <div className="mission-button" style={{ left: '55%', top: '10%' }} onClick={() => setShowMission(true)} />
-          <div className="mission-button" style={{ left: '25%', top: '13%' }} onClick={() => setShowMission(true)} />
-        </div>
+      <div className="buildings-row">
+        {buildingSprites.map((sprite, idx) => (
+          <div
+            key={idx}
+            className="building-btn"
+            style={{ backgroundImage: `url(${sprite})` }}
+            onClick={() => setShowMission(true)}
+          />
+        ))}
       </div>
       {showMission && (
         <MissionModal
@@ -76,9 +78,35 @@ const Home = () => {
           position: relative;
           overflow: hidden;
         }
+        .home-image-row {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          margin-bottom: 32px;
+        }
+        .oreja-tap {
+          height: 180px;
+          width: 44px;
+          background: #ff36ba;
+          color: #fff;
+          font-weight: 700;
+          font-size: 1.1rem;
+          border-radius: 18px 0 0 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: -18px;
+          z-index: 3;
+          box-shadow: 0 2px 12px #ff36ba55;
+          border: 2px solid #ff36ba;
+          border-right: none;
+          cursor: pointer;
+          user-select: none;
+        }
         .home-image-container {
           position: relative;
-          margin: 32px auto 24px auto;
           border-radius: 28px;
           border: 2px solid #ff36ba;
           box-shadow: 0 0 20px rgba(255, 54, 186, 0.5);
@@ -87,8 +115,7 @@ const Home = () => {
           display: flex;
           align-items: flex-start;
           justify-content: center;
-          width: 90vw;
-          max-width: 900px;
+          width: 900px;
           aspect-ratio: 3/2;
           min-width: 320px;
           height: auto;
@@ -131,50 +158,27 @@ const Home = () => {
           margin-left: 8px;
           cursor: default;
         }
-        .mission-buttons-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-        }
-        .mission-button {
-          position: absolute;
-          width: 56px;
-          height: 112px;
-          pointer-events: auto;
-          background: url(${missionButton}) no-repeat left center;
-          background-size: 200% 100%;
-          border: none;
-          box-shadow: none;
-          transition: background-position 0.18s;
-        }
-        .mission-button:nth-child(1) { background-image: url(${missionButton}); }
-        .mission-button:nth-child(2) { background-image: url(${missionButton2}); }
-        .mission-button:nth-child(3) { background-image: url(${missionButton3}); }
-        .mission-button:nth-child(4) { background-image: url(${missionButton4}); }
-        .mission-button:nth-child(5) { background-image: url(${missionButton5}); }
-        .mission-button:nth-child(6) { background-image: url(${missionButton6}); }
-        .mission-button:nth-child(7) { background-image: url(${missionButton7}); }
-        .mission-button:nth-child(8) { background-image: url(${missionButton8}); }
-        .mission-button:nth-child(9) { background-image: url(${missionButton9}); }
-        .mission-button:hover {
-          background-position: right center;
-        }
-        .ear-button {
-          position: absolute;
-          left: calc(5vw - 18px);
-          top: 50%;
-          transform: translateY(-50%);
-          z-index: 10;
-          cursor: pointer;
-          background: none;
-          border: none;
-          padding: 0;
+        .buildings-row {
           display: flex;
-          align-items: center;
+          flex-direction: row;
+          align-items: flex-end;
           justify-content: center;
+          gap: 32px;
+          margin-top: 36px;
+        }
+        .building-btn {
+          width: 120px;
+          height: 120px;
+          background-repeat: no-repeat;
+          background-size: 200% 100%;
+          background-position: left center;
+          cursor: pointer;
+          border: none;
+          outline: none;
+          transition: none;
+        }
+        .building-btn:hover {
+          background-position: right center;
         }
         .home-user-name {
           color: #ffb9fa;
