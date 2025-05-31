@@ -13,7 +13,7 @@ import missionButton6 from '../images/missionboton6.webp';
 import missionButton7 from '../images/missionboton7.webp';
 import missionButton8 from '../images/missionboton8.webp';
 import missionButton9 from '../images/missionboton9.webp';
-import home1 from '../images/home1.png';
+import home1 from '../images/home1.webp';
 
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
