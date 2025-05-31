@@ -51,11 +51,10 @@ const Home = () => {
             </button>
           </div>
           <img src={mapa1} alt="Mapa" className="home-image" />
-          <img
-            src={edifico1}
-            alt="Edificio principal"
-            className="main-building"
+          <div
+            className="sprite-edificio1"
             onClick={() => setShowMission(true)}
+            title="Edificio principal"
           />
           <div
             className="mission-button main-building second-building"
@@ -240,6 +239,23 @@ const Home = () => {
           width: 285.8px;
           height: 389.1px;
           z-index: 4;
+        }
+        .sprite-edificio1 {
+          position: absolute;
+          left: 252.3px;
+          top: 339.1px;
+          width: 548.4px;
+          height: 365.3px;
+          background-image: url('../images/edifico1.svg');
+          background-size: 200% 100%;
+          background-position: left center;
+          background-repeat: no-repeat;
+          cursor: pointer;
+          z-index: 10;
+          transition: none;
+        }
+        .sprite-edificio1:hover {
+          background-position: right center;
         }
       `}</style>
     </div>
