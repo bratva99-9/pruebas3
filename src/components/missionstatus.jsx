@@ -89,66 +89,72 @@ const MissionStatus = ({ onClose }) => {
             {missions.length === 0 ? (
               <div className="no-missions">No tienes misiones activas</div>
             ) : (
-              missions.map(mission => (
-                <div key={mission.asset_id} className="mission-status-card">
-                  <div className="mission-video-container">
-                    {mission.video_url ? (
-                      <video 
-                        className="mission-video"
-                        src={mission.video_url}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        onError={(e) => {
-                          console.error('Error al cargar el video:', e);
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                    ) : (
-                      <div className="mission-video-placeholder">
-                        <span>Video no disponible</span>
-                      </div>
-                    )}
-                    <div className="mission-info-overlay">
-                      <div className="mission-info-content">
-                        <div className="mission-stat">
-                          <span className="stat-icon">
-                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <circle cx="11" cy="11" r="9" fill="#ffe066" stroke="#ff00ff" strokeWidth="2"/>
-                              <circle cx="11" cy="11" r="7" fill="#fffbe6" fillOpacity="0.7"/>
-                              <path d="M11 15.2c-2.2-1.6-4-3.1-4-4.7a2 2 0 0 1 4-1.1A2 2 0 0 1 15 10.5c0 1.6-1.8 3.1-4 4.7z" fill="#ff00ff" stroke="#ff00ff" strokeWidth="0.7"/>
-                            </svg>
-                          </span>
-                          <span className="stat-text">{formatReward(mission.reward)} SEXY</span>
+              missions.map(mission => {
+                let videoUrl = mission.video_url;
+                if (videoUrl && videoUrl.startsWith('Qm')) {
+                  videoUrl = `https://ipfs.io/ipfs/${videoUrl}`;
+                }
+                return (
+                  <div key={mission.asset_id} className="mission-status-card">
+                    <div className="mission-video-container">
+                      {videoUrl ? (
+                        <video 
+                          className="mission-video"
+                          src={videoUrl}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          onError={(e) => {
+                            console.error('Error al cargar el video:', e);
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <div className="mission-video-placeholder">
+                          <span>Video no disponible</span>
                         </div>
-                        <div className="mission-stat">
-                          <span className="stat-icon">
-                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <rect x="4.5" y="9.5" width="13" height="7" rx="2" fill="#ff00ff" fillOpacity="0.13" stroke="#ff00ff" strokeWidth="1.7"/>
-                              <rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="1.3"/>
-                              <path d="M4.5 12H17.5" stroke="#ff00ff" strokeWidth="1.3"/>
-                              <path d="M11 9.5V16" stroke="#ff00ff" strokeWidth="1.3"/>
-                              <path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
-                              <path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
-                            </svg>
-                          </span>
-                          <span className="stat-text">{formatDropChance(mission.nft_drop_chance)}</span>
-                        </div>
-                        <div className="mission-stat">
-                          <span className="stat-icon">
-                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <circle cx="10" cy="10" r="8.5" stroke="#bfc2d1" strokeWidth="1.5"/>
-                              <path d="M10 5.5V10L13 12" stroke="#bfc2d1" strokeWidth="1.5" strokeLinecap="round"/>
-                            </svg>
-                          </span>
-                          <span className="stat-text">{getTimeLeft(Number(mission.end_time))}</span>
+                      )}
+                      <div className="mission-info-overlay">
+                        <div className="mission-info-content">
+                          <div className="mission-stat">
+                            <span className="stat-icon">
+                              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="11" cy="11" r="9" fill="#ffe066" stroke="#ff00ff" strokeWidth="2"/>
+                                <circle cx="11" cy="11" r="7" fill="#fffbe6" fillOpacity="0.7"/>
+                                <path d="M11 15.2c-2.2-1.6-4-3.1-4-4.7a2 2 0 0 1 4-1.1A2 2 0 0 1 15 10.5c0 1.6-1.8 3.1-4 4.7z" fill="#ff00ff" stroke="#ff00ff" strokeWidth="0.7"/>
+                              </svg>
+                            </span>
+                            <span className="stat-text">{formatReward(mission.reward)} SEXY</span>
+                          </div>
+                          <div className="mission-stat">
+                            <span className="stat-icon">
+                              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4.5" y="9.5" width="13" height="7" rx="2" fill="#ff00ff" fillOpacity="0.13" stroke="#ff00ff" strokeWidth="1.7"/>
+                                <rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="1.3"/>
+                                <path d="M4.5 12H17.5" stroke="#ff00ff" strokeWidth="1.3"/>
+                                <path d="M11 9.5V16" stroke="#ff00ff" strokeWidth="1.3"/>
+                                <path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
+                                <path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
+                              </svg>
+                            </span>
+                            <span className="stat-text">{formatDropChance(mission.nft_drop_chance)}</span>
+                          </div>
+                          <div className="mission-stat">
+                            <span className="stat-icon">
+                              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="10" cy="10" r="8.5" stroke="#bfc2d1" strokeWidth="1.5"/>
+                                <path d="M10 5.5V10L13 12" stroke="#bfc2d1" strokeWidth="1.5" strokeLinecap="round"/>
+                              </svg>
+                            </span>
+                            <span className="stat-text">{getTimeLeft(Number(mission.end_time))}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         )}

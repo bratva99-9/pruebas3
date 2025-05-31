@@ -8,6 +8,11 @@ import missionButton from '../images/missionboton.webp';
 import missionButton2 from '../images/missionboton2.webp';
 import missionButton3 from '../images/missionboton3.webp';
 import missionButton4 from '../images/missionboton4.webp';
+import missionButton5 from '../images/missionboton5.webp';
+import missionButton6 from '../images/missionboton6.webp';
+import missionButton7 from '../images/missionboton7.webp';
+import missionButton8 from '../images/missionboton8.webp';
+import missionButton9 from '../images/missionboton9.webp';
 
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
@@ -47,22 +52,15 @@ const Home = () => {
       </div>
       <ClaimActionButton />
       <div style={{display: 'flex', justifyContent: 'center', gap: 24, marginTop: 24}}>
-        <div
-          className="mission-button"
-          onClick={() => setShowMission(true)}
-        />
-        <div
-          className="mission-button"
-          onClick={() => setShowMission(true)}
-        />
-        <div
-          className="mission-button"
-          onClick={() => setShowMission(true)}
-        />
-        <div
-          className="mission-button"
-          onClick={() => setShowMission(true)}
-        />
+        <div className="mission-button" onClick={() => setShowMission(true)} />
+        <div className="mission-button" onClick={() => setShowMission(true)} />
+        <div className="mission-button" onClick={() => setShowMission(true)} />
+        <div className="mission-button" onClick={() => setShowMission(true)} />
+        <div className="mission-button" onClick={() => setShowMission(true)} />
+        <div className="mission-button" onClick={() => setShowMission(true)} />
+        <div className="mission-button" onClick={() => setShowMission(true)} />
+        <div className="mission-button" onClick={() => setShowMission(true)} />
+        <div className="mission-button" onClick={() => setShowMission(true)} />
       </div>
       {showMission && (
         <MissionModal
@@ -127,6 +125,21 @@ const Home = () => {
         }
         .mission-button:nth-child(4) {
           background-image: url(${missionButton4});
+        }
+        .mission-button:nth-child(5) {
+          background-image: url(${missionButton5});
+        }
+        .mission-button:nth-child(6) {
+          background-image: url(${missionButton6});
+        }
+        .mission-button:nth-child(7) {
+          background-image: url(${missionButton7});
+        }
+        .mission-button:nth-child(8) {
+          background-image: url(${missionButton8});
+        }
+        .mission-button:nth-child(9) {
+          background-image: url(${missionButton9});
         }
         .mission-button:hover {
           background-position: right center;
