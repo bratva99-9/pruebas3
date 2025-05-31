@@ -60,6 +60,11 @@ const Home = () => {
             style={{ backgroundImage: `url(${missionButton8})` }}
             onClick={() => setShowMission(true)}
           />
+          <div
+            className="mission-button map-building-7"
+            style={{ backgroundImage: `url(${missionButton7})` }}
+            onClick={() => setShowMission(true)}
+          />
         </div>
       </div>
       <div className="buildings-row">
@@ -225,6 +230,14 @@ const Home = () => {
         }
         .mission-button:hover {
           background-position: right center;
+        }
+        .map-building-7 {
+          position: absolute;
+          left: 245.5px;
+          top: 318px;
+          width: 285.8px;
+          height: 389.1px;
+          z-index: 4;
         }
       `}</style>
     </div>
