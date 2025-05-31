@@ -26,6 +26,11 @@ const Home = () => {
 
   return (
     <div className="home-container">
+      <div className="ear-button" title="Menu">
+        <svg width="38" height="80" viewBox="0 0 38 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M38 0C17 0 0 17.9 0 40C0 62.1 17 80 38 80" fill="#ff36ba"/>
+        </svg>
+      </div>
       <div className="home-image-container">
         <img src={home1} alt="Home Background" className="home-image" />
         <div className="user-info">
@@ -67,14 +72,14 @@ const Home = () => {
           align-items: center;
           justify-content: flex-start;
           padding: 20px;
-          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+          background: hsl(245, 86.70%, 2.90%);
           position: relative;
           overflow: hidden;
         }
         .home-image-container {
           position: relative;
           margin: 32px auto 24px auto;
-          border-radius: 20px;
+          border-radius: 28px;
           border: 2px solid #ff36ba;
           box-shadow: 0 0 20px rgba(255, 54, 186, 0.5);
           overflow: hidden;
@@ -84,12 +89,14 @@ const Home = () => {
           justify-content: center;
           width: 90vw;
           max-width: 900px;
+          aspect-ratio: 3/2;
           min-width: 320px;
           height: auto;
         }
         .home-image {
           width: 100%;
-          height: auto;
+          height: 100%;
+          object-fit: contain;
           display: block;
         }
         .user-info {
@@ -134,14 +141,13 @@ const Home = () => {
         }
         .mission-button {
           position: absolute;
-          width: 60px;
-          height: 60px;
+          width: 56px;
+          height: 112px;
           pointer-events: auto;
           background: url(${missionButton}) no-repeat left center;
-          background-size: 200% auto;
-          border-radius: 50%;
-          border: 2px solid #ff36ba44;
-          box-shadow: 0 2px 12px #0006;
+          background-size: 200% 100%;
+          border: none;
+          box-shadow: none;
           transition: background-position 0.18s;
         }
         .mission-button:nth-child(1) { background-image: url(${missionButton}); }
@@ -155,6 +161,20 @@ const Home = () => {
         .mission-button:nth-child(9) { background-image: url(${missionButton9}); }
         .mission-button:hover {
           background-position: right center;
+        }
+        .ear-button {
+          position: absolute;
+          left: calc(5vw - 18px);
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 10;
+          cursor: pointer;
+          background: none;
+          border: none;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         .home-user-name {
           color: #ffb9fa;
