@@ -25,28 +25,15 @@ const Home = () => {
   };
 
   return (
-    <div
-      className="home"
-      style={{
-        minHeight: '100vh',
-        width: '100vw',
-        backgroundColor: 'hsl(245, 86.70%, 2.90%)',
-        color: 'white',
-        padding: 0,
-        margin: 0,
-        position: 'relative',
-        textAlign: 'center',
-        overflow: 'hidden'
-      }}
-    >
-      <div className="home-user-bar">
+    <div className="home-container">
+      <div className="home-image-container">
+        <img src="/home1.png" alt="Home Background" className="home-image" />
+      </div>
+      <div className="home-user-bar user-info">
         <span className="home-user-name">{UserService.getName()}</span>
         <span className="home-user-balance">{UserService.formatWAXOnly()} WAX</span>
         <span className="home-user-sexy">{UserService.formatSEXYOnly()} SEXY</span>
-        <button
-          className="home-logout-btn"
-          onClick={handleLogout}
-        >
+        <button className="btn-logout" onClick={handleLogout}>
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         </button>
       </div>
@@ -74,38 +61,63 @@ const Home = () => {
         />
       )}
       <style jsx>{`
-        .home-user-bar {
+        .home-container {
+          min-height: 100vh;
           display: flex;
-          justify-content: center;
+          flex-direction: column;
           align-items: center;
-          gap: 24px;
-          margin-bottom: 18px;
-          font-size: 16px;
-          font-weight: 600;
-          color: #fff;
-          background: linear-gradient(90deg, rgba(36,0,56,0.7) 0%, rgba(36,0,56,0.3) 100%);
-          border-radius: 12px;
-          padding: 8px 24px;
-          box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-          text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-          letter-spacing: 0.5px;
-          margin-top: 24px;
-          width: fit-content;
-          margin-left: auto;
-          margin-right: auto;
+          justify-content: flex-start;
+          padding: 20px;
+          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+          position: relative;
+          overflow: hidden;
         }
-        .home-logout-btn {
+        .home-image-container {
+          width: 80%;
+          max-width: 800px;
+          margin: 32px auto 24px auto;
+          border-radius: 20px;
+          border: 2px solid #ff36ba;
+          box-shadow: 0 0 20px rgba(255, 54, 186, 0.5);
+          overflow: hidden;
+          background: #181828;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .home-image {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+        .user-info {
+          background: rgba(0, 255, 255, 0.13);
+          border: 2px solid #00ffff;
+          border-radius: 12px;
+          padding: 20px 32px;
+          margin-top: 20px;
+          text-align: center;
+          color: #fff;
+          font-weight: 500;
+          font-size: 1.1rem;
+          box-shadow: 0 2px 12px 0 #00ffff22;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 18px;
+        }
+        .btn-logout {
           background: none;
           border: none;
-          padding: 8px;
-          cursor: pointer;
+          padding: 0;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: transform 0.2s;
-        }
-        .home-logout-btn:hover {
-          transform: scale(1.1);
+          outline: none;
+          box-shadow: none;
+          margin-left: 12px;
+          /* Sin cursor pointer ni efectos */
+          cursor: default;
         }
         .mission-button {
           width: 120px;
@@ -114,33 +126,15 @@ const Home = () => {
           background-size: 200% auto;
           cursor: pointer;
         }
-        .mission-button:nth-child(1) {
-          background-image: url(${missionButton});
-        }
-        .mission-button:nth-child(2) {
-          background-image: url(${missionButton2});
-        }
-        .mission-button:nth-child(3) {
-          background-image: url(${missionButton3});
-        }
-        .mission-button:nth-child(4) {
-          background-image: url(${missionButton4});
-        }
-        .mission-button:nth-child(5) {
-          background-image: url(${missionButton5});
-        }
-        .mission-button:nth-child(6) {
-          background-image: url(${missionButton6});
-        }
-        .mission-button:nth-child(7) {
-          background-image: url(${missionButton7});
-        }
-        .mission-button:nth-child(8) {
-          background-image: url(${missionButton8});
-        }
-        .mission-button:nth-child(9) {
-          background-image: url(${missionButton9});
-        }
+        .mission-button:nth-child(1) { background-image: url(${missionButton}); }
+        .mission-button:nth-child(2) { background-image: url(${missionButton2}); }
+        .mission-button:nth-child(3) { background-image: url(${missionButton3}); }
+        .mission-button:nth-child(4) { background-image: url(${missionButton4}); }
+        .mission-button:nth-child(5) { background-image: url(${missionButton5}); }
+        .mission-button:nth-child(6) { background-image: url(${missionButton6}); }
+        .mission-button:nth-child(7) { background-image: url(${missionButton7}); }
+        .mission-button:nth-child(8) { background-image: url(${missionButton8}); }
+        .mission-button:nth-child(9) { background-image: url(${missionButton9}); }
         .mission-button:hover {
           background-position: right center;
         }
