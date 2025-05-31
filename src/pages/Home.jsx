@@ -13,7 +13,6 @@ import missionButton7 from '../images/missionboton7.webp';
 import missionButton8 from '../images/missionboton8.webp';
 import missionButton9 from '../images/missionboton9.webp';
 import mapa1 from '../images/mapa1.svg';
-import edifico1 from '../images/edifico1.svg';
 
 const buildingSprites = [
   missionButton, missionButton2, missionButton3, missionButton4, missionButton5,
