@@ -32,9 +32,16 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-image-row">
-        <div className="user-tap">
-          <span className="user-tap-name">{UserService.getName()}</span>
-          <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX</span>
+        <div className="user-taps-vertical">
+          <div className="user-tap user-tap-block">
+            <span className="user-tap-name">{UserService.getName()}</span>
+          </div>
+          <div className="user-tap user-tap-block">
+            <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX</span>
+          </div>
+          <div className="user-tap user-tap-block">
+            <span className="user-tap-sexy">{UserService.formatSEXYOnly()} SEXY</span>
+          </div>
         </div>
         <div className="home-image-container">
           <img src={home1} alt="Home Background" className="home-image" />
@@ -92,7 +99,16 @@ const Home = () => {
           width: 100%;
           margin-bottom: 32px;
         }
-        .user-tap {
+        .user-taps-vertical {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 12px;
+          height: 100%;
+          margin-right: 0;
+          z-index: 4;
+        }
+        .user-tap.user-tap-block {
           min-width: 210px;
           height: 44px;
           background: #181828;
@@ -115,6 +131,10 @@ const Home = () => {
         }
         .user-tap-wax {
           color: #00ffff;
+          font-weight: 700;
+        }
+        .user-tap-sexy {
+          color: #ff36ba;
           font-weight: 700;
         }
         .home-image-container {
