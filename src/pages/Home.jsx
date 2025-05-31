@@ -12,7 +12,8 @@ import missionButton6 from '../images/missionboton6.webp';
 import missionButton7 from '../images/missionboton7.webp';
 import missionButton8 from '../images/missionboton8.webp';
 import missionButton9 from '../images/missionboton9.webp';
-import home1 from '../images/home1.webp';
+import mapa1 from '../images/mapa1.svg';
+import edifico1 from '../images/edifico1.svg';
 
 const buildingSprites = [
   missionButton, missionButton2, missionButton3, missionButton4, missionButton5,
@@ -49,10 +50,11 @@ const Home = () => {
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             </button>
           </div>
-          <img src={home1} alt="Home Background" className="home-image" />
-          <div
-            className="mission-button main-building"
-            style={{ backgroundImage: `url(${missionButton})` }}
+          <img src={mapa1} alt="Mapa" className="home-image" />
+          <img
+            src={edifico1}
+            alt="Edificio principal"
+            className="main-building"
             onClick={() => setShowMission(true)}
           />
           <div
