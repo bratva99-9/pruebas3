@@ -242,7 +242,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
         .mission-video-container {
           width: 100%;
           height: 220px;
-          aspect-ratio: 1080/1930;
+          aspect-ratio: 10/20;
           border-radius: 16px;
           overflow: hidden;
           background: rgba(0,0,0,0.32);
@@ -256,7 +256,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
         .mission-video {
           width: 100%;
           height: 100%;
-          aspect-ratio: 1080/1930;
+          aspect-ratio: 10/20;
           object-fit: cover;
           position: relative;
           z-index: 10001;
@@ -283,7 +283,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           bottom: 0;
           background: linear-gradient(0deg, rgba(10,10,46,0.92) 95%, rgba(10,10,46,0.0) 100%);
           padding: 4px 0 4px 0;
-          border-radius: 0 0 18px 18px;
+          border-radius: 0;
           z-index: 10002;
           width: 100%;
           display: flex;
@@ -291,8 +291,8 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
         }
         .mission-info-content {
           display: flex;
-          flex-direction: row;
-          gap: 8px;
+          flex-direction: column;
+          gap: 4px;
           align-items: center;
           justify-content: center;
           position: relative;
@@ -311,6 +311,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           z-index: 10002;
           font-size: 11px;
           padding: 0 2px;
+          justify-content: center;
         }
         .stat-icon {
           display: flex;
