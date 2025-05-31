@@ -32,14 +32,17 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-image-row">
-        <div className="user-tap-outer">
-          <div className="user-tap">
-            <span className="user-tap-name">{UserService.getName()}</span>
-            <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX</span>
-          </div>
+        <div className="user-tap">
+          <span className="user-tap-name">{UserService.getName()}</span>
+          <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX</span>
         </div>
         <div className="home-image-container">
           <img src={home1} alt="Home Background" className="home-image" />
+          <div
+            className="mission-button main-building"
+            style={{ backgroundImage: `url(${missionButton})` }}
+            onClick={() => setShowMission(true)}
+          />
           <div className="user-info">
             <span className="home-user-sexy">{UserService.formatSEXYOnly()} SEXY</span>
             <button className="btn-logout" onClick={handleLogout}>
@@ -49,7 +52,7 @@ const Home = () => {
         </div>
       </div>
       <div className="buildings-row">
-        {buildingSprites.map((sprite, idx) => (
+        {buildingSprites.slice(1).map((sprite, idx) => (
           <div
             key={idx}
             className="mission-button"
@@ -88,13 +91,6 @@ const Home = () => {
           justify-content: center;
           width: 100%;
           margin-bottom: 32px;
-        }
-        .user-tap-outer {
-          display: flex;
-          align-items: center;
-          height: 100%;
-          margin-right: -18px;
-          z-index: 4;
         }
         .user-tap {
           min-width: 210px;
@@ -141,6 +137,14 @@ const Home = () => {
           height: 100%;
           object-fit: contain;
           display: block;
+        }
+        .main-building {
+          position: absolute;
+          left: 40px;
+          bottom: 40px;
+          width: 180px;
+          height: 180px;
+          z-index: 3;
         }
         .user-info {
           position: absolute;
