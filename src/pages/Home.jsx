@@ -51,13 +51,6 @@ const Home = () => {
           <img src="/mapa1.svg" alt="Mapa" className="home-image" />
           <div
             className="mission-button edificio1-map"
-            style={{
-              left: '177.7px',
-              top: '234.9px',
-              width: '440px',
-              height: '293px',
-              backgroundImage: 'url(/edificio1.svg)'
-            }}
             onClick={() => setShowMission(true)}
             title="Edificio principal"
           />
@@ -273,7 +266,7 @@ const Home = () => {
           width: 440px;
           height: 293px;
           background-image: url(/edificio1.svg);
-          background-size: 200% 100%;
+          background-size: 200% auto;
           background-position: left center;
           background-repeat: no-repeat;
           z-index: 10;
