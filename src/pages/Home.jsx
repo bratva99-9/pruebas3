@@ -29,27 +29,27 @@ const Home = () => {
     <div className="home-container">
       <div className="home-image-container">
         <img src={home1} alt="Home Background" className="home-image" />
-      </div>
-      <div className="home-user-bar user-info">
-        <span className="home-user-name">{UserService.getName()}</span>
-        <span className="home-user-balance">{UserService.formatWAXOnly()} WAX</span>
-        <span className="home-user-sexy">{UserService.formatSEXYOnly()} SEXY</span>
-        <button className="btn-logout" onClick={handleLogout}>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        </button>
+        <div className="user-info">
+          <span className="home-user-name">{UserService.getName()}</span>
+          <span className="home-user-balance">{UserService.formatWAXOnly()} WAX</span>
+          <span className="home-user-sexy">{UserService.formatSEXYOnly()} SEXY</span>
+          <button className="btn-logout" onClick={handleLogout}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </button>
+        </div>
+        <div className="mission-buttons-overlay">
+          <div className="mission-button" style={{ left: '7%', bottom: '8%' }} onClick={() => setShowMission(true)} />
+          <div className="mission-button" style={{ left: '19%', bottom: '12%' }} onClick={() => setShowMission(true)} />
+          <div className="mission-button" style={{ left: '32%', bottom: '7%' }} onClick={() => setShowMission(true)} />
+          <div className="mission-button" style={{ left: '45%', bottom: '13%' }} onClick={() => setShowMission(true)} />
+          <div className="mission-button" style={{ left: '58%', bottom: '8%' }} onClick={() => setShowMission(true)} />
+          <div className="mission-button" style={{ left: '70%', bottom: '12%' }} onClick={() => setShowMission(true)} />
+          <div className="mission-button" style={{ left: '82%', bottom: '7%' }} onClick={() => setShowMission(true)} />
+          <div className="mission-button" style={{ left: '55%', top: '10%' }} onClick={() => setShowMission(true)} />
+          <div className="mission-button" style={{ left: '25%', top: '13%' }} onClick={() => setShowMission(true)} />
+        </div>
       </div>
       <ClaimActionButton />
-      <div style={{display: 'flex', justifyContent: 'center', gap: 24, marginTop: 24}}>
-        <div className="mission-button" onClick={() => setShowMission(true)} />
-        <div className="mission-button" onClick={() => setShowMission(true)} />
-        <div className="mission-button" onClick={() => setShowMission(true)} />
-        <div className="mission-button" onClick={() => setShowMission(true)} />
-        <div className="mission-button" onClick={() => setShowMission(true)} />
-        <div className="mission-button" onClick={() => setShowMission(true)} />
-        <div className="mission-button" onClick={() => setShowMission(true)} />
-        <div className="mission-button" onClick={() => setShowMission(true)} />
-        <div className="mission-button" onClick={() => setShowMission(true)} />
-      </div>
       {showMission && (
         <MissionModal
           onClose={() => setShowMission(false)}
@@ -74,6 +74,7 @@ const Home = () => {
           overflow: hidden;
         }
         .home-image-container {
+          position: relative;
           margin: 32px auto 24px auto;
           border-radius: 20px;
           border: 2px solid #ff36ba;
@@ -81,31 +82,38 @@ const Home = () => {
           overflow: hidden;
           background: #181828;
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           justify-content: center;
-          width: auto;
-          max-width: 100vw;
+          width: 70vw;
+          max-width: 560px;
+          min-width: 320px;
+          height: auto;
+          transform: scale(0.7);
         }
         .home-image {
-          display: block;
-          max-width: 100%;
+          width: 100%;
           height: auto;
+          display: block;
         }
         .user-info {
+          position: absolute;
+          top: 18px;
+          left: 50%;
+          transform: translateX(-50%);
           background: rgba(0, 255, 255, 0.13);
           border: 2px solid #00ffff;
           border-radius: 12px;
-          padding: 20px 32px;
-          margin-top: 20px;
+          padding: 7px 18px;
           text-align: center;
           color: #fff;
           font-weight: 500;
-          font-size: 1.1rem;
+          font-size: 0.95rem;
           box-shadow: 0 2px 12px 0 #00ffff22;
           display: flex;
           flex-direction: row;
           align-items: center;
-          gap: 18px;
+          gap: 10px;
+          z-index: 2;
         }
         .btn-logout {
           background: none;
@@ -116,16 +124,28 @@ const Home = () => {
           justify-content: center;
           outline: none;
           box-shadow: none;
-          margin-left: 12px;
-          /* Sin cursor pointer ni efectos */
+          margin-left: 8px;
           cursor: default;
         }
+        .mission-buttons-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+        }
         .mission-button {
-          width: 120px;
-          height: 120px;
+          position: absolute;
+          width: 60px;
+          height: 60px;
+          pointer-events: auto;
           background: url(${missionButton}) no-repeat left center;
           background-size: 200% auto;
-          cursor: pointer;
+          border-radius: 50%;
+          border: 2px solid #ff36ba44;
+          box-shadow: 0 2px 12px #0006;
+          transition: none;
         }
         .mission-button:nth-child(1) { background-image: url(${missionButton}); }
         .mission-button:nth-child(2) { background-image: url(${missionButton2}); }
@@ -136,9 +156,6 @@ const Home = () => {
         .mission-button:nth-child(7) { background-image: url(${missionButton7}); }
         .mission-button:nth-child(8) { background-image: url(${missionButton8}); }
         .mission-button:nth-child(9) { background-image: url(${missionButton9}); }
-        .mission-button:hover {
-          background-position: right center;
-        }
         .home-user-name {
           color: #ffb9fa;
         }
