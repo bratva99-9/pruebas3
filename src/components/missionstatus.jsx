@@ -96,7 +96,12 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           <div className="mission-status-section">
             <span style={{display: 'none'}}>{now}</span>
             {missions.length === 0 ? (
-              <div className="no-missions">You have no active missions</div>
+              <div className="no-missions-centered">
+                <div className="no-missions-text">
+                  No tienes misiones activas en este momento.<br />
+                  ¡Envía una chica a una misión para comenzar a ganar recompensas!
+                </div>
+              </div>
             ) : (
               missions.map(mission => {
                 let videoUrl = mission.video_url;
@@ -166,7 +171,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
                         try {
                           await UserService.claimMission([mission.asset_id]);
                           showToast('¡Recompensa reclamada!', 'success');
-                          fetchMissions();
+                          setTimeout(fetchMissions, 2000);
                         } catch (err) {
                           showToast('Error al reclamar: ' + (err.message || err), 'error');
                         }
@@ -175,7 +180,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
                         try {
                           await UserService.cancelMission(mission.asset_id);
                           showToast('¡Misión cancelada!', 'success');
-                          fetchMissions();
+                          setTimeout(fetchMissions, 2000);
                         } catch (err) {
                           showToast('Error al cancelar: ' + (err.message || err), 'error');
                         }
@@ -195,10 +200,9 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
             disabled={missions.length === 0}
             onClick={async () => {
               try {
-                const assetIds = missions.slice(0, 10).map(m => m.asset_id);
-                await UserService.claimMission(assetIds);
+                await UserService.claimRewards();
                 showToast('¡Recompensas reclamadas!', 'success');
-                fetchMissions();
+                setTimeout(fetchMissions, 2000);
               } catch (err) {
                 showToast('Error al reclamar todas: ' + (err.message || err), 'error');
               }
@@ -209,26 +213,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
         </div>
       </div>
       {toast && (
-        <div style={{
-          position: 'fixed',
-          top: 32,
-          right: 32,
-          zIndex: 12000,
-          background: toast.type === 'success' ? 'linear-gradient(90deg,#3b82f6 0%,#5eead4 100%)' : 'linear-gradient(90deg,#ff6fff 0%,#b266ff 100%)',
-          color: '#fff',
-          padding: '18px 36px',
-          borderRadius: 16,
-          fontWeight: 600,
-          fontSize: 18,
-          boxShadow: '0 4px 24px #0004',
-          border: toast.type === 'success' ? '2px solid #3b82f6' : '2px solid #ff6fff',
-          letterSpacing: 1,
-          minWidth: 220,
-          textAlign: 'center',
-          transition: 'all 0.3s',
-        }}>
-          {toast.message}
-        </div>
+        <div className={`custom-toast ${toast.type}`}>{toast.message}</div>
       )}
       <style jsx>{`
         .nft-modal-fullscreen {
@@ -446,17 +431,6 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           position: relative;
           z-index: 10001;
         }
-        .no-missions {
-          color: #bfc2d1;
-          font-size: 1rem;
-          text-align: center;
-          padding: 20px;
-          background: rgba(36,0,56,0.05);
-          border-radius: 12px;
-          border: 1px solid rgba(0,255,255,0.1);
-          position: relative;
-          z-index: 10001;
-        }
         .mission-status-actions {
           display: flex;
           flex-direction: row;
@@ -497,6 +471,57 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           background: rgba(255,0,0,0.22);
           border-color: #ff0033;
           color: #fff;
+        }
+        .custom-toast {
+          position: fixed;
+          top: 38px;
+          right: 38px;
+          z-index: 12000;
+          min-width: 240px;
+          max-width: 420px;
+          padding: 18px 38px;
+          border-radius: 14px;
+          font-size: 18px;
+          font-weight: 600;
+          letter-spacing: 1px;
+          text-align: center;
+          box-shadow: 0 4px 24px #0006;
+          border: 2px solid #00ffff;
+          background: linear-gradient(90deg, #181828 0%, #2d0a3a 100%);
+          color: #fff;
+          transition: all 0.3s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .custom-toast.success {
+          border-color: #00ffff;
+          background: linear-gradient(90deg, #00ffff 0%, #3b82f6 100%);
+          color: #fff;
+        }
+        .custom-toast.error {
+          border-color: #ff6fff;
+          background: linear-gradient(90deg, #ff6fff 0%, #b266ff 100%);
+          color: #fff;
+        }
+        .no-missions-centered {
+          width: 100%;
+          height: 60vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .no-missions-text {
+          color: #ff6fff;
+          font-size: 1.3rem;
+          text-align: center;
+          background: rgba(36,0,56,0.10);
+          border-radius: 16px;
+          border: 2px solid #ff6fff;
+          padding: 32px 38px;
+          box-shadow: 0 2px 18px 0 #ff6fff33;
+          font-weight: 500;
+          max-width: 420px;
         }
       `}</style>
     </div>
