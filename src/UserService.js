@@ -312,6 +312,24 @@ export class User {
 
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
+
+  // Reclamar recompensa de una o varias misiones usando la acción 'claim'
+  async claimMission(asset_ids) {
+    if (!this.session || !this.authName) throw new Error("No sesión activa");
+    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay asset_ids para reclamar");
+
+    const actions = [{
+      account: "nightclubapp",
+      name: "claim",
+      authorization: [{ actor: this.authName, permission: "active" }],
+      data: {
+        user: this.authName,
+        asset_ids: asset_ids
+      }
+    }];
+
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+  }
 }
 
 // Exporta la instancia única

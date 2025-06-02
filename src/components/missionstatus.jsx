@@ -155,7 +155,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
                     <div className="mission-status-actions">
                       <button className="btn-mission-action" onClick={async () => {
                         try {
-                          await UserService.claimRewards();
+                          await UserService.claimMission([mission.asset_id]);
                           alert('¡Recompensa reclamada!');
                         } catch (err) {
                           alert('Error al reclamar: ' + (err.message || err));
@@ -178,6 +178,22 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
         )}
         <div className="nftmodal-bottom-buttons unified-width compact-width fixed-bottom-btns" style={{justifyContent: 'center'}}>
           <button className="btn-square btn-small" onClick={() => { if (typeof onForceCloseAll === 'function') { onForceCloseAll(); } else if (typeof onClose === 'function') { onClose(); } }}>Close Status</button>
+          <button
+            className="btn-square btn-small"
+            style={{ background: '#22c55e', borderColor: '#22c55e', color: '#fff', marginLeft: '16px' }}
+            disabled={missions.length === 0}
+            onClick={async () => {
+              try {
+                const assetIds = missions.slice(0, 10).map(m => m.asset_id);
+                await UserService.claimMission(assetIds);
+                alert('¡Recompensas reclamadas!');
+              } catch (err) {
+                alert('Error al reclamar todas: ' + (err.message || err));
+              }
+            }}
+          >
+            Claim All
+          </button>
         </div>
       </div>
       <style jsx>{`
