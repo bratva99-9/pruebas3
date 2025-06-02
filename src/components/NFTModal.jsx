@@ -638,12 +638,12 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
           box-shadow: 0 0 24px 4px #ff36ba55;
         }
         .cooldown-overlay-minimal {
-          position: absolute;
-          top: 10px;
-          left: 10px;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
           background: rgba(24, 24, 40, 0.38);
-          border-radius: 8px;
-          padding: 2px 10px;
+          border-radius: 10px;
+          padding: 4px 18px;
           z-index: 120;
           display: flex;
           align-items: center;
