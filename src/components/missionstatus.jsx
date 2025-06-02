@@ -96,10 +96,10 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           <div className="mission-status-section">
             <span style={{display: 'none'}}>{now}</span>
             {missions.length === 0 ? (
-              <div className="no-missions-centered">
-                <div className="no-missions-text">
-                  No tienes misiones activas en este momento.<br />
-                  ¡Envía una chica a una misión para comenzar a ganar recompensas!
+              <div className="no-missions-centered-full">
+                <div className="no-missions-text-en">
+                  You have no active missions at the moment.<br />
+                  Send a girl on a mission to start earning rewards!
                 </div>
               </div>
             ) : (
@@ -213,7 +213,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
         </div>
       </div>
       {toast && (
-        <div className={`custom-toast ${toast.type}`}>{toast.message}</div>
+        <div className={`custom-toast-blue`}>{toast.message}</div>
       )}
       <style jsx>{`
         .nft-modal-fullscreen {
@@ -472,7 +472,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           border-color: #ff0033;
           color: #fff;
         }
-        .custom-toast {
+        .custom-toast-blue {
           position: fixed;
           top: 38px;
           right: 38px;
@@ -480,38 +480,31 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           min-width: 240px;
           max-width: 420px;
           padding: 18px 38px;
-          border-radius: 14px;
+          border-radius: 12px;
           font-size: 18px;
           font-weight: 600;
           letter-spacing: 1px;
           text-align: center;
-          box-shadow: 0 4px 24px #0006;
+          box-shadow: 0 4px 24px #00ffff44;
           border: 2px solid #00ffff;
-          background: linear-gradient(90deg, #181828 0%, #2d0a3a 100%);
+          background: rgba(0,255,255,0.10);
           color: #fff;
           transition: all 0.3s;
           display: flex;
           align-items: center;
           justify-content: center;
         }
-        .custom-toast.success {
-          border-color: #00ffff;
-          background: linear-gradient(90deg, #00ffff 0%, #3b82f6 100%);
-          color: #fff;
-        }
-        .custom-toast.error {
-          border-color: #ff6fff;
-          background: linear-gradient(90deg, #ff6fff 0%, #b266ff 100%);
-          color: #fff;
-        }
-        .no-missions-centered {
-          width: 100%;
-          height: 60vh;
+        .no-missions-centered-full {
+          width: 100vw;
+          height: 80vh;
           display: flex;
           align-items: center;
           justify-content: center;
+          position: absolute;
+          top: 0;
+          left: 0;
         }
-        .no-missions-text {
+        .no-missions-text-en {
           color: #ff6fff;
           font-size: 1.3rem;
           text-align: center;
