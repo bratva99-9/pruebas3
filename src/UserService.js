@@ -295,6 +295,23 @@ export class User {
       return [];
     }
   }
+
+  // Cancelar una misión específica
+  async cancelMission(asset_id) {
+    if (!this.session || !this.authName) throw new Error("No sesión activa");
+
+    const actions = [{
+      account: "nightclubapp",
+      name: "cancelmiss",
+      authorization: [{ actor: this.authName, permission: "active" }],
+      data: {
+        user: this.authName,
+        asset_id: asset_id
+      }
+    }];
+
+    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+  }
 }
 
 // Exporta la instancia única

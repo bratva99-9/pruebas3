@@ -153,8 +153,22 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
                       </div>
                     </div>
                     <div className="mission-status-actions">
-                      <button className="btn-mission-action">Claim</button>
-                      <button className="btn-mission-action btn-mission-cancel">Cancel</button>
+                      <button className="btn-mission-action" onClick={async () => {
+                        try {
+                          await UserService.claimRewards();
+                          alert('¡Recompensa reclamada!');
+                        } catch (err) {
+                          alert('Error al reclamar: ' + (err.message || err));
+                        }
+                      }}>Claim</button>
+                      <button className="btn-mission-action btn-mission-cancel" onClick={async () => {
+                        try {
+                          await UserService.cancelMission(mission.asset_id);
+                          alert('¡Misión cancelada!');
+                        } catch (err) {
+                          alert('Error al cancelar: ' + (err.message || err));
+                        }
+                      }}>Cancel</button>
                     </div>
                   </div>
                 );
