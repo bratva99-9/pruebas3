@@ -280,7 +280,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
                       boxShadow: isSelected ? '0 0 18px 4px #ff36ba66' : 'none',
                       border: isSelected ? '4px solid #ff00ffcc' : 'none',
                       backgroundColor: 'black',
-                      filter: inCooldown ? 'grayscale(1)' : 'none',
+                      filter: inCooldown ? 'grayscale(1) blur(2.5px)' : 'none',
                       transform: 'none',
                       transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1)',
                       zIndex: isSelected ? 99999 : 21,
@@ -293,8 +293,8 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
                     }}
                   />
                   {inCooldown && (
-                    <div className="cooldown-overlay">
-                      <span className="cooldown-text">{cooldownLeft}</span>
+                    <div className="cooldown-overlay-minimal">
+                      <span className="cooldown-text-minimal">{cooldownLeft}</span>
                     </div>
                   )}
                 </div>
@@ -637,26 +637,29 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
           margin-bottom: 18px;
           box-shadow: 0 0 24px 4px #ff36ba55;
         }
-        .cooldown-overlay {
+        .cooldown-overlay-minimal {
           position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(24, 24, 40, 0.68);
+          top: 10px;
+          left: 10px;
+          background: rgba(24, 24, 40, 0.38);
+          border-radius: 8px;
+          padding: 2px 10px;
+          z-index: 120;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 18px;
-          z-index: 100;
+          pointer-events: none;
         }
-        .cooldown-text {
+        .cooldown-text-minimal {
           color: #bfc2d1;
-          font-size: 1.5rem;
-          font-weight: 700;
-          letter-spacing: 2px;
+          font-size: 0.98rem;
+          font-weight: 400;
+          letter-spacing: 1.2px;
           opacity: 0.85;
-          text-shadow: 0 2px 8px #000a;
+          text-shadow: 0 1px 4px #000a;
+          font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+          padding: 0;
+          margin: 0;
         }
       `}</style>
     </div>
