@@ -26,46 +26,55 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [now, setNow] = useState(Math.floor(Date.now() / 1000));
+  const [toast, setToast] = useState(null);
+
+  // Función para mostrar notificación
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3500);
+  };
+
+  // Función para recargar misiones
+  const fetchMissions = async () => {
+    setLoading(true);
+    try {
+      const currentUser = UserService.getName();
+      if (!currentUser) {
+        console.error('No hay usuario logueado');
+        setMissions([]);
+        setLoading(false);
+        return;
+      }
+      // Obtener todas las misiones y filtrar por usuario
+      const allMissions = await UserService.getUserMissions();
+      const userMissions = allMissions.filter(m => m.user === currentUser);
+      
+      // Obtener información de los NFTs para cada misión
+      const missionsWithNFTs = await Promise.all(userMissions.map(async (mission) => {
+        try {
+          const response = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${mission.asset_id}`);
+          const data = await response.json();
+          if (data.data && data.data.data && data.data.data.video) {
+            return {
+              ...mission,
+              video_url: data.data.data.video
+            };
+          }
+        } catch (err) {
+          console.error('Error al obtener información del NFT:', err);
+        }
+        return mission;
+      }));
+
+      setMissions(missionsWithNFTs);
+    } catch (err) {
+      console.error('Error al obtener misiones:', err);
+      setMissions([]);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchMissions = async () => {
-      setLoading(true);
-      try {
-        const currentUser = UserService.getName();
-        if (!currentUser) {
-          console.error('No hay usuario logueado');
-          setMissions([]);
-          setLoading(false);
-          return;
-        }
-        // Obtener todas las misiones y filtrar por usuario
-        const allMissions = await UserService.getUserMissions();
-        const userMissions = allMissions.filter(m => m.user === currentUser);
-        
-        // Obtener información de los NFTs para cada misión
-        const missionsWithNFTs = await Promise.all(userMissions.map(async (mission) => {
-          try {
-            const response = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${mission.asset_id}`);
-            const data = await response.json();
-            if (data.data && data.data.data && data.data.data.video) {
-              return {
-                ...mission,
-                video_url: data.data.data.video
-              };
-            }
-          } catch (err) {
-            console.error('Error al obtener información del NFT:', err);
-          }
-          return mission;
-        }));
-
-        setMissions(missionsWithNFTs);
-      } catch (err) {
-        console.error('Error al obtener misiones:', err);
-        setMissions([]);
-      }
-      setLoading(false);
-    };
     fetchMissions();
   }, []);
 
@@ -156,17 +165,19 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
                       <button className="btn-mission-action" onClick={async () => {
                         try {
                           await UserService.claimMission([mission.asset_id]);
-                          alert('¡Recompensa reclamada!');
+                          showToast('¡Recompensa reclamada!', 'success');
+                          fetchMissions();
                         } catch (err) {
-                          alert('Error al reclamar: ' + (err.message || err));
+                          showToast('Error al reclamar: ' + (err.message || err), 'error');
                         }
                       }}>Claim</button>
                       <button className="btn-mission-action btn-mission-cancel" onClick={async () => {
                         try {
                           await UserService.cancelMission(mission.asset_id);
-                          alert('¡Misión cancelada!');
+                          showToast('¡Misión cancelada!', 'success');
+                          fetchMissions();
                         } catch (err) {
-                          alert('Error al cancelar: ' + (err.message || err));
+                          showToast('Error al cancelar: ' + (err.message || err), 'error');
                         }
                       }}>Cancel</button>
                     </div>
@@ -186,9 +197,10 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
               try {
                 const assetIds = missions.slice(0, 10).map(m => m.asset_id);
                 await UserService.claimMission(assetIds);
-                alert('¡Recompensas reclamadas!');
+                showToast('¡Recompensas reclamadas!', 'success');
+                fetchMissions();
               } catch (err) {
-                alert('Error al reclamar todas: ' + (err.message || err));
+                showToast('Error al reclamar todas: ' + (err.message || err), 'error');
               }
             }}
           >
@@ -196,6 +208,28 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           </button>
         </div>
       </div>
+      {toast && (
+        <div style={{
+          position: 'fixed',
+          top: 32,
+          right: 32,
+          zIndex: 12000,
+          background: toast.type === 'success' ? 'linear-gradient(90deg,#3b82f6 0%,#5eead4 100%)' : 'linear-gradient(90deg,#ff6fff 0%,#b266ff 100%)',
+          color: '#fff',
+          padding: '18px 36px',
+          borderRadius: 16,
+          fontWeight: 600,
+          fontSize: 18,
+          boxShadow: '0 4px 24px #0004',
+          border: toast.type === 'success' ? '2px solid #3b82f6' : '2px solid #ff6fff',
+          letterSpacing: 1,
+          minWidth: 220,
+          textAlign: 'center',
+          transition: 'all 0.3s',
+        }}>
+          {toast.message}
+        </div>
+      )}
       <style jsx>{`
         .nft-modal-fullscreen {
           position: fixed;
