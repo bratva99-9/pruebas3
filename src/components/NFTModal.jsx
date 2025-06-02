@@ -13,6 +13,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
   const [showMissionStatus, setShowMissionStatus] = useState(false);
   const [cooldowns, setCooldowns] = useState({});
+  const [now, setNow] = useState(Math.floor(Date.now() / 1000));
 
   const MAX_SELECTED = 10;
   const history = useHistory();
@@ -54,6 +55,14 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   useEffect(() => {
     fetchNFTs();
   }, [fetchNFTs]);
+
+  // Actualizar el tiempo actual cada segundo para el temporizador de cooldown
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(Math.floor(Date.now() / 1000));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Filtrar NFTs por colección, schema y que tengan video
   const filteredNFTs = nfts.filter(nft =>
@@ -218,7 +227,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
                 ? `https://ipfs.io/ipfs/${nft.data.video}`
                 : nft.data.video;
               const cooldownEnd = cooldowns[nft.asset_id];
-              const now = Math.floor(Date.now() / 1000);
               const inCooldown = cooldownEnd && now < cooldownEnd;
               let cooldownLeft = '';
               if (inCooldown) {
@@ -232,7 +240,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
                 <div 
                   key={nft.asset_id}
                   className={`nft-card${isSelected ? ' selected' : ''}`}
-                  onClick={() => toggleNFTSelection(nft.asset_id)}
+                  onClick={() => { if (!inCooldown) toggleNFTSelection(nft.asset_id); }}
                   style={{
                     minWidth: 139,
                     maxWidth: 139,
@@ -251,6 +259,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
                     position: 'relative',
                     transition: 'border 0.32s cubic-bezier(0.4,0,0.2,1)',
                     zIndex: isSelected ? 99999 : 21,
+                    cursor: inCooldown ? 'not-allowed' : 'pointer',
                   }}
                 >
                   <video
