@@ -162,7 +162,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
         </div>
       )}
       {showSuccess && (
-        <div className="success-toast">¡Misión enviada con éxito!</div>
+        <div className="success-toast">Mission sent successfully!</div>
       )}
       <div className="nft-modal-content">
         <div className="mission-info-header">
@@ -638,6 +638,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
           box-shadow: 0 0 24px 4px #ff36ba55;
         }
         .cooldown-overlay-minimal {
+          position: absolute;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
