@@ -330,6 +330,22 @@ export class User {
 
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
+
+  // Obtener cooldowns de la tabla cooldowns
+  async getCooldowns() {
+    try {
+      const response = await this.rpc.get_table_rows({
+        code: 'nightclubapp',
+        scope: 'nightclubapp',
+        table: 'cooldowns',
+        limit: 1000
+      });
+      return response.rows || [];
+    } catch (err) {
+      console.error('Error al obtener cooldowns:', err);
+      return [];
+    }
+  }
 }
 
 // Exporta la instancia única

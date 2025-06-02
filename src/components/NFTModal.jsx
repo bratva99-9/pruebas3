@@ -12,6 +12,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   const [displayCount, setDisplayCount] = useState(5);
   const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
   const [showMissionStatus, setShowMissionStatus] = useState(false);
+  const [cooldowns, setCooldowns] = useState({});
 
   const MAX_SELECTED = 10;
   const history = useHistory();
@@ -35,6 +36,13 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
       console.log('NFTs recibidos:', nfts);
 
       setNfts(nfts);
+      // Cooldowns
+      const cooldownRows = await UserService.getCooldowns();
+      const cooldownMap = {};
+      cooldownRows.forEach(row => {
+        cooldownMap[row.asset_id] = row.last_claim_time;
+      });
+      setCooldowns(cooldownMap);
       setLoading(false);
 
     } catch (error) {
@@ -209,6 +217,17 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
               const videoUrl = nft.data.video.startsWith('Qm')
                 ? `https://ipfs.io/ipfs/${nft.data.video}`
                 : nft.data.video;
+              const cooldownEnd = cooldowns[nft.asset_id];
+              const now = Math.floor(Date.now() / 1000);
+              const inCooldown = cooldownEnd && now < cooldownEnd;
+              let cooldownLeft = '';
+              if (inCooldown) {
+                const diff = cooldownEnd - now;
+                const h = Math.floor(diff / 3600);
+                const m = Math.floor((diff % 3600) / 60) % 60;
+                const s = diff % 60;
+                cooldownLeft = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+              }
               return (
                 <div 
                   key={nft.asset_id}
@@ -252,7 +271,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
                       boxShadow: isSelected ? '0 0 18px 4px #ff36ba66' : 'none',
                       border: isSelected ? '4px solid #ff00ffcc' : 'none',
                       backgroundColor: 'black',
-                      filter: 'none',
+                      filter: inCooldown ? 'grayscale(1)' : 'none',
                       transform: 'none',
                       transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1)',
                       zIndex: isSelected ? 99999 : 21,
@@ -264,6 +283,11 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
                       e.target.style.display = 'none';
                     }}
                   />
+                  {inCooldown && (
+                    <div className="cooldown-overlay">
+                      <span className="cooldown-text">{cooldownLeft}</span>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -603,6 +627,27 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
           height: 64px;
           margin-bottom: 18px;
           box-shadow: 0 0 24px 4px #ff36ba55;
+        }
+        .cooldown-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(24, 24, 40, 0.68);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 18px;
+          z-index: 100;
+        }
+        .cooldown-text {
+          color: #bfc2d1;
+          font-size: 1.5rem;
+          font-weight: 700;
+          letter-spacing: 2px;
+          opacity: 0.85;
+          text-shadow: 0 2px 8px #000a;
         }
       `}</style>
     </div>
