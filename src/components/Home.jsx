@@ -4,7 +4,7 @@ export default function Home({ userName, balance, handleLogout }) {
   return (
     <div className="home-container">
       <div className="home-image-container">
-        <img src="/home1.png" alt="Home Background" className="home-image" />
+        <img src="/Mapa1.png" alt="Map Background" className="home-image" />
       </div>
       <div className="user-info">
         <h1>Welcome, {userName}</h1>
