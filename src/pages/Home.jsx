@@ -260,13 +260,13 @@ const Home = () => {
         }
         .edificio1-map {
           position: absolute;
-          left: 177.7px;
-          top: 234.9px;
-          width: 214.7px;
-          height: 293px;
+          left: 451px;
+          top: 313.5px;
+          width: 188px;
+          height: 233px;
           background-image: url(/edificio1.svg);
-          background-size: 200% auto;
-          background-position: left center;
+          background-size: 100% 100%;
+          background-position: center center;
           background-repeat: no-repeat;
           z-index: 10;
         }
