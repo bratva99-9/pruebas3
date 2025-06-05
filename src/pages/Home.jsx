@@ -262,8 +262,8 @@ const Home = () => {
           position: absolute;
           left: 451.1px;
           top: 313.5px;
-          width: 214.7px;
-          height: 293px;
+          width: 188.1px;
+          height: 233px;
           background-image: url(/edificio1.svg);
           background-size: 200% auto;
           background-position: left center;
