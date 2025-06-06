@@ -194,6 +194,11 @@ const Home = () => {
           background-position: left center;
           background-repeat: no-repeat;
           z-index: 10;
+          cursor: pointer;
+          transition: none;
+        }
+        .edificio1-map:hover {
+          background-position: right center;
         }
       `}</style>
     </div>
