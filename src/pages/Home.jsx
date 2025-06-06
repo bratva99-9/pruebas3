@@ -189,7 +189,7 @@ const Home = () => {
         }
         .edificio1-map {
           position: absolute;
-          left: 421.7px;
+          left: 451.7px;
           top: 270px;
           width: 240.8px;
           height: 321.1px;
