@@ -53,6 +53,10 @@ const Home = () => {
             className="mission-button edificio1-map"
             onClick={() => setShowMission(true)}
           />
+          <div
+            className="mission-button edificio2-map"
+            onClick={() => setShowMission(true)}
+          />
         </div>
       </div>
       <div className="buildings-row">
@@ -198,6 +202,23 @@ const Home = () => {
           transition: none;
         }
         .edificio1-map:hover {
+          background-position: right center;
+        }
+        .edificio2-map {
+          position: absolute;
+          left: 628.8px;
+          top: 309.5px;
+          width: 163.7px;
+          height: 161px;
+          background-image: url(/edifico2.svg);
+          background-size: 200% auto;
+          background-position: left center;
+          background-repeat: no-repeat;
+          z-index: 10;
+          cursor: pointer;
+          transition: none;
+        }
+        .edificio2-map:hover {
           background-position: right center;
         }
       `}</style>
