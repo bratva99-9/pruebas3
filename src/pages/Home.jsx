@@ -207,7 +207,7 @@ const Home = () => {
         .edificio2-map {
           position: absolute;
           left: 617.3px;
-          top: 230.4px;
+          top: 270.4px;
           width: 219.2px;
           height: 273px;
           background-image: url(/edifico2.svg);
