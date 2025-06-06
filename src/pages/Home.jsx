@@ -260,8 +260,8 @@ const Home = () => {
         }
         .edificio1-map {
           position: absolute;
-          left: 441.6px;
-          top: 295.1px;
+          left: 450.2px;
+          top: 313.5px;
           width: 205.4px;
           height: 254.6px;
           background-image: url(/edificio1.svg);
