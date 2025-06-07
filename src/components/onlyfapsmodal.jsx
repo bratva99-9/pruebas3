@@ -123,13 +123,13 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
                       loop
                       muted
                       playsInline
-                      style={{ aspectRatio: '1/2', width: '160px' }}
+                      style={{ width: '100%', height: '100%', aspectRatio: '1/2', objectFit: 'cover', display: 'block' }}
                       onError={(e) => {
                         e.target.style.display = 'none';
                       }}
                     />
                   ) : (
-                    <div className="placeholder-media" style={{ aspectRatio: '1/2', width: '160px' }}>
+                    <div className="placeholder-media">
                       <span>Foto #{photoNumber}</span>
                     </div>
                   )}
@@ -253,6 +253,9 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           box-shadow: 0 4px 20px #ff36ba33;
           transition: box-shadow 0.2s, border 0.2s;
           border: 2px solid transparent;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
         }
         .photo-card:hover {
           transform: translateY(-5px);
