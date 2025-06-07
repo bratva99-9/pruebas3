@@ -117,7 +117,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
               <span className="stat-text">{girlData.stats?.giftChance}</span>
             </div>
           </div>
-          {/* Divisor y contador de NFTs */}
+          <div className="nftmodal-divider" />
           <div className="nft-count-center-row">
             <span className="selected-count-style selected-count-btn btn-small">
               {ownedNFTs.filter(nft => nft.template && templateData.some(tpl => tpl.template_id === nft.template.template_id)).length}/{templateData.filter(tpl => tpl.template_id).length} Collected
@@ -263,7 +263,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           margin: 0 auto;
           padding: 0 20px 24px 20px;
           overflow-y: auto;
-          max-height: calc(100vh - 200px);
+          max-height: calc(100vh - 120px);
           justify-items: stretch;
           align-items: stretch;
           scrollbar-width: thin;
@@ -401,7 +401,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           display: flex;
           justify-content: center;
           align-items: center;
-          margin: 0 0 8px 0;
+          margin: 0 0 18px 0;
         }
         .selected-count-style.selected-count-btn.btn-small {
           font-size: 14px;
@@ -436,8 +436,8 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .girl-header-nftmodal {
           width: 100%;
           max-width: 900px;
-          margin: 0 auto 32px auto;
-          padding: 32px 0 18px 0;
+          margin: 0 auto 12px auto;
+          padding: 18px 0 0 0;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -446,6 +446,8 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           display: flex;
           align-items: center;
           gap: 24px;
+          margin-bottom: 8px;
+          margin-top: 0;
         }
         .girl-header-title {
           color: #ff36ba;
@@ -453,21 +455,30 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           font-weight: 800;
           letter-spacing: 2px;
           text-shadow: 0 0 20px #ff36ba44;
-          margin: 0 12px;
+          margin: 0 12px 0 12px;
           text-transform: capitalize;
+          line-height: 1.1;
         }
         .girl-header-description {
           color: #bfc2d1;
           font-size: 1.2rem;
           font-weight: 400;
-          margin: 12px 0 18px 0;
+          margin: 6px 0 18px 0;
           text-align: center;
           max-width: 700px;
         }
         .girl-header-stats {
           display: flex;
           gap: 32px;
-          margin-bottom: 0;
+          margin-bottom: 18px;
+        }
+        .nftmodal-divider {
+          width: 900px;
+          max-width: 900px;
+          height: 2px;
+          background: linear-gradient(90deg, rgba(255,0,255,0.12) 0%, rgba(0,255,255,0.12) 100%);
+          margin: 18px auto 18px auto;
+          border-radius: 2px;
         }
         .girl-header-stat {
           display: flex;
