@@ -118,7 +118,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
             </div>
           </div>
           {/* Divisor y contador de NFTs */}
-          <div className="nftmodal-divider-vertical" />
           <div className="nft-count-center-row">
             <span className="selected-count-style selected-count-btn btn-small">
               {ownedNFTs.filter(nft => nft.template && templateData.some(tpl => tpl.template_id === nft.template.template_id)).length}/{templateData.filter(tpl => tpl.template_id).length} Collected
@@ -267,6 +266,19 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           max-height: calc(100vh - 200px);
           justify-items: stretch;
           align-items: stretch;
+          scrollbar-width: thin;
+          scrollbar-color: #ff00ff #181828;
+        }
+        .photos-grid-full.scrollable-nfts-fix.grid-5-cols::-webkit-scrollbar {
+          width: 10px;
+          background: #181828;
+        }
+        .photos-grid-full.scrollable-nfts-fix.grid-5-cols::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #ff00ff 0%, #00ffff 100%);
+          border-radius: 8px;
+        }
+        .photos-grid-full.scrollable-nfts-fix.grid-5-cols::-webkit-scrollbar-track {
+          background: #181828;
         }
         .photo-card {
           position: relative;
@@ -407,13 +419,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           margin-bottom: 0;
           min-width: 120px;
           white-space: nowrap;
-        }
-        .nftmodal-divider-vertical {
-          width: 2px;
-          height: 38px;
-          background: linear-gradient(180deg, rgba(255,0,255,0.12) 0%, rgba(0,255,255,0.12) 100%);
-          margin: 18px auto 10px auto;
-          border-radius: 2px;
         }
         /* Barra de navegación rosada vertical estilo NFTModal */
         .vertical-pink-bar {
