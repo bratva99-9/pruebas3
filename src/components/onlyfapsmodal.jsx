@@ -123,7 +123,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
                       loop
                       muted
                       playsInline
-                      style={{ width: '100%', height: '100%', aspectRatio: '1/2', objectFit: 'cover', display: 'block' }}
+                      style={{ width: '100%', height: '100%', aspectRatio: '10/20', objectFit: 'cover', display: 'block' }}
                       onError={(e) => {
                         e.target.style.display = 'none';
                       }}
@@ -152,7 +152,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .onlyfaps-modal-bg-full {
           position: fixed;
           top: 0; left: 0; width: 100vw; height: 100vh;
-          background: #1a0022;
+          background: #09081a;
           z-index: 10000;
           display: flex;
           align-items: center;
@@ -171,18 +171,22 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           position: absolute;
           top: 28px;
           right: 38px;
-          background: none;
-          border: none;
+          background: none !important;
+          border: none !important;
+          outline: none !important;
+          box-shadow: none !important;
           color: #ff36ba;
           font-size: 2.5rem;
           cursor: pointer;
           z-index: 10;
-          padding: 0;
-          transition: all 0.3s ease;
+          padding: 0 !important;
+          margin: 0 !important;
+          line-height: 1;
+          transition: color 0.3s ease;
         }
         .modal-close-btn:hover {
           color: #b800a6;
-          transform: scale(1.05);
+          background: none !important;
         }
         .girl-nav {
           display: flex;
@@ -203,18 +207,22 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
         .nav-btn {
-          background: none;
-          border: none;
+          background: none !important;
+          border: none !important;
+          outline: none !important;
+          box-shadow: none !important;
           color: #ff36ba;
           font-size: 2.5rem;
           font-weight: 400;
           cursor: pointer;
-          padding: 0;
-          transition: all 0.3s ease;
+          padding: 0 !important;
+          margin: 0 !important;
+          line-height: 1;
+          transition: color 0.3s ease;
         }
         .nav-btn:hover {
           color: #b800a6;
-          transform: scale(1.05);
+          background: none !important;
         }
         .nav-btn:disabled {
           opacity: 0.5;
@@ -235,7 +243,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .photo-card {
           position: relative;
-          aspect-ratio: 1/2;
+          aspect-ratio: 10/20;
           height: 320px;
           border-radius: 12px;
           overflow: hidden;
@@ -251,7 +259,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .girl-media {
           width: 100%;
           height: 100%;
-          aspect-ratio: 1/2;
+          aspect-ratio: 10/20;
           object-fit: cover;
           display: block;
           border-radius: 12px;
@@ -259,7 +267,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .placeholder-media {
           width: 100%;
           height: 100%;
-          aspect-ratio: 1/2;
+          aspect-ratio: 10/20;
           background: #2a003f;
           display: flex;
           align-items: center;
