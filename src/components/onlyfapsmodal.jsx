@@ -104,32 +104,25 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
               const tpl = tplRaw || { template_id: '', img: '', video: '' };
               const isOwned = isPhotoOwned(tpl.template_id);
               const photoNumber = index + 1;
-              // Validar hash de video
-              const hasValidVideo = tpl.video && tpl.video.length > 10;
-              const hasValidImg = tpl.img && tpl.img.length > 10;
+              // Buscar el NFT del usuario para este template
+              const userNFT = ownedNFTs.find(nft => nft.template && nft.template.template_id === tpl.template_id);
+              // Usar el hash de video del NFT del usuario si lo tiene, si no, el del template
+              const videoHash = userNFT && userNFT.data && userNFT.data.video && userNFT.data.video.length > 10
+                ? userNFT.data.video
+                : (tpl.video && tpl.video.length > 10 ? tpl.video : '');
               return (
                 <div 
                   key={tpl.template_id || index} 
                   className={`photo-card ${!isOwned ? 'locked' : ''}`}
                 >
-                  {hasValidVideo ? (
+                  {videoHash ? (
                     <video
-                      src={`https://ipfs.io/ipfs/${tpl.video}`}
+                      src={`https://ipfs.io/ipfs/${videoHash}`}
                       className="girl-media"
                       autoPlay
                       loop
                       muted
                       playsInline
-                      style={{ aspectRatio: '1/2', width: '160px' }}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                      }}
-                    />
-                  ) : hasValidImg ? (
-                    <img
-                      src={`https://ipfs.io/ipfs/${tpl.img}`}
-                      alt={`Foto ${photoNumber}`}
-                      className="girl-media"
                       style={{ aspectRatio: '1/2', width: '160px' }}
                       onError={(e) => {
                         e.target.style.display = 'none';
