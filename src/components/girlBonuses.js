@@ -39,9 +39,9 @@ const girlBonuses = {
     name: "Ashley",
     description: "Complete the Ashley collection to unlock the following bonuses.",
     stats: {
-      time: "8h",
-      token: "6 SEXY",
-      giftChance: "4%"
+      time: "-1%",
+      token: "+20%",
+      giftChance: "+1%"
     }
   },
   grace: {

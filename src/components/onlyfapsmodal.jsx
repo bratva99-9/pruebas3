@@ -117,15 +117,14 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
               <span className="stat-text">{girlData.stats?.giftChance}</span>
             </div>
           </div>
+          {/* Divisor y contador de NFTs */}
+          <div className="nftmodal-divider-vertical" />
+          <div className="nft-count-center-row">
+            <span className="selected-count-style selected-count-btn btn-small">
+              {ownedNFTs.filter(nft => nft.template && templateData.some(tpl => tpl.template_id === nft.template.template_id)).length}/{templateData.filter(tpl => tpl.template_id).length} Collected
+            </span>
+          </div>
         </div>
-        {/* Botón Bonus Collection Boost */}
-        <button className="cancel-btn bonus-btn left-top-btn" style={{position:'absolute',top:32,left:38}}>
-          Bonus Collection Boost
-        </button>
-        {/* Contador NFTs de la chica */}
-        <button className="cancel-btn nft-count-btn right-top-btn" style={{position:'absolute',top:32,right:38}}>
-          {ownedNFTs.filter(nft => nft.template && templateData.some(tpl => tpl.template_id === nft.template.template_id)).length}/{templateData.filter(tpl => tpl.template_id).length}
-        </button>
         {/* Botón Cancel abajo */}
         <button className="cancel-btn" onClick={onClose}>Cancel</button>
         <div className="photos-grid-full scrollable-nfts-fix grid-5-cols">
@@ -259,7 +258,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .photos-grid-full.scrollable-nfts-fix.grid-5-cols {
           display: grid;
           grid-template-columns: repeat(5, 1fr);
-          gap: 24px;
+          gap: 22px;
           width: 90vw;
           max-width: 1600px;
           margin: 0 auto;
@@ -272,7 +271,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .photo-card {
           position: relative;
           aspect-ratio: 10/20;
-          height: 320px;
+          height: 304px;
           border-radius: 12px;
           overflow: hidden;
           background: none;
@@ -286,7 +285,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .girl-media {
           width: 100%;
-          height: 100%;
+          height: 95%;
           aspect-ratio: 10/20;
           object-fit: cover;
           display: block;
@@ -294,7 +293,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .placeholder-media {
           width: 100%;
-          height: 100%;
+          height: 95%;
           aspect-ratio: 10/20;
           background: #2a003f;
           display: flex;
@@ -380,20 +379,53 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           box-shadow: none;
         }
         .bonus-btn.left-top-btn {
-          left: 38px;
-          top: 32px;
-          right: auto;
-          bottom: auto;
-          position: absolute;
-          transform: none;
+          display: none;
         }
         .nft-count-btn.right-top-btn {
-          right: 38px;
-          top: 32px;
-          left: auto;
-          bottom: auto;
+          display: none;
+        }
+        .nft-count-center-row {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 0 0 8px 0;
+        }
+        .selected-count-style.selected-count-btn.btn-small {
+          font-size: 14px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(36,0,56,0.10);
+          border: 2px solid #00ffff;
+          border-radius: 12px;
+          padding: 6px 20px;
+          box-shadow: none;
+          text-shadow: none;
+          letter-spacing: 0.5px;
+          cursor: default;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
+          margin-bottom: 0;
+          min-width: 120px;
+          white-space: nowrap;
+        }
+        .nftmodal-divider-vertical {
+          width: 2px;
+          height: 38px;
+          background: linear-gradient(180deg, rgba(255,0,255,0.12) 0%, rgba(0,255,255,0.12) 100%);
+          margin: 18px auto 10px auto;
+          border-radius: 2px;
+        }
+        /* Barra de navegación rosada vertical estilo NFTModal */
+        .vertical-pink-bar {
           position: absolute;
-          transform: none;
+          left: 0;
+          top: 0;
+          width: 8px;
+          height: 100%;
+          background: linear-gradient(180deg, #ff00ff 0%, #00ffff 100%);
+          border-radius: 8px;
+          box-shadow: 0 0 18px 4px #ff36ba66;
+          z-index: 2;
         }
         /* Estilos para el encabezado tipo NFTModal */
         .girl-header-nftmodal {
