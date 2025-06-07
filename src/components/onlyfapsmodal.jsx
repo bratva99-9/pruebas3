@@ -104,12 +104,15 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
               const tpl = tplRaw || { template_id: '', img: '', video: '' };
               const isOwned = isPhotoOwned(tpl.template_id);
               const photoNumber = index + 1;
+              // Validar hash de video
+              const hasValidVideo = tpl.video && tpl.video.length > 10;
+              const hasValidImg = tpl.img && tpl.img.length > 10;
               return (
                 <div 
                   key={tpl.template_id || index} 
                   className={`photo-card ${!isOwned ? 'locked' : ''}`}
                 >
-                  {tpl.video ? (
+                  {hasValidVideo ? (
                     <video
                       src={`https://ipfs.io/ipfs/${tpl.video}`}
                       className="girl-media"
@@ -117,21 +120,23 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
                       loop
                       muted
                       playsInline
+                      style={{ aspectRatio: '1/2', width: '160px' }}
                       onError={(e) => {
                         e.target.style.display = 'none';
                       }}
                     />
-                  ) : tpl.img ? (
+                  ) : hasValidImg ? (
                     <img
                       src={`https://ipfs.io/ipfs/${tpl.img}`}
                       alt={`Foto ${photoNumber}`}
                       className="girl-media"
+                      style={{ aspectRatio: '1/2', width: '160px' }}
                       onError={(e) => {
                         e.target.style.display = 'none';
                       }}
                     />
                   ) : (
-                    <div className="placeholder-media">
+                    <div className="placeholder-media" style={{ aspectRatio: '1/2', width: '160px' }}>
                       <span>Foto #{photoNumber}</span>
                     </div>
                   )}
@@ -248,7 +253,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .photo-card {
           position: relative;
           aspect-ratio: 1/2;
-          height: 320px;
+          width: 160px;
           border-radius: 18px;
           overflow: hidden;
           background: #1a0022;
@@ -270,17 +275,19 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .girl-media {
           width: 100%;
           height: 100%;
+          aspect-ratio: 1/2;
           object-fit: cover;
           display: block;
         }
         .placeholder-media {
           width: 100%;
           height: 100%;
-          background: #1a1a1a;
+          aspect-ratio: 1/2;
+          background: #2a003f;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #666;
+          color: #b800a6;
           font-size: 1.2rem;
         }
         .lock-overlay {
