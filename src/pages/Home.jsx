@@ -243,20 +243,22 @@ const Home = () => {
         }
         .side-bottom-ears-left .user-tap-block {
           border-radius: 12px 0 0 12px;
-          border: 2px solid #ff36ba;
+          border: none;
           min-width: 160px;
-          height: 30px;
-          background: #181828;
-          box-shadow: 0 0 8px #ff36ba33;
+          height: 28px;
+          background: transparent;
+          box-shadow: none;
           display: flex;
           align-items: center;
-          justify-content: center;
-          font-size: 0.95rem;
-          font-weight: 500;
-          color: #fff;
-          letter-spacing: 0.2px;
-          text-align: center;
-          margin: 0;
+          justify-content: flex-start;
+          font-size: 0.85rem;
+          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+          font-weight: 400;
+          color: #b0b3c6;
+          letter-spacing: 0.1px;
+          text-align: left;
+          margin: 0 0 0 4px;
+          padding-left: 8px;
         }
       `}</style>
     </div>
