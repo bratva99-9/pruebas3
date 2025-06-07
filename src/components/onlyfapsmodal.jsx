@@ -28,9 +28,15 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Obtener NFTs poseídos por el usuario
-        const userNFTs = await UserService.getUserNFTs();
-        console.log('NFTs poseídos:', userNFTs);
+        // Obtener NFTs poseídos por el usuario (fetch manual)
+        const currentUser = UserService.getName();
+        let userNFTs = [];
+        if (currentUser) {
+          const urlUser = `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${currentUser}&collection_name=nightclubnft&schema_name=photos&limit=100`;
+          const resUser = await fetch(urlUser);
+          const dataUser = await resUser.json();
+          userNFTs = dataUser.data || [];
+        }
         setOwnedNFTs(userNFTs);
 
         // Obtener todas las fotos de la colección
@@ -74,7 +80,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           };
         });
         
-        console.log('Fotos filtradas:', allPhotos);
         setPhotos(allPhotos);
       } catch (err) {
         console.error('Error al cargar datos:', err);
@@ -92,7 +97,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
 
   const isPhotoOwned = (templateId) => {
     if (templateId.startsWith('placeholder-')) return false;
-    return ownedNFTs.some(nft => nft.template_id === templateId);
+    return ownedNFTs.some(nft => nft.template && nft.template.template_id === templateId);
   };
 
   return (
@@ -126,7 +131,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
                       muted
                       playsInline
                       onError={(e) => {
-                        console.error('Error cargando video:', e);
                         e.target.style.display = 'none';
                       }}
                     />
@@ -136,7 +140,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
                       alt={photo.name}
                       className="girl-media"
                       onError={(e) => {
-                        console.error('Error cargando imagen:', e);
                         e.target.style.display = 'none';
                       }}
                     />
