@@ -72,17 +72,15 @@ const Home = () => {
             <span className="user-tap-sexy">{UserService.formatSEXYOnly()} SEXY</span>
           </div>
           <div className="side-bottom-ears-left">
-            <div className="user-tap user-tap-block small-ear">
+            <div className="user-tap user-tap-block small-ear night-club-status-ear">
               <span className="user-tap-name">Night Club Status</span>
-              <div className="subdata-mission-status">
-                <div className="subdata-row">
-                  <span className="subdata-label">Pending</span>
-                  <span className="subdata-value">{pendingMissions}</span>
-                </div>
-                <div className="subdata-row">
-                  <span className="subdata-label">Completed</span>
-                  <span className="subdata-value">{completedMissions}</span>
-                </div>
+              <div className="subdata-mission-status-inline">
+                <span className="subdata-label">Pending</span>
+                <span className="subdata-value">{pendingMissions}</span>
+              </div>
+              <div className="subdata-mission-status-inline">
+                <span className="subdata-label">Completed</span>
+                <span className="subdata-value">{completedMissions}</span>
               </div>
             </div>
             <div className="user-tap user-tap-block small-ear">
@@ -327,6 +325,50 @@ const Home = () => {
           font-weight: 600;
           opacity: 0.95;
           margin-left: 8px;
+        }
+        .night-club-status-ear {
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          height: 28px;
+          min-height: 28px;
+          padding-top: 2px;
+          padding-bottom: 2px;
+        }
+        .night-club-status-ear .user-tap-name {
+          font-size: 0.85rem;
+          color: #b0b3c6;
+          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+          font-weight: 600;
+          margin-bottom: 0px;
+        }
+        .subdata-mission-status-inline {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.72rem;
+          color: #b0b3c6;
+          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+          font-weight: 400;
+          opacity: 0.85;
+          margin-top: 0px;
+          margin-bottom: -2px;
+        }
+        .subdata-label {
+          font-size: 0.72rem;
+          color: #b0b3c6;
+          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+          font-weight: 400;
+          opacity: 0.85;
+        }
+        .subdata-value {
+          font-size: 0.72rem;
+          color: #b0b3c6;
+          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+          font-weight: 600;
+          opacity: 0.95;
+          margin-left: 2px;
         }
       `}</style>
     </div>
