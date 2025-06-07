@@ -259,15 +259,19 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           padding: 0 20px 24px 20px;
           overflow-y: auto;
           max-height: calc(100vh - 200px);
+          justify-items: stretch;
+          align-items: stretch;
         }
         .photo-card {
           position: relative;
           aspect-ratio: 1/2;
-          border-radius: 16px;
+          height: 320px;
+          border-radius: 18px;
           overflow: hidden;
-          background: #000;
-          box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
-          transition: all 0.3s ease;
+          background: #1a0022;
+          box-shadow: 0 4px 20px #ff36ba33;
+          transition: box-shadow 0.2s, border 0.2s;
+          border: 2px solid transparent;
         }
         .photo-card:hover {
           transform: translateY(-5px);
