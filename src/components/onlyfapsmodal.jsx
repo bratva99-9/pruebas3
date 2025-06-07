@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from 'react';
 
+const girlNames = [
+  "Sandra", "Ashley", "Rachel", "Jessica", "Emily", "Sophia", "Mia", "Olivia", "Ava", "Chloe"
+];
+
 const OnlyFapsModal = ({ girlName, onClose }) => {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentGirl, setCurrentGirl] = useState(girlName);
+
+  useEffect(() => {
+    setCurrentGirl(girlName);
+  }, [girlName]);
 
   useEffect(() => {
     const fetchPhotos = async () => {
       setLoading(true);
       try {
-        // Llama a la API de AtomicAssets para obtener los templates del schema 'photos' de la colección 'nightclubnft'
         const url = `https://wax.api.atomicassets.io/atomicassets/v1/templates?collection_name=nightclubnft&schema_name=photos&limit=200`;
         const res = await fetch(url);
         const data = await res.json();
-        // Filtra y ordena los templates de la chica
         const girlPhotos = data.data
-          .filter(t => t.name.startsWith(`${girlName} - collection photo #`))
+          .filter(t => t.name.startsWith(`${currentGirl} - collection photo #`))
           .sort((a, b) => {
             const numA = parseInt(a.name.split('#')[1]);
             const numB = parseInt(b.name.split('#')[1]);
@@ -27,86 +34,138 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
       setLoading(false);
     };
     fetchPhotos();
-  }, [girlName]);
+  }, [currentGirl]);
+
+  const girlIndex = girlNames.indexOf(currentGirl);
+  const prevGirl = () => setCurrentGirl(girlNames[(girlIndex - 1 + girlNames.length) % girlNames.length]);
+  const nextGirl = () => setCurrentGirl(girlNames[(girlIndex + 1) % girlNames.length]);
 
   return (
-    <div className="onlyfaps-modal-bg">
-      <div className="onlyfaps-modal">
+    <div className="onlyfaps-modal-bg-full">
+      <div className="onlyfaps-modal-full">
         <button className="close-btn" onClick={onClose}>×</button>
-        <h2 className="girl-title">{girlName}</h2>
+        <div className="girl-nav">
+          <button className="girl-arrow" onClick={prevGirl}>&lt;</button>
+          <h2 className="girl-title">{currentGirl}</h2>
+          <button className="girl-arrow" onClick={nextGirl}>&gt;</button>
+        </div>
         {loading ? (
           <div className="loading">Cargando fotos...</div>
         ) : (
-          <div className="photos-grid">
+          <div className="photos-grid-full">
             {photos.map(photo => (
-              <div key={photo.template_id} className="photo-cell">
-                <img src={`https://ipfs.io/ipfs/${photo.immutable_data.img}`} alt={photo.name} className="girl-photo" />
-                <div className="photo-label">{photo.name.split('#')[1]}</div>
+              <div key={photo.template_id} className="photo-card-nftmodal">
+                {photo.immutable_data.video ? (
+                  <video
+                    src={`https://ipfs.io/ipfs/${photo.immutable_data.video}`}
+                    className="girl-photo-nft"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    src={`https://ipfs.io/ipfs/${photo.immutable_data.img}`}
+                    alt={photo.name}
+                    className="girl-photo-nft"
+                  />
+                )}
+                <div className="photo-label-nft">{photo.name.split('#')[1]}</div>
               </div>
             ))}
           </div>
         )}
       </div>
       <style jsx>{`
-        .onlyfaps-modal-bg {
+        .onlyfaps-modal-bg-full {
           position: fixed;
           top: 0; left: 0; width: 100vw; height: 100vh;
-          background: rgba(0,0,0,0.7);
+          background: hsl(245, 86.70%, 2.90%);
           z-index: 10000;
           display: flex;
           align-items: center;
           justify-content: center;
         }
-        .onlyfaps-modal {
-          background: #181828;
-          border-radius: 18px;
-          padding: 32px 28px 24px 28px;
-          min-width: 600px;
-          max-width: 90vw;
-          box-shadow: 0 0 32px #ff36ba55;
+        .onlyfaps-modal-full {
+          width: 100vw;
+          height: 100vh;
+          padding: 0;
           position: relative;
-        }
-        .close-btn {
-          position: absolute;
-          top: 18px;
-          right: 18px;
-          background: none;
-          border: none;
-          color: #ff36ba;
-          font-size: 2rem;
-          cursor: pointer;
-        }
-        .girl-title {
-          color: #ff36ba;
-          text-align: center;
-          margin-bottom: 18px;
-          font-size: 2rem;
-          font-weight: 700;
-          letter-spacing: 1px;
-        }
-        .photos-grid {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          grid-template-rows: repeat(4, 1fr);
-          gap: 12px;
-        }
-        .photo-cell {
           display: flex;
           flex-direction: column;
           align-items: center;
         }
-        .girl-photo {
-          width: 100px;
-          height: 100px;
+        .close-btn {
+          position: absolute;
+          top: 28px;
+          right: 38px;
+          background: none;
+          border: none;
+          color: #ff36ba;
+          font-size: 2.5rem;
+          cursor: pointer;
+          z-index: 10;
+        }
+        .girl-nav {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: 48px;
+          margin-bottom: 24px;
+        }
+        .girl-title {
+          color: #ff36ba;
+          text-align: center;
+          font-size: 2.2rem;
+          font-weight: 700;
+          letter-spacing: 1px;
+          margin: 0 32px;
+        }
+        .girl-arrow {
+          background: none;
+          border: none;
+          color: #ff36ba;
+          font-size: 2.2rem;
+          font-weight: 700;
+          cursor: pointer;
+          padding: 0 18px;
+          transition: color 0.2s;
+        }
+        .girl-arrow:hover {
+          color: #fff;
+        }
+        .photos-grid-full {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          grid-template-rows: repeat(4, 1fr);
+          gap: 18px;
+          width: 80vw;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+        .photo-card-nftmodal {
+          background: #181828;
+          border-radius: 14px;
+          box-shadow: 0 2px 12px #ff36ba22;
+          border: 2px solid #ff36ba33;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 10px 6px 8px 6px;
+        }
+        .girl-photo-nft {
+          width: 120px;
+          height: 120px;
           object-fit: cover;
           border-radius: 10px;
-          border: 2px solid #ff36ba33;
-          box-shadow: 0 2px 8px #0005;
+          background: #000;
         }
-        .photo-label {
-          margin-top: 4px;
+        .photo-label-nft {
+          margin-top: 6px;
           color: #b0b3c6;
-          font-size: 0.95rem;
+          font-size: 1rem;
+          font-weight: 500;
         }
         .loading {
           color: #ff36ba;
