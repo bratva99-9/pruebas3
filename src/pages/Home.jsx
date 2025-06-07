@@ -72,18 +72,10 @@ const Home = () => {
             <span className="user-tap-sexy">{UserService.formatSEXYOnly()} SEXY</span>
           </div>
           <div className="side-bottom-ears-left">
-            <div className="user-tap user-tap-block small-ear night-club-status-ear-fixed">
+            <div className="user-tap user-tap-block night-club-status-ear-vertical">
               <div className="ncs-title">Night Club Status</div>
-              <div className="ncs-subdata">
-                <div className="ncs-row">
-                  <span className="ncs-label">Pending</span>
-                  <span className="ncs-value">{pendingMissions}</span>
-                </div>
-                <div className="ncs-row">
-                  <span className="ncs-label">Completed</span>
-                  <span className="ncs-value">{completedMissions}</span>
-                </div>
-              </div>
+              <div className="ncs-line ncs-pending">Pending <span className="ncs-value">{pendingMissions}</span></div>
+              <div className="ncs-line ncs-completed">Completed <span className="ncs-value">{completedMissions}</span></div>
             </div>
             <div className="user-tap user-tap-block small-ear">
               <span className="user-tap-name">Buy Cards</span>
@@ -328,59 +320,40 @@ const Home = () => {
           opacity: 0.95;
           margin-left: 8px;
         }
-        .night-club-status-ear-fixed {
+        .night-club-status-ear-vertical {
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          width: 100%;
           min-width: 140px;
-          height: 30px;
+          min-height: 68px;
+          height: auto;
+          background: transparent;
+          border: none;
+          box-shadow: none;
           padding: 0 10px;
         }
-        .ncs-title {
-          font-size: 0.92rem;
+        .night-club-status-ear-vertical .ncs-title {
+          font-size: 0.95rem;
           color: #b0b3c6;
           font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
           font-weight: 600;
-          margin-bottom: 0px;
+          margin-bottom: 2px;
           width: 100%;
           text-align: center;
-          line-height: 1.1;
         }
-        .ncs-subdata {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          width: 100%;
-          margin-top: 1px;
-        }
-        .ncs-row {
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          gap: 4px;
-          margin-bottom: 0px;
-          line-height: 1.1;
-        }
-        .ncs-label {
-          font-size: 0.78rem;
+        .night-club-status-ear-vertical .ncs-line {
+          font-size: 0.82rem;
           color: #b0b3c6;
           font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
           font-weight: 400;
-          opacity: 0.85;
+          width: 100%;
           text-align: center;
+          margin-bottom: 1px;
         }
-        .ncs-value {
-          font-size: 0.78rem;
-          color: #b0b3c6;
-          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+        .night-club-status-ear-vertical .ncs-value {
           font-weight: 600;
-          opacity: 0.95;
-          margin-left: 2px;
-          text-align: center;
+          margin-left: 4px;
         }
       `}</style>
     </div>
