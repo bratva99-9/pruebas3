@@ -1,34 +1,45 @@
 import React, { useEffect, useState } from 'react';
+import { UserService } from '../UserService';
+
+const GIRL_NAMES = [
+  'sandra',
+  'emily',
+  'alissa',
+  'becca',
+  'ashley',
+  'grace',
+  'sophie',
+  'megan',
+  'rachel',
+  'stella'
+];
 
 const OnlyFapsModal = ({ girlName, onClose }) => {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [girlNames, setGirlNames] = useState([]);
   const [currentGirl, setCurrentGirl] = useState(girlName);
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [ownedNFTs, setOwnedNFTs] = useState([]);
 
   useEffect(() => {
     setCurrentGirl(girlName);
   }, [girlName]);
 
   useEffect(() => {
-    const fetchPhotos = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
+        // Obtener NFTs poseídos por el usuario
+        const userNFTs = await UserService.getUserNFTs();
+        setOwnedNFTs(userNFTs);
+
+        // Obtener todas las fotos de la colección
         const url = `https://wax.api.atomicassets.io/atomicassets/v1/templates?collection_name=nightclubnft&schema_name=photos&limit=200`;
         const res = await fetch(url);
         const data = await res.json();
         
-        // Extraer nombres únicos de chicas y ordenarlos alfabéticamente
-        const names = Array.from(new Set(
-          data.data.map(t => t.name.split(' - collection photo #')[0])
-        )).sort();
-        
-        setGirlNames(names);
-        
         // Filtrar y ordenar las fotos de la chica actual
         const girlPhotos = data.data
-          .filter(t => t.name.startsWith(`${currentGirl} - collection photo #`))
+          .filter(t => t.name.toLowerCase().startsWith(`${currentGirl} - collection photo #`))
           .sort((a, b) => {
             const numA = parseInt(a.name.split('#')[1]);
             const numB = parseInt(b.name.split('#')[1]);
@@ -37,101 +48,79 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         
         setPhotos(girlPhotos);
       } catch (err) {
-        console.error('Error al cargar fotos:', err);
+        console.error('Error al cargar datos:', err);
         setPhotos([]);
-        setGirlNames([]);
+        setOwnedNFTs([]);
       }
       setLoading(false);
     };
-    fetchPhotos();
+    fetchData();
   }, [currentGirl]);
 
-  const girlIndex = girlNames.indexOf(currentGirl);
-  const prevGirl = () => setCurrentGirl(girlNames[(girlIndex - 1 + girlNames.length) % girlNames.length]);
-  const nextGirl = () => setCurrentGirl(girlNames[(girlIndex + 1) % girlNames.length]);
+  const girlIndex = GIRL_NAMES.indexOf(currentGirl.toLowerCase());
+  const prevGirl = () => setCurrentGirl(GIRL_NAMES[(girlIndex - 1 + GIRL_NAMES.length) % GIRL_NAMES.length]);
+  const nextGirl = () => setCurrentGirl(GIRL_NAMES[(girlIndex + 1) % GIRL_NAMES.length]);
 
-  const handlePhotoClick = (photo) => {
-    setSelectedPhoto(photo);
-  };
-
-  const closePhotoView = () => {
-    setSelectedPhoto(null);
+  const isPhotoOwned = (templateId) => {
+    return ownedNFTs.some(nft => nft.template_id === templateId);
   };
 
   return (
     <div className="onlyfaps-modal-bg-full">
       <div className="onlyfaps-modal-full">
-        <button className="close-btn" onClick={onClose}>×</button>
+        <button className="modal-close-btn" onClick={onClose}>×</button>
         <div className="girl-nav">
-          <button className="girl-arrow" onClick={prevGirl} disabled={girlNames.length === 0}>&lt;</button>
+          <button className="nav-btn" onClick={prevGirl} disabled={GIRL_NAMES.length === 0}>&lt;</button>
           <h2 className="girl-title">{currentGirl}</h2>
-          <button className="girl-arrow" onClick={nextGirl} disabled={girlNames.length === 0}>&gt;</button>
+          <button className="nav-btn" onClick={nextGirl} disabled={GIRL_NAMES.length === 0}>&gt;</button>
         </div>
         {loading ? (
           <div className="loading">Cargando fotos...</div>
         ) : (
           <div className="photos-grid-full">
-            {photos.map(photo => (
-              <div 
-                key={photo.template_id} 
-                className="photo-media-cell"
-                onClick={() => handlePhotoClick(photo)}
-              >
-                {photo.immutable_data.video ? (
-                  <video
-                    src={`https://ipfs.io/ipfs/${photo.immutable_data.video}`}
-                    className="girl-media"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    style={{ aspectRatio: '1/2' }}
-                  />
-                ) : (
-                  <img
-                    src={`https://ipfs.io/ipfs/${photo.immutable_data.img}`}
-                    alt={photo.name}
-                    className="girl-media"
-                    style={{ aspectRatio: '1/2' }}
-                  />
-                )}
-                <div className="photo-label-nft">{photo.name.split('#')[1]}</div>
-              </div>
-            ))}
+            {photos.map(photo => {
+              const isOwned = isPhotoOwned(photo.template_id);
+              return (
+                <div 
+                  key={photo.template_id} 
+                  className={`photo-card ${!isOwned ? 'locked' : ''}`}
+                >
+                  {photo.immutable_data.video ? (
+                    <video
+                      src={`https://ipfs.io/ipfs/${photo.immutable_data.video}`}
+                      className="girl-media"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    />
+                  ) : (
+                    <img
+                      src={`https://ipfs.io/ipfs/${photo.immutable_data.img}`}
+                      alt={photo.name}
+                      className="girl-media"
+                    />
+                  )}
+                  {!isOwned && (
+                    <div className="lock-overlay">
+                      <svg viewBox="0 0 24 24" className="lock-icon">
+                        <path d="M12 1C8.676 1 6 3.676 6 7v2H4v14h16V9h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v2H8V7c0-2.276 1.724-4 4-4z"/>
+                      </svg>
+                    </div>
+                  )}
+                  <div className="photo-label-nft">{photo.name.split('#')[1]}</div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
-
-      {selectedPhoto && (
-        <div className="photo-viewer-overlay" onClick={closePhotoView}>
-          <div className="photo-viewer-content" onClick={e => e.stopPropagation()}>
-            <button className="photo-viewer-close" onClick={closePhotoView}>×</button>
-            {selectedPhoto.immutable_data.video ? (
-              <video
-                src={`https://ipfs.io/ipfs/${selectedPhoto.immutable_data.video}`}
-                className="photo-viewer-media"
-                autoPlay
-                loop
-                muted
-                playsInline
-                controls
-              />
-            ) : (
-              <img
-                src={`https://ipfs.io/ipfs/${selectedPhoto.immutable_data.img}`}
-                alt={selectedPhoto.name}
-                className="photo-viewer-media"
-              />
-            )}
-          </div>
-        </div>
-      )}
 
       <style jsx>{`
         .onlyfaps-modal-bg-full {
           position: fixed;
           top: 0; left: 0; width: 100vw; height: 100vh;
-          background: hsl(245, 86.70%, 2.90%);
+          background: rgba(0, 0, 0, 0.95);
           z-index: 10000;
           display: flex;
           align-items: center;
@@ -146,137 +135,152 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           flex-direction: column;
           align-items: center;
         }
-        .close-btn {
+        .modal-close-btn {
           position: absolute;
           top: 28px;
           right: 38px;
-          background: none;
-          border: none;
-          color: #ff36ba;
-          font-size: 2.5rem;
+          background: rgba(0, 255, 255, 0.1);
+          border: 2px solid #00ffff;
+          color: #00ffff;
+          font-size: 2rem;
           cursor: pointer;
           z-index: 10;
-          transition: color 0.2s;
+          width: 48px;
+          height: 48px;
+          border-radius: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
         }
-        .close-btn:hover {
-          color: #fff;
+        .modal-close-btn:hover {
+          background: rgba(0, 255, 255, 0.2);
+          transform: scale(1.05);
         }
         .girl-nav {
           display: flex;
           align-items: center;
           justify-content: center;
           margin-top: 48px;
-          margin-bottom: 24px;
+          margin-bottom: 32px;
+          gap: 24px;
         }
         .girl-title {
-          color: #ff36ba;
+          color: #00ffff;
           text-align: center;
-          font-size: 2.2rem;
+          font-size: 2.4rem;
           font-weight: 700;
-          letter-spacing: 1px;
-          margin: 0 32px;
+          letter-spacing: 2px;
+          text-transform: capitalize;
+          margin: 0;
+          text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
-        .girl-arrow {
-          background: none;
-          border: none;
-          color: #ff36ba;
-          font-size: 2.2rem;
+        .nav-btn {
+          background: rgba(0, 255, 255, 0.1);
+          border: 2px solid #00ffff;
+          color: #00ffff;
+          font-size: 1.8rem;
           font-weight: 700;
           cursor: pointer;
-          padding: 0 18px;
-          transition: color 0.2s;
+          width: 48px;
+          height: 48px;
+          border-radius: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
         }
-        .girl-arrow:hover {
-          color: #fff;
+        .nav-btn:hover {
+          background: rgba(0, 255, 255, 0.2);
+          transform: scale(1.05);
+        }
+        .nav-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
         }
         .photos-grid-full {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-          gap: 18px;
+          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+          gap: 24px;
           width: 90vw;
-          max-width: 1400px;
+          max-width: 1600px;
           margin: 0 auto;
           padding: 0 20px;
         }
-        .photo-media-cell {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          background: none;
-          border: none;
-          box-shadow: none;
-          padding: 0;
-          cursor: pointer;
-          transition: transform 0.2s;
+        .photo-card {
+          position: relative;
+          aspect-ratio: 1/2;
+          border-radius: 16px;
+          overflow: hidden;
+          background: #000;
+          box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
+          transition: all 0.3s ease;
         }
-        .photo-media-cell:hover {
-          transform: scale(1.05);
+        .photo-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 30px rgba(0, 255, 255, 0.2);
+        }
+        .photo-card.locked {
+          border: 2px solid #ff36ba;
+          box-shadow: 0 4px 20px rgba(255, 54, 186, 0.2);
+        }
+        .photo-card.locked:hover {
+          box-shadow: 0 8px 30px rgba(255, 54, 186, 0.3);
         }
         .girl-media {
           width: 100%;
-          height: auto;
+          height: 100%;
           object-fit: cover;
-          border-radius: 10px;
-          background: #000;
           display: block;
-          box-shadow: 0 4px 12px rgba(255, 54, 186, 0.2);
+        }
+        .lock-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          backdrop-filter: blur(4px);
+        }
+        .lock-icon {
+          width: 48px;
+          height: 48px;
+          fill: #ff36ba;
+          filter: drop-shadow(0 0 10px rgba(255, 54, 186, 0.5));
         }
         .photo-label-nft {
-          margin-top: 8px;
-          color: #b0b3c6;
-          font-size: 0.9rem;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 12px;
+          background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+          color: #fff;
+          font-size: 1rem;
           font-weight: 500;
           text-align: center;
         }
         .loading {
-          color: #ff36ba;
+          color: #00ffff;
           text-align: center;
-          font-size: 1.2rem;
-        }
-        .photo-viewer-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background: rgba(0, 0, 0, 0.9);
-          z-index: 10001;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .photo-viewer-content {
-          position: relative;
-          max-width: 90vw;
-          max-height: 90vh;
-        }
-        .photo-viewer-media {
-          max-width: 100%;
-          max-height: 90vh;
-          object-fit: contain;
-          border-radius: 12px;
-        }
-        .photo-viewer-close {
-          position: absolute;
-          top: -40px;
-          right: 0;
-          background: none;
-          border: none;
-          color: #ff36ba;
-          font-size: 2.5rem;
-          cursor: pointer;
-          transition: color 0.2s;
-        }
-        .photo-viewer-close:hover {
-          color: #fff;
+          font-size: 1.4rem;
+          font-weight: 500;
         }
         @media (max-width: 768px) {
           .photos-grid-full {
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
           }
           .girl-title {
-            font-size: 1.8rem;
+            font-size: 2rem;
+          }
+          .nav-btn, .modal-close-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1.6rem;
           }
         }
       `}</style>
