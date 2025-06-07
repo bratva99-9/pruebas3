@@ -17,7 +17,6 @@ const GIRL_NAMES = [
 ];
 
 const OnlyFapsModal = ({ girlName, onClose }) => {
-  const [loading, setLoading] = useState(true);
   const [currentGirl, setCurrentGirl] = useState(girlName);
   const [ownedNFTs, setOwnedNFTs] = useState([]);
   const [templateData, setTemplateData] = useState([]); // [{template_id, img, video}]
@@ -29,7 +28,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       try {
         // Obtener NFTs poseídos por el usuario (fetch manual)
         const currentUser = UserService.getName();
@@ -75,7 +73,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         setOwnedNFTs([]);
         setTemplateData(Array(20).fill({ template_id: '', img: '', video: '' }));
       }
-      setLoading(false);
     };
     fetchData();
   }, [currentGirl]);
