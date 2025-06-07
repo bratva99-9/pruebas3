@@ -69,6 +69,20 @@ const Home = () => {
           />
         ))}
       </div>
+      <div className="bottom-ears">
+        <div className="user-tap user-tap-block small-ear">
+          <span className="user-tap-name">Night Club Status</span>
+        </div>
+        <div className="user-tap user-tap-block small-ear">
+          <span className="user-tap-name">Buy Cards</span>
+        </div>
+        <div className="user-tap user-tap-block small-ear">
+          <span className="user-tap-name">Marketplace</span>
+        </div>
+        <div className="user-tap user-tap-block small-ear">
+          <span className="user-tap-name">Upgrade</span>
+        </div>
+      </div>
       {showMission && (
         <MissionModal
           onClose={() => setShowMission(false)}
@@ -220,6 +234,16 @@ const Home = () => {
         }
         .edificio2-map:hover {
           background-position: right center;
+        }
+        .bottom-ears {
+          display: flex;
+          gap: 16px;
+          margin-top: 20px;
+        }
+        .bottom-ears .user-tap-block {
+          border-radius: 12px;
+          border: 2px solid #ff36ba;
+          min-width: 160px;
         }
       `}</style>
     </div>
