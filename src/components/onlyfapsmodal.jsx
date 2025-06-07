@@ -246,7 +246,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .photo-card {
           position: relative;
           aspect-ratio: 1/2;
-          width: 160px;
+          height: 320px;
           border-radius: 18px;
           overflow: hidden;
           background: #1a0022;
