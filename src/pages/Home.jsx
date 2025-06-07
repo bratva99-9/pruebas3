@@ -12,6 +12,7 @@ import missionButton6 from '../images/missionboton6.webp';
 import missionButton7 from '../images/missionboton7.webp';
 import missionButton8 from '../images/missionboton8.webp';
 import missionButton9 from '../images/missionboton9.webp';
+import OnlyFapsModal from '../components/onlyfapsmodal';
 
 const buildingSprites = [
   missionButton, missionButton2, missionButton3, missionButton4, missionButton5,
@@ -21,6 +22,8 @@ const buildingSprites = [
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
   const [showMissionStatus, setShowMissionStatus] = useState(false);
+  const [showOnlyFaps, setShowOnlyFaps] = useState(false);
+  const [onlyFapsGirl, setOnlyFapsGirl] = useState('Sandra');
   const [pendingMissions, setPendingMissions] = useState(0);
   const [completedMissions, setCompletedMissions] = useState(0);
   const navigate = useHistory();
@@ -105,7 +108,7 @@ const Home = () => {
           <img src="/mapa1.png" alt="Mapa" className="home-image" />
           <div
             className="mission-button edificio1-map"
-            onClick={() => setShowMission(true)}
+            onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
           />
           <div
             className="mission-button edificio2-map"
@@ -133,6 +136,9 @@ const Home = () => {
         <MissionStatus
           onClose={() => setShowMissionStatus(false)}
         />
+      )}
+      {showOnlyFaps && (
+        <OnlyFapsModal girlName={onlyFapsGirl} onClose={() => setShowOnlyFaps(false)} />
       )}
       <style jsx>{`
         .home-container {
