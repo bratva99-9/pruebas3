@@ -44,7 +44,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         const templates = girlTemplates[currentGirl] || [];
         // Solo buscar los que tengan template_id válido
         const validTemplates = templates.filter(id => id && id.length > 0);
-        let templateInfo = Array(20).fill(null);
+        let templateInfo = Array(20).fill({ template_id: '', img: '', video: '' });
         if (validTemplates.length > 0) {
           // Fetch de todos los templates en paralelo
           const fetches = validTemplates.map(id =>
@@ -61,10 +61,12 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           // Coloca cada resultado en la posición correcta
           templateInfo = templates.map((id, idx) => {
             if (!id || id.length === 0) return { template_id: '', img: '', video: '' };
-            const found = results.find(r => r.template_id === id);
+            const found = results.find(r => r && r.template_id === id);
             return found || { template_id: id, img: '', video: '' };
           });
         }
+        // Asegura que nunca haya nulls
+        templateInfo = templateInfo.map(tpl => tpl || { template_id: '', img: '', video: '' });
         setTemplateData(templateInfo);
       } catch (err) {
         console.error('Error al cargar datos:', err);
@@ -98,7 +100,8 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           <div className="loading">Cargando fotos...</div>
         ) : (
           <div className="photos-grid-full scrollable-nfts-fix grid-5-cols">
-            {templateData.map((tpl, index) => {
+            {templateData.map((tplRaw, index) => {
+              const tpl = tplRaw || { template_id: '', img: '', video: '' };
               const isOwned = isPhotoOwned(tpl.template_id);
               const photoNumber = index + 1;
               return (
