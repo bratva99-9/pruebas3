@@ -72,7 +72,7 @@ const Home = () => {
             <span className="user-tap-sexy">{UserService.formatSEXYOnly()} SEXY</span>
           </div>
           <div className="side-bottom-ears-left">
-            <div className="user-tap user-tap-block night-club-status-ear-real">
+            <div className="user-tap user-tap-block small-ear night-club-status-ear-fix">
               <div className="ncs-title">Night Club Status</div>
               <div className="ncs-line ncs-pending">Pending <span className="ncs-value">{pendingMissions}</span></div>
               <div className="ncs-line ncs-completed">Completed <span className="ncs-value">{completedMissions}</span></div>
@@ -320,22 +320,16 @@ const Home = () => {
           opacity: 0.95;
           margin-left: 8px;
         }
-        .night-club-status-ear-real {
-          min-width: 140px;
-          min-height: 70px;
-          background: #181828;
-          border: 2px solid #ff36ba;
-          border-radius: 12px 0 0 12px;
-          border-right: 0;
-          box-shadow: 0 0 8px #ff36ba33;
+        .night-club-status-ear-fix {
+          min-height: 68px;
+          height: auto;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           gap: 2px;
-          padding: 6px 14px 6px 10px;
         }
-        .night-club-status-ear-real .ncs-title {
+        .night-club-status-ear-fix .ncs-title {
           font-size: 0.95rem;
           color: #ffb9fa;
           font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
@@ -344,7 +338,7 @@ const Home = () => {
           width: 100%;
           text-align: center;
         }
-        .night-club-status-ear-real .ncs-line {
+        .night-club-status-ear-fix .ncs-line {
           font-size: 0.82rem;
           color: #b0b3c6;
           font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
@@ -353,7 +347,7 @@ const Home = () => {
           text-align: center;
           margin-bottom: 0px;
         }
-        .night-club-status-ear-real .ncs-value {
+        .night-club-status-ear-fix .ncs-value {
           font-weight: 600;
           margin-left: 4px;
         }
