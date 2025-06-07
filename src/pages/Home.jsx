@@ -335,23 +335,25 @@ const Home = () => {
           justify-content: center;
           width: 100%;
           min-width: 140px;
-          min-height: 60px;
-          padding: 2px 0 2px 0;
+          height: 30px;
+          padding: 0 10px;
         }
         .ncs-title {
-          font-size: 0.95rem;
+          font-size: 0.92rem;
           color: #b0b3c6;
           font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
           font-weight: 600;
-          margin-bottom: 2px;
+          margin-bottom: 0px;
           width: 100%;
           text-align: center;
+          line-height: 1.1;
         }
         .ncs-subdata {
           display: flex;
           flex-direction: column;
           align-items: center;
           width: 100%;
+          margin-top: 1px;
         }
         .ncs-row {
           display: flex;
@@ -359,8 +361,9 @@ const Home = () => {
           justify-content: center;
           align-items: center;
           width: 100%;
-          gap: 6px;
+          gap: 4px;
           margin-bottom: 0px;
+          line-height: 1.1;
         }
         .ncs-label {
           font-size: 0.78rem;
@@ -368,6 +371,7 @@ const Home = () => {
           font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
           font-weight: 400;
           opacity: 0.85;
+          text-align: center;
         }
         .ncs-value {
           font-size: 0.78rem;
@@ -376,6 +380,7 @@ const Home = () => {
           font-weight: 600;
           opacity: 0.95;
           margin-left: 2px;
+          text-align: center;
         }
       `}</style>
     </div>
