@@ -116,7 +116,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         {loading ? (
           <div className="loading">Cargando fotos...</div>
         ) : (
-          <div className="photos-grid-full scrollable-nfts-fix">
+          <div className="photos-grid-full scrollable-nfts-fix grid-5-cols">
             {photos.map((photo, index) => {
               const isOwned = isPhotoOwned(photo.template_id);
               const photoNumber = index + 1;
@@ -249,9 +249,9 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           opacity: 0.5;
           cursor: not-allowed;
         }
-        .photos-grid-full.scrollable-nfts-fix {
+        .photos-grid-full.scrollable-nfts-fix.grid-5-cols {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+          grid-template-columns: repeat(5, 1fr);
           gap: 24px;
           width: 90vw;
           max-width: 1600px;
