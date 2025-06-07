@@ -66,13 +66,20 @@ const Home = () => {
             <span className="user-tap-name">{UserService.getName()}</span>
           </div>
           <div className="user-tap user-tap-block small-ear">
-            <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX
-              <span className="plus-icon" title="Próximamente más opciones">+</span>
-            </span>
+            <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX</span>
           </div>
           <div className="user-tap user-tap-block small-ear">
-            <span className="user-tap-sexy">{UserService.formatSEXYOnly()} SEXY
-              <span className="plus-icon" title="Próximamente más opciones">+</span>
+            <span className="user-tap-sexy">
+              {UserService.formatSEXYOnly()} SEXY
+              <a
+                href="https://swap.tacocrypto.io/swap?output=SEXY-nightclub.gm&input=WAX-eosio.token"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="plus-icon-link"
+                title="Comprar SEXY"
+              >
+                <span className="plus-icon">+</span>
+              </a>
             </span>
           </div>
           <div className="side-bottom-ears-left">
@@ -82,14 +89,10 @@ const Home = () => {
               <div className="ncs-line ncs-completed">Completed <span className="ncs-value">{completedMissions}</span></div>
             </div>
             <div className="user-tap user-tap-block small-ear">
-              <span className="user-tap-name">
-                <button className="ear-link-btn" onClick={() => window.open('https://neftyblocks.com/collection/nightclubnft', '_blank')}>Buy Cards</button>
-              </span>
+              <span className="user-tap-name ear-link-btn-text ear-link-btn-buy">Buy Cards</span>
             </div>
             <div className="user-tap user-tap-block small-ear">
-              <span className="user-tap-name">
-                <button className="ear-link-btn" onClick={() => window.open('https://neftyblocks.com/collection/nightclubnft/blends', '_blank')}>Upgrade</button>
-              </span>
+              <span className="user-tap-name ear-link-btn-text ear-link-btn-upgrade">Upgrade</span>
             </div>
           </div>
         </div>
@@ -360,30 +363,34 @@ const Home = () => {
           margin-left: 4px;
           color: #b0b3c6;
         }
+        .plus-icon-link {
+          display: inline-flex;
+          align-items: center;
+          margin-left: 4px;
+          text-decoration: none;
+        }
         .plus-icon {
           font-size: 1.1em;
           color: #888c99;
-          margin-left: 8px;
           opacity: 0.7;
           font-weight: 700;
           cursor: pointer;
           vertical-align: middle;
           transition: color 0.2s, opacity 0.2s;
+          line-height: 1;
+          margin: 0;
         }
-        .plus-icon:hover {
-          color: #b0b3c6;
+        .plus-icon-link:hover .plus-icon {
+          color: #ff36ba;
           opacity: 1;
         }
-        .ear-link-btn {
-          background: none;
-          border: none;
-          color: inherit;
-          font: inherit;
+        .ear-link-btn-text {
           cursor: pointer;
-          padding: 0;
-          margin: 0;
-          text-align: center;
-          width: 100%;
+          transition: color 0.2s;
+        }
+        .ear-link-btn-buy:hover,
+        .ear-link-btn-upgrade:hover {
+          color: #ff36ba;
         }
       `}</style>
     </div>
