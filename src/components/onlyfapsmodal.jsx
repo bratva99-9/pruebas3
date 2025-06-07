@@ -112,7 +112,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         {loading ? (
           <div className="loading">Cargando fotos...</div>
         ) : (
-          <div className="photos-grid-full scrollable-nfts">
+          <div className="photos-grid-full">
             {photos.map((photo, index) => {
               const isOwned = isPhotoOwned(photo.template_id);
               const photoNumber = index + 1;
@@ -167,7 +167,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .onlyfaps-modal-bg-full {
           position: fixed;
           top: 0; left: 0; width: 100vw; height: 100vh;
-          background: linear-gradient(135deg, #2a003f 0%, #ff36ba 100%);
+          background: rgba(0, 0, 0, 0.95);
           z-index: 10000;
           display: flex;
           align-items: center;
@@ -186,24 +186,23 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           position: absolute;
           top: 28px;
           right: 38px;
-          background: none;
-          border: 2px solid #ff36ba;
-          color: #ff36ba;
-          font-size: 2.2rem;
+          background: rgba(0, 255, 255, 0.1);
+          border: 2px solid #00ffff;
+          color: #00ffff;
+          font-size: 2rem;
           cursor: pointer;
           z-index: 10;
           width: 48px;
           height: 48px;
-          border-radius: 50%;
+          border-radius: 24px;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: background 0.2s, border 0.2s, color 0.2s;
+          transition: all 0.3s ease;
         }
         .modal-close-btn:hover {
-          background: #ff36ba22;
-          color: #fff;
-          border-color: #b800a6;
+          background: rgba(0, 255, 255, 0.2);
+          transform: scale(1.05);
         }
         .girl-nav {
           display: flex;
@@ -214,34 +213,33 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           gap: 24px;
         }
         .girl-title {
-          color: #ff36ba;
+          color: #00ffff;
           text-align: center;
           font-size: 2.4rem;
           font-weight: 700;
           letter-spacing: 2px;
           text-transform: capitalize;
           margin: 0;
-          text-shadow: 0 0 12px #b800a6cc;
+          text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
         .nav-btn {
-          background: none;
-          border: 2px solid #ff36ba;
-          color: #ff36ba;
-          font-size: 2rem;
+          background: rgba(0, 255, 255, 0.1);
+          border: 2px solid #00ffff;
+          color: #00ffff;
+          font-size: 1.8rem;
           font-weight: 700;
           cursor: pointer;
           width: 48px;
           height: 48px;
-          border-radius: 50%;
+          border-radius: 24px;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: background 0.2s, border 0.2s, color 0.2s;
+          transition: all 0.3s ease;
         }
         .nav-btn:hover {
-          background: #ff36ba22;
-          color: #fff;
-          border-color: #b800a6;
+          background: rgba(0, 255, 255, 0.2);
+          transform: scale(1.05);
         }
         .nav-btn:disabled {
           opacity: 0.5;
@@ -254,34 +252,27 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           width: 90vw;
           max-width: 1600px;
           margin: 0 auto;
-          padding: 0 20px 24px 20px;
-          overflow-y: auto;
-          max-height: 70vh;
-        }
-        .scrollable-nfts {
-          overflow-y: auto;
-          max-height: 70vh;
+          padding: 0 20px;
         }
         .photo-card {
           position: relative;
           aspect-ratio: 1/2;
-          border-radius: 18px;
+          border-radius: 16px;
           overflow: hidden;
-          background: #1a0022;
-          box-shadow: 0 4px 20px #ff36ba33;
-          transition: box-shadow 0.2s, border 0.2s;
-          border: 2px solid transparent;
+          background: #000;
+          box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
+          transition: all 0.3s ease;
         }
         .photo-card:hover {
-          box-shadow: 0 8px 30px #ff36ba55;
-          border-color: #ff36ba;
+          transform: translateY(-5px);
+          box-shadow: 0 8px 30px rgba(0, 255, 255, 0.2);
         }
         .photo-card.locked {
-          border: 2px solid #b800a6;
-          box-shadow: 0 4px 20px #b800a655;
+          border: 2px solid #ff36ba;
+          box-shadow: 0 4px 20px rgba(255, 54, 186, 0.2);
         }
         .photo-card.locked:hover {
-          box-shadow: 0 8px 30px #b800a6aa;
+          box-shadow: 0 8px 30px rgba(255, 54, 186, 0.3);
         }
         .girl-media {
           width: 100%;
@@ -292,11 +283,11 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .placeholder-media {
           width: 100%;
           height: 100%;
-          background: #2a003f;
+          background: #1a1a1a;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #b800a6;
+          color: #666;
           font-size: 1.2rem;
         }
         .lock-overlay {
@@ -305,42 +296,40 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           left: 0;
           width: 100%;
           height: 100%;
-          background: rgba(186, 0, 166, 0.55);
+          background: rgba(0, 0, 0, 0.7);
           display: flex;
           align-items: center;
           justify-content: center;
-          backdrop-filter: blur(2px);
+          backdrop-filter: blur(4px);
         }
         .lock-icon {
           width: 48px;
           height: 48px;
           fill: #ff36ba;
-          filter: drop-shadow(0 0 10px #b800a6);
+          filter: drop-shadow(0 0 10px rgba(255, 54, 186, 0.5));
         }
         .photo-label-nft {
           position: absolute;
           bottom: 0;
           left: 0;
           right: 0;
-          padding: 10px 0 8px 0;
-          background: linear-gradient(to top, #b800a6cc 0%, transparent 100%);
+          padding: 12px;
+          background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
           color: #fff;
-          font-size: 1.1rem;
-          font-weight: 600;
+          font-size: 1rem;
+          font-weight: 500;
           text-align: center;
-          letter-spacing: 1px;
         }
         .loading {
-          color: #ff36ba;
+          color: #00ffff;
           text-align: center;
           font-size: 1.4rem;
           font-weight: 500;
         }
         @media (max-width: 768px) {
           .photos-grid-full {
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 12px;
-            max-height: 60vh;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
           }
           .girl-title {
             font-size: 2rem;
