@@ -89,10 +89,10 @@ const Home = () => {
               <div className="ncs-line ncs-completed">Completed <span className="ncs-value">{completedMissions}</span></div>
             </div>
             <div className="user-tap user-tap-block small-ear">
-              <span className="user-tap-name ear-link-btn-text ear-link-btn-buy">Buy Cards</span>
+              <span className="user-tap-name ear-link-btn-text ear-link-btn-buy" onClick={() => window.open('https://neftyblocks.com/collection/nightclubnft', '_blank')}>Buy Cards</span>
             </div>
             <div className="user-tap user-tap-block small-ear">
-              <span className="user-tap-name ear-link-btn-text ear-link-btn-upgrade">Upgrade</span>
+              <span className="user-tap-name ear-link-btn-text ear-link-btn-upgrade" onClick={() => window.open('https://neftyblocks.com/collection/nightclubnft/blends', '_blank')}>Upgrade</span>
             </div>
           </div>
         </div>
