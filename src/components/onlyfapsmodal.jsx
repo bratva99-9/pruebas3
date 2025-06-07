@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-const girlNames = [
-  "Sandra", "Ashley", "Rachel", "Jessica", "Emily", "Sophia", "Mia", "Olivia", "Ava", "Chloe"
-];
-
 const OnlyFapsModal = ({ girlName, onClose }) => {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [girlNames, setGirlNames] = useState([]);
   const [currentGirl, setCurrentGirl] = useState(girlName);
 
   useEffect(() => {
@@ -20,6 +17,12 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         const url = `https://wax.api.atomicassets.io/atomicassets/v1/templates?collection_name=nightclubnft&schema_name=photos&limit=200`;
         const res = await fetch(url);
         const data = await res.json();
+        // Extraer nombres únicos de chicas
+        const names = Array.from(new Set(
+          data.data.map(t => t.name.split(' - collection photo #')[0])
+        ));
+        setGirlNames(names);
+        // Filtrar y ordenar las fotos de la chica actual
         const girlPhotos = data.data
           .filter(t => t.name.startsWith(`${currentGirl} - collection photo #`))
           .sort((a, b) => {
@@ -30,6 +33,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         setPhotos(girlPhotos);
       } catch (err) {
         setPhotos([]);
+        setGirlNames([]);
       }
       setLoading(false);
     };
@@ -45,30 +49,32 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
       <div className="onlyfaps-modal-full">
         <button className="close-btn" onClick={onClose}>×</button>
         <div className="girl-nav">
-          <button className="girl-arrow" onClick={prevGirl}>&lt;</button>
+          <button className="girl-arrow" onClick={prevGirl} disabled={girlNames.length === 0}>&lt;</button>
           <h2 className="girl-title">{currentGirl}</h2>
-          <button className="girl-arrow" onClick={nextGirl}>&gt;</button>
+          <button className="girl-arrow" onClick={nextGirl} disabled={girlNames.length === 0}>&gt;</button>
         </div>
         {loading ? (
           <div className="loading">Cargando fotos...</div>
         ) : (
           <div className="photos-grid-full">
             {photos.map(photo => (
-              <div key={photo.template_id} className="photo-card-nftmodal">
+              <div key={photo.template_id} className="photo-media-cell">
                 {photo.immutable_data.video ? (
                   <video
                     src={`https://ipfs.io/ipfs/${photo.immutable_data.video}`}
-                    className="girl-photo-nft"
+                    className="girl-media"
                     autoPlay
                     loop
                     muted
                     playsInline
+                    style={{ aspectRatio: '1/2' }}
                   />
                 ) : (
                   <img
                     src={`https://ipfs.io/ipfs/${photo.immutable_data.img}`}
                     alt={photo.name}
-                    className="girl-photo-nft"
+                    className="girl-media"
+                    style={{ aspectRatio: '1/2' }}
                   />
                 )}
                 <div className="photo-label-nft">{photo.name.split('#')[1]}</div>
@@ -144,28 +150,29 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           max-width: 1200px;
           margin: 0 auto;
         }
-        .photo-card-nftmodal {
-          background: #181828;
-          border-radius: 14px;
-          box-shadow: 0 2px 12px #ff36ba22;
-          border: 2px solid #ff36ba33;
+        .photo-media-cell {
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 10px 6px 8px 6px;
+          background: none;
+          border: none;
+          box-shadow: none;
+          padding: 0;
         }
-        .girl-photo-nft {
-          width: 120px;
-          height: 120px;
+        .girl-media {
+          width: 100px;
+          height: 200px;
           object-fit: cover;
           border-radius: 10px;
           background: #000;
+          display: block;
         }
         .photo-label-nft {
           margin-top: 6px;
           color: #b0b3c6;
           font-size: 1rem;
           font-weight: 500;
+          text-align: center;
         }
         .loading {
           color: #ff36ba;
