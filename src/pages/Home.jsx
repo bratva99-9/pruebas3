@@ -72,15 +72,17 @@ const Home = () => {
             <span className="user-tap-sexy">{UserService.formatSEXYOnly()} SEXY</span>
           </div>
           <div className="side-bottom-ears-left">
-            <div className="user-tap user-tap-block small-ear night-club-status-ear">
-              <span className="user-tap-name">Night Club Status</span>
-              <div className="subdata-mission-status-inline">
-                <span className="subdata-label">Pending</span>
-                <span className="subdata-value">{pendingMissions}</span>
-              </div>
-              <div className="subdata-mission-status-inline">
-                <span className="subdata-label">Completed</span>
-                <span className="subdata-value">{completedMissions}</span>
+            <div className="user-tap user-tap-block small-ear night-club-status-ear-fixed">
+              <div className="ncs-title">Night Club Status</div>
+              <div className="ncs-subdata">
+                <div className="ncs-row">
+                  <span className="ncs-label">Pending</span>
+                  <span className="ncs-value">{pendingMissions}</span>
+                </div>
+                <div className="ncs-row">
+                  <span className="ncs-label">Completed</span>
+                  <span className="ncs-value">{completedMissions}</span>
+                </div>
               </div>
             </div>
             <div className="user-tap user-tap-block small-ear">
@@ -326,44 +328,49 @@ const Home = () => {
           opacity: 0.95;
           margin-left: 8px;
         }
-        .night-club-status-ear {
+        .night-club-status-ear-fixed {
+          display: flex;
           flex-direction: column;
-          align-items: flex-start;
+          align-items: center;
           justify-content: center;
-          height: 28px;
-          min-height: 28px;
-          padding-top: 2px;
-          padding-bottom: 2px;
+          width: 100%;
+          min-width: 140px;
+          min-height: 60px;
+          padding: 2px 0 2px 0;
         }
-        .night-club-status-ear .user-tap-name {
-          font-size: 0.85rem;
+        .ncs-title {
+          font-size: 0.95rem;
           color: #b0b3c6;
           font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
           font-weight: 600;
-          margin-bottom: 0px;
+          margin-bottom: 2px;
+          width: 100%;
+          text-align: center;
         }
-        .subdata-mission-status-inline {
+        .ncs-subdata {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+        }
+        .ncs-row {
           display: flex;
           flex-direction: row;
+          justify-content: center;
           align-items: center;
+          width: 100%;
           gap: 6px;
-          font-size: 0.72rem;
-          color: #b0b3c6;
-          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-          font-weight: 400;
-          opacity: 0.85;
-          margin-top: 0px;
-          margin-bottom: -2px;
+          margin-bottom: 0px;
         }
-        .subdata-label {
-          font-size: 0.72rem;
+        .ncs-label {
+          font-size: 0.78rem;
           color: #b0b3c6;
           font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
           font-weight: 400;
           opacity: 0.85;
         }
-        .subdata-value {
-          font-size: 0.72rem;
+        .ncs-value {
+          font-size: 0.78rem;
           color: #b0b3c6;
           font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
           font-weight: 600;
