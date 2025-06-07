@@ -48,6 +48,20 @@ const Home = () => {
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             </button>
           </div>
+          <div className="side-bottom-ears">
+            <div className="user-tap user-tap-block small-ear">
+              <span className="user-tap-name">Night Club Status</span>
+            </div>
+            <div className="user-tap user-tap-block small-ear">
+              <span className="user-tap-name">Buy Cards</span>
+            </div>
+            <div className="user-tap user-tap-block small-ear">
+              <span className="user-tap-name">Marketplace</span>
+            </div>
+            <div className="user-tap user-tap-block small-ear">
+              <span className="user-tap-name">Upgrade</span>
+            </div>
+          </div>
           <img src="/mapa1.png" alt="Mapa" className="home-image" />
           <div
             className="mission-button edificio1-map"
@@ -68,20 +82,6 @@ const Home = () => {
           onClick={() => setShowMission(true)}
           />
         ))}
-      </div>
-      <div className="bottom-ears">
-        <div className="user-tap user-tap-block small-ear">
-          <span className="user-tap-name">Night Club Status</span>
-        </div>
-        <div className="user-tap user-tap-block small-ear">
-          <span className="user-tap-name">Buy Cards</span>
-        </div>
-        <div className="user-tap user-tap-block small-ear">
-          <span className="user-tap-name">Marketplace</span>
-        </div>
-        <div className="user-tap user-tap-block small-ear">
-          <span className="user-tap-name">Upgrade</span>
-        </div>
       </div>
       {showMission && (
         <MissionModal
@@ -235,15 +235,31 @@ const Home = () => {
         .edificio2-map:hover {
           background-position: right center;
         }
-        .bottom-ears {
+        .side-bottom-ears {
+          position: absolute;
+          right: -142px;
+          top: 90px;
           display: flex;
-          gap: 16px;
-          margin-top: 20px;
+          flex-direction: column;
+          gap: 12px;
+          z-index: 5;
         }
-        .bottom-ears .user-tap-block {
-          border-radius: 12px;
+        .side-bottom-ears .user-tap-block {
+          border-radius: 0 12px 12px 0;
           border: 2px solid #ff36ba;
           min-width: 160px;
+          height: 30px;
+          background: #181828;
+          box-shadow: 0 0 8px #ff36ba33;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: #fff;
+          letter-spacing: 0.2px;
+          text-align: center;
+          margin: 0;
         }
       `}</style>
     </div>
