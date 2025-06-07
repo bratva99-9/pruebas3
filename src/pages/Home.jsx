@@ -66,10 +66,14 @@ const Home = () => {
             <span className="user-tap-name">{UserService.getName()}</span>
           </div>
           <div className="user-tap user-tap-block small-ear">
-            <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX</span>
+            <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX
+              <span className="plus-icon" title="Próximamente más opciones">+</span>
+            </span>
           </div>
           <div className="user-tap user-tap-block small-ear">
-            <span className="user-tap-sexy">{UserService.formatSEXYOnly()} SEXY</span>
+            <span className="user-tap-sexy">{UserService.formatSEXYOnly()} SEXY
+              <span className="plus-icon" title="Próximamente más opciones">+</span>
+            </span>
           </div>
           <div className="side-bottom-ears-left">
             <div className="user-tap user-tap-block small-ear night-club-status-ear-fix">
@@ -78,13 +82,14 @@ const Home = () => {
               <div className="ncs-line ncs-completed">Completed <span className="ncs-value">{completedMissions}</span></div>
             </div>
             <div className="user-tap user-tap-block small-ear">
-              <span className="user-tap-name">Buy Cards</span>
+              <span className="user-tap-name">
+                <button className="ear-link-btn" onClick={() => window.open('https://neftyblocks.com/collection/nightclubnft', '_blank')}>Buy Cards</button>
+              </span>
             </div>
             <div className="user-tap user-tap-block small-ear">
-              <span className="user-tap-name">Marketplace</span>
-            </div>
-            <div className="user-tap user-tap-block small-ear">
-              <span className="user-tap-name">Upgrade</span>
+              <span className="user-tap-name">
+                <button className="ear-link-btn" onClick={() => window.open('https://neftyblocks.com/collection/nightclubnft/blends', '_blank')}>Upgrade</button>
+              </span>
             </div>
           </div>
         </div>
@@ -354,6 +359,31 @@ const Home = () => {
           font-weight: 600;
           margin-left: 4px;
           color: #b0b3c6;
+        }
+        .plus-icon {
+          font-size: 1.1em;
+          color: #888c99;
+          margin-left: 8px;
+          opacity: 0.7;
+          font-weight: 700;
+          cursor: pointer;
+          vertical-align: middle;
+          transition: color 0.2s, opacity 0.2s;
+        }
+        .plus-icon:hover {
+          color: #b0b3c6;
+          opacity: 1;
+        }
+        .ear-link-btn {
+          background: none;
+          border: none;
+          color: inherit;
+          font: inherit;
+          cursor: pointer;
+          padding: 0;
+          margin: 0;
+          text-align: center;
+          width: 100%;
         }
       `}</style>
     </div>
