@@ -152,7 +152,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .onlyfaps-modal-bg-full {
           position: fixed;
           top: 0; left: 0; width: 100vw; height: 100vh;
-          background: rgba(0, 0, 0, 0.95);
+          background: #1a0022;
           z-index: 10000;
           display: flex;
           align-items: center;
@@ -171,22 +171,17 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           position: absolute;
           top: 28px;
           right: 38px;
-          background: rgba(0, 255, 255, 0.1);
-          border: 2px solid #00ffff;
-          color: #00ffff;
-          font-size: 2rem;
+          background: none;
+          border: none;
+          color: #ff36ba;
+          font-size: 2.5rem;
           cursor: pointer;
           z-index: 10;
-          width: 48px;
-          height: 48px;
-          border-radius: 24px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          padding: 0;
           transition: all 0.3s ease;
         }
         .modal-close-btn:hover {
-          background: rgba(0, 255, 255, 0.2);
+          color: #b800a6;
           transform: scale(1.05);
         }
         .girl-nav {
@@ -208,22 +203,17 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
         .nav-btn {
-          background: rgba(0, 255, 255, 0.1);
-          border: 2px solid #00ffff;
-          color: #00ffff;
-          font-size: 1.8rem;
-          font-weight: 700;
+          background: none;
+          border: none;
+          color: #ff36ba;
+          font-size: 2.5rem;
+          font-weight: 400;
           cursor: pointer;
-          width: 48px;
-          height: 48px;
-          border-radius: 24px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          padding: 0;
           transition: all 0.3s ease;
         }
         .nav-btn:hover {
-          background: rgba(0, 255, 255, 0.2);
+          color: #b800a6;
           transform: scale(1.05);
         }
         .nav-btn:disabled {
@@ -247,23 +237,16 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           position: relative;
           aspect-ratio: 1/2;
           height: 320px;
-          border-radius: 18px;
+          border-radius: 12px;
           overflow: hidden;
-          background: #1a0022;
-          box-shadow: 0 4px 20px #ff36ba33;
-          transition: box-shadow 0.2s, border 0.2s;
-          border: 2px solid transparent;
+          background: none;
+          transition: transform 0.2s;
         }
         .photo-card:hover {
           transform: translateY(-5px);
-          box-shadow: 0 8px 30px rgba(0, 255, 255, 0.2);
         }
         .photo-card.locked {
-          border: 2px solid #ff36ba;
-          box-shadow: 0 4px 20px rgba(255, 54, 186, 0.2);
-        }
-        .photo-card.locked:hover {
-          box-shadow: 0 8px 30px rgba(255, 54, 186, 0.3);
+          filter: brightness(0.5);
         }
         .girl-media {
           width: 100%;
@@ -271,6 +254,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           aspect-ratio: 1/2;
           object-fit: cover;
           display: block;
+          border-radius: 12px;
         }
         .placeholder-media {
           width: 100%;
@@ -282,6 +266,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           justify-content: center;
           color: #b800a6;
           font-size: 1.2rem;
+          border-radius: 12px;
         }
         .lock-overlay {
           position: absolute;
@@ -289,11 +274,12 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           left: 0;
           width: 100%;
           height: 100%;
-          background: rgba(0, 0, 0, 0.7);
+          background: rgba(0, 0, 0, 0.5);
           display: flex;
           align-items: center;
           justify-content: center;
           backdrop-filter: blur(4px);
+          border-radius: 12px;
         }
         .lock-icon {
           width: 48px;
@@ -312,6 +298,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           font-size: 1rem;
           font-weight: 500;
           text-align: center;
+          border-radius: 0 0 12px 12px;
         }
         .loading {
           color: #00ffff;
@@ -328,9 +315,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
             font-size: 2rem;
           }
           .nav-btn, .modal-close-btn {
-            width: 40px;
-            height: 40px;
-            font-size: 1.6rem;
+            font-size: 2rem;
           }
         }
       `}</style>
