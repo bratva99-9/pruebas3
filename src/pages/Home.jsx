@@ -41,14 +41,7 @@ const Home = () => {
           <div className="user-tap user-tap-block small-ear">
             <span className="user-tap-sexy">{UserService.formatSEXYOnly()} SEXY</span>
           </div>
-        </div>
-        <div className="home-image-container">
-          <div className="logout-ear small-ear">
-            <button className="btn-logout" onClick={handleLogout}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            </button>
-          </div>
-          <div className="side-bottom-ears">
+          <div className="side-bottom-ears-left">
             <div className="user-tap user-tap-block small-ear">
               <span className="user-tap-name">Night Club Status</span>
             </div>
@@ -61,6 +54,13 @@ const Home = () => {
             <div className="user-tap user-tap-block small-ear">
               <span className="user-tap-name">Upgrade</span>
             </div>
+          </div>
+        </div>
+        <div className="home-image-container">
+          <div className="logout-ear small-ear">
+            <button className="btn-logout" onClick={handleLogout}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
           </div>
           <img src="/mapa1.png" alt="Mapa" className="home-image" />
           <div
@@ -235,17 +235,14 @@ const Home = () => {
         .edificio2-map:hover {
           background-position: right center;
         }
-        .side-bottom-ears {
-          position: absolute;
-          right: -142px;
-          top: 90px;
+        .side-bottom-ears-left {
+          margin-top: 24px;
           display: flex;
           flex-direction: column;
           gap: 12px;
-          z-index: 5;
         }
-        .side-bottom-ears .user-tap-block {
-          border-radius: 0 12px 12px 0;
+        .side-bottom-ears-left .user-tap-block {
+          border-radius: 12px 0 0 12px;
           border: 2px solid #ff36ba;
           min-width: 160px;
           height: 30px;
