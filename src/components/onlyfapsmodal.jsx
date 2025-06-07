@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { UserService } from '../UserService';
+import girlTemplates from './girlTemplates';
 
 const GIRL_NAMES = [
   'sandra',
@@ -15,10 +16,10 @@ const GIRL_NAMES = [
 ];
 
 const OnlyFapsModal = ({ girlName, onClose }) => {
-  const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentGirl, setCurrentGirl] = useState(girlName);
   const [ownedNFTs, setOwnedNFTs] = useState([]);
+  const [templateData, setTemplateData] = useState([]); // [{template_id, img, video}]
 
   useEffect(() => {
     setCurrentGirl(girlName.toLowerCase());
@@ -39,56 +40,36 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         setOwnedNFTs(userNFTs);
 
-        // Obtener todas las fotos de la colección
-        const url = `https://wax.api.atomicassets.io/atomicassets/v1/templates?collection_name=nightclubnft&schema_name=photos&limit=200`;
-        const res = await fetch(url);
-        const data = await res.json();
-        
-        // Filtrar y ordenar las fotos de la chica actual
-        const girlPhotos = data.data
-          .filter(t => {
-            const name = t.name.toLowerCase();
-            const currentGirlLower = currentGirl.toLowerCase();
-            // Acepta tanto 'alissa - collection photo #' como 'alissa- collection photo #'
-            return (
-              name.startsWith(`${currentGirlLower} - collection photo #`) ||
-              name.startsWith(`${currentGirlLower}- collection photo #`)
-            );
-          })
-          .sort((a, b) => {
-            const numA = parseInt(a.name.split('#')[1]);
-            const numB = parseInt(b.name.split('#')[1]);
-            return numA - numB;
-          });
-
-        // Asegurar que tenemos exactamente 20 fotos
-        const allPhotos = Array(20).fill(null).map((_, index) => {
-          const photoNumber = index + 1;
-          const existingPhoto = girlPhotos.find(p => 
-            parseInt(p.name.split('#')[1]) === photoNumber
+        // Obtener los datos de los 20 templates de la chica actual
+        const templates = girlTemplates[currentGirl] || [];
+        // Solo buscar los que tengan template_id válido
+        const validTemplates = templates.filter(id => id && id.length > 0);
+        let templateInfo = Array(20).fill(null);
+        if (validTemplates.length > 0) {
+          // Fetch de todos los templates en paralelo
+          const fetches = validTemplates.map(id =>
+            fetch(`https://wax.api.atomicassets.io/atomicassets/v1/template/nightclubnft/${id}`)
+              .then(res => res.json())
+              .then(data => ({
+                template_id: id,
+                img: data.data?.immutable_data?.img || '',
+                video: data.data?.immutable_data?.video || ''
+              }))
+              .catch(() => ({ template_id: id, img: '', video: '' }))
           );
-          
-          if (existingPhoto) {
-            return existingPhoto;
-          }
-          
-          // Crear un placeholder para fotos faltantes
-          return {
-            template_id: `placeholder-${photoNumber}`,
-            name: `${currentGirl} - collection photo #${photoNumber}`,
-            immutable_data: {
-              img: '',
-              video: ''
-            },
-            isPlaceholder: true
-          };
-        });
-        
-        setPhotos(allPhotos);
+          const results = await Promise.all(fetches);
+          // Coloca cada resultado en la posición correcta
+          templateInfo = templates.map((id, idx) => {
+            if (!id || id.length === 0) return { template_id: '', img: '', video: '' };
+            const found = results.find(r => r.template_id === id);
+            return found || { template_id: id, img: '', video: '' };
+          });
+        }
+        setTemplateData(templateInfo);
       } catch (err) {
         console.error('Error al cargar datos:', err);
-        setPhotos([]);
         setOwnedNFTs([]);
+        setTemplateData(Array(20).fill({ template_id: '', img: '', video: '' }));
       }
       setLoading(false);
     };
@@ -100,7 +81,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
   const nextGirl = () => setCurrentGirl(GIRL_NAMES[(girlIndex + 1) % GIRL_NAMES.length]);
 
   const isPhotoOwned = (templateId) => {
-    if (templateId.startsWith('placeholder-')) return false;
+    if (!templateId) return false;
     return ownedNFTs.some(nft => nft.template && nft.template.template_id === templateId);
   };
 
@@ -117,18 +98,17 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           <div className="loading">Cargando fotos...</div>
         ) : (
           <div className="photos-grid-full scrollable-nfts-fix grid-5-cols">
-            {photos.map((photo, index) => {
-              const isOwned = isPhotoOwned(photo.template_id);
+            {templateData.map((tpl, index) => {
+              const isOwned = isPhotoOwned(tpl.template_id);
               const photoNumber = index + 1;
-              
               return (
                 <div 
-                  key={photo.template_id} 
+                  key={tpl.template_id || index} 
                   className={`photo-card ${!isOwned ? 'locked' : ''}`}
                 >
-                  {!photo.isPlaceholder && photo.immutable_data.video ? (
+                  {tpl.video ? (
                     <video
-                      src={`https://ipfs.io/ipfs/${photo.immutable_data.video}`}
+                      src={`https://ipfs.io/ipfs/${tpl.video}`}
                       className="girl-media"
                       autoPlay
                       loop
@@ -138,10 +118,10 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
                         e.target.style.display = 'none';
                       }}
                     />
-                  ) : !photo.isPlaceholder && photo.immutable_data.img ? (
+                  ) : tpl.img ? (
                     <img
-                      src={`https://ipfs.io/ipfs/${photo.immutable_data.img}`}
-                      alt={photo.name}
+                      src={`https://ipfs.io/ipfs/${tpl.img}`}
+                      alt={`Foto ${photoNumber}`}
                       className="girl-media"
                       onError={(e) => {
                         e.target.style.display = 'none';
