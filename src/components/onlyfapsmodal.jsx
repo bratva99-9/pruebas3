@@ -49,7 +49,11 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           .filter(t => {
             const name = t.name.toLowerCase();
             const currentGirlLower = currentGirl.toLowerCase();
-            return name.startsWith(`${currentGirlLower} - collection photo #`);
+            // Acepta tanto 'alissa - collection photo #' como 'alissa- collection photo #'
+            return (
+              name.startsWith(`${currentGirlLower} - collection photo #`) ||
+              name.startsWith(`${currentGirlLower}- collection photo #`)
+            );
           })
           .sort((a, b) => {
             const numA = parseInt(a.name.split('#')[1]);
@@ -112,7 +116,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         {loading ? (
           <div className="loading">Cargando fotos...</div>
         ) : (
-          <div className="photos-grid-full">
+          <div className="photos-grid-full scrollable-nfts-fix">
             {photos.map((photo, index) => {
               const isOwned = isPhotoOwned(photo.template_id);
               const photoNumber = index + 1;
@@ -245,14 +249,16 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           opacity: 0.5;
           cursor: not-allowed;
         }
-        .photos-grid-full {
+        .photos-grid-full.scrollable-nfts-fix {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
           gap: 24px;
           width: 90vw;
           max-width: 1600px;
           margin: 0 auto;
-          padding: 0 20px;
+          padding: 0 20px 24px 20px;
+          overflow-y: auto;
+          max-height: calc(100vh - 200px);
         }
         .photo-card {
           position: relative;
