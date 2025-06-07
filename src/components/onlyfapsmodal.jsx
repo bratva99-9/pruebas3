@@ -90,7 +90,16 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
   return (
     <div className="onlyfaps-modal-bg-full">
       <div className="onlyfaps-modal-full">
-        <button className="modal-close-btn" onClick={onClose}>×</button>
+        {/* Botón Bonus Collection Boost */}
+        <button className="cancel-btn bonus-btn left-top-btn" style={{position:'absolute',top:32,left:38}}>
+          Bonus Collection Boost
+        </button>
+        {/* Contador NFTs de la chica */}
+        <button className="cancel-btn nft-count-btn right-top-btn" style={{position:'absolute',top:32,right:38}}>
+          {ownedNFTs.filter(nft => nft.template && templateData.some(tpl => tpl.template_id === nft.template.template_id)).length}/{templateData.filter(tpl => tpl.template_id).length}
+        </button>
+        {/* Botón Cancel abajo */}
+        <button className="cancel-btn" onClick={onClose}>Cancel</button>
         <div className="girl-nav">
           <button className="nav-btn" onClick={prevGirl} disabled={GIRL_NAMES.length === 0}>&lt;</button>
           <h2 className="girl-title">{currentGirl}</h2>
@@ -325,6 +334,47 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           .nav-btn, .modal-close-btn {
             font-size: 2rem;
           }
+        }
+        .cancel-btn {
+          position: fixed;
+          left: 50%;
+          bottom: 32px;
+          transform: translateX(-50%);
+          z-index: 10001;
+          font-size: 15px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(0,255,255,0.10);
+          border: 2px solid #00ffff;
+          border-radius: 14px;
+          padding: 8px 32px;
+          box-shadow: none;
+          text-shadow: none;
+          letter-spacing: 1px;
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+        .cancel-btn:hover {
+          background: rgba(255,0,255,0.13);
+          border-color: #ff00ff;
+          color: #fff;
+          box-shadow: none;
+        }
+        .bonus-btn.left-top-btn {
+          left: 38px;
+          top: 32px;
+          right: auto;
+          bottom: auto;
+          position: absolute;
+          transform: none;
+        }
+        .nft-count-btn.right-top-btn {
+          right: 38px;
+          top: 32px;
+          left: auto;
+          bottom: auto;
+          position: absolute;
+          transform: none;
         }
       `}</style>
     </div>
