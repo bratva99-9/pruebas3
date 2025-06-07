@@ -321,35 +321,39 @@ const Home = () => {
           margin-left: 8px;
         }
         .night-club-status-ear-fix {
-          min-height: 68px;
+          min-height: 78px;
           height: auto;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 2px;
+          gap: 6px;
+          padding-top: 4px;
+          padding-bottom: 4px;
         }
         .night-club-status-ear-fix .ncs-title {
-          font-size: 0.95rem;
+          font-size: 0.97rem;
           color: #ffb9fa;
           font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
           font-weight: 600;
-          margin-bottom: 2px;
+          margin-bottom: 0px;
           width: 100%;
           text-align: center;
         }
         .night-club-status-ear-fix .ncs-line {
-          font-size: 0.82rem;
+          font-size: 0.85rem;
           color: #b0b3c6;
           font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
           font-weight: 400;
           width: 100%;
           text-align: center;
           margin-bottom: 0px;
+          line-height: 1.5;
         }
         .night-club-status-ear-fix .ncs-value {
           font-weight: 600;
           margin-left: 4px;
+          color: #b0b3c6;
         }
       `}</style>
     </div>
