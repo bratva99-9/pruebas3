@@ -253,9 +253,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           box-shadow: 0 4px 20px #ff36ba33;
           transition: box-shadow 0.2s, border 0.2s;
           border: 2px solid transparent;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
         }
         .photo-card:hover {
           transform: translateY(-5px);
