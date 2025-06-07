@@ -327,9 +327,9 @@ const Home = () => {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 2px;
-          padding-top: 2px;
-          padding-bottom: 2px;
+          gap: 0px;
+          padding-top: 1px;
+          padding-bottom: 1px;
         }
         .night-club-status-ear-fix .ncs-title {
           font-size: 0.97rem;
@@ -348,7 +348,7 @@ const Home = () => {
           width: 100%;
           text-align: center;
           margin-bottom: 0px;
-          line-height: 1.1;
+          line-height: 1.02;
         }
         .night-club-status-ear-fix .ncs-value {
           font-weight: 600;
