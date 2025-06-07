@@ -21,7 +21,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
   const [ownedNFTs, setOwnedNFTs] = useState([]);
 
   useEffect(() => {
-    setCurrentGirl(girlName);
+    setCurrentGirl(girlName.toLowerCase());
   }, [girlName]);
 
   useEffect(() => {
@@ -30,6 +30,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
       try {
         // Obtener NFTs poseídos por el usuario
         const userNFTs = await UserService.getUserNFTs();
+        console.log('NFTs poseídos:', userNFTs);
         setOwnedNFTs(userNFTs);
 
         // Obtener todas las fotos de la colección
@@ -39,14 +40,42 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         
         // Filtrar y ordenar las fotos de la chica actual
         const girlPhotos = data.data
-          .filter(t => t.name.toLowerCase().startsWith(`${currentGirl} - collection photo #`))
+          .filter(t => {
+            const name = t.name.toLowerCase();
+            const currentGirlLower = currentGirl.toLowerCase();
+            return name.startsWith(`${currentGirlLower} - collection photo #`);
+          })
           .sort((a, b) => {
             const numA = parseInt(a.name.split('#')[1]);
             const numB = parseInt(b.name.split('#')[1]);
             return numA - numB;
           });
+
+        // Asegurar que tenemos exactamente 20 fotos
+        const allPhotos = Array(20).fill(null).map((_, index) => {
+          const photoNumber = index + 1;
+          const existingPhoto = girlPhotos.find(p => 
+            parseInt(p.name.split('#')[1]) === photoNumber
+          );
+          
+          if (existingPhoto) {
+            return existingPhoto;
+          }
+          
+          // Crear un placeholder para fotos faltantes
+          return {
+            template_id: `placeholder-${photoNumber}`,
+            name: `${currentGirl} - collection photo #${photoNumber}`,
+            immutable_data: {
+              img: '',
+              video: ''
+            },
+            isPlaceholder: true
+          };
+        });
         
-        setPhotos(girlPhotos);
+        console.log('Fotos filtradas:', allPhotos);
+        setPhotos(allPhotos);
       } catch (err) {
         console.error('Error al cargar datos:', err);
         setPhotos([]);
@@ -62,6 +91,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
   const nextGirl = () => setCurrentGirl(GIRL_NAMES[(girlIndex + 1) % GIRL_NAMES.length]);
 
   const isPhotoOwned = (templateId) => {
+    if (templateId.startsWith('placeholder-')) return false;
     return ownedNFTs.some(nft => nft.template_id === templateId);
   };
 
@@ -78,14 +108,16 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           <div className="loading">Cargando fotos...</div>
         ) : (
           <div className="photos-grid-full">
-            {photos.map(photo => {
+            {photos.map((photo, index) => {
               const isOwned = isPhotoOwned(photo.template_id);
+              const photoNumber = index + 1;
+              
               return (
                 <div 
                   key={photo.template_id} 
                   className={`photo-card ${!isOwned ? 'locked' : ''}`}
                 >
-                  {photo.immutable_data.video ? (
+                  {!photo.isPlaceholder && photo.immutable_data.video ? (
                     <video
                       src={`https://ipfs.io/ipfs/${photo.immutable_data.video}`}
                       className="girl-media"
@@ -93,13 +125,25 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
                       loop
                       muted
                       playsInline
+                      onError={(e) => {
+                        console.error('Error cargando video:', e);
+                        e.target.style.display = 'none';
+                      }}
                     />
-                  ) : (
+                  ) : !photo.isPlaceholder && photo.immutable_data.img ? (
                     <img
                       src={`https://ipfs.io/ipfs/${photo.immutable_data.img}`}
                       alt={photo.name}
                       className="girl-media"
+                      onError={(e) => {
+                        console.error('Error cargando imagen:', e);
+                        e.target.style.display = 'none';
+                      }}
                     />
+                  ) : (
+                    <div className="placeholder-media">
+                      <span>Foto #{photoNumber}</span>
+                    </div>
                   )}
                   {!isOwned && (
                     <div className="lock-overlay">
@@ -108,7 +152,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
                       </svg>
                     </div>
                   )}
-                  <div className="photo-label-nft">{photo.name.split('#')[1]}</div>
+                  <div className="photo-label-nft">#{photoNumber}</div>
                 </div>
               );
             })}
@@ -232,6 +276,16 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           height: 100%;
           object-fit: cover;
           display: block;
+        }
+        .placeholder-media {
+          width: 100%;
+          height: 100%;
+          background: #1a1a1a;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #666;
+          font-size: 1.2rem;
         }
         .lock-overlay {
           position: absolute;
