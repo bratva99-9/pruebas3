@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import MissionModal from '../components/MissionModal';
 import MissionStatus from '../components/missionstatus';
@@ -21,7 +21,37 @@ const buildingSprites = [
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
   const [showMissionStatus, setShowMissionStatus] = useState(false);
+  const [pendingMissions, setPendingMissions] = useState(0);
+  const [completedMissions, setCompletedMissions] = useState(0);
   const navigate = useHistory();
+
+  useEffect(() => {
+    const fetchMissions = async () => {
+      try {
+        const currentUser = UserService.getName();
+        if (!currentUser) {
+          setPendingMissions(0);
+          setCompletedMissions(0);
+          return;
+        }
+        const allMissions = await UserService.getUserMissions();
+        const userMissions = allMissions.filter(m => m.user === currentUser);
+        const now = Math.floor(Date.now() / 1000);
+        // Pendientes: end_time > ahora
+        const pending = userMissions.filter(m => Number(m.end_time) > now);
+        // Completadas: end_time <= ahora y !m.claimed
+        const completed = userMissions.filter(m => Number(m.end_time) <= now && !m.claimed);
+        setPendingMissions(pending.length);
+        setCompletedMissions(completed.length);
+      } catch (err) {
+        setPendingMissions(0);
+        setCompletedMissions(0);
+      }
+    };
+    fetchMissions();
+    const interval = setInterval(fetchMissions, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogout = () => {
     UserService.logout();
@@ -44,6 +74,16 @@ const Home = () => {
           <div className="side-bottom-ears-left">
             <div className="user-tap user-tap-block small-ear">
               <span className="user-tap-name">Night Club Status</span>
+              <div className="subdata-mission-status">
+                <div className="subdata-row">
+                  <span className="subdata-label">Pending</span>
+                  <span className="subdata-value">{pendingMissions}</span>
+                </div>
+                <div className="subdata-row">
+                  <span className="subdata-label">Completed</span>
+                  <span className="subdata-value">{completedMissions}</span>
+                </div>
+              </div>
             </div>
             <div className="user-tap user-tap-block small-ear">
               <span className="user-tap-name">Buy Cards</span>
@@ -259,6 +299,34 @@ const Home = () => {
           text-align: left;
           margin: 0 0 0 4px;
           padding-left: 8px;
+        }
+        .subdata-mission-status {
+          margin-top: 2px;
+          margin-left: 2px;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+        .subdata-row {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .subdata-label {
+          font-size: 0.78rem;
+          color: #b0b3c6;
+          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+          font-weight: 400;
+          opacity: 0.85;
+        }
+        .subdata-value {
+          font-size: 0.78rem;
+          color: #b0b3c6;
+          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+          font-weight: 600;
+          opacity: 0.95;
+          margin-left: 8px;
         }
       `}</style>
     </div>
