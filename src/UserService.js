@@ -158,13 +158,13 @@ export class User {
 
     const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
     
-    // LOG para depuración de la estructura de action_traces
-    console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
-
-    // Procesar las recompensas ganadas
-    if (result.processed && result.processed.action_traces) {
+    if (result && result.processed && result.processed.action_traces) {
+      console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
       const rewards = this.processRewardTraces(result.processed.action_traces);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
+    } else {
+      console.warn('No se encontraron action_traces en la respuesta:', result);
+      window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
     }
 
     return result;
@@ -186,13 +186,13 @@ export class User {
 
     const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
     
-    // LOG para depuración de la estructura de action_traces
-    console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
-
-    // Procesar las recompensas ganadas
-    if (result.processed && result.processed.action_traces) {
+    if (result && result.processed && result.processed.action_traces) {
+      console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
       const rewards = this.processRewardTraces(result.processed.action_traces);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
+    } else {
+      console.warn('No se encontraron action_traces en la respuesta:', result);
+      window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
     }
 
     return result;
@@ -215,13 +215,13 @@ export class User {
 
     const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
 
-    // LOG para depuración de la estructura de action_traces
-    console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
-
-    // Procesar las recompensas ganadas
-    if (result.processed && result.processed.action_traces) {
+    if (result && result.processed && result.processed.action_traces) {
+      console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
       const rewards = this.processRewardTraces(result.processed.action_traces);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
+    } else {
+      console.warn('No se encontraron action_traces en la respuesta:', result);
+      window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
     }
 
     return result;
