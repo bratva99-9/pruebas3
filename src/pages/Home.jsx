@@ -86,7 +86,11 @@ const Home = () => {
             </span>
           </div>
           <div className="side-bottom-ears-left">
-            <div className="user-tap user-tap-block small-ear night-club-status-ear-fix">
+            <div
+              className="user-tap user-tap-block small-ear night-club-status-ear-fix"
+              style={{ cursor: 'pointer' }}
+              onClick={() => setShowMissionStatus(true)}
+            >
               <div className="ncs-title">Night Club Status</div>
               <div className="ncs-line ncs-pending">Pending <span className="ncs-value">{pendingMissions}</span></div>
               <div className="ncs-line ncs-completed">Completed <span className="ncs-value">{completedMissions}</span></div>
