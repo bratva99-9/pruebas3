@@ -145,44 +145,56 @@ export class User {
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
   }
 
+  // Obtener historial de recompensas NFT para el usuario
+  async getNFTRewardHistory() {
+    if (!this.authName) return [];
+    try {
+      const response = await fetch(`https://wax.greymass.com/v1/chain/get_table_rows`, {
+        method: 'POST',
+        body: JSON.stringify({
+          code: 'nightclubapp',
+          scope: 'nightclubapp',
+          table: 'nftrewhist',
+          limit: 100,
+          reverse: true,
+          json: true
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await response.json();
+      // Filtrar solo los del usuario actual
+      return (data.rows || []).filter(r => r.user === this.authName);
+    } catch (err) {
+      console.warn('No se pudo obtener el historial de recompensas NFT:', err);
+      return [];
+    }
+  }
+
   // Reclamar todas las recompensas
   async claimRewards() {
     if (!this.session || !this.authName) throw new Error("No active session");
 
+    // 1. Obtener historial antes del claim
+    const prevRewards = await this.getNFTRewardHistory();
+    const prevIds = new Set(prevRewards.map(r => r.id));
+
+    // 2. Hacer claim
     const actions = [{
       account: "nightclubapp",
       name: "claimall",
       authorization: [{ actor: this.authName, permission: "active" }],
       data: { user: this.authName }
     }];
-
     const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
-    
-    if (result && result.processed && result.processed.action_traces) {
-      console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
-      const rewards = this.processRewardTraces(result.processed.action_traces);
-      window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
-    } else if (result && result.transactionId) {
-      // Buscar los traces usando la API de history
-      try {
-        const history = await fetch('https://wax.greymass.com/v1/history/get_transaction', {
-          method: 'POST',
-          body: JSON.stringify({ id: result.transactionId }),
-          headers: { 'Content-Type': 'application/json' }
-        });
-        const historyData = await history.json();
-        if (historyData && historyData.traces) {
-          const rewards = this.processRewardTraces(historyData.traces);
-          window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
-        } else {
-          window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
-        }
-      } catch (err) {
-        console.warn('No se pudieron obtener los traces de la transacción:', err);
-        window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
-      }
+
+    // 3. Obtener historial después del claim
+    const newRewards = await this.getNFTRewardHistory();
+    const justWon = newRewards.filter(r => !prevIds.has(r.id));
+
+    // 4. Notificar
+    if (justWon.length > 0) {
+      window.dispatchEvent(new CustomEvent('nftRewards', { detail: justWon }));
     } else {
-      console.warn('No se encontraron action_traces en la respuesta:', result);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
     }
 
@@ -193,6 +205,11 @@ export class User {
   async claimMissionRewards(missionId) {
     if (!this.session || !this.authName) throw new Error("No sesión activa");
 
+    // 1. Obtener historial antes del claim
+    const prevRewards = await this.getNFTRewardHistory();
+    const prevIds = new Set(prevRewards.map(r => r.id));
+
+    // 2. Hacer claim
     const actions = [{
       account: "nightclubapp",
       name: "claimmission",
@@ -202,33 +219,16 @@ export class User {
         mission_id: missionId
       }
     }];
-
     const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
-    
-    if (result && result.processed && result.processed.action_traces) {
-      console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
-      const rewards = this.processRewardTraces(result.processed.action_traces);
-      window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
-    } else if (result && result.transactionId) {
-      try {
-        const history = await fetch('https://wax.greymass.com/v1/history/get_transaction', {
-          method: 'POST',
-          body: JSON.stringify({ id: result.transactionId }),
-          headers: { 'Content-Type': 'application/json' }
-        });
-        const historyData = await history.json();
-        if (historyData && historyData.traces) {
-          const rewards = this.processRewardTraces(historyData.traces);
-          window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
-        } else {
-          window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
-        }
-      } catch (err) {
-        console.warn('No se pudieron obtener los traces de la transacción:', err);
-        window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
-      }
+
+    // 3. Obtener historial después del claim
+    const newRewards = await this.getNFTRewardHistory();
+    const justWon = newRewards.filter(r => !prevIds.has(r.id));
+
+    // 4. Notificar
+    if (justWon.length > 0) {
+      window.dispatchEvent(new CustomEvent('nftRewards', { detail: justWon }));
     } else {
-      console.warn('No se encontraron action_traces en la respuesta:', result);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
     }
 
@@ -240,6 +240,11 @@ export class User {
     if (!this.session || !this.authName) throw new Error("No sesión activa");
     if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay asset_ids para reclamar");
 
+    // 1. Obtener historial antes del claim
+    const prevRewards = await this.getNFTRewardHistory();
+    const prevIds = new Set(prevRewards.map(r => r.id));
+
+    // 2. Hacer claim
     const actions = [{
       account: "nightclubapp",
       name: "claim",
@@ -249,77 +254,20 @@ export class User {
         asset_ids: asset_ids
       }
     }];
-
     const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
 
-    if (result && result.processed && result.processed.action_traces) {
-      console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
-      const rewards = this.processRewardTraces(result.processed.action_traces);
-      window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
-    } else if (result && result.transactionId) {
-      try {
-        const history = await fetch('https://wax.greymass.com/v1/history/get_transaction', {
-          method: 'POST',
-          body: JSON.stringify({ id: result.transactionId }),
-          headers: { 'Content-Type': 'application/json' }
-        });
-        const historyData = await history.json();
-        if (historyData && historyData.traces) {
-          const rewards = this.processRewardTraces(historyData.traces);
-          window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
-        } else {
-          window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
-        }
-      } catch (err) {
-        console.warn('No se pudieron obtener los traces de la transacción:', err);
-        window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
-      }
+    // 3. Obtener historial después del claim
+    const newRewards = await this.getNFTRewardHistory();
+    const justWon = newRewards.filter(r => !prevIds.has(r.id));
+
+    // 4. Notificar
+    if (justWon.length > 0) {
+      window.dispatchEvent(new CustomEvent('nftRewards', { detail: justWon }));
     } else {
-      console.warn('No se encontraron action_traces en la respuesta:', result);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
     }
 
     return result;
-  }
-
-  // Procesar las trazas de acción para extraer recompensas
-  processRewardTraces(traces) {
-    const rewards = [];
-    let noWinDetected = false;
-
-    function recursiveSearch(tracesArr) {
-      if (!Array.isArray(tracesArr)) return;
-      tracesArr.forEach(trace => {
-        // Detectar logreward (NFT ganado)
-        if (trace.act && trace.act.name === 'logreward' && trace.act.data && trace.act.data.rewards) {
-          if (Array.isArray(trace.act.data.rewards)) {
-            rewards.push(...trace.act.data.rewards);
-          } else {
-            rewards.push(trace.act.data.rewards);
-          }
-        }
-        // Detectar lognftmint (resultado de la misión)
-        else if (trace.act && trace.act.name === 'lognftmint' && trace.act.data) {
-          if (trace.act.data.result && String(trace.act.data.result).toLowerCase().includes('no_win')) {
-            noWinDetected = true;
-          }
-        }
-        // Recursividad profunda en inline_traces
-        if (trace.inline_traces && Array.isArray(trace.inline_traces)) {
-          recursiveSearch(trace.inline_traces);
-        }
-      });
-    }
-
-    recursiveSearch(traces);
-
-    // SOLO mostrar "no tuviste suerte" si NO hay rewards
-    if (rewards.length > 0) {
-      return rewards;
-    } else if (noWinDetected) {
-      return [{ empty: true }];
-    }
-    return [];
   }
 
   // Obtener misiones activas del usuario
