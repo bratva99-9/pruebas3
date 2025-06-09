@@ -31,7 +31,7 @@ const NFTRewardNotification = ({ reward, onClose }) => {
               color: '#ff36ba',
               fontSize: '1.1rem',
               fontWeight: 600
-            }}>No has ganado ningún NFT esta vez.</h3>
+            }}>No tuviste suerte esta vez.<br />¡Intenta de nuevo!</h3>
           </div>
         </div>
         <style jsx>{`

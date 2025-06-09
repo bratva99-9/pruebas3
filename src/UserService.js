@@ -197,25 +197,42 @@ export class User {
   // Procesar las trazas de acción para extraer recompensas
   processRewardTraces(traces) {
     const rewards = [];
-    
-    // Buscar acciones de logreward o logall
+    let noWinDetected = false;
+
     traces.forEach(trace => {
-      console.log('Procesando traza:', trace);
+      // Detectar logreward (NFT ganado)
       if (trace.act && trace.act.name === 'logreward' && trace.act.data && trace.act.data.rewards) {
-        console.log('Encontrada acción logreward:', trace.act.data.rewards);
-        rewards.push(...trace.act.data.rewards);
-      } else if (trace.act && trace.act.name === 'logall' && trace.act.data && trace.act.data.rewards) {
-        console.log('Encontrada acción logall:', trace.act.data.rewards);
-        rewards.push(...trace.act.data.rewards);
+        // Puede ser un array o un solo objeto
+        if (Array.isArray(trace.act.data.rewards)) {
+          rewards.push(...trace.act.data.rewards);
+        } else {
+          rewards.push(trace.act.data.rewards);
+        }
       }
-      
+      // Detectar lognftmint (resultado de la misión)
+      else if (trace.act && trace.act.name === 'lognftmint' && trace.act.data) {
+        // Si el resultado es no_win, marcar que no hubo suerte
+        if (trace.act.data.result && String(trace.act.data.result).toLowerCase().includes('no_win')) {
+          noWinDetected = true;
+        }
+      }
       // Buscar en trazas anidadas
       if (trace.inline_traces) {
         const nestedRewards = this.processRewardTraces(trace.inline_traces);
-        rewards.push(...nestedRewards);
+        if (Array.isArray(nestedRewards)) rewards.push(...nestedRewards);
+        // Si el resultado anidado fue no_win, marcarlo
+        if (nestedRewards && nestedRewards._noWinDetected) noWinDetected = true;
       }
     });
 
+    // Si no hay rewards pero sí hubo un no_win, devolver un marcador especial
+    if (rewards.length === 0 && noWinDetected) {
+      // Devolver un objeto especial para mostrar la notificación de "no tuviste suerte"
+      const result = [{ empty: true }];
+      result._noWinDetected = true;
+      return result;
+    }
+    // Si no hay rewards ni no_win, devolver array vacío
     return rewards;
   }
 
