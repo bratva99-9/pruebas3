@@ -229,8 +229,6 @@ export class User {
 
   // Procesar las trazas de acción para extraer recompensas
   processRewardTraces(traces) {
-    // LOG para depuración de la entrada
-    console.log('processRewardTraces input:', JSON.stringify(traces, null, 2));
     const rewards = [];
     let noWinDetected = false;
 
@@ -260,12 +258,13 @@ export class User {
 
     recursiveSearch(traces);
 
-    if (rewards.length === 0 && noWinDetected) {
-      const result = [{ empty: true }];
-      result._noWinDetected = true;
-      return result;
+    // SOLO mostrar "no tuviste suerte" si NO hay rewards
+    if (rewards.length > 0) {
+      return rewards;
+    } else if (noWinDetected) {
+      return [{ empty: true }];
     }
-    return rewards;
+    return [];
   }
 
   // Obtener misiones activas del usuario

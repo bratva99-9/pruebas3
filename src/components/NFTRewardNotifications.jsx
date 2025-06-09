@@ -34,15 +34,26 @@ const NFTRewardNotifications = () => {
   console.log('Renderizando notificaciones:', notifications);
 
   return (
-    <>
+    <div style={{
+      position: 'fixed',
+      top: 20,
+      right: 20,
+      zIndex: 10000,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '12px',
+      alignItems: 'flex-end',
+      pointerEvents: 'none'
+    }}>
       {notifications.map((reward, index) => (
-        <NFTRewardNotification
-          key={`${reward.id}-${index}`}
-          reward={reward}
-          onClose={() => removeNotification(index)}
-        />
+        <div key={reward.id ? `${reward.id}-${index}` : `empty-${index}`} style={{ pointerEvents: 'auto' }}>
+          <NFTRewardNotification
+            reward={reward}
+            onClose={() => removeNotification(index)}
+          />
+        </div>
       ))}
-    </>
+    </div>
   );
 };
 
