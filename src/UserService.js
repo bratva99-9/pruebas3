@@ -162,6 +162,25 @@ export class User {
       console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
       const rewards = this.processRewardTraces(result.processed.action_traces);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
+    } else if (result && result.transactionId) {
+      // Buscar los traces usando la API de history
+      try {
+        const history = await fetch('https://wax.greymass.com/v1/history/get_transaction', {
+          method: 'POST',
+          body: JSON.stringify({ id: result.transactionId }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const historyData = await history.json();
+        if (historyData && historyData.traces) {
+          const rewards = this.processRewardTraces(historyData.traces);
+          window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
+        } else {
+          window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
+        }
+      } catch (err) {
+        console.warn('No se pudieron obtener los traces de la transacción:', err);
+        window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
+      }
     } else {
       console.warn('No se encontraron action_traces en la respuesta:', result);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
@@ -190,6 +209,24 @@ export class User {
       console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
       const rewards = this.processRewardTraces(result.processed.action_traces);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
+    } else if (result && result.transactionId) {
+      try {
+        const history = await fetch('https://wax.greymass.com/v1/history/get_transaction', {
+          method: 'POST',
+          body: JSON.stringify({ id: result.transactionId }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const historyData = await history.json();
+        if (historyData && historyData.traces) {
+          const rewards = this.processRewardTraces(historyData.traces);
+          window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
+        } else {
+          window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
+        }
+      } catch (err) {
+        console.warn('No se pudieron obtener los traces de la transacción:', err);
+        window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
+      }
     } else {
       console.warn('No se encontraron action_traces en la respuesta:', result);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
@@ -219,6 +256,24 @@ export class User {
       console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
       const rewards = this.processRewardTraces(result.processed.action_traces);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
+    } else if (result && result.transactionId) {
+      try {
+        const history = await fetch('https://wax.greymass.com/v1/history/get_transaction', {
+          method: 'POST',
+          body: JSON.stringify({ id: result.transactionId }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const historyData = await history.json();
+        if (historyData && historyData.traces) {
+          const rewards = this.processRewardTraces(historyData.traces);
+          window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
+        } else {
+          window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
+        }
+      } catch (err) {
+        console.warn('No se pudieron obtener los traces de la transacción:', err);
+        window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
+      }
     } else {
       console.warn('No se encontraron action_traces en la respuesta:', result);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
