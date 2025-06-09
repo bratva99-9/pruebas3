@@ -2,14 +2,53 @@ import React, { useEffect } from 'react';
 
 const NFTRewardNotification = ({ reward, onClose }) => {
   useEffect(() => {
-    console.log('Notificación montada con reward:', reward);
     const timer = setTimeout(() => {
-      console.log('Cerrando notificación automáticamente');
       onClose();
     }, 5000);
-
     return () => clearTimeout(timer);
   }, [onClose, reward]);
+
+  if (reward.empty) {
+    return (
+      <div className="nft-reward-notification" style={{
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        background: 'linear-gradient(135deg, rgba(40,40,50,0.95) 0%, rgba(80,80,90,0.95) 100%)',
+        border: '2px solid #ff36ba',
+        borderRadius: '12px',
+        padding: '16px',
+        color: '#fff',
+        zIndex: 10000,
+        boxShadow: '0 4px 24px rgba(255, 54, 186, 0.2)',
+        animation: 'slideIn 0.3s ease-out',
+        maxWidth: '320px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ flex: 1 }}>
+            <h3 style={{
+              margin: '0 0 4px 0',
+              color: '#ff36ba',
+              fontSize: '1.1rem',
+              fontWeight: 600
+            }}>No has ganado ningún NFT esta vez.</h3>
+          </div>
+        </div>
+        <style jsx>{`
+          @keyframes slideIn {
+            from {
+              transform: translateX(100%);
+              opacity: 0;
+            }
+            to {
+              transform: translateX(0);
+              opacity: 1;
+            }
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <div className="nft-reward-notification" style={{
@@ -62,7 +101,6 @@ const NFTRewardNotification = ({ reward, onClose }) => {
           }}>{reward.schema || 'Schema Desconocido'}</span>
         </div>
       </div>
-
       <style jsx>{`
         @keyframes slideIn {
           from {

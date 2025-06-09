@@ -160,14 +160,9 @@ export class User {
     
     // Procesar las recompensas ganadas
     if (result.processed && result.processed.action_traces) {
-      console.log('Trazas de acción:', result.processed.action_traces);
       const rewards = this.processRewardTraces(result.processed.action_traces);
-      console.log('Recompensas procesadas:', rewards);
-      if (rewards.length > 0) {
-        // Emitir evento de recompensas
-        console.log('Emitiendo evento nftRewards con:', rewards);
-        window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards }));
-      }
+      // SIEMPRE emitir el evento, aunque rewards esté vacío
+      window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
     }
 
     return result;
@@ -192,10 +187,8 @@ export class User {
     // Procesar las recompensas ganadas
     if (result.processed && result.processed.action_traces) {
       const rewards = this.processRewardTraces(result.processed.action_traces);
-      if (rewards.length > 0) {
-        // Emitir evento de recompensas
-        window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards }));
-      }
+      // SIEMPRE emitir el evento, aunque rewards esté vacío
+      window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
     }
 
     return result;
