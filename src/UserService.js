@@ -160,9 +160,12 @@ export class User {
     
     // Procesar las recompensas ganadas
     if (result.processed && result.processed.action_traces) {
+      console.log('Trazas de acción:', result.processed.action_traces);
       const rewards = this.processRewardTraces(result.processed.action_traces);
+      console.log('Recompensas procesadas:', rewards);
       if (rewards.length > 0) {
         // Emitir evento de recompensas
+        console.log('Emitiendo evento nftRewards con:', rewards);
         window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards }));
       }
     }
@@ -204,15 +207,19 @@ export class User {
     
     // Buscar acciones de logreward o logall
     traces.forEach(trace => {
+      console.log('Procesando traza:', trace);
       if (trace.act && trace.act.name === 'logreward' && trace.act.data && trace.act.data.rewards) {
+        console.log('Encontrada acción logreward:', trace.act.data.rewards);
         rewards.push(...trace.act.data.rewards);
       } else if (trace.act && trace.act.name === 'logall' && trace.act.data && trace.act.data.rewards) {
+        console.log('Encontrada acción logall:', trace.act.data.rewards);
         rewards.push(...trace.act.data.rewards);
       }
       
       // Buscar en trazas anidadas
       if (trace.inline_traces) {
-        rewards.push(...this.processRewardTraces(trace.inline_traces));
+        const nestedRewards = this.processRewardTraces(trace.inline_traces);
+        rewards.push(...nestedRewards);
       }
     });
 
