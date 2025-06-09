@@ -156,7 +156,67 @@ export class User {
       data: { user: this.authName }
     }];
 
-    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+    const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+    
+    // Procesar las recompensas ganadas
+    if (result.processed && result.processed.action_traces) {
+      const rewards = this.processRewardTraces(result.processed.action_traces);
+      if (rewards.length > 0) {
+        // Emitir evento de recompensas
+        window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards }));
+      }
+    }
+
+    return result;
+  }
+
+  // Reclamar recompensa de una misión en específico
+  async claimMissionRewards(missionId) {
+    if (!this.session || !this.authName) throw new Error("No sesión activa");
+
+    const actions = [{
+      account: "nightclubapp",
+      name: "claimmission",
+      authorization: [{ actor: this.authName, permission: "active" }],
+      data: {
+        user: this.authName,
+        mission_id: missionId
+      }
+    }];
+
+    const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+    
+    // Procesar las recompensas ganadas
+    if (result.processed && result.processed.action_traces) {
+      const rewards = this.processRewardTraces(result.processed.action_traces);
+      if (rewards.length > 0) {
+        // Emitir evento de recompensas
+        window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards }));
+      }
+    }
+
+    return result;
+  }
+
+  // Procesar las trazas de acción para extraer recompensas
+  processRewardTraces(traces) {
+    const rewards = [];
+    
+    // Buscar acciones de logreward o logall
+    traces.forEach(trace => {
+      if (trace.act && trace.act.name === 'logreward' && trace.act.data && trace.act.data.rewards) {
+        rewards.push(...trace.act.data.rewards);
+      } else if (trace.act && trace.act.name === 'logall' && trace.act.data && trace.act.data.rewards) {
+        rewards.push(...trace.act.data.rewards);
+      }
+      
+      // Buscar en trazas anidadas
+      if (trace.inline_traces) {
+        rewards.push(...this.processRewardTraces(trace.inline_traces));
+      }
+    });
+
+    return rewards;
   }
 
   // Obtener misiones activas del usuario
@@ -191,92 +251,6 @@ export class User {
       console.error("Error al obtener tipos de misiones:", err);
       return [];
     }
-  }
-
-  // Reclamar recompensa de una misión en específico
-  async claimMissionRewards(missionId) {
-    if (!this.session || !this.authName) throw new Error("No sesión activa");
-
-    const actions = [{
-      account: "nightclubapp",
-      name: "claimmission",
-      authorization: [{ actor: this.authName, permission: "active" }],
-      data: {
-        user: this.authName,
-        mission_id: missionId
-      }
-    }];
-
-    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
-  }
-
-  // Explorar todas las tablas ABI del contrato
-  async getContractTables() {
-    try {
-      const { abi } = await this.rpc.get_abi('nightclubapp');
-      if (abi && abi.tables) {
-        return abi.tables.map(table => ({
-          name: table.name,
-          type: table.type,
-          indexes: table.indexes
-        }));
-      }
-      return [];
-    } catch (err) {
-      console.error("Error obteniendo tablas del contrato:", err);
-      return [];
-    }
-  }
-
-  // Formatea el balance WAX con 2 decimales y sufijo
-  formatWAXBalance() {
-    const wax = parseFloat(this.balance);
-    return isNaN(wax) ? "0.00 WAX" : `${wax.toFixed(2)} WAX`;
-  }
-
-  // Formatea el balance SEXY con 2 decimales y sufijo
-  formatSEXYBalance() {
-    const sexy = parseFloat(this.sexyBalance);
-    return isNaN(sexy) ? "0.00 SEXY" : `${sexy.toFixed(2)} SEXY`;
-  }
-
-  // Sólo número WAX (2 decimales, sin sufijo)
-  formatWAXOnly() {
-    const wax = parseFloat(this.balance);
-    return isNaN(wax) ? "0.00" : wax.toFixed(2);
-  }
-
-  // Sólo número SEXY (2 decimales, sin sufijo)
-  formatSEXYOnly() {
-    const sexy = parseFloat(this.sexyBalance);
-    return isNaN(sexy) ? "0.00" : sexy.toFixed(2);
-  }
-
-  // Inicializa UAL
-  init() {
-    this.ualCallback = this.ualCallback.bind(this);
-
-    const wax = new Wax([this.myChain], { appName: this.appName });
-    const anchor = new Anchor([this.myChain], { appName: this.appName });
-
-    const divUal = document.createElement('div');
-    divUal.setAttribute('id', 'ual-login');
-    document.body.appendChild(divUal);
-
-    const divLoginRoot = document.getElementById('ual-login');
-    this.ual = new UALJs(this.ualCallback, [this.myChain], this.appName, [wax, anchor], {
-      containerElement: divLoginRoot
-    });
-
-    this.ual.init();
-  }
-
-  // Singleton
-  static new() {
-    if (!User.instance) {
-      User.instance = new User();
-    }
-    return User.instance;
   }
 
   // Obtener misiones del usuario desde la tabla 'missions' (scope global)
@@ -345,6 +319,75 @@ export class User {
       console.error('Error al obtener cooldowns:', err);
       return [];
     }
+  }
+
+  // Inicializa UAL
+  init() {
+    this.ualCallback = this.ualCallback.bind(this);
+
+    const wax = new Wax([this.myChain], { appName: this.appName });
+    const anchor = new Anchor([this.myChain], { appName: this.appName });
+
+    const divUal = document.createElement('div');
+    divUal.setAttribute('id', 'ual-login');
+    document.body.appendChild(divUal);
+
+    const divLoginRoot = document.getElementById('ual-login');
+    this.ual = new UALJs(this.ualCallback, [this.myChain], this.appName, [wax, anchor], {
+      containerElement: divLoginRoot
+    });
+
+    this.ual.init();
+  }
+
+  // Singleton
+  static new() {
+    if (!User.instance) {
+      User.instance = new User();
+    }
+    return User.instance;
+  }
+
+  // Explorar todas las tablas ABI del contrato
+  async getContractTables() {
+    try {
+      const { abi } = await this.rpc.get_abi('nightclubapp');
+      if (abi && abi.tables) {
+        return abi.tables.map(table => ({
+          name: table.name,
+          type: table.type,
+          indexes: table.indexes
+        }));
+      }
+      return [];
+    } catch (err) {
+      console.error("Error obteniendo tablas del contrato:", err);
+      return [];
+    }
+  }
+
+  // Formatea el balance WAX con 2 decimales y sufijo
+  formatWAXBalance() {
+    const wax = parseFloat(this.balance);
+    return isNaN(wax) ? "0.00 WAX" : `${wax.toFixed(2)} WAX`;
+  }
+
+  // Formatea el balance SEXY con 2 decimales y sufijo
+  formatSEXYBalance() {
+    const sexy = parseFloat(this.sexyBalance);
+    return isNaN(sexy) ? "0.00 SEXY" : `${sexy.toFixed(2)} SEXY`;
+  }
+
+  // Sólo número WAX (2 decimales, sin sufijo)
+  formatWAXOnly() {
+    const wax = parseFloat(this.balance);
+    return isNaN(wax) ? "0.00" : wax.toFixed(2);
+  }
+
+  // Sólo número SEXY (2 decimales, sin sufijo)
+  formatSEXYOnly() {
+    const sexy = parseFloat(this.sexyBalance);
+    return isNaN(sexy) ? "0.00" : sexy.toFixed(2);
   }
 }
 
