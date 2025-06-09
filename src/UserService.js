@@ -302,7 +302,16 @@ export class User {
       }
     }];
 
-    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+    const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+
+    // Procesar las recompensas ganadas
+    if (result.processed && result.processed.action_traces) {
+      const rewards = this.processRewardTraces(result.processed.action_traces);
+      // SIEMPRE emitir el evento, aunque rewards esté vacío
+      window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
+    }
+
+    return result;
   }
 
   // Obtener cooldowns de la tabla cooldowns
