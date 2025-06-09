@@ -158,10 +158,12 @@ export class User {
 
     const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
     
+    // LOG para depuración de la estructura de action_traces
+    console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
+
     // Procesar las recompensas ganadas
     if (result.processed && result.processed.action_traces) {
       const rewards = this.processRewardTraces(result.processed.action_traces);
-      // SIEMPRE emitir el evento, aunque rewards esté vacío
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
     }
 
@@ -184,10 +186,41 @@ export class User {
 
     const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
     
+    // LOG para depuración de la estructura de action_traces
+    console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
+
     // Procesar las recompensas ganadas
     if (result.processed && result.processed.action_traces) {
       const rewards = this.processRewardTraces(result.processed.action_traces);
-      // SIEMPRE emitir el evento, aunque rewards esté vacío
+      window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
+    }
+
+    return result;
+  }
+
+  // Reclamar recompensa de una o varias misiones usando la acción 'claim'
+  async claimMission(asset_ids) {
+    if (!this.session || !this.authName) throw new Error("No sesión activa");
+    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay asset_ids para reclamar");
+
+    const actions = [{
+      account: "nightclubapp",
+      name: "claim",
+      authorization: [{ actor: this.authName, permission: "active" }],
+      data: {
+        user: this.authName,
+        asset_ids: asset_ids
+      }
+    }];
+
+    const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
+
+    // LOG para depuración de la estructura de action_traces
+    console.log('action_traces:', JSON.stringify(result.processed.action_traces, null, 2));
+
+    // Procesar las recompensas ganadas
+    if (result.processed && result.processed.action_traces) {
+      const rewards = this.processRewardTraces(result.processed.action_traces);
       window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
     }
 
@@ -196,43 +229,42 @@ export class User {
 
   // Procesar las trazas de acción para extraer recompensas
   processRewardTraces(traces) {
+    // LOG para depuración de la entrada
+    console.log('processRewardTraces input:', JSON.stringify(traces, null, 2));
     const rewards = [];
     let noWinDetected = false;
 
-    traces.forEach(trace => {
-      // Detectar logreward (NFT ganado)
-      if (trace.act && trace.act.name === 'logreward' && trace.act.data && trace.act.data.rewards) {
-        // Puede ser un array o un solo objeto
-        if (Array.isArray(trace.act.data.rewards)) {
-          rewards.push(...trace.act.data.rewards);
-        } else {
-          rewards.push(trace.act.data.rewards);
+    function recursiveSearch(tracesArr) {
+      if (!Array.isArray(tracesArr)) return;
+      tracesArr.forEach(trace => {
+        // Detectar logreward (NFT ganado)
+        if (trace.act && trace.act.name === 'logreward' && trace.act.data && trace.act.data.rewards) {
+          if (Array.isArray(trace.act.data.rewards)) {
+            rewards.push(...trace.act.data.rewards);
+          } else {
+            rewards.push(trace.act.data.rewards);
+          }
         }
-      }
-      // Detectar lognftmint (resultado de la misión)
-      else if (trace.act && trace.act.name === 'lognftmint' && trace.act.data) {
-        // Si el resultado es no_win, marcar que no hubo suerte
-        if (trace.act.data.result && String(trace.act.data.result).toLowerCase().includes('no_win')) {
-          noWinDetected = true;
+        // Detectar lognftmint (resultado de la misión)
+        else if (trace.act && trace.act.name === 'lognftmint' && trace.act.data) {
+          if (trace.act.data.result && String(trace.act.data.result).toLowerCase().includes('no_win')) {
+            noWinDetected = true;
+          }
         }
-      }
-      // Buscar en trazas anidadas
-      if (trace.inline_traces) {
-        const nestedRewards = this.processRewardTraces(trace.inline_traces);
-        if (Array.isArray(nestedRewards)) rewards.push(...nestedRewards);
-        // Si el resultado anidado fue no_win, marcarlo
-        if (nestedRewards && nestedRewards._noWinDetected) noWinDetected = true;
-      }
-    });
+        // Recursividad profunda en inline_traces
+        if (trace.inline_traces && Array.isArray(trace.inline_traces)) {
+          recursiveSearch(trace.inline_traces);
+        }
+      });
+    }
 
-    // Si no hay rewards pero sí hubo un no_win, devolver un marcador especial
+    recursiveSearch(traces);
+
     if (rewards.length === 0 && noWinDetected) {
-      // Devolver un objeto especial para mostrar la notificación de "no tuviste suerte"
       const result = [{ empty: true }];
       result._noWinDetected = true;
       return result;
     }
-    // Si no hay rewards ni no_win, devolver array vacío
     return rewards;
   }
 
@@ -302,33 +334,6 @@ export class User {
     }];
 
     return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
-  }
-
-  // Reclamar recompensa de una o varias misiones usando la acción 'claim'
-  async claimMission(asset_ids) {
-    if (!this.session || !this.authName) throw new Error("No sesión activa");
-    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay asset_ids para reclamar");
-
-    const actions = [{
-      account: "nightclubapp",
-      name: "claim",
-      authorization: [{ actor: this.authName, permission: "active" }],
-      data: {
-        user: this.authName,
-        asset_ids: asset_ids
-      }
-    }];
-
-    const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
-
-    // Procesar las recompensas ganadas
-    if (result.processed && result.processed.action_traces) {
-      const rewards = this.processRewardTraces(result.processed.action_traces);
-      // SIEMPRE emitir el evento, aunque rewards esté vacío
-      window.dispatchEvent(new CustomEvent('nftRewards', { detail: rewards.length > 0 ? rewards : [{ empty: true }] }));
-    }
-
-    return result;
   }
 
   // Obtener cooldowns de la tabla cooldowns
