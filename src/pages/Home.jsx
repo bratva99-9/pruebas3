@@ -153,19 +153,15 @@ const Home = () => {
             )}
           </div>
           <img src="/mapa1.png" alt="Map" className="home-image main-rounded" />
-          <img
-            src="/edificio1.svg"
-            alt="Edificio 1"
-            className="edificio1-map edificio-zindex"
+          <div
+            className="mission-button edificio1-map edificio-zindex"
             onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
-            style={{zIndex: 30}}
+            title="Edificio 1"
           />
-          <img
-            src="/edificio2.svg"
-            alt="Edificio 2"
-            className="edificio2-map edificio-zindex"
+          <div
+            className="mission-button edificio2-map edificio-zindex"
             onClick={() => setShowMission(true)}
-            style={{zIndex: 30}}
+            title="Edificio 2"
           />
         </div>
       </div>
@@ -364,16 +360,30 @@ const Home = () => {
           cursor: pointer;
         }
         .edificio1-map {
-          top: 40%;
-          left: 30%;
-          width: 100px;
-          height: auto;
+          background-image: url('/edificio1.svg');
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+          width: 110px;
+          height: 180px;
+          top: 110px;
+          left: 90px;
+          transition: filter 0.18s, box-shadow 0.18s;
         }
         .edificio2-map {
-          top: 45%;
-          left: 60%;
-          width: 100px;
-          height: auto;
+          background-image: url('/edificio2.svg');
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+          width: 90px;
+          height: 90px;
+          top: 220px;
+          left: 370px;
+          transition: filter 0.18s, box-shadow 0.18s;
+        }
+        .edificio1-map:hover, .edificio2-map:hover {
+          filter: brightness(1.25) drop-shadow(0 0 12px #ff36ba88);
+          box-shadow: 0 0 18px 4px #ff36ba55;
         }
         .main-rounded {
           border-radius: 28px;
