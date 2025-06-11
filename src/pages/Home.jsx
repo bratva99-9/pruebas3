@@ -110,28 +110,26 @@ const Home = () => {
 
   return (
     <div className="home-main-wrapper">
-      {/* Barra superior horizontal con 4 elementos */}
-      <div className="top-info-bar">
-        <div className="top-info-item user-name">{UserService.getName()}</div>
-        <div className="top-info-item wax-balance">{UserService.formatWAXOnly()} WAX</div>
-        <div className="top-info-item sexy-balance">{UserService.formatSEXYOnly()} SEXY</div>
-        <div className="top-info-item sexy-balance2">{UserService.formatSEXYOnly()} SEXY+</div>
-      </div>
       <div className="home-image-row">
-        {/* Floating Action Bar */}
-        <div className="fab-menu-vertical">
-          {menuOptions.map(opt => (
-            <button
-              key={opt.action}
-              className="fab-menu-btn"
-              onClick={() => handleMenuClick(opt.action)}
-              title={opt.label}
-            >
-              <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
-            </button>
-          ))}
-        </div>
         <div className="home-image-container fab-rounded">
+          <div className="top-info-bar inside-map">
+            <div className="top-info-item user-name">{UserService.getName()}</div>
+            <div className="top-info-item wax-balance">{UserService.formatWAXOnly()} WAX</div>
+            <div className="top-info-item sexy-balance">{UserService.formatSEXYOnly()} SEXY</div>
+            <div className="top-info-item sexy-balance2">{UserService.formatSEXYOnly()} SEXY+</div>
+          </div>
+          <div className="fab-menu-vertical inside-map">
+            {menuOptions.map(opt => (
+              <button
+                key={opt.action}
+                className="fab-menu-btn"
+                onClick={() => handleMenuClick(opt.action)}
+                title={opt.label}
+              >
+                <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
+              </button>
+            ))}
+          </div>
           <img src="/mapa1.png" alt="Mapa" className="home-image" />
           <div
             className="mission-button edificio1-map"
@@ -176,26 +174,6 @@ const Home = () => {
           position: relative;
           overflow: hidden;
         }
-        .top-info-bar {
-          width: 855px;
-          margin: 0 auto 18px auto;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-          background: rgba(24,24,40,0.82);
-          border-radius: 18px;
-          box-shadow: 0 2px 16px #ff36ba22;
-          padding: 12px 32px;
-          font-size: 1.08rem;
-          font-weight: 500;
-          color: #fff;
-          gap: 18px;
-        }
-        .top-info-item { flex: 1; text-align: center; }
-        .user-name { color: #ffb9fa; font-weight: 600; }
-        .wax-balance { color: #00ffff; font-weight: 600; }
-        .sexy-balance, .sexy-balance2 { color: #ff36ba; font-weight: 600; }
         .home-image-row {
           display: flex;
           flex-direction: row;
@@ -203,54 +181,6 @@ const Home = () => {
           justify-content: center;
           width: 100%;
           margin-bottom: 32px;
-        }
-        .fab-menu-vertical {
-          display: flex;
-          flex-direction: column;
-          gap: 18px;
-          align-items: center;
-          justify-content: flex-start;
-          margin-right: 24px;
-          margin-top: 30px;
-          background: rgba(24,24,40,0.55);
-          border-radius: 22px;
-          box-shadow: 0 2px 16px #ff36ba33;
-          padding: 18px 8px;
-          position: relative;
-          z-index: 20;
-          backdrop-filter: blur(6px);
-        }
-        .fab-menu-btn {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          background: rgba(255,255,255,0.09);
-          border: 2px solid #ff36ba55;
-          box-shadow: 0 2px 8px #ff36ba22;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0;
-          padding: 0;
-          cursor: pointer;
-          transition: background 0.18s, border 0.18s, transform 0.18s;
-          outline: none;
-          position: relative;
-        }
-        .fab-menu-btn:hover {
-          background: linear-gradient(135deg, #ff36ba33 0%, #7f36ff33 100%);
-          border: 2.5px solid #ff36ba;
-          transform: scale(1.13);
-        }
-        .fab-menu-icon {
-          width: 26px;
-          height: 26px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #ffb9fa;
-          opacity: 0.88;
-          font-size: 1.3em;
         }
         .home-image-container {
           position: relative;
@@ -317,6 +247,41 @@ const Home = () => {
         }
         .edificio2-map:hover {
           background-position: right center;
+        }
+        .top-info-bar.inside-map {
+          position: absolute;
+          top: 18px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 92%;
+          background: rgba(24,24,40,0.82);
+          border-radius: 18px;
+          box-shadow: 0 2px 16px #ff36ba22;
+          padding: 10px 24px;
+          font-size: 1.08rem;
+          font-weight: 500;
+          color: #fff;
+          gap: 18px;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          z-index: 30;
+        }
+        .fab-menu-vertical.inside-map {
+          position: absolute;
+          left: 18px;
+          top: 90px;
+          background: rgba(24,24,40,0.55);
+          border-radius: 22px;
+          box-shadow: 0 2px 16px #ff36ba33;
+          padding: 18px 8px;
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+          align-items: center;
+          z-index: 30;
+          backdrop-filter: blur(6px);
         }
       `}</style>
     </div>
