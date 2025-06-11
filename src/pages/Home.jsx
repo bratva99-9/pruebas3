@@ -112,46 +112,28 @@ const Home = () => {
 
   return (
     <div className="home-main-wrapper">
+      {/* Barra superior horizontal con 4 elementos */}
+      <div className="top-info-bar">
+        <div className="top-info-item user-name">{UserService.getName()}</div>
+        <div className="top-info-item wax-balance">{UserService.formatWAXOnly()} WAX</div>
+        <div className="top-info-item sexy-balance">{UserService.formatSEXYOnly()} SEXY</div>
+        <div className="top-info-item sexy-balance2">{UserService.formatSEXYOnly()} SEXY+</div>
+      </div>
       <div className="home-image-row">
-        <div className="home-image-container main-rounded">
-          <div className={`side-menu-overlay${sidebarOpen ? ' open' : ''}`} style={{ height: '100%', maxHeight: '100%', pointerEvents: 'none' }}>
-            <button className="side-menu-hamburger" onClick={() => setSidebarOpen(!sidebarOpen)}
-              aria-label={sidebarOpen ? 'Collapse menu' : 'Expand menu'} style={{ pointerEvents: 'auto' }}>
-              <span className="hamburger-bar"></span>
-              <span className="hamburger-bar"></span>
-              <span className="hamburger-bar"></span>
+        {/* Floating Action Bar */}
+        <div className="fab-menu-vertical">
+          {menuOptions.map(opt => (
+            <button
+              key={opt.action}
+              className="fab-menu-btn"
+              onClick={() => handleMenuClick(opt.action)}
+              title={opt.label}
+            >
+              <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
             </button>
-            <nav className="side-menu-nav-overlay" style={{display: sidebarOpen ? 'flex' : 'none', pointerEvents: 'auto'}}>
-              <div className="side-menu-scroll-overlay">
-                {menuOptions.map(opt => (
-                  <button
-                    key={opt.action}
-                    className="side-menu-btn-overlay"
-                    onClick={() => handleMenuClick(opt.action)}
-                    title={opt.label}
-                    style={{ pointerEvents: 'auto' }}
-                  >
-                    <span className="side-menu-icon-overlay" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
-                    {sidebarOpen && <span className="side-menu-label-overlay">{opt.label}</span>}
-                  </button>
-                ))}
-              </div>
-            </nav>
-            {!sidebarOpen && (
-              <div className="side-menu-icons-only" style={{ pointerEvents: 'auto' }}>
-                {menuOptions.map(opt => (
-                  <button
-                    key={opt.action}
-                    className="side-menu-btn-overlay"
-                    onClick={() => handleMenuClick(opt.action)}
-                    title={opt.label}
-                    style={{marginBottom: 2, pointerEvents: 'auto'}}>
-                    <span className="side-menu-icon-overlay" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          ))}
+        </div>
+        <div className="home-image-container fab-rounded">
           <img src="/mapa1.png" alt="Mapa" className="home-image" />
           <div
             className="mission-button edificio1-map"
@@ -196,6 +178,26 @@ const Home = () => {
           position: relative;
           overflow: hidden;
         }
+        .top-info-bar {
+          width: 855px;
+          margin: 0 auto 18px auto;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          background: rgba(24,24,40,0.82);
+          border-radius: 18px;
+          box-shadow: 0 2px 16px #ff36ba22;
+          padding: 12px 32px;
+          font-size: 1.08rem;
+          font-weight: 500;
+          color: #fff;
+          gap: 18px;
+        }
+        .top-info-item { flex: 1; text-align: center; }
+        .user-name { color: #ffb9fa; font-weight: 600; }
+        .wax-balance { color: #00ffff; font-weight: 600; }
+        .sexy-balance, .sexy-balance2 { color: #ff36ba; font-weight: 600; }
         .home-image-row {
           display: flex;
           flex-direction: row;
@@ -204,135 +206,68 @@ const Home = () => {
           width: 100%;
           margin-bottom: 32px;
         }
-        .home-image-container {
-          position: relative;
-          border-radius: 28px;
-          border: 2px solid #ff36ba;
-          box-shadow: 0 0 20px rgba(255, 54, 186, 0.5);
-          overflow: hidden;
-          background: #181828;
-          display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-          justify-content: flex-start;
-          width: 855px;
-          height: 570px;
-          z-index: 1;
-        }
-        .side-menu-overlay {
-          position: absolute;
-          left: 0;
-          top: 0;
-          height: 100%;
-          width: 44px;
-          z-index: 10;
+        .fab-menu-vertical {
           display: flex;
           flex-direction: column;
-          align-items: flex-start;
-          justify-content: flex-start;
-          background: rgba(24,24,40,0.72);
-          border-right: 2px solid #ff36ba;
-          border-radius: 0 16px 16px 0;
-          box-shadow: 0 0 16px 0 #ff36ba33;
-          transition: width 0.22s cubic-bezier(0.4,0,0.2,1);
-          overflow: visible;
-        }
-        .side-menu-overlay.open {
-          width: 160px;
-          background: rgba(24,24,40,0.92);
-        }
-        .side-menu-hamburger {
-          margin: 18px 0 12px 8px;
-          background: none;
-          border: none;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-          cursor: pointer;
-          z-index: 11;
-        }
-        .hamburger-bar {
-          width: 22px;
-          height: 3px;
-          background: #b0b3c6;
-          border-radius: 2px;
-          transition: background 0.2s;
-        }
-        .side-menu-hamburger:hover .hamburger-bar {
-          background: linear-gradient(90deg, #ff36ba 0%, #7f36ff 100%);
-        }
-        .side-menu-nav-overlay {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          align-items: stretch;
-          margin-top: 10px;
-          width: 100%;
-          height: calc(100% - 60px);
-          overflow: hidden;
-        }
-        .side-menu-scroll-overlay {
-          flex: 1;
-          overflow-y: auto;
-          scrollbar-width: thin;
-          scrollbar-color: #ff36ba #181828;
-          padding-right: 2px;
-        }
-        .side-menu-scroll-overlay::-webkit-scrollbar {
-          width: 6px;
-          background: #181828;
-          border-radius: 8px;
-        }
-        .side-menu-scroll-overlay::-webkit-scrollbar-thumb {
-          background: #ff36ba55;
-          border-radius: 8px;
-        }
-        .side-menu-btn-overlay {
-          display: flex;
+          gap: 18px;
           align-items: center;
-          gap: 10px;
-          background: none;
-          border: none;
-          color: #b0b3c6;
-          font-size: 0.98rem;
-          font-weight: 500;
-          padding: 7px 10px 7px 10px;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: background 0.18s, color 0.18s;
-          outline: none;
-          margin: 0 2px;
           justify-content: flex-start;
+          margin-right: 24px;
+          margin-top: 30px;
+          background: rgba(24,24,40,0.55);
+          border-radius: 22px;
+          box-shadow: 0 2px 16px #ff36ba33;
+          padding: 18px 8px;
           position: relative;
+          z-index: 20;
+          backdrop-filter: blur(6px);
         }
-        .side-menu-btn-overlay:hover {
-          background: linear-gradient(90deg, #ff36ba33 0%, #7f36ff33 100%);
-          color: #ff36ba;
-        }
-        .side-menu-icon-overlay {
+        .fab-menu-btn {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.09);
+          border: 2px solid #ff36ba55;
+          box-shadow: 0 2px 8px #ff36ba22;
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 22px;
-          height: 22px;
-          opacity: 0.7;
-          filter: grayscale(1);
-          transition: color 0.2s, opacity 0.2s, filter 0.2s;
+          margin: 0;
+          padding: 0;
+          cursor: pointer;
+          transition: background 0.18s, border 0.18s, transform 0.18s;
+          outline: none;
+          position: relative;
         }
-        .side-menu-btn-overlay:hover .side-menu-icon-overlay {
-          opacity: 1;
-          filter: grayscale(0.2);
+        .fab-menu-btn:hover {
+          background: linear-gradient(135deg, #ff36ba33 0%, #7f36ff33 100%);
+          border: 2.5px solid #ff36ba;
+          transform: scale(1.13);
         }
-        .side-menu-label-overlay {
-          color: #b0b3c6;
-          font-size: 0.98rem;
-          font-weight: 500;
-          opacity: 0.92;
-          letter-spacing: 0.3px;
-          transition: opacity 0.2s;
-          white-space: nowrap;
+        .fab-menu-icon {
+          width: 26px;
+          height: 26px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #ffb9fa;
+          opacity: 0.88;
+          font-size: 1.3em;
         }
+        .home-image-container {
+          position: relative;
+          border-radius: 32px;
+          border: 2.5px solid #ff36ba;
+          box-shadow: 0 0 28px rgba(255, 54, 186, 0.5);
+          overflow: hidden;
+          background: #181828;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          width: 855px;
+          height: 570px;
+        }
+        .fab-rounded { border-radius: 32px !important; }
         .home-image {
           width: 100%;
           height: 100%;
@@ -343,12 +278,6 @@ const Home = () => {
           .home-image-container {
             width: 98vw;
             max-width: 98vw;
-          }
-          .side-menu-overlay {
-            width: 32px;
-          }
-          .side-menu-overlay.open {
-            width: 100px;
           }
         }
         .edificio-zindex {
@@ -390,21 +319,6 @@ const Home = () => {
         }
         .edificio2-map:hover {
           background-position: right center;
-        }
-        .main-rounded {
-          border-radius: 28px;
-        }
-        .home-image-container {
-          position: relative;
-          overflow: visible;
-        }
-        .side-menu-icons-only {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          margin-top: 10px;
-          width: 100%;
-          z-index: 12;
         }
       `}</style>
     </div>
