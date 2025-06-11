@@ -47,9 +47,8 @@ const Home = () => {
         if (!currentUser) {
           return;
         }
-        const allMissions = await UserService.getUserMissions();
-        const userMissions = allMissions.filter(m => m.user === currentUser);
-        const now = Math.floor(Date.now() / 1000);
+        // const userMissions = allMissions.filter(m => m.user === currentUser);
+        // const now = Math.floor(Date.now() / 1000);
       } catch (err) {
       }
     };
