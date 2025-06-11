@@ -144,11 +144,11 @@ const Home = () => {
           <div className="logout-ear small-ear" style={{display: 'none'}}></div>
           <img src="/mapa1.png" alt="Map" className="home-image" />
           <div
-            className="mission-button edificio1-map"
+            className="mission-button edificio1-map edificio-zindex"
             onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
           />
           <div
-            className="mission-button edificio2-map"
+            className="mission-button edificio2-map edificio-zindex"
             onClick={() => setShowMission(true)}
           />
         </div>
@@ -339,6 +339,19 @@ const Home = () => {
           .side-menu-overlay.open {
             width: 100px;
           }
+        }
+        .edificio-zindex {
+          position: absolute;
+          z-index: 20;
+          pointer-events: auto;
+        }
+        .side-menu-overlay {
+          z-index: 10;
+          pointer-events: auto;
+        }
+        .home-image-container {
+          position: relative;
+          overflow: visible;
         }
       `}</style>
     </div>
