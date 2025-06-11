@@ -37,8 +37,6 @@ const Home = () => {
   const [showMissionStatus, setShowMissionStatus] = useState(false);
   const [showOnlyFaps, setShowOnlyFaps] = useState(false);
   const [onlyFapsGirl, setOnlyFapsGirl] = useState('Sandra');
-  const [pendingMissions, setPendingMissions] = useState(0);
-  const [completedMissions, setCompletedMissions] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useHistory();
 
@@ -47,8 +45,6 @@ const Home = () => {
       try {
         const currentUser = UserService.getName();
         if (!currentUser) {
-          setPendingMissions(0);
-          setCompletedMissions(0);
           return;
         }
         const allMissions = await UserService.getUserMissions();
@@ -56,11 +52,7 @@ const Home = () => {
         const now = Math.floor(Date.now() / 1000);
         const pending = userMissions.filter(m => Number(m.end_time) > now);
         const completed = userMissions.filter(m => Number(m.end_time) <= now && !m.claimed);
-        setPendingMissions(pending.length);
-        setCompletedMissions(completed.length);
       } catch (err) {
-        setPendingMissions(0);
-        setCompletedMissions(0);
       }
     };
     fetchMissions();
