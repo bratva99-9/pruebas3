@@ -19,6 +19,19 @@ const buildingSprites = [
   missionButton6, missionButton7, missionButton8, missionButton9
 ];
 
+const menuOptions = [
+  { icon: '🏠', label: 'Inicio', action: 'home' },
+  { icon: '🎯', label: 'Misiones activas', action: 'missions' },
+  { icon: '🎁', label: 'Reclamar recompensas', action: 'claim' },
+  { icon: '🖼️', label: 'Inventario de NFTs', action: 'inventory' },
+  { icon: '🛒', label: 'Comprar cartas', action: 'buy' },
+  { icon: '🔧', label: 'Upgrade / Blends', action: 'upgrade' },
+  { icon: '📜', label: 'Historial', action: 'history' },
+  { icon: '⚙️', label: 'Configuración', action: 'settings' },
+  { icon: '🚪', label: 'Cerrar sesión', action: 'logout' },
+  { icon: '❓', label: 'Ayuda', action: 'help' },
+];
+
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
   const [showMissionStatus, setShowMissionStatus] = useState(false);
@@ -26,6 +39,7 @@ const Home = () => {
   const [onlyFapsGirl, setOnlyFapsGirl] = useState('Sandra');
   const [pendingMissions, setPendingMissions] = useState(0);
   const [completedMissions, setCompletedMissions] = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useHistory();
 
   useEffect(() => {
@@ -40,9 +54,7 @@ const Home = () => {
         const allMissions = await UserService.getUserMissions();
         const userMissions = allMissions.filter(m => m.user === currentUser);
         const now = Math.floor(Date.now() / 1000);
-        // Pendientes: end_time > ahora
         const pending = userMissions.filter(m => Number(m.end_time) > now);
-        // Completadas: end_time <= ahora y !m.claimed
         const completed = userMissions.filter(m => Number(m.end_time) <= now && !m.claimed);
         setPendingMissions(pending.length);
         setCompletedMissions(completed.length);
@@ -56,353 +68,262 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleLogout = () => {
-    UserService.logout();
-    navigate.push('/');
+  const handleMenuClick = (action) => {
+    setSidebarOpen(false);
+    switch (action) {
+      case 'home':
+        navigate.push('/home');
+        break;
+      case 'missions':
+        setShowMissionStatus(true);
+        break;
+      case 'claim':
+        alert('¡Reclama tus recompensas desde Misiones activas!');
+        break;
+      case 'inventory':
+        alert('Inventario de NFTs próximamente.');
+        break;
+      case 'buy':
+        window.open('https://neftyblocks.com/collection/nightclubnft', '_blank');
+        break;
+      case 'upgrade':
+        window.open('https://neftyblocks.com/collection/nightclubnft/blends', '_blank');
+        break;
+      case 'history':
+        alert('Historial próximamente.');
+        break;
+      case 'settings':
+        alert('Configuración próximamente.');
+        break;
+      case 'logout':
+        UserService.logout();
+        navigate.push('/');
+        break;
+      case 'help':
+        alert('¿Necesitas ayuda? Contáctanos en Discord.');
+        break;
+      default:
+        break;
+    }
   };
 
   return (
-    <div className="home-container">
-      <div className="home-image-row">
-        <div className="user-taps-vertical small-ears">
-          <div className="user-tap user-tap-block small-ear">
-            <span className="user-tap-name">{UserService.getName()}</span>
-          </div>
-          <div className="user-tap user-tap-block small-ear">
-            <span className="user-tap-wax">{UserService.formatWAXOnly()} WAX</span>
-          </div>
-          <div className="user-tap user-tap-block small-ear">
-            <span className="user-tap-sexy">
-              {UserService.formatSEXYOnly()} SEXY
-              <a
-                href="https://swap.tacocrypto.io/swap?output=SEXY-nightclub.gm&input=WAX-eosio.token"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="plus-icon-link"
-                title="Comprar SEXY"
-              >
-                <span className="plus-icon">+</span>
-              </a>
-            </span>
-          </div>
-          <div className="side-bottom-ears-left">
-            <div
-              className="user-tap user-tap-block small-ear night-club-status-ear-fix"
-              style={{ cursor: 'pointer' }}
-              onClick={() => setShowMissionStatus(true)}
+    <div className="home-main-wrapper">
+      <aside className={`sidebar-menu${sidebarOpen ? ' open' : ''}`}>
+        <div className="sidebar-header">
+          <span className="sidebar-title">NightClub</span>
+          <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>&times;</button>
+        </div>
+        <nav className="sidebar-nav">
+          {menuOptions.map(opt => (
+            <button
+              key={opt.action}
+              className="sidebar-nav-btn"
+              onClick={() => handleMenuClick(opt.action)}
             >
-              <div className="ncs-title">Night Club Status</div>
-              <div className="ncs-line ncs-pending">Pending <span className="ncs-value">{pendingMissions}</span></div>
-              <div className="ncs-line ncs-completed">Completed <span className="ncs-value">{completedMissions}</span></div>
-            </div>
-            <div className="user-tap user-tap-block small-ear">
-              <span className="user-tap-name ear-link-btn-text ear-link-btn-buy" onClick={() => window.open('https://neftyblocks.com/collection/nightclubnft', '_blank')}>Buy Cards</span>
-            </div>
-            <div className="user-tap user-tap-block small-ear">
-              <span className="user-tap-name ear-link-btn-text ear-link-btn-upgrade" onClick={() => window.open('https://neftyblocks.com/collection/nightclubnft/blends', '_blank')}>Upgrade</span>
-            </div>
-          </div>
-        </div>
-        <div className="home-image-container">
-          <div className="logout-ear small-ear">
-            <button className="btn-logout" onClick={handleLogout}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff36ba" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              <span className="sidebar-icon">{opt.icon}</span>
+              <span className="sidebar-label">{opt.label}</span>
             </button>
+          ))}
+        </nav>
+      </aside>
+      <div className="sidebar-toggle-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+        <span className="sidebar-hamburger"></span>
+        <span className="sidebar-hamburger"></span>
+        <span className="sidebar-hamburger"></span>
+      </div>
+      <div className="home-container">
+        <div className="home-image-row">
+          <div className="user-taps-vertical small-ears" style={{display: 'none'}}></div>
+          <div className="home-image-container">
+            <div className="logout-ear small-ear" style={{display: 'none'}}></div>
+            <img src="/mapa1.png" alt="Mapa" className="home-image" />
+            <div
+              className="mission-button edificio1-map"
+              onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
+            />
+            <div
+              className="mission-button edificio2-map"
+              onClick={() => setShowMission(true)}
+            />
           </div>
-          <img src="/mapa1.png" alt="Mapa" className="home-image" />
-          <div
-            className="mission-button edificio1-map"
-            onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
-          />
-          <div
-            className="mission-button edificio2-map"
-            onClick={() => setShowMission(true)}
-          />
         </div>
-      </div>
-      <div className="buildings-row">
-        {buildingSprites.slice(1).map((sprite, idx) => (
-          <div
-            key={idx}
-            className="mission-button"
-            style={{ backgroundImage: `url(${sprite})` }}
-          onClick={() => setShowMission(true)}
+        <div className="buildings-row">
+          {buildingSprites.slice(1).map((sprite, idx) => (
+            <div
+              key={idx}
+              className="mission-button"
+              style={{ backgroundImage: `url(${sprite})` }}
+              onClick={() => setShowMission(true)}
+            />
+          ))}
+        </div>
+        {showMission && (
+          <MissionModal
+            onClose={() => setShowMission(false)}
+            onForceCloseAll={() => setShowMission(false)}
           />
-        ))}
+        )}
+        {showMissionStatus && (
+          <MissionStatus
+            onClose={() => setShowMissionStatus(false)}
+          />
+        )}
+        {showOnlyFaps && (
+          <OnlyFapsModal girlName={onlyFapsGirl} onClose={() => setShowOnlyFaps(false)} />
+        )}
+        <style jsx>{`
+          .home-main-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: row;
+            background: hsl(245, 86.70%, 2.90%);
+            position: relative;
+            overflow: hidden;
+          }
+          .sidebar-menu {
+            width: 260px;
+            background: #181828;
+            border-right: 2px solid #ff36ba;
+            box-shadow: 0 0 20px rgba(255, 54, 186, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            padding: 0 0 24px 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 10010;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+          }
+          .sidebar-menu.open {
+            transform: translateX(0);
+          }
+          .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 18px 12px 18px;
+            border-bottom: 1px solid #ff36ba33;
+          }
+          .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff36ba;
+            letter-spacing: 2px;
+          }
+          .sidebar-close {
+            background: none;
+            border: none;
+            color: #ff36ba;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+          }
+          .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 18px;
+            padding: 0 12px;
+          }
+          .sidebar-nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.08rem;
+            font-weight: 500;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s;
+            outline: none;
+          }
+          .sidebar-nav-btn:hover {
+            background: #ff36ba22;
+            color: #ff36ba;
+          }
+          .sidebar-icon {
+            font-size: 1.35em;
+            width: 28px;
+            text-align: center;
+          }
+          .sidebar-label {
+            flex: 1;
+            text-align: left;
+          }
+          .sidebar-toggle-btn {
+            position: fixed;
+            top: 28px;
+            left: 18px;
+            z-index: 10020;
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+          }
+          .sidebar-hamburger {
+            width: 32px;
+            height: 4px;
+            background: #ff36ba;
+            border-radius: 2px;
+            transition: all 0.2s;
+          }
+          @media (max-width: 900px) {
+            .sidebar-menu {
+              position: fixed;
+              left: 0;
+              top: 0;
+              bottom: 0;
+              z-index: 10010;
+              width: 220px;
+              transform: translateX(-100%);
+            }
+            .sidebar-menu.open {
+              transform: translateX(0);
+            }
+            .sidebar-toggle-btn {
+              display: flex;
+            }
+            .home-container {
+              margin-left: 0 !important;
+            }
+          }
+          @media (min-width: 901px) {
+            .sidebar-menu {
+              transform: translateX(0);
+              position: relative;
+              left: 0;
+              top: 0;
+              width: 260px;
+            }
+            .sidebar-toggle-btn {
+              display: none;
+            }
+            .home-container {
+              margin-left: 260px !important;
+            }
+          }
+          .home-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: hsl(245, 86.70%, 2.90%);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            transition: margin-left 0.3s cubic-bezier(0.4,0,0.2,1);
+          }
+        `}</style>
       </div>
-      {showMission && (
-        <MissionModal
-          onClose={() => setShowMission(false)}
-          onForceCloseAll={() => setShowMission(false)}
-        />
-      )}
-      {showMissionStatus && (
-        <MissionStatus
-          onClose={() => setShowMissionStatus(false)}
-        />
-      )}
-      {showOnlyFaps && (
-        <OnlyFapsModal girlName={onlyFapsGirl} onClose={() => setShowOnlyFaps(false)} />
-      )}
-      <style jsx>{`
-        .home-container {
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-          background: hsl(245, 86.70%, 2.90%);
-          position: relative;
-          overflow: hidden;
-        }
-        .home-image-row {
-          display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-          justify-content: center;
-          width: 100%;
-          margin-bottom: 32px;
-        }
-        .user-taps-vertical.small-ears {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 8px;
-          margin-top: 38px;
-          margin-right: 0;
-          z-index: 4;
-        }
-        .user-tap.user-tap-block.small-ear {
-          min-width: 140px;
-          height: 30px;
-          background: #181828;
-          border: 2px solid #ff36ba;
-          border-radius: 12px 0 0 12px;
-          border-right: 0;
-          box-shadow: 0 0 8px #ff36ba33;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          padding: 0 14px 0 10px;
-          font-size: 0.95rem;
-          font-weight: 500;
-          color: #fff;
-          letter-spacing: 0.2px;
-          text-align: center;
-        }
-        .user-tap-name {
-          color: #ffb9fa;
-          font-weight: 600;
-        }
-        .user-tap-wax {
-          color: #00ffff;
-          font-weight: 600;
-        }
-        .user-tap-sexy {
-          color: #ff36ba;
-          font-weight: 600;
-        }
-        .home-image-container {
-          position: relative;
-          border-radius: 28px;
-          border: 2px solid #ff36ba;
-          box-shadow: 0 0 20px rgba(255, 54, 186, 0.5);
-          overflow: hidden;
-          background: #181828;
-          display: flex;
-          align-items: flex-start;
-          justify-content: center;
-          width: 855px;
-          height: 570px;
-        }
-        .logout-ear.small-ear {
-          position: absolute;
-          top: 38px;
-          right: -142px;
-          min-width: 38px;
-          height: 30px;
-          background: #181828;
-          border: 2px solid #ff36ba;
-          border-radius: 0 12px 12px 0;
-          border-left: 0;
-          box-shadow: 0 0 8px #ff36ba33;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 5;
-        }
-        .btn-logout {
-          background: none;
-          border: none;
-          padding: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          outline: none;
-          box-shadow: none;
-          margin: 0;
-          cursor: pointer;
-        }
-        .home-image {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-          display: block;
-        }
-        .edificio1-map {
-          position: absolute;
-          left: 451.7px;
-          top: 270px;
-          width: 240.8px;
-          height: 321.1px;
-          background-image: url(/edificio1.svg);
-          background-size: 200% auto;
-          background-position: left center;
-          background-repeat: no-repeat;
-          z-index: 10;
-          cursor: pointer;
-          transition: none;
-        }
-        .edificio1-map:hover {
-          background-position: right center;
-        }
-        .edificio2-map {
-          position: absolute;
-          left: 617.3px;
-          top: 200.4px;
-          width: 219.2px;
-          height: 273px;
-          background-image: url(/edifico2.svg);
-          background-size: 200% auto;
-          background-position: left center;
-          background-repeat: no-repeat;
-          z-index: 10;
-          cursor: pointer;
-          transition: none;
-        }
-        .edificio2-map:hover {
-          background-position: right center;
-        }
-        .side-bottom-ears-left {
-          margin-top: 24px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-        .side-bottom-ears-left .user-tap-block {
-          border-radius: 12px 0 0 12px;
-          border: none;
-          min-width: 160px;
-          height: 28px;
-          background: transparent;
-          box-shadow: none;
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          font-size: 0.85rem;
-          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-          font-weight: 400;
-          color: #b0b3c6;
-          letter-spacing: 0.1px;
-          text-align: left;
-          margin: 0 0 0 4px;
-          padding-left: 8px;
-        }
-        .subdata-mission-status {
-          margin-top: 2px;
-          margin-left: 2px;
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
-        }
-        .subdata-row {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .subdata-label {
-          font-size: 0.78rem;
-          color: #b0b3c6;
-          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-          font-weight: 400;
-          opacity: 0.85;
-        }
-        .subdata-value {
-          font-size: 0.78rem;
-          color: #b0b3c6;
-          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-          font-weight: 600;
-          opacity: 0.95;
-          margin-left: 8px;
-        }
-        .night-club-status-ear-fix {
-          min-height: 78px;
-          height: auto;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 0px;
-          padding-top: 0px;
-          padding-bottom: 0px;
-        }
-        .night-club-status-ear-fix .ncs-title {
-          font-size: 0.97rem;
-          color: #ffb9fa;
-          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-          font-weight: 600;
-          margin-bottom: 0px;
-          width: 100%;
-          text-align: center;
-        }
-        .night-club-status-ear-fix .ncs-line {
-          font-size: 0.85rem;
-          color: #b0b3c6;
-          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-          font-weight: 400;
-          width: 100%;
-          text-align: center;
-          margin-bottom: 0px;
-          line-height: 1;
-        }
-        .night-club-status-ear-fix .ncs-value {
-          font-weight: 600;
-          margin-left: 4px;
-          color: #b0b3c6;
-        }
-        .plus-icon-link {
-          display: inline-flex;
-          align-items: center;
-          margin-left: 4px;
-          text-decoration: none;
-        }
-        .plus-icon {
-          font-size: 1.1em;
-          color: #888c99;
-          opacity: 0.7;
-          font-weight: 700;
-          cursor: pointer;
-          vertical-align: middle;
-          transition: color 0.2s, opacity 0.2s;
-          line-height: 1;
-          margin: 0;
-        }
-        .plus-icon-link:hover .plus-icon {
-          color: #ff36ba;
-          opacity: 1;
-        }
-        .ear-link-btn-text {
-          cursor: pointer;
-          transition: color 0.2s;
-        }
-        .ear-link-btn-buy:hover,
-        .ear-link-btn-upgrade:hover {
-          color: #ff36ba;
-        }
-      `}</style>
     </div>
   );
 };
