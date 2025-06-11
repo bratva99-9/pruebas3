@@ -113,16 +113,15 @@ const Home = () => {
   return (
     <div className="home-main-wrapper">
       <div className="home-image-row">
-        <div className="home-image-container main-rounded" style={{paddingLeft: sidebarOpen ? 160 : 44, transition: 'padding-left 0.22s cubic-bezier(0.4,0,0.2,1)'}}>
-          <div className={`side-menu-overlay${sidebarOpen ? ' open' : ''}`}
-            style={{ height: '100%', maxHeight: '100%' }}>
+        <div className="home-image-container main-rounded">
+          <div className={`side-menu-overlay${sidebarOpen ? ' open' : ''}`} style={{ height: '100%', maxHeight: '100%', pointerEvents: 'none' }}>
             <button className="side-menu-hamburger" onClick={() => setSidebarOpen(!sidebarOpen)}
-              aria-label={sidebarOpen ? 'Collapse menu' : 'Expand menu'}>
+              aria-label={sidebarOpen ? 'Collapse menu' : 'Expand menu'} style={{ pointerEvents: 'auto' }}>
               <span className="hamburger-bar"></span>
               <span className="hamburger-bar"></span>
               <span className="hamburger-bar"></span>
             </button>
-            <nav className="side-menu-nav-overlay" style={{display: sidebarOpen ? 'flex' : 'none'}}>
+            <nav className="side-menu-nav-overlay" style={{display: sidebarOpen ? 'flex' : 'none', pointerEvents: 'auto'}}>
               <div className="side-menu-scroll-overlay">
                 {menuOptions.map(opt => (
                   <button
@@ -130,6 +129,7 @@ const Home = () => {
                     className="side-menu-btn-overlay"
                     onClick={() => handleMenuClick(opt.action)}
                     title={opt.label}
+                    style={{ pointerEvents: 'auto' }}
                   >
                     <span className="side-menu-icon-overlay" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
                     {sidebarOpen && <span className="side-menu-label-overlay">{opt.label}</span>}
@@ -138,15 +138,14 @@ const Home = () => {
               </div>
             </nav>
             {!sidebarOpen && (
-              <div className="side-menu-icons-only">
+              <div className="side-menu-icons-only" style={{ pointerEvents: 'auto' }}>
                 {menuOptions.map(opt => (
                   <button
                     key={opt.action}
                     className="side-menu-btn-overlay"
                     onClick={() => handleMenuClick(opt.action)}
                     title={opt.label}
-                    style={{marginBottom: 2}}
-                  >
+                    style={{marginBottom: 2, pointerEvents: 'auto'}}>
                     <span className="side-menu-icon-overlay" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
                   </button>
                 ))}
@@ -361,7 +360,7 @@ const Home = () => {
         }
         .side-menu-overlay {
           z-index: 10;
-          pointer-events: auto;
+          pointer-events: none;
           position: absolute;
           left: 0;
           top: 0;
@@ -388,7 +387,6 @@ const Home = () => {
         .home-image-container {
           position: relative;
           overflow: visible;
-          transition: padding-left 0.22s cubic-bezier(0.4,0,0.2,1);
         }
         .side-menu-icons-only {
           display: flex;
