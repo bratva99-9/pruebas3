@@ -252,7 +252,7 @@ const Home = () => {
         }
         .top-info-bar.inside-map {
           position: absolute;
-          top: 18px;
+          top: 15px;
           left: 50%;
           transform: translateX(-50%);
           width: 92%;
@@ -260,10 +260,10 @@ const Home = () => {
           border-radius: 0;
           box-shadow: none;
           padding: 0;
-          font-size: 1.08rem;
+          font-size: 0.92rem;
           font-weight: 500;
           color: #fff;
-          gap: 18px;
+          gap: 12px;
           display: flex;
           flex-direction: row;
           justify-content: space-between;
@@ -273,91 +273,101 @@ const Home = () => {
         }
         .fab-menu-vertical.inside-map {
           position: absolute;
-          left: 18px;
-          top: 90px;
+          left: 14px;
+          top: 81px;
           display: flex;
           flex-direction: column;
-          gap: 17px;
+          gap: 16px;
           align-items: center;
           z-index: 30;
           background: none;
           box-shadow: none;
           border-radius: 0;
           padding: 0;
+          transform: scale(0.95);
         }
         .fab-menu-btn-extend {
-          width: 46px;
-          height: 46px;
+          width: 43.7px;
+          height: 43.7px;
           border-radius: 50px;
           background: rgba(255,255,255,0.09);
           border: 2px solid #ff36ba55;
           box-shadow: 0 2px 8px #ff36ba22;
           display: flex;
           align-items: center;
-          justify-content: flex-start;
+          justify-content: center;
           margin: 0;
-          padding: 0 12px 0 0;
+          padding: 0;
           cursor: pointer;
           transition: width 0.22s cubic-bezier(0.4,0,0.2,1), background 0.18s, border 0.18s, transform 0.18s;
           outline: none;
           position: relative;
-          overflow: hidden;
+          overflow: visible;
+        }
+        .fab-menu-btn-extend .fab-menu-icon {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 20px;
+          height: 20px;
+          color: #ffb9fa;
+          opacity: 0.88;
+          font-size: 1.05em;
+          pointer-events: none;
         }
         .fab-menu-btn-extend .fab-menu-label {
           opacity: 0;
           max-width: 0;
           margin-left: 0;
-          color: #ffb9fa;
-          font-size: 1.01em;
+          color: #b0b3c6;
+          font-size: 0.93em;
           font-weight: 500;
           white-space: nowrap;
-          transition: opacity 0.18s, max-width 0.22s, margin-left 0.18s;
+          transition: opacity 0.18s, max-width 0.22s, margin-left 0.18s, color 0.18s;
+          position: absolute;
+          left: 100%;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          padding-left: 12px;
+          pointer-events: none;
         }
         .fab-menu-btn-extend:hover,
         .fab-menu-btn-extend:focus {
-          width: 170px;
+          width: 150px;
           background: linear-gradient(135deg, #ff36ba33 0%, #7f36ff33 100%);
           border: 2.5px solid #ff36ba;
-          transform: scale(1.07);
+          transform: scale(1.03);
         }
         .fab-menu-btn-extend:hover .fab-menu-label,
         .fab-menu-btn-extend:focus .fab-menu-label {
           opacity: 1;
-          max-width: 120px;
-          margin-left: 14px;
-        }
-        .fab-menu-icon {
-          width: 24px;
-          height: 24px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #ffb9fa;
-          opacity: 0.88;
-          font-size: 1.15em;
-          flex-shrink: 0;
+          max-width: 90px;
+          margin-left: 0;
+          color: #b0b3c6;
         }
         .top-info-item {
           display: flex;
           align-items: center;
           justify-content: center;
-          min-width: 120px;
-          padding: 0 18px;
-          height: 44px;
+          min-width: 95px;
+          padding: 0 12px;
+          height: 37px;
           background: rgba(24,24,40,0.82);
-          border-radius: 22px;
+          border-radius: 18px;
           border: 2px solid #ff36ba55;
           box-shadow: 0 2px 8px #ff36ba33;
-          font-size: 1.01em;
+          font-size: 0.93em;
           font-weight: 600;
           color: #ffb9fa;
-          margin: 0 6px;
+          margin: 0 4px;
           transition: background 0.18s, border 0.18s, transform 0.18s;
         }
         .top-info-item:hover, .top-info-item:focus {
           background: linear-gradient(135deg, #ff36ba33 0%, #7f36ff33 100%);
           border: 2.5px solid #ff36ba;
-          transform: scale(1.07);
+          transform: scale(1.05);
         }
         .user-name { color: #ffb9fa; }
         .wax-balance { color: #00ffff; }
