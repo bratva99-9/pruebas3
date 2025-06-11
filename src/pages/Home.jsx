@@ -22,29 +22,26 @@ const buildingSprites = [
 const menuOptions = [
   { icon: 'home', label: 'Home', action: 'home' },
   { icon: 'target', label: 'Active Missions', action: 'missions' },
-  { icon: 'gift', label: 'Claim Rewards', action: 'claim' },
   { icon: 'image', label: 'NFT Inventory', action: 'inventory' },
   { icon: 'cart', label: 'Buy Cards', action: 'buy' },
-  { icon: 'wrench', label: 'Upgrade / Blends', action: 'upgrade' },
-  { icon: 'list', label: 'History', action: 'history' },
+  { icon: 'wrench', label: 'Upgrade', action: 'upgrade' },
+  { icon: 'gift', label: 'Gift History', action: 'history' },
   { icon: 'settings', label: 'Settings', action: 'settings' },
   { icon: 'logout', label: 'Logout', action: 'logout' },
   { icon: 'help', label: 'Help', action: 'help' },
 ];
 
 function getMenuIcon(name) {
-  // SVG minimalista gris
   switch (name) {
-    case 'home': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9.5L9 4l6 5.5V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"/><path d="M9 22V12h6v10"/></svg>);
-    case 'target': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="9" r="7"/><circle cx="9" cy="9" r="3"/></svg>);
-    case 'gift': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="14" height="8" rx="2"/><path d="M2 7h14"/><path d="M9 7v8"/><path d="M7 3a2 2 0 1 1 4 0c0 1-2 3-2 3s-2-2-2-3z"/></svg>);
-    case 'image': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="14" height="10" rx="2"/><circle cx="6" cy="8" r="1.5"/><path d="M2 14l4-4a2 2 0 0 1 3 0l5 5"/></svg>);
-    case 'cart': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="7" cy="15" r="1"/><circle cx="13" cy="15" r="1"/><path d="M2 2h2l2.6 9.59a1 1 0 0 0 1 .41h6.72a1 1 0 0 0 1-.76l1.38-5.52H5.21"/></svg>);
-    case 'wrench': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 13.3a4 4 0 0 1-5.6-5.6l-5.1-5.1a2 2 0 1 1 2.8-2.8l5.1 5.1a4 4 0 0 1 5.6 5.6z"/></svg>);
-    case 'list': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="6" x2="14" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>);
-    case 'settings': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="9" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>);
-    case 'logout': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>);
-    case 'help': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="9" r="8"/><path d="M9 13v-2a2 2 0 1 1 2-2"/><circle cx="9" cy="17" r="1"/></svg>);
+    case 'home': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10L10 4l7 6"/><path d="M5 10v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6"/></svg>);
+    case 'target': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="10" cy="10" r="8"/><circle cx="10" cy="10" r="3"/></svg>);
+    case 'gift': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="16" height="9" rx="2"/><path d="M2 7h16"/><path d="M10 7v9"/><path d="M7 3a2 2 0 1 1 4 0c0 1-2 3-2 3s-2-2-2-3z"/></svg>);
+    case 'image': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="16" height="10" rx="2"/><circle cx="7" cy="9" r="1.5"/><path d="M2 15l4-4a2 2 0 0 1 3 0l5 5"/></svg>);
+    case 'cart': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="7" cy="17" r="1"/><circle cx="15" cy="17" r="1"/><path d="M2 2h2l3.6 9.59a1 1 0 0 0 1 .41h7.72a1 1 0 0 0 1-.76l1.38-5.52H5.21"/></svg>);
+    case 'wrench': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 13.3a4 4 0 0 1-5.6-5.6l-5.1-5.1a2 2 0 1 1 2.8-2.8l5.1 5.1a4 4 0 0 1 5.6 5.6z"/></svg>);
+    case 'settings': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="10" cy="10" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>);
+    case 'logout': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>);
+    case 'help': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 14v-2a2 2 0 1 1 2-2"/><circle cx="10" cy="17" r="1"/></svg>);
     default: return null;
   }
 }
@@ -135,14 +132,28 @@ const Home = () => {
                     title={opt.label}
                   >
                     <span className="side-menu-icon-overlay" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
-                    <span className="side-menu-label-overlay">{opt.label}</span>
+                    {sidebarOpen && <span className="side-menu-label-overlay">{opt.label}</span>}
                   </button>
                 ))}
               </div>
             </nav>
+            {!sidebarOpen && (
+              <div className="side-menu-icons-only">
+                {menuOptions.map(opt => (
+                  <button
+                    key={opt.action}
+                    className="side-menu-btn-overlay"
+                    onClick={() => handleMenuClick(opt.action)}
+                    title={opt.label}
+                    style={{marginBottom: 2}}
+                  >
+                    <span className="side-menu-icon-overlay" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-          <div className="logout-ear small-ear" style={{display: 'none'}}></div>
-          <img src="/mapa1.png" alt="Map" className="home-image" />
+          <img src="/mapa1.png" alt="Map" className="home-image main-rounded" />
           <div
             className="mission-button edificio1-map edificio-zindex"
             onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
@@ -225,6 +236,7 @@ const Home = () => {
           border-radius: 0 16px 16px 0;
           box-shadow: 0 0 16px 0 #ff36ba33;
           transition: width 0.22s cubic-bezier(0.4,0,0.2,1);
+          overflow: visible;
         }
         .side-menu-overlay.open {
           width: 160px;
@@ -352,6 +364,17 @@ const Home = () => {
         .home-image-container {
           position: relative;
           overflow: visible;
+        }
+        .main-rounded {
+          border-radius: 28px;
+        }
+        .side-menu-icons-only {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          margin-top: 10px;
+          width: 100%;
+          z-index: 12;
         }
       `}</style>
     </div>
