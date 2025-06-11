@@ -120,17 +120,16 @@ const Home = () => {
           </div>
           <div className="fab-menu-vertical inside-map">
             {menuOptions.map(opt => (
-              <div className="fab-menu-btn-wrapper" key={opt.action}>
-                <button
-                  className="fab-menu-btn"
-                  onClick={() => handleMenuClick(opt.action)}
-                  title={opt.label}
-                  tabIndex={0}
-                >
-                  <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
-                </button>
-                <span className="fab-menu-tooltip">{opt.label}</span>
-              </div>
+              <button
+                key={opt.action}
+                className="fab-menu-btn fab-menu-btn-extend"
+                onClick={() => handleMenuClick(opt.action)}
+                title={opt.label}
+                tabIndex={0}
+              >
+                <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
+                <span className="fab-menu-label">{opt.label}</span>
+              </button>
             ))}
           </div>
           <img src="/mapa1.png" alt="Mapa" className="home-image" />
@@ -257,10 +256,10 @@ const Home = () => {
           left: 50%;
           transform: translateX(-50%);
           width: 92%;
-          background: rgba(24,24,40,0.82);
-          border-radius: 22px;
-          box-shadow: 0 2px 16px #ff36ba33;
-          padding: 10px 24px;
+          background: none;
+          border-radius: 0;
+          box-shadow: none;
+          padding: 0;
           font-size: 1.08rem;
           font-weight: 500;
           color: #fff;
@@ -270,7 +269,7 @@ const Home = () => {
           justify-content: space-between;
           align-items: center;
           z-index: 30;
-          border: 2px solid #ff36ba55;
+          border: none;
         }
         .fab-menu-vertical.inside-map {
           position: absolute;
@@ -286,33 +285,46 @@ const Home = () => {
           border-radius: 0;
           padding: 0;
         }
-        .fab-menu-btn-wrapper {
-          position: relative;
-          display: flex;
-          align-items: center;
-        }
-        .fab-menu-btn {
+        .fab-menu-btn-extend {
           width: 46px;
           height: 46px;
-          border-radius: 50%;
+          border-radius: 50px;
           background: rgba(255,255,255,0.09);
           border: 2px solid #ff36ba55;
           box-shadow: 0 2px 8px #ff36ba22;
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-start;
           margin: 0;
-          padding: 0;
+          padding: 0 12px 0 0;
           cursor: pointer;
-          transition: background 0.18s, border 0.18s, transform 0.18s;
+          transition: width 0.22s cubic-bezier(0.4,0,0.2,1), background 0.18s, border 0.18s, transform 0.18s;
           outline: none;
           position: relative;
+          overflow: hidden;
         }
-        .fab-menu-btn:hover,
-        .fab-menu-btn:focus {
+        .fab-menu-btn-extend .fab-menu-label {
+          opacity: 0;
+          max-width: 0;
+          margin-left: 0;
+          color: #ffb9fa;
+          font-size: 1.01em;
+          font-weight: 500;
+          white-space: nowrap;
+          transition: opacity 0.18s, max-width 0.22s, margin-left 0.18s;
+        }
+        .fab-menu-btn-extend:hover,
+        .fab-menu-btn-extend:focus {
+          width: 170px;
           background: linear-gradient(135deg, #ff36ba33 0%, #7f36ff33 100%);
           border: 2.5px solid #ff36ba;
-          transform: scale(1.13);
+          transform: scale(1.07);
+        }
+        .fab-menu-btn-extend:hover .fab-menu-label,
+        .fab-menu-btn-extend:focus .fab-menu-label {
+          opacity: 1;
+          max-width: 120px;
+          margin-left: 14px;
         }
         .fab-menu-icon {
           width: 24px;
@@ -323,31 +335,33 @@ const Home = () => {
           color: #ffb9fa;
           opacity: 0.88;
           font-size: 1.15em;
+          flex-shrink: 0;
         }
-        .fab-menu-tooltip {
-          position: absolute;
-          left: 54px;
-          top: 50%;
-          transform: translateY(-50%) scale(0.95);
-          background: rgba(24,24,40,0.92);
-          color: #ffb9fa;
-          padding: 6px 16px;
-          border-radius: 8px;
-          font-size: 0.98rem;
-          font-weight: 500;
-          white-space: nowrap;
-          opacity: 0;
-          pointer-events: none;
-          border: 1.5px solid #ff36ba55;
+        .top-info-item {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 120px;
+          padding: 0 18px;
+          height: 44px;
+          background: rgba(24,24,40,0.82);
+          border-radius: 22px;
+          border: 2px solid #ff36ba55;
           box-shadow: 0 2px 8px #ff36ba33;
-          transition: opacity 0.18s, transform 0.18s;
-          z-index: 100;
+          font-size: 1.01em;
+          font-weight: 600;
+          color: #ffb9fa;
+          margin: 0 6px;
+          transition: background 0.18s, border 0.18s, transform 0.18s;
         }
-        .fab-menu-btn-wrapper:hover .fab-menu-tooltip,
-        .fab-menu-btn-wrapper:focus-within .fab-menu-tooltip {
-          opacity: 1;
-          transform: translateY(-50%) scale(1);
+        .top-info-item:hover, .top-info-item:focus {
+          background: linear-gradient(135deg, #ff36ba33 0%, #7f36ff33 100%);
+          border: 2.5px solid #ff36ba;
+          transform: scale(1.07);
         }
+        .user-name { color: #ffb9fa; }
+        .wax-balance { color: #00ffff; }
+        .sexy-balance, .sexy-balance2 { color: #ff36ba; }
       `}</style>
     </div>
   );
