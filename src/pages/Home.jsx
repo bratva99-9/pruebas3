@@ -113,7 +113,7 @@ const Home = () => {
   return (
     <div className="home-main-wrapper">
       <div className="home-image-row">
-        <div className="home-image-container">
+        <div className="home-image-container main-rounded" style={{paddingLeft: sidebarOpen ? 160 : 44, transition: 'padding-left 0.22s cubic-bezier(0.4,0,0.2,1)'}}>
           <div className={`side-menu-overlay${sidebarOpen ? ' open' : ''}`}
             style={{ height: '100%', maxHeight: '100%' }}>
             <button className="side-menu-hamburger" onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -157,10 +157,12 @@ const Home = () => {
           <div
             className="mission-button edificio1-map edificio-zindex"
             onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
+            style={{zIndex: 30}}
           />
           <div
             className="mission-button edificio2-map edificio-zindex"
             onClick={() => setShowMission(true)}
+            style={{zIndex: 30}}
           />
         </div>
       </div>
@@ -354,19 +356,39 @@ const Home = () => {
         }
         .edificio-zindex {
           position: absolute;
-          z-index: 20;
+          z-index: 30;
           pointer-events: auto;
         }
         .side-menu-overlay {
           z-index: 10;
           pointer-events: auto;
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 44px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          background: rgba(24,24,40,0.72);
+          border-right: 2px solid #ff36ba;
+          border-radius: 0 16px 16px 0;
+          box-shadow: 0 0 16px 0 #ff36ba33;
+          transition: width 0.22s cubic-bezier(0.4,0,0.2,1);
+          overflow: visible;
+        }
+        .side-menu-overlay.open {
+          width: 160px;
+          background: rgba(24,24,40,0.92);
+        }
+        .main-rounded {
+          border-radius: 28px;
         }
         .home-image-container {
           position: relative;
           overflow: visible;
-        }
-        .main-rounded {
-          border-radius: 28px;
+          transition: padding-left 0.22s cubic-bezier(0.4,0,0.2,1);
         }
         .side-menu-icons-only {
           display: flex;
