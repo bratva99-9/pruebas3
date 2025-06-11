@@ -50,8 +50,6 @@ const Home = () => {
         const allMissions = await UserService.getUserMissions();
         const userMissions = allMissions.filter(m => m.user === currentUser);
         const now = Math.floor(Date.now() / 1000);
-        const pending = userMissions.filter(m => Number(m.end_time) > now);
-        const completed = userMissions.filter(m => Number(m.end_time) <= now && !m.claimed);
       } catch (err) {
       }
     };
