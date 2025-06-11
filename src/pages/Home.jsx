@@ -137,7 +137,7 @@ const Home = () => {
   };
 
   return (
-    <div className="home-main-wrapper" style={{overflow: 'hidden', minHeight: '100vh', background: 'hsl(245, 86.70%, 2.90%)'}}>
+    <div className="home-main-wrapper" style={{overflow: 'hidden', minHeight: '100vh', background: 'hsl(245, 86.70%, 2.90%)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
       {showRotate && (
         <div className="rotate-warning">
           <span>Gira tu dispositivo para jugar en modo horizontal</span>
@@ -149,12 +149,10 @@ const Home = () => {
           width: BASE_WIDTH,
           height: BASE_HEIGHT,
           position: 'relative',
-          margin: '0 auto',
-          top: '50%',
-          left: '50%',
-          transform: `translate(-50%, -50%) scale(${scale})`,
-          transformOrigin: 'top left',
           background: 'none',
+          transform: `scale(${scale})`,
+          transformOrigin: 'center center',
+          willChange: 'transform',
         }}
       >
         <div className="home-image-row">
