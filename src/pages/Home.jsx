@@ -120,14 +120,17 @@ const Home = () => {
           </div>
           <div className="fab-menu-vertical inside-map">
             {menuOptions.map(opt => (
-              <button
-                key={opt.action}
-                className="fab-menu-btn"
-                onClick={() => handleMenuClick(opt.action)}
-                title={opt.label}
-              >
-                <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
-              </button>
+              <div className="fab-menu-btn-wrapper" key={opt.action}>
+                <button
+                  className="fab-menu-btn"
+                  onClick={() => handleMenuClick(opt.action)}
+                  title={opt.label}
+                  tabIndex={0}
+                >
+                  <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
+                </button>
+                <span className="fab-menu-tooltip">{opt.label}</span>
+              </div>
             ))}
           </div>
           <img src="/mapa1.png" alt="Mapa" className="home-image" />
@@ -255,8 +258,8 @@ const Home = () => {
           transform: translateX(-50%);
           width: 92%;
           background: rgba(24,24,40,0.82);
-          border-radius: 18px;
-          box-shadow: 0 2px 16px #ff36ba22;
+          border-radius: 22px;
+          box-shadow: 0 2px 16px #ff36ba33;
           padding: 10px 24px;
           font-size: 1.08rem;
           font-weight: 500;
@@ -267,6 +270,7 @@ const Home = () => {
           justify-content: space-between;
           align-items: center;
           z-index: 30;
+          border: 2px solid #ff36ba55;
         }
         .fab-menu-vertical.inside-map {
           position: absolute;
@@ -274,7 +278,7 @@ const Home = () => {
           top: 90px;
           display: flex;
           flex-direction: column;
-          gap: 18px;
+          gap: 17px;
           align-items: center;
           z-index: 30;
           background: none;
@@ -282,9 +286,14 @@ const Home = () => {
           border-radius: 0;
           padding: 0;
         }
+        .fab-menu-btn-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
         .fab-menu-btn {
-          width: 48px;
-          height: 48px;
+          width: 46px;
+          height: 46px;
           border-radius: 50%;
           background: rgba(255,255,255,0.09);
           border: 2px solid #ff36ba55;
@@ -299,20 +308,45 @@ const Home = () => {
           outline: none;
           position: relative;
         }
-        .fab-menu-btn:hover {
+        .fab-menu-btn:hover,
+        .fab-menu-btn:focus {
           background: linear-gradient(135deg, #ff36ba33 0%, #7f36ff33 100%);
           border: 2.5px solid #ff36ba;
           transform: scale(1.13);
         }
         .fab-menu-icon {
-          width: 26px;
-          height: 26px;
+          width: 24px;
+          height: 24px;
           display: flex;
           align-items: center;
           justify-content: center;
           color: #ffb9fa;
           opacity: 0.88;
-          font-size: 1.3em;
+          font-size: 1.15em;
+        }
+        .fab-menu-tooltip {
+          position: absolute;
+          left: 54px;
+          top: 50%;
+          transform: translateY(-50%) scale(0.95);
+          background: rgba(24,24,40,0.92);
+          color: #ffb9fa;
+          padding: 6px 16px;
+          border-radius: 8px;
+          font-size: 0.98rem;
+          font-weight: 500;
+          white-space: nowrap;
+          opacity: 0;
+          pointer-events: none;
+          border: 1.5px solid #ff36ba55;
+          box-shadow: 0 2px 8px #ff36ba33;
+          transition: opacity 0.18s, transform 0.18s;
+          z-index: 100;
+        }
+        .fab-menu-btn-wrapper:hover .fab-menu-tooltip,
+        .fab-menu-btn-wrapper:focus-within .fab-menu-tooltip {
+          opacity: 1;
+          transform: translateY(-50%) scale(1);
         }
       `}</style>
     </div>
