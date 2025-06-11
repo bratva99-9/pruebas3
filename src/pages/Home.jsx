@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import MissionModal from '../components/MissionModal';
 import MissionStatus from '../components/missionstatus';
-import NFTRewardNotification from '../components/NFTRewardNotification';
 import { UserService } from '../UserService';
 import missionButton from '../images/missionboton.webp';
 import missionButton2 from '../images/missionboton2.webp';
@@ -27,7 +26,6 @@ const Home = () => {
   const [onlyFapsGirl, setOnlyFapsGirl] = useState('Sandra');
   const [pendingMissions, setPendingMissions] = useState(0);
   const [completedMissions, setCompletedMissions] = useState(0);
-  const [nftReward, setNftReward] = useState(null);
   const navigate = useHistory();
 
   useEffect(() => {
@@ -56,18 +54,6 @@ const Home = () => {
     fetchMissions();
     const interval = setInterval(fetchMissions, 10000);
     return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const handleNFTReward = (event) => {
-      const rewards = event.detail;
-      if (rewards && rewards.length > 0) {
-        setNftReward(rewards[0]);
-      }
-    };
-
-    window.addEventListener('nftRewards', handleNFTReward);
-    return () => window.removeEventListener('nftRewards', handleNFTReward);
   }, []);
 
   const handleLogout = () => {
@@ -157,12 +143,6 @@ const Home = () => {
       )}
       {showOnlyFaps && (
         <OnlyFapsModal girlName={onlyFapsGirl} onClose={() => setShowOnlyFaps(false)} />
-      )}
-      {nftReward && (
-        <NFTRewardNotification
-          reward={nftReward}
-          onClose={() => setNftReward(null)}
-        />
       )}
       <style jsx>{`
         .home-container {
