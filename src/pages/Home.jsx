@@ -184,7 +184,7 @@ const Home = () => {
           justify-content: center;
           width: 100%;
           margin-bottom: 32px;
-          margin-top: 32px;
+          margin-top: 22px;
         }
         .home-image-container {
           position: relative;
