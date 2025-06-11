@@ -51,7 +51,6 @@ const Home = () => {
   const [showMissionStatus, setShowMissionStatus] = useState(false);
   const [showOnlyFaps, setShowOnlyFaps] = useState(false);
   const [onlyFapsGirl, setOnlyFapsGirl] = useState('Sandra');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useHistory();
 
   useEffect(() => {
@@ -72,7 +71,6 @@ const Home = () => {
   }, []);
 
   const handleMenuClick = (action) => {
-    setSidebarOpen(false);
     switch (action) {
       case 'home':
         navigate.push('/home');
