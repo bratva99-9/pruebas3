@@ -120,16 +120,17 @@ const Home = () => {
           </div>
           <div className="fab-menu-vertical inside-map">
             {menuOptions.map(opt => (
-              <button
-                key={opt.action}
-                className="fab-menu-btn fab-menu-btn-extend"
-                onClick={() => handleMenuClick(opt.action)}
-                title={opt.label}
-                tabIndex={0}
-              >
-                <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
-                <span className="fab-menu-label">{opt.label}</span>
-              </button>
+              <div className="fab-menu-btn-pill-wrapper" key={opt.action}>
+                <button
+                  className="fab-menu-btn"
+                  onClick={() => handleMenuClick(opt.action)}
+                  title={opt.label}
+                  tabIndex={0}
+                >
+                  <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
+                </button>
+                <span className="fab-menu-pill">{opt.label}</span>
+              </div>
             ))}
           </div>
           <img src="/mapa1.png" alt="Mapa" className="home-image" />
@@ -286,10 +287,15 @@ const Home = () => {
           padding: 0;
           transform: scale(0.95);
         }
-        .fab-menu-btn-extend {
+        .fab-menu-btn-pill-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+        .fab-menu-btn {
           width: 43.7px;
           height: 43.7px;
-          border-radius: 50px;
+          border-radius: 50%;
           background: rgba(255,255,255,0.09);
           border: 2px solid #ff36ba55;
           box-shadow: 0 2px 8px #ff36ba22;
@@ -299,16 +305,18 @@ const Home = () => {
           margin: 0;
           padding: 0;
           cursor: pointer;
-          transition: width 0.22s cubic-bezier(0.4,0,0.2,1), background 0.18s, border 0.18s, transform 0.18s;
+          transition: background 0.18s, border 0.18s, transform 0.18s;
           outline: none;
           position: relative;
-          overflow: visible;
+          z-index: 2;
         }
-        .fab-menu-btn-extend .fab-menu-icon {
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
+        .fab-menu-btn:hover,
+        .fab-menu-btn:focus {
+          background: linear-gradient(135deg, #ff36ba33 0%, #7f36ff33 100%);
+          border: 2.5px solid #ff36ba;
+          transform: scale(1.03);
+        }
+        .fab-menu-icon {
           width: 20px;
           height: 20px;
           color: #ffb9fa;
@@ -316,36 +324,29 @@ const Home = () => {
           font-size: 1.05em;
           pointer-events: none;
         }
-        .fab-menu-btn-extend .fab-menu-label {
-          opacity: 0;
-          max-width: 0;
-          margin-left: 0;
+        .fab-menu-pill {
+          position: absolute;
+          left: 52px;
+          top: 50%;
+          transform: translateY(-50%) scaleX(0.92);
+          background: rgba(24,24,40,0.92);
           color: #b0b3c6;
+          padding: 6px 18px 6px 16px;
+          border-radius: 22px;
           font-size: 0.93em;
           font-weight: 500;
           white-space: nowrap;
-          transition: opacity 0.18s, max-width 0.22s, margin-left 0.18s, color 0.18s;
-          position: absolute;
-          left: 100%;
-          top: 50%;
-          transform: translateY(-50%);
-          background: none;
-          padding-left: 12px;
+          opacity: 0;
           pointer-events: none;
+          border: 1.5px solid #ff36ba55;
+          box-shadow: 0 2px 8px #ff36ba33;
+          transition: opacity 0.18s, transform 0.22s cubic-bezier(0.4,0,0.2,1);
+          z-index: 1;
         }
-        .fab-menu-btn-extend:hover,
-        .fab-menu-btn-extend:focus {
-          width: 150px;
-          background: linear-gradient(135deg, #ff36ba33 0%, #7f36ff33 100%);
-          border: 2.5px solid #ff36ba;
-          transform: scale(1.03);
-        }
-        .fab-menu-btn-extend:hover .fab-menu-label,
-        .fab-menu-btn-extend:focus .fab-menu-label {
+        .fab-menu-btn-pill-wrapper:hover .fab-menu-pill,
+        .fab-menu-btn-pill-wrapper:focus-within .fab-menu-pill {
           opacity: 1;
-          max-width: 90px;
-          margin-left: 0;
-          color: #b0b3c6;
+          transform: translateY(-50%) scaleX(1);
         }
         .top-info-item {
           display: flex;
