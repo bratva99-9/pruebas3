@@ -264,10 +264,10 @@ const Home = () => {
           font-size: 0.92rem;
           font-weight: 500;
           color: #fff;
-          gap: 12px;
+          gap: 4px;
           display: flex;
           flex-direction: row;
-          justify-content: space-between;
+          justify-content: center;
           align-items: center;
           z-index: 30;
           border: none;
@@ -275,10 +275,10 @@ const Home = () => {
         .fab-menu-vertical.inside-map {
           position: absolute;
           left: 14px;
-          top: 81px;
+          top: 65px;
           display: flex;
           flex-direction: column;
-          gap: 16px;
+          gap: 12px;
           align-items: center;
           z-index: 30;
           background: none;
@@ -302,12 +302,12 @@ const Home = () => {
           display: flex;
           align-items: center;
           justify-content: center;
+          position: relative;
           margin: 0;
           padding: 0;
           cursor: pointer;
           transition: background 0.18s, border 0.18s, transform 0.18s;
           outline: none;
-          position: relative;
           z-index: 2;
         }
         .fab-menu-btn:hover,
@@ -323,6 +323,13 @@ const Home = () => {
           opacity: 0.88;
           font-size: 1.05em;
           pointer-events: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
         }
         .fab-menu-pill {
           position: absolute;
@@ -362,7 +369,7 @@ const Home = () => {
           font-size: 0.93em;
           font-weight: 600;
           color: #ffb9fa;
-          margin: 0 4px;
+          margin: 0 2px;
           transition: background 0.18s, border 0.18s, transform 0.18s;
         }
         .top-info-item:hover, .top-info-item:focus {
