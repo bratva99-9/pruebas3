@@ -153,13 +153,17 @@ const Home = () => {
             )}
           </div>
           <img src="/mapa1.png" alt="Map" className="home-image main-rounded" />
-          <div
-            className="mission-button edificio1-map edificio-zindex"
+          <img
+            src="/edificio1.svg"
+            alt="Edificio 1"
+            className="edificio1-map edificio-zindex"
             onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
             style={{zIndex: 30}}
           />
-          <div
-            className="mission-button edificio2-map edificio-zindex"
+          <img
+            src="/edificio2.svg"
+            alt="Edificio 2"
+            className="edificio2-map edificio-zindex"
             onClick={() => setShowMission(true)}
             style={{zIndex: 30}}
           />
@@ -189,16 +193,6 @@ const Home = () => {
       {showOnlyFaps && (
         <OnlyFapsModal girlName={onlyFapsGirl} onClose={() => setShowOnlyFaps(false)} />
       )}
-      <div style={{position: 'relative', width: 855, height: 570, margin: '32px auto', border: '2px dashed #ff36ba', background: '#222', zIndex: 100}}>
-        <div
-          className="mission-button edificio1-map edificio-zindex edificio-debug"
-          onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
-        />
-        <div
-          className="mission-button edificio2-map edificio-zindex edificio-debug"
-          onClick={() => setShowMission(true)}
-        />
-      </div>
       <style jsx>{`
         .home-main-wrapper {
           min-height: 100vh;
@@ -367,29 +361,19 @@ const Home = () => {
           position: absolute;
           z-index: 30;
           pointer-events: auto;
+          cursor: pointer;
         }
-        .side-menu-overlay {
-          z-index: 10;
-          pointer-events: none;
-          position: absolute;
-          left: 0;
-          top: 0;
-          height: 100%;
-          width: 44px;
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          justify-content: flex-start;
-          background: rgba(24,24,40,0.72);
-          border-right: 2px solid #ff36ba;
-          border-radius: 0 16px 16px 0;
-          box-shadow: 0 0 16px 0 #ff36ba33;
-          transition: width 0.22s cubic-bezier(0.4,0,0.2,1);
-          overflow: visible;
+        .edificio1-map {
+          top: 40%;
+          left: 30%;
+          width: 100px;
+          height: auto;
         }
-        .side-menu-overlay.open {
-          width: 160px;
-          background: rgba(24,24,40,0.92);
+        .edificio2-map {
+          top: 45%;
+          left: 60%;
+          width: 100px;
+          height: auto;
         }
         .main-rounded {
           border-radius: 28px;
@@ -405,10 +389,6 @@ const Home = () => {
           margin-top: 10px;
           width: 100%;
           z-index: 12;
-        }
-        .edificio-debug {
-          outline: 2px solid #00ffff;
-          background: rgba(0,255,255,0.08) !important;
         }
       `}</style>
     </div>
