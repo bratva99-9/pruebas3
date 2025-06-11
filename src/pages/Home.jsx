@@ -20,17 +20,34 @@ const buildingSprites = [
 ];
 
 const menuOptions = [
-  { icon: '🏠', label: 'Home', action: 'home' },
-  { icon: '🎯', label: 'Active Missions', action: 'missions' },
-  { icon: '🎁', label: 'Claim Rewards', action: 'claim' },
-  { icon: '🖼️', label: 'NFT Inventory', action: 'inventory' },
-  { icon: '🛒', label: 'Buy Cards', action: 'buy' },
-  { icon: '🔧', label: 'Upgrade / Blends', action: 'upgrade' },
-  { icon: '📜', label: 'History', action: 'history' },
-  { icon: '⚙️', label: 'Settings', action: 'settings' },
-  { icon: '🚪', label: 'Logout', action: 'logout' },
-  { icon: '❓', label: 'Help', action: 'help' },
+  { icon: 'home', label: 'Home', action: 'home' },
+  { icon: 'target', label: 'Active Missions', action: 'missions' },
+  { icon: 'gift', label: 'Claim Rewards', action: 'claim' },
+  { icon: 'image', label: 'NFT Inventory', action: 'inventory' },
+  { icon: 'cart', label: 'Buy Cards', action: 'buy' },
+  { icon: 'wrench', label: 'Upgrade / Blends', action: 'upgrade' },
+  { icon: 'list', label: 'History', action: 'history' },
+  { icon: 'settings', label: 'Settings', action: 'settings' },
+  { icon: 'logout', label: 'Logout', action: 'logout' },
+  { icon: 'help', label: 'Help', action: 'help' },
 ];
+
+function getMenuIcon(name) {
+  // SVG minimalista gris
+  switch (name) {
+    case 'home': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9.5L9 4l6 5.5V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"/><path d="M9 22V12h6v10"/></svg>);
+    case 'target': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="9" r="7"/><circle cx="9" cy="9" r="3"/></svg>);
+    case 'gift': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="14" height="8" rx="2"/><path d="M2 7h14"/><path d="M9 7v8"/><path d="M7 3a2 2 0 1 1 4 0c0 1-2 3-2 3s-2-2-2-3z"/></svg>);
+    case 'image': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="14" height="10" rx="2"/><circle cx="6" cy="8" r="1.5"/><path d="M2 14l4-4a2 2 0 0 1 3 0l5 5"/></svg>);
+    case 'cart': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="7" cy="15" r="1"/><circle cx="13" cy="15" r="1"/><path d="M2 2h2l2.6 9.59a1 1 0 0 0 1 .41h6.72a1 1 0 0 0 1-.76l1.38-5.52H5.21"/></svg>);
+    case 'wrench': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 13.3a4 4 0 0 1-5.6-5.6l-5.1-5.1a2 2 0 1 1 2.8-2.8l5.1 5.1a4 4 0 0 1 5.6 5.6z"/></svg>);
+    case 'list': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="6" x2="14" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>);
+    case 'settings': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="9" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>);
+    case 'logout': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>);
+    case 'help': return (<svg width="18" height="18" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="9" r="8"/><path d="M9 13v-2a2 2 0 1 1 2-2"/><circle cx="9" cy="17" r="1"/></svg>);
+    default: return null;
+  }
+}
 
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
@@ -100,23 +117,25 @@ const Home = () => {
     <div className="home-main-wrapper">
       <div className="home-image-row">
         <div className="home-image-container">
-          <div className={`side-menu-inside${sidebarOpen ? ' open' : ''}`}
+          <div className={`side-menu-overlay${sidebarOpen ? ' open' : ''}`}
             style={{ height: '100%', maxHeight: '100%' }}>
-            <button className="side-menu-toggle-inside" onClick={() => setSidebarOpen(!sidebarOpen)}
+            <button className="side-menu-hamburger" onClick={() => setSidebarOpen(!sidebarOpen)}
               aria-label={sidebarOpen ? 'Collapse menu' : 'Expand menu'}>
-              <span className="chevron-icon-inside">{sidebarOpen ? '<' : '>'}</span>
+              <span className="hamburger-bar"></span>
+              <span className="hamburger-bar"></span>
+              <span className="hamburger-bar"></span>
             </button>
-            <nav className="side-menu-nav-inside">
-              <div className="side-menu-scroll-inside">
+            <nav className="side-menu-nav-overlay" style={{display: sidebarOpen ? 'flex' : 'none'}}>
+              <div className="side-menu-scroll-overlay">
                 {menuOptions.map(opt => (
                   <button
                     key={opt.action}
-                    className={`side-menu-btn-inside${sidebarOpen ? ' expanded' : ''}`}
+                    className="side-menu-btn-overlay"
                     onClick={() => handleMenuClick(opt.action)}
                     title={opt.label}
                   >
-                    <span className="side-menu-icon-inside" aria-hidden="true">{opt.icon}</span>
-                    {sidebarOpen && <span className="side-menu-label-inside">{opt.label}</span>}
+                    <span className="side-menu-icon-overlay" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
+                    <span className="side-menu-label-overlay">{opt.label}</span>
                   </button>
                 ))}
               </div>
@@ -190,122 +209,112 @@ const Home = () => {
           height: 570px;
           z-index: 1;
         }
-        .side-menu-inside {
+        .side-menu-overlay {
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 44px;
+          z-index: 10;
           display: flex;
           flex-direction: column;
-          align-items: stretch;
+          align-items: flex-start;
           justify-content: flex-start;
-          background: transparent;
-          border: none;
-          border-radius: 0 12px 12px 0;
-          box-shadow: none;
-          padding: 10px 0 10px 0;
-          min-width: 38px;
-          width: 38px;
-          transition: width 0.22s cubic-bezier(0.4,0,0.2,1);
-          height: 100%;
-          max-height: 100%;
-          position: relative;
-          z-index: 2;
-          overflow: visible;
-        }
-        .side-menu-inside.open {
-          width: 140px;
-          min-width: 140px;
-          background: rgba(24,24,40,0.92);
-          box-shadow: 0 0 16px 0 #ff36ba33;
+          background: rgba(24,24,40,0.72);
           border-right: 2px solid #ff36ba;
+          border-radius: 0 16px 16px 0;
+          box-shadow: 0 0 16px 0 #ff36ba33;
+          transition: width 0.22s cubic-bezier(0.4,0,0.2,1);
         }
-        .side-menu-toggle-inside {
+        .side-menu-overlay.open {
+          width: 160px;
+          background: rgba(24,24,40,0.92);
+        }
+        .side-menu-hamburger {
+          margin: 18px 0 12px 8px;
           background: none;
           border: none;
-          color: #ff36ba;
-          width: 28px;
-          height: 28px;
+          padding: 0;
           display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto 8px auto;
+          flex-direction: column;
+          gap: 4px;
           cursor: pointer;
-          transition: background 0.2s, border 0.2s;
-          position: relative;
-          z-index: 3;
+          z-index: 11;
         }
-        .chevron-icon-inside {
-          font-size: 1.2em;
-          color: #ff36ba;
-          opacity: 0.7;
-          font-family: monospace;
-          font-weight: bold;
-          line-height: 1;
+        .hamburger-bar {
+          width: 22px;
+          height: 3px;
+          background: #b0b3c6;
+          border-radius: 2px;
+          transition: background 0.2s;
         }
-        .side-menu-nav-inside {
+        .side-menu-hamburger:hover .hamburger-bar {
+          background: linear-gradient(90deg, #ff36ba 0%, #7f36ff 100%);
+        }
+        .side-menu-nav-overlay {
           flex: 1;
           display: flex;
           flex-direction: column;
           align-items: stretch;
+          margin-top: 10px;
+          width: 100%;
+          height: calc(100% - 60px);
           overflow: hidden;
         }
-        .side-menu-scroll-inside {
+        .side-menu-scroll-overlay {
           flex: 1;
           overflow-y: auto;
           scrollbar-width: thin;
           scrollbar-color: #ff36ba #181828;
           padding-right: 2px;
         }
-        .side-menu-scroll-inside::-webkit-scrollbar {
+        .side-menu-scroll-overlay::-webkit-scrollbar {
           width: 6px;
           background: #181828;
           border-radius: 8px;
         }
-        .side-menu-scroll-inside::-webkit-scrollbar-thumb {
+        .side-menu-scroll-overlay::-webkit-scrollbar-thumb {
           background: #ff36ba55;
           border-radius: 8px;
         }
-        .side-menu-btn-inside {
+        .side-menu-btn-overlay {
           display: flex;
           align-items: center;
-          gap: 0;
+          gap: 10px;
           background: none;
           border: none;
-          color: #fff;
+          color: #b0b3c6;
           font-size: 0.98rem;
           font-weight: 500;
-          padding: 5px 0 5px 0;
+          padding: 7px 10px 7px 10px;
           border-radius: 8px;
           cursor: pointer;
           transition: background 0.18s, color 0.18s;
           outline: none;
-          margin: 0 4px;
-          justify-content: center;
+          margin: 0 2px;
+          justify-content: flex-start;
           position: relative;
         }
-        .side-menu-btn-inside.expanded {
-          gap: 10px;
-          justify-content: flex-start;
-          padding: 5px 12px;
-        }
-        .side-menu-btn-inside:hover {
+        .side-menu-btn-overlay:hover {
           background: linear-gradient(90deg, #ff36ba33 0%, #7f36ff33 100%);
           color: #ff36ba;
         }
-        .side-menu-icon-inside {
-          font-size: 1.15em;
+        .side-menu-icon-overlay {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           width: 22px;
-          text-align: center;
-          color: #b0b3c6;
-          opacity: 0.38;
+          height: 22px;
+          opacity: 0.7;
           filter: grayscale(1);
           transition: color 0.2s, opacity 0.2s, filter 0.2s;
         }
-        .side-menu-btn-inside:hover .side-menu-icon-inside {
-          color: #ff36ba;
-          opacity: 0.85;
+        .side-menu-btn-overlay:hover .side-menu-icon-overlay {
+          opacity: 1;
           filter: grayscale(0.2);
         }
-        .side-menu-label-inside {
-          margin-left: 8px;
-          color: #fff;
+        .side-menu-label-overlay {
+          color: #b0b3c6;
           font-size: 0.98rem;
           font-weight: 500;
           opacity: 0.92;
@@ -324,14 +333,11 @@ const Home = () => {
             width: 98vw;
             max-width: 98vw;
           }
-          .side-menu-inside {
-            height: 60vw;
-            min-width: 28px;
-            width: 28px;
+          .side-menu-overlay {
+            width: 32px;
           }
-          .side-menu-inside.open {
-            width: 80px;
-            min-width: 80px;
+          .side-menu-overlay.open {
+            width: 100px;
           }
         }
       `}</style>
