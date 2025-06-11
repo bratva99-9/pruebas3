@@ -118,17 +118,21 @@ const Home = () => {
             <div className="top-info-item sexy-balance">{UserService.formatSEXYOnly()} SEXY</div>
             <div className="top-info-item sexy-balance2">{UserService.formatSEXYOnly()} SEXY+</div>
           </div>
-          <div className="fab-menu-vertical inside-map">
-            {menuOptions.map(opt => (
-              <button
-                key={opt.action}
-                className="fab-menu-btn"
-                onClick={() => handleMenuClick(opt.action)}
-                title={opt.label}
-              >
-                <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
-              </button>
-            ))}
+          <div className="side-menu-overlay inside-map">
+            <nav className="side-menu-nav-overlay">
+              <div className="side-menu-scroll-overlay">
+                {menuOptions.map(opt => (
+                  <button
+                    key={opt.action}
+                    className="side-menu-btn-overlay"
+                    onClick={() => handleMenuClick(opt.action)}
+                    title={opt.label}
+                  >
+                    <span className="side-menu-icon-overlay" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
+                  </button>
+                ))}
+              </div>
+            </nav>
           </div>
           <img src="/mapa1.png" alt="Mapa" className="home-image" />
           <div
@@ -268,20 +272,85 @@ const Home = () => {
           align-items: center;
           z-index: 30;
         }
-        .fab-menu-vertical.inside-map {
+        .side-menu-overlay.inside-map {
           position: absolute;
-          left: 18px;
-          top: 90px;
-          background: rgba(24,24,40,0.55);
-          border-radius: 22px;
-          box-shadow: 0 2px 16px #ff36ba33;
-          padding: 18px 8px;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 44px;
+          z-index: 20;
           display: flex;
           flex-direction: column;
-          gap: 18px;
+          align-items: flex-start;
+          justify-content: flex-start;
+          background: rgba(24,24,40,0.72);
+          border-right: 2px solid #ff36ba;
+          border-radius: 0 16px 16px 0;
+          box-shadow: 0 0 16px 0 #ff36ba33;
+          transition: width 0.22s cubic-bezier(0.4,0,0.2,1);
+          overflow: visible;
+        }
+        .side-menu-nav-overlay {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          margin-top: 10px;
+          width: 100%;
+          height: calc(100% - 60px);
+          overflow: hidden;
+        }
+        .side-menu-scroll-overlay {
+          flex: 1;
+          overflow-y: auto;
+          scrollbar-width: thin;
+          scrollbar-color: #ff36ba #181828;
+          padding-right: 2px;
+        }
+        .side-menu-scroll-overlay::-webkit-scrollbar {
+          width: 6px;
+          background: #181828;
+          border-radius: 8px;
+        }
+        .side-menu-scroll-overlay::-webkit-scrollbar-thumb {
+          background: #ff36ba55;
+          border-radius: 8px;
+        }
+        .side-menu-btn-overlay {
+          display: flex;
           align-items: center;
-          z-index: 30;
-          backdrop-filter: blur(6px);
+          gap: 10px;
+          background: none;
+          border: none;
+          color: #b0b3c6;
+          font-size: 0.98rem;
+          font-weight: 500;
+          padding: 7px 10px 7px 10px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background 0.18s, color 0.18s;
+          outline: none;
+          margin: 0 2px;
+          justify-content: flex-start;
+          position: relative;
+        }
+        .side-menu-btn-overlay:hover {
+          background: linear-gradient(90deg, #ff36ba33 0%, #7f36ff33 100%);
+          color: #ff36ba;
+        }
+        .side-menu-icon-overlay {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 22px;
+          height: 22px;
+          opacity: 0.7;
+          filter: grayscale(1);
+          transition: color 0.2s, opacity 0.2s, filter 0.2s;
+        }
+        .side-menu-btn-overlay:hover .side-menu-icon-overlay {
+          opacity: 1;
+          filter: grayscale(0.2);
         }
       `}</style>
     </div>
