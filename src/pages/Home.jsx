@@ -46,57 +46,12 @@ function getMenuIcon(name) {
   }
 }
 
-const BASE_WIDTH = 855;
-const BASE_HEIGHT = 570;
-
 const Home = () => {
   const [showMission, setShowMission] = useState(false);
   const [showMissionStatus, setShowMissionStatus] = useState(false);
   const [showOnlyFaps, setShowOnlyFaps] = useState(false);
   const [onlyFapsGirl, setOnlyFapsGirl] = useState('Sandra');
   const navigate = useHistory();
-  const [scale, setScale] = useState(1);
-  const [showRotate, setShowRotate] = useState(false);
-
-  useEffect(() => {
-    const fetchMissions = async () => {
-      try {
-        const currentUser = UserService.getName();
-        if (!currentUser) {
-          return;
-        }
-        // const userMissions = allMissions.filter(m => m.user === currentUser);
-        // const now = Math.floor(Date.now() / 1000);
-      } catch (err) {
-      }
-    };
-    fetchMissions();
-    const interval = setInterval(fetchMissions, 10000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    function handleResize() {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      // Calcula el scale máximo que cabe en la pantalla
-      const scaleW = w / BASE_WIDTH;
-      const scaleH = h / BASE_HEIGHT;
-      const newScale = Math.min(scaleW, scaleH, 1);
-      setScale(newScale);
-      // Detecta móvil vertical
-      const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-      const isPortrait = h > w;
-      setShowRotate(isMobile && isPortrait);
-    }
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
-    };
-  }, []);
 
   const handleMenuClick = (action) => {
     switch (action) {
@@ -137,83 +92,65 @@ const Home = () => {
   };
 
   return (
-    <div className="home-main-wrapper" style={{overflow: 'hidden', minHeight: '100vh', background: 'hsl(245, 86.70%, 2.90%)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-      {showRotate && (
-        <div className="rotate-warning">
-          <span>Gira tu dispositivo para jugar en modo horizontal</span>
-        </div>
-      )}
-      <div
-        className="responsive-scale-wrapper"
-        style={{
-          width: BASE_WIDTH,
-          height: BASE_HEIGHT,
-          position: 'relative',
-          background: 'none',
-          transform: `scale(${scale})`,
-          transformOrigin: 'center center',
-          willChange: 'transform',
-        }}
-      >
-        <div className="home-image-row">
-          <div className="home-image-container fab-rounded">
-            <div className="top-info-bar inside-map">
-              <div className="top-info-item user-name">{UserService.getName()}</div>
-              <div className="top-info-item wax-balance">{UserService.formatWAXOnly()} WAX</div>
-              <div className="top-info-item sexy-balance">{UserService.formatSEXYOnly()} SEXY</div>
-              <div className="top-info-item sexy-balance2">{UserService.formatSEXYOnly()} SEXY+</div>
-            </div>
-            <div className="fab-menu-vertical inside-map">
-              {menuOptions.map(opt => (
-                <div className="fab-menu-btn-pill-wrapper" key={opt.action}>
-                  <button
-                    className="fab-menu-btn"
-                    onClick={() => handleMenuClick(opt.action)}
-                    title={opt.label}
-                    tabIndex={0}
-                  >
-                    <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
-                  </button>
-                  <span className="fab-menu-pill">{opt.label}</span>
-                </div>
-              ))}
-            </div>
-            <img src="/mapa1.png" alt="Mapa" className="home-image" />
-            <div
-              className="mission-button edificio1-map"
-              onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
-            />
-            <div
-              className="mission-button edificio2-map"
-              onClick={() => setShowMission(true)}
-            />
+    <div className="home-main-wrapper">
+      <div className="home-image-row">
+        <div className="home-image-container fab-rounded">
+          <div className="top-info-bar inside-map">
+            <div className="top-info-item user-name">{UserService.getName()}</div>
+            <div className="top-info-item wax-balance">{UserService.formatWAXOnly()} WAX</div>
+            <div className="top-info-item sexy-balance">{UserService.formatSEXYOnly()} SEXY</div>
+            <div className="top-info-item sexy-balance2">{UserService.formatSEXYOnly()} SEXY+</div>
           </div>
-        </div>
-        <div className="buildings-row">
-          {buildingSprites.slice(1).map((sprite, idx) => (
-            <div
-              key={idx}
-              className="mission-button"
-              style={{ backgroundImage: `url(${sprite})` }}
-              onClick={() => setShowMission(true)}
-            />
-          ))}
-        </div>
-        {showMission && (
-          <MissionModal
-            onClose={() => setShowMission(false)}
-            onForceCloseAll={() => setShowMission(false)}
+          <div className="fab-menu-vertical inside-map">
+            {menuOptions.map(opt => (
+              <div className="fab-menu-btn-pill-wrapper" key={opt.action}>
+                <button
+                  className="fab-menu-btn"
+                  onClick={() => handleMenuClick(opt.action)}
+                  title={opt.label}
+                  tabIndex={0}
+                >
+                  <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
+                </button>
+                <span className="fab-menu-pill">{opt.label}</span>
+              </div>
+            ))}
+          </div>
+          <img src="/mapa1.png" alt="Mapa" className="home-image" />
+          <div
+            className="mission-button edificio1-map"
+            onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
           />
-        )}
-        {showMissionStatus && (
-          <MissionStatus
-            onClose={() => setShowMissionStatus(false)}
+          <div
+            className="mission-button edificio2-map"
+            onClick={() => setShowMission(true)}
           />
-        )}
-        {showOnlyFaps && (
-          <OnlyFapsModal girlName={onlyFapsGirl} onClose={() => setShowOnlyFaps(false)} />
-        )}
+        </div>
       </div>
+      <div className="buildings-row">
+        {buildingSprites.slice(1).map((sprite, idx) => (
+          <div
+            key={idx}
+            className="mission-button"
+            style={{ backgroundImage: `url(${sprite})` }}
+            onClick={() => setShowMission(true)}
+          />
+        ))}
+      </div>
+      {showMission && (
+        <MissionModal
+          onClose={() => setShowMission(false)}
+          onForceCloseAll={() => setShowMission(false)}
+        />
+      )}
+      {showMissionStatus && (
+        <MissionStatus
+          onClose={() => setShowMissionStatus(false)}
+        />
+      )}
+      {showOnlyFaps && (
+        <OnlyFapsModal girlName={onlyFapsGirl} onClose={() => setShowOnlyFaps(false)} />
+      )}
       <style jsx>{`
         .home-main-wrapper {
           min-height: 100vh;
