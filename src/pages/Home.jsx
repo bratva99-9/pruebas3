@@ -99,29 +99,29 @@ const Home = () => {
   return (
     <div className="home-main-wrapper">
       <div className="home-image-row">
-        <div className={`side-menu${sidebarOpen ? ' open' : ''}`}
-          style={{ height: '570px', maxHeight: '570px' }}>
-          <button className="side-menu-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}
-            aria-label={sidebarOpen ? 'Collapse menu' : 'Expand menu'}>
-            <span className="chevron-icon">{sidebarOpen ? '<' : '>'}</span>
-          </button>
-          <nav className="side-menu-nav">
-            <div className="side-menu-scroll">
-              {menuOptions.map(opt => (
-                <button
-                  key={opt.action}
-                  className={`side-menu-btn${sidebarOpen ? ' expanded' : ''}`}
-                  onClick={() => handleMenuClick(opt.action)}
-                  title={opt.label}
-                >
-                  <span className="side-menu-icon" aria-hidden="true">{opt.icon}</span>
-                  {sidebarOpen && <span className="side-menu-label">{opt.label}</span>}
-                </button>
-              ))}
-            </div>
-          </nav>
-        </div>
         <div className="home-image-container">
+          <div className={`side-menu-inside${sidebarOpen ? ' open' : ''}`}
+            style={{ height: '100%', maxHeight: '100%' }}>
+            <button className="side-menu-toggle-inside" onClick={() => setSidebarOpen(!sidebarOpen)}
+              aria-label={sidebarOpen ? 'Collapse menu' : 'Expand menu'}>
+              <span className="chevron-icon-inside">{sidebarOpen ? '<' : '>'}</span>
+            </button>
+            <nav className="side-menu-nav-inside">
+              <div className="side-menu-scroll-inside">
+                {menuOptions.map(opt => (
+                  <button
+                    key={opt.action}
+                    className={`side-menu-btn-inside${sidebarOpen ? ' expanded' : ''}`}
+                    onClick={() => handleMenuClick(opt.action)}
+                    title={opt.label}
+                  >
+                    <span className="side-menu-icon-inside" aria-hidden="true">{opt.icon}</span>
+                    {sidebarOpen && <span className="side-menu-label-inside">{opt.label}</span>}
+                  </button>
+                ))}
+              </div>
+            </nav>
+          </div>
           <div className="logout-ear small-ear" style={{display: 'none'}}></div>
           <img src="/mapa1.png" alt="Map" className="home-image" />
           <div
@@ -175,134 +175,6 @@ const Home = () => {
           width: 100%;
           margin-bottom: 32px;
         }
-        .side-menu {
-          display: flex;
-          flex-direction: column;
-          align-items: stretch;
-          justify-content: flex-start;
-          background: #181828;
-          border: 2px solid #ff36ba;
-          border-right: none;
-          border-radius: 22px 0 0 22px;
-          box-shadow: 0 0 24px 0 #ff36ba33;
-          padding: 12px 0 12px 0;
-          margin-right: -2px;
-          min-width: 60px;
-          width: 60px;
-          transition: width 0.25s cubic-bezier(0.4,0,0.2,1);
-          height: 570px;
-          max-height: 570px;
-          position: relative;
-          z-index: 2;
-          overflow: visible;
-        }
-        .side-menu.open {
-          width: 180px;
-          min-width: 180px;
-        }
-        .side-menu-toggle {
-          background: #181828;
-          border: 2px solid #ff36ba;
-          border-radius: 50%;
-          color: #ff36ba;
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto 12px auto;
-          box-shadow: 0 0 12px #ff36ba33;
-          cursor: pointer;
-          transition: background 0.2s, border 0.2s;
-          position: relative;
-          z-index: 3;
-        }
-        .side-menu-toggle:hover {
-          background: #2a2a3a;
-          border-color: #ff36ba;
-        }
-        .chevron-icon {
-          font-size: 1.5em;
-          color: #ff36ba;
-          opacity: 0.7;
-          font-family: monospace;
-          font-weight: bold;
-          line-height: 1;
-        }
-        .side-menu-nav {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          align-items: stretch;
-          overflow: hidden;
-        }
-        .side-menu-scroll {
-          flex: 1;
-          overflow-y: auto;
-          scrollbar-width: thin;
-          scrollbar-color: #ff36ba #181828;
-          padding-right: 2px;
-        }
-        .side-menu-scroll::-webkit-scrollbar {
-          width: 7px;
-          background: #181828;
-          border-radius: 8px;
-        }
-        .side-menu-scroll::-webkit-scrollbar-thumb {
-          background: #ff36ba55;
-          border-radius: 8px;
-        }
-        .side-menu-btn {
-          display: flex;
-          align-items: center;
-          gap: 0;
-          background: none;
-          border: none;
-          color: #fff;
-          font-size: 1.08rem;
-          font-weight: 500;
-          padding: 8px 0 8px 0;
-          border-radius: 10px;
-          cursor: pointer;
-          transition: background 0.18s, color 0.18s;
-          outline: none;
-          margin: 0 8px;
-          justify-content: center;
-          position: relative;
-        }
-        .side-menu-btn.expanded {
-          gap: 16px;
-          justify-content: flex-start;
-          padding: 8px 18px;
-        }
-        .side-menu-btn:hover {
-          background: #ff36ba22;
-          color: #ff36ba;
-        }
-        .side-menu-icon {
-          font-size: 1.6em;
-          width: 36px;
-          text-align: center;
-          color: #b0b3c6;
-          opacity: 0.45;
-          filter: grayscale(1);
-          transition: color 0.2s, opacity 0.2s, filter 0.2s;
-        }
-        .side-menu-btn:hover .side-menu-icon {
-          color: #ff36ba;
-          opacity: 0.85;
-          filter: grayscale(0.2);
-        }
-        .side-menu-label {
-          margin-left: 10px;
-          color: #fff;
-          font-size: 1.08rem;
-          font-weight: 500;
-          opacity: 0.92;
-          letter-spacing: 0.5px;
-          transition: opacity 0.2s;
-          white-space: nowrap;
-        }
         .home-image-container {
           position: relative;
           border-radius: 28px;
@@ -311,11 +183,135 @@ const Home = () => {
           overflow: hidden;
           background: #181828;
           display: flex;
+          flex-direction: row;
           align-items: flex-start;
-          justify-content: center;
+          justify-content: flex-start;
           width: 855px;
           height: 570px;
           z-index: 1;
+        }
+        .side-menu-inside {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          justify-content: flex-start;
+          background: transparent;
+          border: none;
+          border-radius: 0 12px 12px 0;
+          box-shadow: none;
+          padding: 10px 0 10px 0;
+          min-width: 38px;
+          width: 38px;
+          transition: width 0.22s cubic-bezier(0.4,0,0.2,1);
+          height: 100%;
+          max-height: 100%;
+          position: relative;
+          z-index: 2;
+          overflow: visible;
+        }
+        .side-menu-inside.open {
+          width: 140px;
+          min-width: 140px;
+          background: rgba(24,24,40,0.92);
+          box-shadow: 0 0 16px 0 #ff36ba33;
+          border-right: 2px solid #ff36ba;
+        }
+        .side-menu-toggle-inside {
+          background: none;
+          border: none;
+          color: #ff36ba;
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 8px auto;
+          cursor: pointer;
+          transition: background 0.2s, border 0.2s;
+          position: relative;
+          z-index: 3;
+        }
+        .chevron-icon-inside {
+          font-size: 1.2em;
+          color: #ff36ba;
+          opacity: 0.7;
+          font-family: monospace;
+          font-weight: bold;
+          line-height: 1;
+        }
+        .side-menu-nav-inside {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          overflow: hidden;
+        }
+        .side-menu-scroll-inside {
+          flex: 1;
+          overflow-y: auto;
+          scrollbar-width: thin;
+          scrollbar-color: #ff36ba #181828;
+          padding-right: 2px;
+        }
+        .side-menu-scroll-inside::-webkit-scrollbar {
+          width: 6px;
+          background: #181828;
+          border-radius: 8px;
+        }
+        .side-menu-scroll-inside::-webkit-scrollbar-thumb {
+          background: #ff36ba55;
+          border-radius: 8px;
+        }
+        .side-menu-btn-inside {
+          display: flex;
+          align-items: center;
+          gap: 0;
+          background: none;
+          border: none;
+          color: #fff;
+          font-size: 0.98rem;
+          font-weight: 500;
+          padding: 5px 0 5px 0;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background 0.18s, color 0.18s;
+          outline: none;
+          margin: 0 4px;
+          justify-content: center;
+          position: relative;
+        }
+        .side-menu-btn-inside.expanded {
+          gap: 10px;
+          justify-content: flex-start;
+          padding: 5px 12px;
+        }
+        .side-menu-btn-inside:hover {
+          background: linear-gradient(90deg, #ff36ba33 0%, #7f36ff33 100%);
+          color: #ff36ba;
+        }
+        .side-menu-icon-inside {
+          font-size: 1.15em;
+          width: 22px;
+          text-align: center;
+          color: #b0b3c6;
+          opacity: 0.38;
+          filter: grayscale(1);
+          transition: color 0.2s, opacity 0.2s, filter 0.2s;
+        }
+        .side-menu-btn-inside:hover .side-menu-icon-inside {
+          color: #ff36ba;
+          opacity: 0.85;
+          filter: grayscale(0.2);
+        }
+        .side-menu-label-inside {
+          margin-left: 8px;
+          color: #fff;
+          font-size: 0.98rem;
+          font-weight: 500;
+          opacity: 0.92;
+          letter-spacing: 0.3px;
+          transition: opacity 0.2s;
+          white-space: nowrap;
         }
         .home-image {
           width: 100%;
@@ -328,14 +324,14 @@ const Home = () => {
             width: 98vw;
             max-width: 98vw;
           }
-          .side-menu {
+          .side-menu-inside {
             height: 60vw;
-            min-width: 52px;
-            width: 52px;
+            min-width: 28px;
+            width: 28px;
           }
-          .side-menu.open {
-            width: 120px;
-            min-width: 120px;
+          .side-menu-inside.open {
+            width: 80px;
+            min-width: 80px;
           }
         }
       `}</style>
