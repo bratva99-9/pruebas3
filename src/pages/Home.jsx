@@ -189,6 +189,16 @@ const Home = () => {
       {showOnlyFaps && (
         <OnlyFapsModal girlName={onlyFapsGirl} onClose={() => setShowOnlyFaps(false)} />
       )}
+      <div style={{position: 'relative', width: 855, height: 570, margin: '32px auto', border: '2px dashed #ff36ba', background: '#222', zIndex: 100}}>
+        <div
+          className="mission-button edificio1-map edificio-zindex edificio-debug"
+          onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
+        />
+        <div
+          className="mission-button edificio2-map edificio-zindex edificio-debug"
+          onClick={() => setShowMission(true)}
+        />
+      </div>
       <style jsx>{`
         .home-main-wrapper {
           min-height: 100vh;
@@ -395,6 +405,10 @@ const Home = () => {
           margin-top: 10px;
           width: 100%;
           z-index: 12;
+        }
+        .edificio-debug {
+          outline: 2px solid #00ffff;
+          background: rgba(0,255,255,0.08) !important;
         }
       `}</style>
     </div>
