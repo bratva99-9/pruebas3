@@ -150,7 +150,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
                     loop
                     muted
                     playsInline
-                    style={{ width: '100%', height: '100%', aspectRatio: '10/20', objectFit: 'cover', display: 'block' }}
+                    style={{ width: '100%', height: '100%', aspectRatio: '9/16', objectFit: 'cover', display: 'block' }}
                     onError={(e) => {
                       e.target.style.display = 'none';
                     }}
@@ -257,7 +257,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .photos-grid-full.scrollable-nfts-fix.grid-5-cols {
           display: grid;
           grid-template-columns: repeat(5, 1fr);
-          gap: 22px;
+          gap: 32px;
           width: 90vw;
           max-width: 1600px;
           margin: 0 auto;
@@ -282,12 +282,16 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .photo-card {
           position: relative;
-          aspect-ratio: 10/20;
-          height: 304px;
-          border-radius: 12px;
+          aspect-ratio: 9/16;
+          height: 272px;
+          border-radius: 18px;
           overflow: hidden;
           background: none;
           transition: transform 0.2s;
+          display: flex;
+          align-items: stretch;
+          justify-content: center;
+          min-width: 0;
         }
         .photo-card:hover {
           transform: translateY(-5px);
@@ -297,23 +301,24 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .girl-media {
           width: 100%;
-          height: 95%;
-          aspect-ratio: 10/20;
+          height: 100%;
+          aspect-ratio: 9/16;
           object-fit: cover;
           display: block;
-          border-radius: 12px;
+          border-radius: 18px;
+          background: #19191d;
         }
         .placeholder-media {
           width: 100%;
-          height: 95%;
-          aspect-ratio: 10/20;
+          height: 100%;
+          aspect-ratio: 9/16;
           background: #2a003f;
           display: flex;
           align-items: center;
           justify-content: center;
           color: #b800a6;
           font-size: 1.2rem;
-          border-radius: 12px;
+          border-radius: 18px;
         }
         .lock-overlay {
           position: absolute;
