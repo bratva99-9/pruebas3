@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import MissionModal from '../components/MissionModal';
 import MissionStatus from '../components/missionstatus';
+import InventoryModal from '../components/InventoryModal';
 import { UserService } from '../UserService';
 import missionButton from '../images/missionboton.webp';
 import missionButton2 from '../images/missionboton2.webp';
@@ -51,40 +52,38 @@ const Home = () => {
   const [showMissionStatus, setShowMissionStatus] = useState(false);
   const [showOnlyFaps, setShowOnlyFaps] = useState(false);
   const [onlyFapsGirl, setOnlyFapsGirl] = useState('Sandra');
-  const navigate = useHistory();
+  const [showInventory, setShowInventory] = useState(false);
+  const history = useHistory();
 
   const handleMenuClick = (action) => {
     switch (action) {
       case 'home':
-        navigate.push('/home');
+        history.push('/');
         break;
       case 'missions':
         setShowMissionStatus(true);
         break;
-      case 'claim':
-        alert('¡Reclama tus recompensas desde Misiones activas!');
-        break;
       case 'inventory':
-        alert('Inventario de NFTs próximamente.');
+        setShowInventory(true);
         break;
       case 'buy':
-        window.open('https://neftyblocks.com/collection/nightclubnft', '_blank');
+        history.push('/buy');
         break;
       case 'upgrade':
-        window.open('https://neftyblocks.com/collection/nightclubnft/blends', '_blank');
+        history.push('/upgrade');
         break;
       case 'history':
-        alert('Historial próximamente.');
+        history.push('/history');
         break;
       case 'settings':
-        alert('Configuración próximamente.');
+        history.push('/settings');
         break;
       case 'logout':
         UserService.logout();
-        navigate.push('/');
+        history.push('/login');
         break;
       case 'help':
-        alert('¿Necesitas ayuda? Contáctanos en Discord.');
+        history.push('/help');
         break;
       default:
         break;
@@ -150,6 +149,11 @@ const Home = () => {
       )}
       {showOnlyFaps && (
         <OnlyFapsModal girlName={onlyFapsGirl} onClose={() => setShowOnlyFaps(false)} />
+      )}
+      {showInventory && (
+        <InventoryModal
+          onClose={() => setShowInventory(false)}
+        />
       )}
       <style jsx>{`
         .home-main-wrapper {
@@ -280,7 +284,7 @@ const Home = () => {
           width: 43.7px;
           height: 43.7px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.09);
+          background: rgba(10, 6, 22, 0.92);
           border: 2px solid #ff36ba55;
           box-shadow: 0 2px 8px #ff36ba22;
           display: flex;
@@ -296,7 +300,7 @@ const Home = () => {
         }
         .fab-menu-btn:hover,
         .fab-menu-btn:focus {
-          background: linear-gradient(135deg, #ff36ba33 0%, #7f36ff33 100%);
+          background: rgba(18, 10, 40, 0.95);
           border: 2.5px solid #ff36ba;
           transform: scale(1.03);
         }
