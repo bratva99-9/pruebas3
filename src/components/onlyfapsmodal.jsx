@@ -263,22 +263,8 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           margin: 0 auto;
           padding: 0 12px 24px 12px;
           overflow-y: auto;
-          max-height: calc(100vh - 120px);
-          justify-items: stretch;
-          align-items: stretch;
           scrollbar-width: thin;
           scrollbar-color: #ff00ff #181828;
-        }
-        .photos-grid-full.scrollable-nfts-fix.grid-5-cols::-webkit-scrollbar {
-          width: 10px;
-          background: #181828;
-        }
-        .photos-grid-full.scrollable-nfts-fix.grid-5-cols::-webkit-scrollbar-thumb {
-          background: linear-gradient(180deg, #ff00ff 0%, #00ffff 100%);
-          border-radius: 8px;
-        }
-        .photos-grid-full.scrollable-nfts-fix.grid-5-cols::-webkit-scrollbar-track {
-          background: #181828;
         }
         .photo-card {
           position: relative;
@@ -288,9 +274,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           overflow: hidden;
           background: none;
           transition: transform 0.2s;
-          display: flex;
-          align-items: stretch;
-          justify-content: center;
           min-width: 0;
         }
         .photo-card:hover {
