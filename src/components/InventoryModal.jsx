@@ -11,12 +11,14 @@ const SCHEMAS = [
 ];
 
 const COLLECTION = 'nightclubnft';
+const PAGE_SIZE = 10;
 
 const InventoryModal = ({ onClose }) => {
   const [nfts, setNfts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [filteredNfts, setFilteredNfts] = useState([]);
+  const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
     fetchNFTs();
@@ -24,6 +26,7 @@ const InventoryModal = ({ onClose }) => {
   }, []);
 
   useEffect(() => {
+    setDisplayCount(PAGE_SIZE);
     if (selectedCategory === 'all') {
       setFilteredNfts(nfts);
     } else {
@@ -38,7 +41,7 @@ const InventoryModal = ({ onClose }) => {
   const fetchNFTs = async () => {
     try {
       setLoading(true);
-      const user = UserService.authName || UserService.getName && UserService.getName();
+      const user = UserService.authName || (UserService.getName && UserService.getName());
       if (!user) {
         setNfts([]);
         setFilteredNfts([]);
@@ -60,6 +63,10 @@ const InventoryModal = ({ onClose }) => {
       setFilteredNfts([]);
       setLoading(false);
     }
+  };
+
+  const handleLoadMore = () => {
+    setDisplayCount(prev => prev + PAGE_SIZE);
   };
 
   if (loading) {
@@ -90,8 +97,7 @@ const InventoryModal = ({ onClose }) => {
         <div className="nfts-grid">
           {filteredNfts.length === 0 ? (
             <div style={{color:'#fff', gridColumn:'1/-1', textAlign:'center', fontSize:'1.2rem', opacity:0.7}}>No tienes NFTs en esta categoría.</div>
-          ) : filteredNfts.map(nft => {
-            // Mostrar video si existe, si no imagen
+          ) : filteredNfts.slice(0, displayCount).map(nft => {
             const videoHash = nft.data && nft.data.video && nft.data.video.length > 10 ? nft.data.video : null;
             const imgHash = nft.data && nft.data.img && nft.data.img.length > 10 ? nft.data.img : null;
             const fileUrl = videoHash
@@ -99,7 +105,7 @@ const InventoryModal = ({ onClose }) => {
               : (imgHash ? (imgHash.startsWith('http') ? imgHash : `https://ipfs.io/ipfs/${imgHash}`) : '');
             return (
               <div key={nft.asset_id} className="nft-card">
-                <div className="nft-image">
+                <div className="nft-media">
                   {videoHash ? (
                     <video
                       src={fileUrl}
@@ -107,23 +113,22 @@ const InventoryModal = ({ onClose }) => {
                       loop
                       muted
                       playsInline
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', background: '#19191d', borderRadius: 12 }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '10/20', borderRadius: '18px', background: '#19191d', display: 'block' }}
                       onError={e => { e.target.style.display = 'none'; }}
                     />
                   ) : imgHash ? (
-                    <img src={fileUrl} alt={nft.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 12 }} />
+                    <img src={fileUrl} alt="NFT" style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '10/20', borderRadius: '18px', background: '#19191d', display: 'block' }} />
                   ) : (
-                    <div style={{width:'100%',height:'100%',background:'#181828',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center'}}>Sin media</div>
+                    <div style={{width:'100%',height:'100%',background:'#181828',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center', aspectRatio:'10/20', borderRadius:'18px'}}>Sin media</div>
                   )}
-                </div>
-                <div className="nft-info">
-                  <h3>{nft.name || nft.asset_id}</h3>
-                  <span className="nft-schema">{nft.schema?.schema_name || ''}</span>
                 </div>
               </div>
             );
           })}
         </div>
+        {filteredNfts.length > displayCount && (
+          <button className="load-more-btn" onClick={handleLoadMore}>Cargar más</button>
+        )}
         <button className="close-btn" onClick={onClose}>Cerrar</button>
       </div>
       <style jsx>{`
@@ -178,51 +183,73 @@ const InventoryModal = ({ onClose }) => {
           font-size: 14px;
           font-weight: 500;
         }
-        .category-btn:hover {
-          background: rgba(255, 0, 255, 0.2);
-          transform: translateY(-2px);
-        }
-        .category-btn.active {
-          background: rgba(255, 0, 255, 0.3);
+        .category-btn:hover, .category-btn.active {
+          background: linear-gradient(90deg, #ff6fd8, #f32cfc 80%);
+          color: #fff;
+          border-color: #ff00ff;
           box-shadow: 0 0 12px #ff00ff44;
         }
         .nfts-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
           gap: 24px;
           width: 100%;
           padding: 0 12px;
+          margin-bottom: 18px;
+          scrollbar-width: thin;
+          scrollbar-color: #ff00ff #181828;
+        }
+        .nfts-grid::-webkit-scrollbar {
+          width: 10px;
+          background: #181828;
+        }
+        .nfts-grid::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #ff00ff 0%, #7f36ff 100%);
+          border-radius: 8px;
+        }
+        .nfts-grid::-webkit-scrollbar-track {
+          background: #181828;
         }
         .nft-card {
-          background: rgba(18, 10, 40, 0.92);
-          border-radius: 16px;
+          background: none;
+          border-radius: 18px;
           overflow: hidden;
-          transition: transform 0.3s ease;
-          border: 1px solid rgba(255, 0, 255, 0.2);
+          box-shadow: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          align-items: stretch;
+          justify-content: center;
+          aspect-ratio: 10/20;
         }
-        .nft-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 0 14px 3px #ff36ba44;
-          border-color: #ff00ff99;
-        }
-        .nft-image {
+        .nft-media {
           width: 100%;
-          aspect-ratio: 1;
+          height: 100%;
+          aspect-ratio: 10/20;
+          border-radius: 18px;
           overflow: hidden;
+          background: #19191d;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
-        .nft-info {
-          padding: 12px;
-          text-align: center;
-        }
-        .nft-info h3 {
+        .load-more-btn {
+          margin: 18px auto 0 auto;
+          display: block;
+          font-size: 15px;
+          font-weight: 500;
           color: #fff;
-          margin: 0 0 4px 0;
-          font-size: 16px;
+          background: linear-gradient(90deg, #ff6fd8, #f32cfc 80%);
+          border: none;
+          border-radius: 14px;
+          padding: 8px 32px;
+          cursor: pointer;
+          box-shadow: 0 2px 14px #d43d9360;
+          transition: background 0.18s, filter 0.18s;
         }
-        .nft-schema {
-          color: #ff00ff;
-          font-size: 12px;
-          text-transform: lowercase;
+        .load-more-btn:hover {
+          background: linear-gradient(90deg, #ff43c0, #d43d93 85%);
+          filter: brightness(1.06);
         }
         .close-btn {
           position: fixed;
