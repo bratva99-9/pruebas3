@@ -301,6 +301,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           object-fit: cover;
           display: block;
           border-radius: 12px;
+          background: #19191d;
         }
         .placeholder-media {
           width: 100%;
