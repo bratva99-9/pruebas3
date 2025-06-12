@@ -56,6 +56,11 @@ const Home = () => {
   const history = useHistory();
 
   const handleMenuClick = (action) => {
+    // Cerrar todos los modales antes de abrir el nuevo o navegar
+    setShowMission(false);
+    setShowMissionStatus(false);
+    setShowOnlyFaps(false);
+    setShowInventory(false);
     switch (action) {
       case 'home':
         history.push('/');
@@ -67,10 +72,10 @@ const Home = () => {
         setShowInventory(true);
         break;
       case 'buy':
-        history.push('/buy');
+        window.open('https://neftyblocks.com/collection/nightclubnft', '_blank');
         break;
       case 'upgrade':
-        history.push('/upgrade');
+        window.open('https://neftyblocks.com/collection/nightclubnft/blends', '_blank');
         break;
       case 'history':
         history.push('/history');
