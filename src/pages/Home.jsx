@@ -56,7 +56,6 @@ const Home = () => {
   const history = useHistory();
 
   const handleMenuClick = (action) => {
-    // Cerrar todos los modales antes de abrir el nuevo o navegar
     setShowMission(false);
     setShowMissionStatus(false);
     setShowOnlyFaps(false);
