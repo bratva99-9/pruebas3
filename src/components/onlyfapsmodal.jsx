@@ -256,51 +256,63 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .photos-grid-full.scrollable-nfts-fix.grid-5-cols {
           display: grid;
           grid-template-columns: repeat(5, 1fr);
-          gap: 32px;
-          width: 100%;
-          max-width: 1200px;
+          gap: 22px;
+          width: 90vw;
+          max-width: 1600px;
           margin: 0 auto;
-          padding: 0 12px;
-          margin-bottom: 18px;
+          padding: 0 20px 24px 20px;
+          overflow-y: auto;
+          max-height: calc(100vh - 120px);
+          justify-items: stretch;
+          align-items: stretch;
           scrollbar-width: thin;
           scrollbar-color: #ff00ff #181828;
-          max-height: 70vh;
-          overflow-y: auto;
+        }
+        .photos-grid-full.scrollable-nfts-fix.grid-5-cols::-webkit-scrollbar {
+          width: 10px;
+          background: #181828;
+        }
+        .photos-grid-full.scrollable-nfts-fix.grid-5-cols::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #ff00ff 0%, #00ffff 100%);
+          border-radius: 8px;
+        }
+        .photos-grid-full.scrollable-nfts-fix.grid-5-cols::-webkit-scrollbar-track {
+          background: #181828;
         }
         .photo-card {
-          background: none;
-          border-radius: 18px;
+          position: relative;
+          aspect-ratio: 10/20;
+          height: 304px;
+          border-radius: 12px;
           overflow: hidden;
-          box-shadow: none;
-          padding: 0;
-          margin: 0;
-          display: flex;
-          align-items: stretch;
-          justify-content: center;
-          min-width: 0;
-          height: 272px;
-          aspect-ratio: 9/16;
+          background: none;
+          transition: transform 0.2s;
+        }
+        .photo-card:hover {
+          transform: translateY(-5px);
+        }
+        .photo-card.locked {
+          filter: brightness(0.5);
         }
         .girl-media {
           width: 100%;
-          height: 100%;
-          aspect-ratio: 9/16;
-          border-radius: 18px;
+          height: 95%;
+          aspect-ratio: 10/20;
           object-fit: cover;
           display: block;
-          background: #19191d;
+          border-radius: 12px;
         }
         .placeholder-media {
           width: 100%;
-          height: 100%;
-          aspect-ratio: 9/16;
+          height: 95%;
+          aspect-ratio: 10/20;
           background: #2a003f;
           display: flex;
           align-items: center;
           justify-content: center;
           color: #b800a6;
           font-size: 1.2rem;
-          border-radius: 18px;
+          border-radius: 12px;
         }
         .lock-overlay {
           position: absolute;
