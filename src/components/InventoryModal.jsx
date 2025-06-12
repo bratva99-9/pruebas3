@@ -127,9 +127,17 @@ const InventoryModal = ({ onClose }) => {
           })}
         </div>
         {filteredNfts.length > displayCount && (
-          <button className="load-more-btn" onClick={handleLoadMore}>Load more</button>
+          <div className="modal-bottom-bar">
+            <button className="close-btn" onClick={onClose}>Close</button>
+            <button
+              className="load-more-btn"
+              onClick={handleLoadMore}
+              disabled={displayCount >= filteredNfts.length}
+            >
+              Load more NFTs
+            </button>
+          </div>
         )}
-        <button className="close-btn" onClick={onClose}>Close</button>
       </div>
       <style jsx>{`
         .inventory-modal-fullscreen {
@@ -224,8 +232,9 @@ const InventoryModal = ({ onClose }) => {
           display: flex;
           align-items: stretch;
           justify-content: center;
-          aspect-ratio: 9/16;
           min-width: 0;
+          min-height: 260px;
+          aspect-ratio: 9/16;
         }
         .nft-media {
           width: 100%;
@@ -238,30 +247,21 @@ const InventoryModal = ({ onClose }) => {
           align-items: center;
           justify-content: center;
         }
-        .load-more-btn {
-          margin: 18px auto 0 auto;
-          display: block;
-          font-size: 15px;
-          font-weight: 500;
-          color: #fff;
-          background: linear-gradient(90deg, #ff6fd8, #f32cfc 80%);
-          border: none;
-          border-radius: 14px;
-          padding: 8px 32px;
-          cursor: pointer;
-          box-shadow: 0 2px 14px #d43d9360;
-          transition: background 0.18s, filter 0.18s;
-        }
-        .load-more-btn:hover {
-          background: linear-gradient(90deg, #ff43c0, #d43d93 85%);
-          filter: brightness(1.06);
-        }
-        .close-btn {
+        .modal-bottom-bar {
+          width: 100%;
+          max-width: 1200px;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
           position: fixed;
           left: 50%;
           bottom: 32px;
           transform: translateX(-50%);
           z-index: 10001;
+          padding: 0 24px;
+        }
+        .close-btn {
           font-size: 15px;
           font-weight: 500;
           color: #fff;
@@ -275,6 +275,25 @@ const InventoryModal = ({ onClose }) => {
         .close-btn:hover {
           background: rgba(255,0,255,0.13);
           border-color: #ff00ff;
+        }
+        .load-more-btn {
+          font-size: 15px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(0,255,255,0.10);
+          border: 2px solid #00ffff;
+          border-radius: 14px;
+          padding: 8px 32px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .load-more-btn:hover:enabled {
+          background: rgba(255,0,255,0.13);
+          border-color: #ff00ff;
+        }
+        .load-more-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
         }
         @keyframes fadeInModal {
           from { opacity: 0; }
