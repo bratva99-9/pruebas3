@@ -126,18 +126,17 @@ const InventoryModal = ({ onClose }) => {
             );
           })}
         </div>
-        {filteredNfts.length > displayCount && (
-          <div className="modal-bottom-bar">
-            <button className="close-btn" onClick={onClose}>Close</button>
-            <button
-              className="load-more-btn"
-              onClick={handleLoadMore}
-              disabled={displayCount >= filteredNfts.length}
-            >
-              Load more NFTs
-            </button>
-          </div>
-        )}
+        <div className="modal-bottom-bar">
+          <div style={{flex:1}}></div>
+          <button className="close-btn" onClick={onClose}>Close</button>
+          <button
+            className="load-more-btn"
+            onClick={handleLoadMore}
+            disabled={displayCount >= filteredNfts.length}
+          >
+            Load more NFTs
+          </button>
+        </div>
       </div>
       <style jsx>{`
         .inventory-modal-fullscreen {
@@ -233,7 +232,7 @@ const InventoryModal = ({ onClose }) => {
           align-items: stretch;
           justify-content: center;
           min-width: 0;
-          min-height: 260px;
+          height: 340px;
           aspect-ratio: 9/16;
         }
         .nft-media {
@@ -252,7 +251,7 @@ const InventoryModal = ({ onClose }) => {
           max-width: 1200px;
           display: flex;
           flex-direction: row;
-          justify-content: space-between;
+          justify-content: flex-end;
           align-items: center;
           position: fixed;
           left: 50%;
@@ -260,6 +259,7 @@ const InventoryModal = ({ onClose }) => {
           transform: translateX(-50%);
           z-index: 10001;
           padding: 0 24px;
+          pointer-events: none;
         }
         .close-btn {
           font-size: 15px;
@@ -271,6 +271,8 @@ const InventoryModal = ({ onClose }) => {
           padding: 8px 32px;
           cursor: pointer;
           transition: all 0.3s ease;
+          margin: 0 auto;
+          pointer-events: auto;
         }
         .close-btn:hover {
           background: rgba(255,0,255,0.13);
@@ -286,6 +288,8 @@ const InventoryModal = ({ onClose }) => {
           padding: 8px 32px;
           cursor: pointer;
           transition: all 0.3s ease;
+          margin-left: 24px;
+          pointer-events: auto;
         }
         .load-more-btn:hover:enabled {
           background: rgba(255,0,255,0.13);
