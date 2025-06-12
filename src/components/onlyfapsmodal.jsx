@@ -256,12 +256,12 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .photos-grid-full.scrollable-nfts-fix.grid-5-cols {
           display: grid;
-          grid-template-columns: repeat(5, 1fr);
+          grid-template-columns: repeat(5, minmax(0, 1fr));
           gap: 32px;
           width: 90vw;
           max-width: 1600px;
           margin: 0 auto;
-          padding: 0 20px 24px 20px;
+          padding: 0 12px 24px 12px;
           overflow-y: auto;
           max-height: calc(100vh - 120px);
           justify-items: stretch;
@@ -283,7 +283,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .photo-card {
           position: relative;
           aspect-ratio: 9/16;
-          height: 272px;
+          width: 100%;
           border-radius: 18px;
           overflow: hidden;
           background: none;
