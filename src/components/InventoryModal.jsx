@@ -127,7 +127,6 @@ const InventoryModal = ({ onClose }) => {
           })}
         </div>
         <div className="modal-bottom-bar">
-          <div style={{flex:1}}></div>
           <button className="close-btn" onClick={onClose}>Close</button>
           <button
             className="load-more-btn"
@@ -232,7 +231,7 @@ const InventoryModal = ({ onClose }) => {
           align-items: stretch;
           justify-content: center;
           min-width: 0;
-          height: 340px;
+          height: 272px;
           aspect-ratio: 9/16;
         }
         .nft-media {
@@ -251,7 +250,7 @@ const InventoryModal = ({ onClose }) => {
           max-width: 1200px;
           display: flex;
           flex-direction: row;
-          justify-content: flex-end;
+          justify-content: center;
           align-items: center;
           position: fixed;
           left: 50%;
@@ -271,7 +270,7 @@ const InventoryModal = ({ onClose }) => {
           padding: 8px 32px;
           cursor: pointer;
           transition: all 0.3s ease;
-          margin: 0 auto;
+          margin: 0 24px;
           pointer-events: auto;
         }
         .close-btn:hover {
@@ -288,8 +287,10 @@ const InventoryModal = ({ onClose }) => {
           padding: 8px 32px;
           cursor: pointer;
           transition: all 0.3s ease;
-          margin-left: 24px;
+          margin-left: auto;
           pointer-events: auto;
+          position: absolute;
+          right: 24px;
         }
         .load-more-btn:hover:enabled {
           background: rgba(255,0,255,0.13);
