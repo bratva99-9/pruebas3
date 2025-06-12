@@ -89,88 +89,89 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
   return (
     <div className="onlyfaps-modal-bg-full">
       <div className="onlyfaps-modal-full">
-        {/* Encabezado estilo NFTModal */}
-        <div className="girl-header-nftmodal">
-          <div className="girl-header-title-row">
-            <button className="nav-btn" onClick={prevGirl} disabled={GIRL_NAMES.length === 0}>&lt;</button>
-            <h1 className="girl-header-title">{girlData.name || currentGirl}</h1>
-            <button className="nav-btn" onClick={nextGirl} disabled={GIRL_NAMES.length === 0}>&gt;</button>
-          </div>
-          <div className="girl-header-description">{girlData.description}</div>
-          <div className="girl-header-stats">
-            <div className="girl-header-stat">
-              <span className="stat-icon">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="9.5" stroke="#bfc2d1" strokeWidth="1.5"/><path d="M11 5.5V11L14 13" stroke="#bfc2d1" strokeWidth="1.5" strokeLinecap="round"/></svg>
-              </span>
-              <span className="stat-text">{girlData.stats?.time}</span>
+        <div className="onlyfaps-modal-inner">
+          {/* Encabezado estilo NFTModal */}
+          <div className="girl-header-nftmodal">
+            <div className="girl-header-title-row">
+              <button className="nav-btn" onClick={prevGirl} disabled={GIRL_NAMES.length === 0}>&lt;</button>
+              <h1 className="girl-header-title">{girlData.name || currentGirl}</h1>
+              <button className="nav-btn" onClick={nextGirl} disabled={GIRL_NAMES.length === 0}>&gt;</button>
             </div>
-            <div className="girl-header-stat">
-              <span className="stat-icon">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="9.5" stroke="#ffe066" strokeWidth="1.5"/><text x="11" y="15" textAnchor="middle" fontSize="10" fill="#ffe066">S</text></svg>
-              </span>
-              <span className="stat-text">{girlData.stats?.token}</span>
-            </div>
-            <div className="girl-header-stat">
-              <span className="stat-icon">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4.5" y="9.5" width="13" height="7" rx="2" fill="#ff00ff" fillOpacity="0.13" stroke="#ff00ff" strokeWidth="1.7"/><rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="1.3"/><path d="M4.5 12H17.5" stroke="#ff00ff" strokeWidth="1.3"/><path d="M11 9.5V16" stroke="#ff00ff" strokeWidth="1.3"/><path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/><path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/></svg>
-              </span>
-              <span className="stat-text">{girlData.stats?.giftChance}</span>
-            </div>
-          </div>
-          <div className="nftmodal-divider" />
-          <div className="nft-count-center-row">
-            <span className="selected-count-style selected-count-btn btn-small">
-              {ownedNFTs.filter(nft => nft.template && templateData.some(tpl => tpl.template_id === nft.template.template_id)).length}/{templateData.filter(tpl => tpl.template_id).length} Collected
-            </span>
-          </div>
-        </div>
-        {/* Botón Cancel abajo */}
-        <button className="cancel-btn" onClick={onClose}>Cancel</button>
-        <div className="photos-grid-full scrollable-nfts-fix grid-5-cols">
-          {templateData.map((tplRaw, index) => {
-            const tpl = tplRaw || { template_id: '', img: '', video: '' };
-            const isOwned = isPhotoOwned(tpl.template_id);
-            const photoNumber = index + 1;
-            // Buscar el NFT del usuario para este template
-            const userNFT = ownedNFTs.find(nft => nft.template && nft.template.template_id === tpl.template_id);
-            // Usar el hash de video del NFT del usuario si lo tiene, si no, el del template
-            const videoHash = userNFT && userNFT.data && userNFT.data.video && userNFT.data.video.length > 10
-              ? userNFT.data.video
-              : (tpl.video && tpl.video.length > 10 ? tpl.video : '');
-            return (
-              <div 
-                key={tpl.template_id || index} 
-                className={`photo-card ${!isOwned ? 'locked' : ''}`}
-              >
-                {videoHash ? (
-                  <video
-                    src={`https://ipfs.io/ipfs/${videoHash}`}
-                    className="girl-media"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    style={{ width: '100%', height: '100%', aspectRatio: '9/16', objectFit: 'cover', display: 'block' }}
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                ) : (
-                  <div className="placeholder-media">
-                    <span>Foto #{photoNumber}</span>
-                  </div>
-                )}
-                {!isOwned && (
-                  <div className="lock-overlay">
-                    <svg viewBox="0 0 24 24" className="lock-icon">
-                      <path d="M12 1C8.676 1 6 3.676 6 7v2H4v14h16V9h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v2H8V7c0-2.276 1.724-4 4-4z"/>
-                    </svg>
-                  </div>
-                )}
-                <div className="photo-label-nft">#{photoNumber}</div>
+            <div className="girl-header-description">{girlData.description}</div>
+            <div className="girl-header-stats">
+              <div className="girl-header-stat">
+                <span className="stat-icon">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="9.5" stroke="#bfc2d1" strokeWidth="1.5"/><path d="M11 5.5V11L14 13" stroke="#bfc2d1" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                </span>
+                <span className="stat-text">{girlData.stats?.time}</span>
               </div>
-            );
-          })}
+              <div className="girl-header-stat">
+                <span className="stat-icon">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="9.5" stroke="#ffe066" strokeWidth="1.5"/><text x="11" y="15" textAnchor="middle" fontSize="10" fill="#ffe066">S</text></svg>
+                </span>
+                <span className="stat-text">{girlData.stats?.token}</span>
+              </div>
+              <div className="girl-header-stat">
+                <span className="stat-icon">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4.5" y="9.5" width="13" height="7" rx="2" fill="#ff00ff" fillOpacity="0.13" stroke="#ff00ff" strokeWidth="1.7"/><rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="1.3"/><path d="M4.5 12H17.5" stroke="#ff00ff" strokeWidth="1.3"/><path d="M11 9.5V16" stroke="#ff00ff" strokeWidth="1.3"/><path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/><path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/></svg>
+                </span>
+                <span className="stat-text">{girlData.stats?.giftChance}</span>
+              </div>
+            </div>
+            <div className="nftmodal-divider" />
+            <div className="nft-count-center-row">
+              <span className="selected-count-style selected-count-btn btn-small">
+                {ownedNFTs.filter(nft => nft.template && templateData.some(tpl => tpl.template_id === nft.template.template_id)).length}/{templateData.filter(tpl => tpl.template_id).length} Collected
+              </span>
+            </div>
+          </div>
+          <div className="photos-grid-full scrollable-nfts-fix grid-5-cols">
+            {templateData.map((tplRaw, index) => {
+              const tpl = tplRaw || { template_id: '', img: '', video: '' };
+              const isOwned = isPhotoOwned(tpl.template_id);
+              const photoNumber = index + 1;
+              // Buscar el NFT del usuario para este template
+              const userNFT = ownedNFTs.find(nft => nft.template && nft.template.template_id === tpl.template_id);
+              // Usar el hash de video del NFT del usuario si lo tiene, si no, el del template
+              const videoHash = userNFT && userNFT.data && userNFT.data.video && userNFT.data.video.length > 10
+                ? userNFT.data.video
+                : (tpl.video && tpl.video.length > 10 ? tpl.video : '');
+              return (
+                <div 
+                  key={tpl.template_id || index} 
+                  className={`photo-card ${!isOwned ? 'locked' : ''}`}
+                >
+                  {videoHash ? (
+                    <video
+                      src={`https://ipfs.io/ipfs/${videoHash}`}
+                      className="girl-media"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      style={{ width: '100%', height: '100%', aspectRatio: '9/16', objectFit: 'cover', display: 'block' }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  ) : (
+                    <div className="placeholder-media">
+                      <span>Foto #{photoNumber}</span>
+                    </div>
+                  )}
+                  {!isOwned && (
+                    <div className="lock-overlay">
+                      <svg viewBox="0 0 24 24" className="lock-icon">
+                        <path d="M12 1C8.676 1 6 3.676 6 7v2H4v14h16V9h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v2H8V7c0-2.276 1.724-4 4-4z"/>
+                      </svg>
+                    </div>
+                  )}
+                  <div className="photo-label-nft">#{photoNumber}</div>
+                </div>
+              );
+            })}
+          </div>
+          <button className="cancel-btn" onClick={onClose}>Cancel</button>
         </div>
       </div>
 
@@ -186,11 +187,22 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .onlyfaps-modal-full {
           width: 100vw;
+          height: 100vh;
           padding: 0;
           position: relative;
           display: flex;
           flex-direction: column;
           align-items: center;
+        }
+        .onlyfaps-modal-inner {
+          width: 100%;
+          max-width: 1200px;
+          height: 90vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          overflow-y: auto;
+          background: none;
         }
         .modal-close-btn {
           position: absolute;
@@ -366,11 +378,9 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           }
         }
         .cancel-btn {
-          position: fixed;
-          left: 50%;
-          bottom: 32px;
-          transform: translateX(-50%);
-          z-index: 10001;
+          position: static;
+          margin: 24px auto 0 auto;
+          display: block;
           font-size: 15px;
           font-weight: 500;
           color: #fff;
