@@ -256,10 +256,10 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .photos-grid-full.scrollable-nfts-fix.grid-5-cols {
           display: grid;
-          grid-template-columns: repeat(5, minmax(0, 1fr));
+          grid-template-columns: repeat(5, 1fr);
           gap: 32px;
-          width: 90vw;
-          max-width: 1600px;
+          width: 100%;
+          max-width: 1200px;
           margin: 0 auto;
           padding: 0 12px 24px 12px;
           overflow-y: auto;
@@ -301,7 +301,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .girl-media {
           width: 100%;
-          height: 100%;
           aspect-ratio: 9/16;
           object-fit: cover;
           display: block;
@@ -310,7 +309,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .placeholder-media {
           width: 100%;
-          height: 100%;
           aspect-ratio: 9/16;
           background: #2a003f;
           display: flex;
