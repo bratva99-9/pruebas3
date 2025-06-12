@@ -259,39 +259,39 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           grid-template-columns: repeat(5, 1fr);
           gap: 32px;
           width: 100%;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 12px 24px 12px;
-          overflow-y: auto;
+          padding: 0 12px;
+          margin-bottom: 18px;
           scrollbar-width: thin;
           scrollbar-color: #ff00ff #181828;
+          max-height: 70vh;
+          overflow-y: auto;
         }
         .photo-card {
-          position: relative;
-          aspect-ratio: 9/16;
-          width: 100%;
+          background: none;
           border-radius: 18px;
           overflow: hidden;
-          background: none;
-          transition: transform 0.2s;
+          box-shadow: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          align-items: stretch;
+          justify-content: center;
           min-width: 0;
-        }
-        .photo-card:hover {
-          transform: translateY(-5px);
-        }
-        .photo-card.locked {
-          filter: brightness(0.5);
+          height: 272px;
+          aspect-ratio: 9/16;
         }
         .girl-media {
           width: 100%;
+          height: 100%;
           aspect-ratio: 9/16;
+          border-radius: 18px;
           object-fit: cover;
           display: block;
-          border-radius: 18px;
           background: #19191d;
         }
         .placeholder-media {
           width: 100%;
+          height: 100%;
           aspect-ratio: 9/16;
           background: #2a003f;
           display: flex;
