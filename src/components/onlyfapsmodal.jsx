@@ -186,7 +186,6 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .onlyfaps-modal-full {
           width: 100vw;
-          height: 100vh;
           padding: 0;
           position: relative;
           display: flex;
@@ -259,6 +258,8 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           grid-template-columns: repeat(5, 1fr);
           gap: 32px;
           width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
           padding: 0 12px;
           margin-bottom: 18px;
           scrollbar-width: thin;
