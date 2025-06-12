@@ -191,8 +191,8 @@ const InventoryModal = ({ onClose }) => {
         }
         .nfts-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-          gap: 24px;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 32px;
           width: 100%;
           padding: 0 12px;
           margin-bottom: 18px;
@@ -225,6 +225,7 @@ const InventoryModal = ({ onClose }) => {
           align-items: stretch;
           justify-content: center;
           aspect-ratio: 9/16;
+          min-width: 0;
         }
         .nft-media {
           width: 100%;
