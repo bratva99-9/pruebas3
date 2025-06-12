@@ -48,7 +48,7 @@ const InventoryModal = ({ onClose }) => {
         setLoading(false);
         return;
       }
-      // Buscar NFTs de todos los schemas
+      // Fetch NFTs from all schemas
       const queries = SCHEMAS.filter(s => s.id !== 'all').map(schema =>
         fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${user}&collection_name=${COLLECTION}&schema_name=${schema.id}&limit=100`)
           .then(res => res.json())
@@ -73,7 +73,7 @@ const InventoryModal = ({ onClose }) => {
     return (
       <div className="inventory-modal-fullscreen">
         <div className="inventory-modal-content">
-          <div className="loading">Cargando inventario...</div>
+          <div className="loading">Loading inventory...</div>
         </div>
       </div>
     );
@@ -96,7 +96,7 @@ const InventoryModal = ({ onClose }) => {
         </div>
         <div className="nfts-grid">
           {filteredNfts.length === 0 ? (
-            <div style={{color:'#fff', gridColumn:'1/-1', textAlign:'center', fontSize:'1.2rem', opacity:0.7}}>No tienes NFTs en esta categoría.</div>
+            <div style={{color:'#fff', gridColumn:'1/-1', textAlign:'center', fontSize:'1.2rem', opacity:0.7}}>No NFTs in this category.</div>
           ) : filteredNfts.slice(0, displayCount).map(nft => {
             const videoHash = nft.data && nft.data.video && nft.data.video.length > 10 ? nft.data.video : null;
             const imgHash = nft.data && nft.data.img && nft.data.img.length > 10 ? nft.data.img : null;
@@ -113,13 +113,13 @@ const InventoryModal = ({ onClose }) => {
                       loop
                       muted
                       playsInline
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '10/20', borderRadius: '18px', background: '#19191d', display: 'block' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '9/16', borderRadius: '18px', background: '#19191d', display: 'block', maxHeight: '420px', minHeight: '240px' }}
                       onError={e => { e.target.style.display = 'none'; }}
                     />
                   ) : imgHash ? (
-                    <img src={fileUrl} alt="NFT" style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '10/20', borderRadius: '18px', background: '#19191d', display: 'block' }} />
+                    <img src={fileUrl} alt="NFT" style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '9/16', borderRadius: '18px', background: '#19191d', display: 'block', maxHeight: '420px', minHeight: '240px' }} />
                   ) : (
-                    <div style={{width:'100%',height:'100%',background:'#181828',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center', aspectRatio:'10/20', borderRadius:'18px'}}>Sin media</div>
+                    <div style={{width:'100%',height:'100%',background:'#181828',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center', aspectRatio:'9/16', borderRadius:'18px'}}>No media</div>
                   )}
                 </div>
               </div>
@@ -127,9 +127,9 @@ const InventoryModal = ({ onClose }) => {
           })}
         </div>
         {filteredNfts.length > displayCount && (
-          <button className="load-more-btn" onClick={handleLoadMore}>Cargar más</button>
+          <button className="load-more-btn" onClick={handleLoadMore}>Load more</button>
         )}
-        <button className="close-btn" onClick={onClose}>Cerrar</button>
+        <button className="close-btn" onClick={onClose}>Close</button>
       </div>
       <style jsx>{`
         .inventory-modal-fullscreen {
@@ -198,14 +198,18 @@ const InventoryModal = ({ onClose }) => {
           margin-bottom: 18px;
           scrollbar-width: thin;
           scrollbar-color: #ff00ff #181828;
+          max-height: 70vh;
+          overflow-y: auto;
         }
         .nfts-grid::-webkit-scrollbar {
-          width: 10px;
+          width: 12px;
           background: #181828;
         }
         .nfts-grid::-webkit-scrollbar-thumb {
           background: linear-gradient(180deg, #ff00ff 0%, #7f36ff 100%);
           border-radius: 8px;
+          border: 2px solid #ff6fff;
+          min-height: 40px;
         }
         .nfts-grid::-webkit-scrollbar-track {
           background: #181828;
@@ -220,12 +224,12 @@ const InventoryModal = ({ onClose }) => {
           display: flex;
           align-items: stretch;
           justify-content: center;
-          aspect-ratio: 10/20;
+          aspect-ratio: 9/16;
         }
         .nft-media {
           width: 100%;
           height: 100%;
-          aspect-ratio: 10/20;
+          aspect-ratio: 9/16;
           border-radius: 18px;
           overflow: hidden;
           background: #19191d;
