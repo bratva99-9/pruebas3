@@ -191,7 +191,7 @@ const Home = () => {
         }
         .fab-menu-vertical {
           position: absolute;
-          left: 16px;
+          left: 10px;
           top: 50%;
           transform: translateY(-50%);
           display: flex;
