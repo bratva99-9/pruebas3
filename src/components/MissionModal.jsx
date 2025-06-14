@@ -475,6 +475,31 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
           opacity: 1;
         }
       `}</style>
+      <style>{`
+        @media (max-width: 900px) and (orientation: landscape) {
+          .mission-modal-fullscreen,
+          .mission-modal-content,
+          .modal-fade-scale-container,
+          .missions-row-scroll {
+            transform: scale(0.8);
+            transform-origin: top center;
+            width: 100vw !important;
+            max-width: 100vw !important;
+            overflow-x: auto !important;
+          }
+          .missions-row-scroll {
+            gap: 24px !important;
+            justify-content: flex-start !important;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+          }
+          .mission-card {
+            min-width: 204px !important;
+            max-width: 204px !important;
+            width: 204px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };
