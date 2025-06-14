@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { UserService } from '../UserService';
 
 // Nodo alternativo con CORS para desarrollo
-const API_NFTREWHIST = 'https://corsproxy.io/?https://wax.greymass.com/v1/chain/get_table_rows';
+const API_NFTREWHIST = 'https://api.waxsweden.org/v1/chain/get_table_rows';
 
 const GiftHistoryModal = ({ onClose }) => {
   const [history, setHistory] = useState([]);
@@ -35,14 +35,14 @@ const GiftHistoryModal = ({ onClose }) => {
         let rows = data.rows || [];
         // Filtrar por usuario y tomar los 10 últimos
         rows = rows.filter(row => row.user === user).slice(0, 10);
-        // Buscar video por template_id
+        // Buscar video por asset_id (igual que MissionStatus)
         const withVideos = await Promise.all(rows.map(async (item) => {
           let video = '';
-          if (item.template_id) {
+          if (item.asset_id) {
             try {
-              const tplRes = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/template/nightclubnft/${item.template_id}`);
-              const tplData = await tplRes.json();
-              video = tplData?.data?.immutable_data?.video || '';
+              const assetRes = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${item.asset_id}`);
+              const assetData = await assetRes.json();
+              video = assetData?.data?.data?.video || '';
             } catch {}
           }
           return { ...item, video };
@@ -74,22 +74,24 @@ const GiftHistoryModal = ({ onClose }) => {
           ) : history.length === 0 ? (
             <div className="no-history">No hay historial de gifts.</div>
           ) : (
-            history.map((item, idx) => (
-              <div className="gifthistory-row-noborder" key={item.id || idx}>
-                <div className="gifthistory-video-noborder">
-                  {item.video ? (
-                    <video src={`https://ipfs.io/ipfs/${item.video}`} autoPlay loop muted playsInline style={{ width: 60, height: 106, borderRadius: 8, objectFit: 'cover', background: '#181828' }} />
-                  ) : (
-                    <div className="no-video">Sin video</div>
-                  )}
+            <div className="gifthistory-scroll-list">
+              {history.map((item, idx) => (
+                <div className="gifthistory-row-noborder" key={item.id || idx}>
+                  <div className="gifthistory-video-noborder">
+                    {item.video ? (
+                      <video src={`https://ipfs.io/ipfs/${item.video}`} autoPlay loop muted playsInline style={{ width: 60, height: 106, borderRadius: 8, objectFit: 'cover', background: '#181828' }} />
+                    ) : (
+                      <div className="no-video">Sin video</div>
+                    )}
+                  </div>
+                  <div className="gifthistory-info-noborder">
+                    <div className="gifthistory-schema-noborder">Schema: <b>{item.schema}</b></div>
+                    <div className="gifthistory-date-noborder">Fecha: <b>{item.timestamp ? new Date(item.timestamp * 1000).toLocaleString() : '-'}</b></div>
+                    <div className="gifthistory-reward-noborder">Reward: <b>{item.reward_name}</b></div>
+                  </div>
                 </div>
-                <div className="gifthistory-info-noborder">
-                  <div className="gifthistory-schema-noborder">Schema: <b>{item.schema}</b></div>
-                  <div className="gifthistory-date-noborder">Fecha: <b>{item.timestamp ? new Date(item.timestamp * 1000).toLocaleString() : '-'}</b></div>
-                  <div className="gifthistory-reward-noborder">Reward: <b>{item.reward_name}</b></div>
-                </div>
-              </div>
-            ))
+              ))}
+            </div>
           )}
         </div>
       </div>
@@ -156,8 +158,32 @@ const GiftHistoryModal = ({ onClose }) => {
           max-width: 600px;
           display: flex;
           flex-direction: column;
+          align-items: center;
+          height: 60vh;
+          overflow: hidden;
+        }
+        .gifthistory-scroll-list {
+          width: 100vw;
+          max-width: 600px;
+          height: 100%;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
           gap: 12px;
           align-items: center;
+          scrollbar-width: thin;
+          scrollbar-color: #ff00ff #181828;
+        }
+        .gifthistory-scroll-list::-webkit-scrollbar {
+          width: 8px;
+          background: #181828;
+        }
+        .gifthistory-scroll-list::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #ff00ff 0%, #b266ff 100%);
+          border-radius: 8px;
+        }
+        .gifthistory-scroll-list::-webkit-scrollbar-track {
+          background: #181828;
         }
         .gifthistory-row-noborder {
           display: flex;
@@ -192,6 +218,17 @@ const GiftHistoryModal = ({ onClose }) => {
           text-align: center;
           font-size: 1.2rem;
           margin: 32px 0;
+        }
+        .no-video {
+          color: #b266ff;
+          font-size: 1.1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 60px;
+          height: 106px;
+          background: #181828;
+          border-radius: 8px;
         }
       `}</style>
     </div>
