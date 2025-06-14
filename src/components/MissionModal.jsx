@@ -481,7 +481,7 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
       <style>{`
         @media (max-width: 900px) and (orientation: landscape) {
           .missions-row-scroll {
-            transform: scale(0.64);
+            transform: scale(0.67);
             transform-origin: center center;
             width: 100vw !important;
             max-width: 100vw !important;
@@ -489,11 +489,10 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
             scrollbar-width: thin;
             scrollbar-color: #ff00ff #181828;
             box-sizing: content-box;
-            padding-left: 90px !important;
-            padding-right: 90px !important;
+            padding-left: 40px !important;
+            padding-right: 120px !important;
             padding-top: 0 !important;
-            margin-top: 0 !important;
-            overflow: visible !important;
+            margin-top: -10px !important;
           }
           .mission-modal-content {
             overflow: visible !important;
