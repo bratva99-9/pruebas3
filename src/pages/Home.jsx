@@ -4,20 +4,12 @@ import MissionModal from '../components/MissionModal';
 import MissionStatus from '../components/missionstatus';
 import InventoryModal from '../components/InventoryModal';
 import { UserService } from '../UserService';
-import missionButton from '../images/missionboton.webp';
-import missionButton2 from '../images/missionboton2.webp';
-import missionButton3 from '../images/missionboton3.webp';
-import missionButton4 from '../images/missionboton4.webp';
-import missionButton5 from '../images/missionboton5.webp';
-import missionButton6 from '../images/missionboton6.webp';
-import missionButton7 from '../images/missionboton7.webp';
-import missionButton8 from '../images/missionboton8.webp';
-import missionButton9 from '../images/missionboton9.webp';
 import OnlyFapsModal from '../components/onlyfapsmodal';
 
 const buildingSprites = [
-  missionButton, missionButton2, missionButton3, missionButton4, missionButton5,
-  missionButton6, missionButton7, missionButton8, missionButton9
+  // Elimina estas líneas:
+  // missionButton, missionButton2, missionButton3, missionButton4, missionButton5,
+  // missionButton6, missionButton7, missionButton8, missionButton9
 ];
 
 const menuOptions = [
