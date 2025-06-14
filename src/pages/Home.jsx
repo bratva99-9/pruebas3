@@ -88,38 +88,40 @@ const Home = () => {
 
   return (
     <div className="home-main-wrapper">
-      <div className="home-image-row">
-        <div className="home-image-container fab-rounded">
-          <div className="top-info-bar inside-map">
-            <div className="top-info-item user-name">{UserService.getName()}</div>
-            <div className="top-info-item wax-balance">{UserService.formatWAXOnly()} WAX</div>
-            <div className="top-info-item sexy-balance">{UserService.formatSEXYOnly()} SEXY</div>
-            <div className="top-info-item sexy-balance2">{UserService.formatSEXYOnly()} SEXY+</div>
+      <div className="home-center-container">
+        <div className="home-image-row">
+          <div className="home-image-container fab-rounded">
+            <div className="top-info-bar inside-map">
+              <div className="top-info-item user-name">{UserService.getName()}</div>
+              <div className="top-info-item wax-balance">{UserService.formatWAXOnly()} WAX</div>
+              <div className="top-info-item sexy-balance">{UserService.formatSEXYOnly()} SEXY</div>
+              <div className="top-info-item sexy-balance2">{UserService.formatSEXYOnly()} SEXY+</div>
+            </div>
+            <div className="fab-menu-vertical">
+              {menuOptions.map(opt => (
+                <div className="fab-menu-btn-pill-wrapper" key={opt.action}>
+                  <button
+                    className="fab-menu-btn"
+                    onClick={() => handleMenuClick(opt.action)}
+                    title={opt.label}
+                    tabIndex={0}
+                  >
+                    <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
+                  </button>
+                  <span className="fab-menu-pill">{opt.label}</span>
+                </div>
+              ))}
+            </div>
+            <img src="/mapa1.png" alt="Mapa" className="home-image" />
+            <div
+              className="mission-button edificio1-map"
+              onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
+            />
+            <div
+              className="mission-button edificio2-map"
+              onClick={() => setShowMission(true)}
+            />
           </div>
-          <div className="fab-menu-vertical" style={{ top: '50%', transform: 'translateY(-50%)', left: 16 }}>
-            {menuOptions.map(opt => (
-              <div className="fab-menu-btn-pill-wrapper" key={opt.action}>
-                <button
-                  className="fab-menu-btn"
-                  onClick={() => handleMenuClick(opt.action)}
-                  title={opt.label}
-                  tabIndex={0}
-                >
-                  <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
-                </button>
-                <span className="fab-menu-pill">{opt.label}</span>
-              </div>
-            ))}
-          </div>
-          <img src="/mapa1.png" alt="Mapa" className="home-image" />
-          <div
-            className="mission-button edificio1-map"
-            onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
-          />
-          <div
-            className="mission-button edificio2-map"
-            onClick={() => setShowMission(true)}
-          />
         </div>
       </div>
       {showMission && (
@@ -150,14 +152,21 @@ const Home = () => {
           position: relative;
           overflow: hidden;
         }
+        .home-center-container {
+          width: 100vw;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
         .home-image-row {
           display: flex;
           flex-direction: row;
-          align-items: flex-start;
+          align-items: center;
           justify-content: center;
           width: 100%;
-          margin-bottom: 32px;
-          margin-top: 22px;
+          margin: 0;
         }
         .home-image-container {
           position: relative;
@@ -169,7 +178,7 @@ const Home = () => {
           overflow: hidden;
           background: none !important;
           display: flex;
-          align-items: flex-start;
+          align-items: center;
           justify-content: center;
           margin: 0 auto;
           padding: 0 !important;
