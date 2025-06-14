@@ -89,7 +89,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
   return (
     <div className="nft-modal-fullscreen">
       <div className="nft-modal-content">
-        <h1 className="mission-title-nftmodal">Active Missions</h1>
+        <h1 className="mission-title-nftmodal">Active Jobs</h1>
         {loading ? (
           <div className="loading">Loading missions...</div>
         ) : (
@@ -264,6 +264,17 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           grid-template-columns: repeat(5, 1fr);
           gap: 18px 10px;
           justify-content: flex-start;
+        }
+        .mission-status-section::-webkit-scrollbar {
+          height: 10px;
+          background: #181828;
+        }
+        .mission-status-section::-webkit-scrollbar-thumb {
+          background: linear-gradient(90deg, #ff00ff 0%, #b266ff 100%);
+          border-radius: 8px;
+        }
+        .mission-status-section::-webkit-scrollbar-track {
+          background: #181828;
         }
         .mission-status-card {
           background: rgba(36,0,56,0.22);
@@ -515,6 +526,98 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           box-shadow: 0 2px 18px 0 #ff6fff33;
           font-weight: 500;
           max-width: 420px;
+        }
+        @media (max-width: 900px) and (orientation: landscape) {
+          .mission-title-nftmodal {
+            font-size: 22px !important;
+            margin-bottom: 4px !important;
+            letter-spacing: 1px !important;
+          }
+          .mission-status-section {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 8px !important;
+            padding: 0 4vw !important;
+            margin-bottom: 18px !important;
+            width: 100vw !important;
+            max-width: 100vw !important;
+            min-height: unset !important;
+            height: auto !important;
+            padding-top: 30px !important;
+            padding-bottom: 30px !important;
+            margin-top: -15px !important;
+            scrollbar-color: #ff00ff #181828 !important;
+            scrollbar-width: thin !important;
+          }
+          .mission-status-card {
+            width: 105.25px !important;
+            min-width: 105.25px !important;
+            max-width: 105.25px !important;
+            height: auto !important;
+            min-height: unset !important;
+            max-height: unset !important;
+            padding: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            background: rgba(36,0,56,0.22);
+            border-radius: 16px !important;
+            box-shadow: 0 2px 18px 0 #0008, 0 0 0 1.5px #ff36ba22;
+            overflow: visible !important;
+          }
+          .mission-video-container {
+            width: 100% !important;
+            aspect-ratio: 9/16 !important;
+            height: auto !important;
+            min-height: unset !important;
+            max-height: unset !important;
+            border-radius: 16px 16px 0 0 !important;
+            overflow: hidden !important;
+            background: #181828 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: 0 !important;
+          }
+          .mission-video {
+            width: 100% !important;
+            height: auto !important;
+            aspect-ratio: 9/16 !important;
+            border-radius: 16px 16px 0 0 !important;
+            object-fit: cover !important;
+            background: #181828 !important;
+            display: block !important;
+          }
+          .mission-info-overlay {
+            padding: 2px 0 2px 0 !important;
+          }
+          .mission-info-content {
+            font-size: 8px !important;
+            gap: 2px !important;
+          }
+          .mission-stat {
+            font-size: 8px !important;
+            gap: 2px !important;
+            padding: 0 1px !important;
+          }
+          .mission-status-actions {
+            margin-top: 4px !important;
+            gap: 4px !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: space-between !important;
+          }
+          .btn-mission-action {
+            font-size: 11px !important;
+            padding: 4px 0 !important;
+            min-width: 40px !important;
+            width: 48% !important;
+            box-sizing: border-box !important;
+          }
+          .mission-status-section {
+            gap: 20px !important;
+          }
         }
       `}</style>
     </div>
