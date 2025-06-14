@@ -220,7 +220,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
             <p>Make sure you own NFTs from the 'nightclubnft' collection with schema 'girls'</p>
           </div>
         ) : (
-          <div className="nfts-grid unified-width compact-width" style={{marginTop: '-11px'}}>
+          <div className="nfts-grid unified-width compact-width">
             {filteredNFTs.slice(0, displayCount).map((nft) => {
               const isSelected = selectedNFTs.includes(nft.asset_id);
               const videoUrl = nft.data.video.startsWith('Qm')
@@ -663,6 +663,16 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
           margin: 0;
         }
         @media (max-width: 900px) and (orientation: landscape) {
+          .mission-info-header {
+            margin-bottom: 0 !important;
+          }
+          .nftmodal-divider {
+            margin-top: 0 !important;
+            margin-bottom: 4px !important;
+          }
+          .nftmodal-top-buttons-bar {
+            margin-top: 0 !important;
+          }
           .mission-title-nftmodal {
             font-size: 26.6px !important;
             margin-bottom: 0px !important;
@@ -682,36 +692,30 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
             margin: 0 !important;
             padding: 0 !important;
           }
-          .nftmodal-divider {
-            margin: 6px auto 6px auto !important;
-          }
           .nft-modal-content {
             padding-top: 0 !important;
             margin-top: 5px !important;
           }
           .nfts-grid {
-            gap: 36.8px !important;
+            gap: 15.2px !important;
             padding-left: 0 !important;
             padding-right: 0 !important;
-            margin-top: 0 !important;
-            max-width: 115vw !important;
-            width: 115vw !important;
-            min-width: 115vw !important;
-            justify-content: space-between !important;
+            margin-top: -24px !important;
+            max-width: 100vw !important;
+            width: 100vw !important;
+            min-width: 100vw !important;
+            justify-content: flex-start !important;
             display: flex !important;
           }
           .nft-card {
-            min-width: 80.5px !important;
-            max-width: 80.5px !important;
-            width: 80.5px !important;
-            height: 138px !important;
-            margin-top: 0 !important;
+            min-width: 92.09px !important;
+            max-width: 92.09px !important;
+            width: 92.09px !important;
+            height: 157.87px !important;
           }
           .nftmodal-top-buttons-bar {
             width: 100vw !important;
             max-width: 100vw !important;
-            gap: 0 !important;
-            margin-bottom: 6px !important;
             padding-left: 0 !important;
             padding-right: 0 !important;
           }
@@ -719,6 +723,22 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
             width: 100vw !important;
             max-width: 100vw !important;
             gap: 25.6px !important;
+          }
+          .nftmodal-divider {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+          }
+          .unified-width {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+          }
+          .compact-width {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+          }
+          .nfts-grid {
+            margin-top: -50px !important;
+            padding-top: 9px !important;
           }
         }
       `}</style>
