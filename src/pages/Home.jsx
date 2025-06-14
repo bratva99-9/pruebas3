@@ -177,9 +177,7 @@ const Home = () => {
           box-shadow: 0 0 28px rgba(255, 54, 186, 0.5);
           overflow: hidden;
           background: none !important;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          display: block;
           margin: 0 auto;
           padding: 0 !important;
           max-width: none;
@@ -200,7 +198,7 @@ const Home = () => {
           flex-direction: column;
           align-items: center;
           gap: 12px;
-          z-index: 10;
+          z-index: 20;
         }
         .fab-menu-btn-pill-wrapper {
           display: flex;
@@ -208,6 +206,7 @@ const Home = () => {
           gap: 0;
           margin: 0;
           padding: 0;
+          position: relative;
         }
         .fab-menu-btn {
           background: #181828;
@@ -328,26 +327,6 @@ const Home = () => {
           align-items: center;
           z-index: 30;
           border: none;
-        }
-        .fab-menu-vertical.inside-map {
-          position: absolute;
-          left: 14px;
-          top: 65px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          align-items: center;
-          z-index: 30;
-          background: none;
-          box-shadow: none;
-          border-radius: 0;
-          padding: 0;
-          transform: scale(0.95);
-        }
-        .fab-menu-btn-pill-wrapper {
-          position: relative;
-          display: flex;
-          align-items: center;
         }
         .top-info-item {
           display: flex;
