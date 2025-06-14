@@ -179,17 +179,17 @@ const Home = () => {
         }
         .home-image-container {
           position: relative;
-          border-radius: 0;
-          border: none;
-          box-shadow: none;
+          border-radius: 0 !important;
+          border: none !important;
+          box-shadow: none !important;
           overflow: auto;
-          background: #181828;
+          background: none !important;
           display: flex;
           align-items: flex-start;
           justify-content: center;
           width: 855px;
           height: 570px;
-          padding: 0;
+          padding: 0 !important;
           max-width: none;
         }
         .fab-rounded { border-radius: 32px !important; }
@@ -420,12 +420,13 @@ const Home = () => {
             max-width: 100vw;
             height: auto;
             min-height: 320px;
-            border-radius: 0;
-            border: none;
-            box-shadow: none;
-            padding: 0;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
             overflow-x: auto;
             overflow-y: hidden;
+            background: none !important;
           }
         }
         @media (max-width: 600px) {
@@ -433,12 +434,13 @@ const Home = () => {
             width: 100vw;
             max-width: 100vw;
             min-height: 180px;
-            border-radius: 0;
-            border: none;
-            box-shadow: none;
-            padding: 0;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
             overflow-x: auto;
             overflow-y: hidden;
+            background: none !important;
           }
           .fab-menu-vertical {
             left: 8px;
