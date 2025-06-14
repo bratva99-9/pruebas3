@@ -276,6 +276,8 @@ const Home = () => {
         .home-center-container {
           width: 100vw;
           height: 100vh;
+          min-width: 855px;
+          min-height: 570px;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -285,11 +287,8 @@ const Home = () => {
           -webkit-overflow-scrolling: touch;
         }
         .home-image-row {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
           width: 100%;
+          min-width: 855px;
           margin: 0;
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
@@ -298,6 +297,8 @@ const Home = () => {
           position: relative;
           width: 855px;
           height: 570px;
+          min-width: 855px;
+          min-height: 570px;
           border: 3px solid #ff36ba;
           border-radius: 32px;
           box-shadow: 0 0 28px rgba(255, 54, 186, 0.5);
