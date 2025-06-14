@@ -185,7 +185,8 @@ const Home = () => {
         .fab-menu-vertical {
           position: absolute;
           left: 16px;
-          top: 16px;
+          top: 50%;
+          transform: translateY(-50%);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -194,9 +195,10 @@ const Home = () => {
         }
         .fab-menu-btn-pill-wrapper {
           display: flex;
-          flex-direction: row;
           align-items: center;
-          gap: 8px;
+          gap: 0;
+          margin: 0;
+          padding: 0;
         }
         .fab-menu-btn {
           background: #181828;
@@ -211,6 +213,7 @@ const Home = () => {
           font-size: 1.5rem;
           cursor: pointer;
           transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, color 0.2s;
+          position: relative;
         }
         .fab-menu-btn:hover, .fab-menu-btn:focus {
           background: #ff36ba44;
@@ -224,6 +227,17 @@ const Home = () => {
           color: #fff;
           box-shadow: 0 0 18px #ff36ba;
         }
+        .fab-menu-icon {
+          width: 22px;
+          height: 22px;
+          color: #ffb9fa;
+          opacity: 0.88;
+          font-size: 1.05em;
+          pointer-events: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
         .fab-menu-pill {
           background: #ff36ba;
           color: #fff;
@@ -231,9 +245,19 @@ const Home = () => {
           padding: 4px 12px;
           font-size: 1rem;
           font-weight: 500;
-          margin-left: 4px;
+          margin-left: 8px;
           display: flex;
           align-items: center;
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(0) scaleX(0.92);
+          transition: opacity 0.18s, transform 0.22s cubic-bezier(0.4,0,0.2,1);
+        }
+        .fab-menu-btn-pill-wrapper:hover .fab-menu-pill,
+        .fab-menu-btn-pill-wrapper:focus-within .fab-menu-pill {
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateY(0) scaleX(1);
         }
         .edificio-zindex {
           position: absolute;
@@ -315,26 +339,6 @@ const Home = () => {
           position: relative;
           display: flex;
           align-items: center;
-        }
-        .fab-menu-icon {
-          width: 20px;
-          height: 20px;
-          color: #ffb9fa;
-          opacity: 0.88;
-          font-size: 1.05em;
-          pointer-events: none;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-        }
-        .fab-menu-btn-pill-wrapper:hover .fab-menu-pill,
-        .fab-menu-btn-pill-wrapper:focus-within .fab-menu-pill {
-          opacity: 1;
-          transform: translateY(-50%) scaleX(1);
         }
         .top-info-item {
           display: flex;
