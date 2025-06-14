@@ -549,6 +549,19 @@ const Home = () => {
             min-width: 855px !important;
           }
         }
+        @media (max-width: 900px) and (orientation: portrait) {
+          .home-center-container {
+            align-items: flex-start !important;
+            justify-content: flex-start !important;
+            padding-top: 0 !important;
+          }
+        }
+        @media (max-width: 900px) and (orientation: landscape) {
+          html, body, .home-main-wrapper, .App {
+            overflow: auto !important;
+            touch-action: pan-x pan-y !important;
+          }
+        }
       `}</style>
     </div>
   );
