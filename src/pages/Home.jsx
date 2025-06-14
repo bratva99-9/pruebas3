@@ -295,13 +295,13 @@ const Home = () => {
           flex-direction: column;
           background: hsl(245, 86.70%, 2.90%);
           position: relative;
-          overflow: hidden;
+          /* overflow: hidden; */
         }
         .home-center-container {
-          width: 100vw;
-          height: 100vh;
           min-width: 855px;
           min-height: 570px;
+          width: auto;
+          height: auto;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -311,8 +311,8 @@ const Home = () => {
           -webkit-overflow-scrolling: touch;
         }
         .home-image-row {
-          width: 100%;
           min-width: 855px;
+          width: auto;
           margin: 0;
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
@@ -353,12 +353,8 @@ const Home = () => {
           z-index: 20;
         }
         .fab-menu-btn {
-          width: 100%;
-          min-width: 45px;
-          max-width: 45px;
+          width: 45px;
           height: 45px;
-          min-height: 45px;
-          max-height: 45px;
         }
         .fab-menu-btn-pill-wrapper {
           display: flex;
@@ -530,9 +526,6 @@ const Home = () => {
           font-size: 1.3em;
           text-align: center;
           padding: 32px;
-        }
-        body, html {
-          overflow: hidden !important;
         }
         @media (max-width: 900px) {
           html, body {
