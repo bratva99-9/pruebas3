@@ -80,20 +80,22 @@ function getMenuIcon(name) {
         </svg>
       );
     case 'settings':
-      // Settings: simple gear
+      // Settings: simple sliders
       return (
         <svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="10" cy="10" r="3"/>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          <line x1="4" y1="7" x2="16" y2="7" />
+          <line x1="4" y1="13" x2="16" y2="13" />
+          <circle cx="8" cy="7" r="2" />
+          <circle cx="12" cy="13" r="2" />
         </svg>
       );
     case 'logout':
-      // Logout: simple door exit
+      // Logout: simple arrow out of a box
       return (
         <svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="3" y="3" width="10" height="14" rx="2"/>
-          <path d="M13 12l4-4-4-4"/>
-          <path d="M17 8v8"/>
+          <path d="M15 12l4-4-4-4"/>
+          <path d="M19 8H9"/>
+          <rect x="3" y="4" width="6" height="12" rx="2"/>
         </svg>
       );
     case 'help':
@@ -117,8 +119,7 @@ const Home = () => {
   const [onlyFapsGirl, setOnlyFapsGirl] = useState('Sandra');
   const [showInventory, setShowInventory] = useState(false);
   const history = useHistory();
-  const [toastMsg, setToastMsg] = useState("");
-  const [showToast, setShowToast] = useState(false);
+  const [toasts, setToasts] = useState([]);
 
   const handleMenuClick = (action) => {
     setShowMission(false);
@@ -142,25 +143,29 @@ const Home = () => {
         window.open('https://neftyblocks.com/collection/nightclubnft/blends', '_blank');
         break;
       case 'history':
-        setToastMsg('This feature is coming soon!');
-        setShowToast(true);
+        addToast('This feature is coming soon!');
         break;
       case 'settings':
-        setToastMsg('Settings will be available in a future update!');
-        setShowToast(true);
+        addToast('Settings will be available in a future update!');
         break;
       case 'logout':
         UserService.logout();
         window.location.href = '/login';
         break;
       case 'help':
-        setToastMsg('Help is coming soon!');
-        setShowToast(true);
+        addToast('Help is coming soon!');
         break;
       default:
         break;
     }
   };
+
+  function addToast(msg) {
+    setToasts(prev => [{ id: Date.now(), msg }, ...prev]);
+    setTimeout(() => {
+      setToasts(prev => prev.slice(0, -1));
+    }, 5000);
+  }
 
   return (
     <div className="home-main-wrapper">
@@ -170,8 +175,26 @@ const Home = () => {
             <div className="top-info-bar inside-map">
               <div className="top-info-item user-name">{UserService.getName()}</div>
               <div className="top-info-item wax-balance">{UserService.formatWAXOnly()} WAX</div>
-              <div className="top-info-item sexy-balance">{UserService.formatSEXYOnly()} SEXY</div>
-              <div className="top-info-item sexy-balance2">{UserService.formatSEXYOnly()} SEXY+</div>
+              <div className="top-info-item sexy-balance">
+                {UserService.formatSEXYOnly()} SEXY
+                <span
+                  style={{ marginLeft: 6, cursor: 'pointer', color: '#00ffff', fontWeight: 700, fontSize: 20, verticalAlign: 'middle' }}
+                  title="Buy/Swap SEXY"
+                  onClick={() => window.open('https://swap.tacocrypto.io/swap?output=SEXY-nightclub.gm&input=WAX-eosio.token', '_blank')}
+                >
+                  +
+                </span>
+              </div>
+              <div className="top-info-item sexy-balance2">
+                {UserService.formatSEXYOnly()} SEXY+
+                <span
+                  style={{ marginLeft: 6, cursor: 'pointer', color: '#00ffff', fontWeight: 700, fontSize: 20, verticalAlign: 'middle' }}
+                  title="Buy/Swap SEXY"
+                  onClick={() => window.open('https://swap.tacocrypto.io/swap?output=SEXY-nightclub.gm&input=WAX-eosio.token', '_blank')}
+                >
+                  +
+                </span>
+              </div>
             </div>
             <div className="fab-menu-vertical">
               {menuOptions.map(opt => (
@@ -219,10 +242,10 @@ const Home = () => {
           onClose={() => setShowInventory(false)}
         />
       )}
-      {showToast && (
-        <div style={{
+      {toasts.map((t, i) => (
+        <div key={t.id} style={{
           position: 'absolute',
-          top: 30,
+          top: 30 + i * 60,
           left: '50%',
           transform: 'translateX(-50%)',
           background: 'rgba(24,24,40,0.95)',
@@ -236,12 +259,11 @@ const Home = () => {
           boxShadow: '0 4px 24px #ff36ba44',
           textAlign: 'center',
           minWidth: 220,
-        }}
-        onAnimationEnd={() => setShowToast(false)}
-        >
-          {toastMsg}
+          transition: 'top 0.3s',
+        }}>
+          {t.msg}
         </div>
-      )}
+      ))}
       <style jsx>{`
         .home-main-wrapper {
           min-height: 100vh;
