@@ -96,6 +96,12 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
               <button className="nav-btn" onClick={prevGirl} disabled={GIRL_NAMES.length === 0}>&lt;</button>
               <h1 className="girl-header-title">{girlData.name || currentGirl}</h1>
               <button className="nav-btn" onClick={nextGirl} disabled={GIRL_NAMES.length === 0}>&gt;</button>
+              <button className="close-x-mobile" onClick={onClose} aria-label="Cerrar">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 6L22 22" stroke="#ff36ba" strokeWidth="2.5" strokeLinecap="round"/>
+                  <path d="M22 6L6 22" stroke="#ff36ba" strokeWidth="2.5" strokeLinecap="round"/>
+                </svg>
+              </button>
             </div>
             <div className="girl-header-description">{girlData.description}</div>
             <div className="girl-header-stats">
@@ -601,6 +607,29 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
             font-size: 13px !important;
             padding: 6px 22px !important;
             margin-top: 0px !important;
+          }
+          .close-x-mobile {
+            display: block !important;
+            background: none !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            position: absolute;
+            right: -250px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0;
+            margin: 0;
+            z-index: 1002;
+            cursor: pointer;
+          }
+          .girl-header-title-row {
+            position: relative;
+          }
+        }
+        @media (min-width: 901px) {
+          .close-x-mobile {
+            display: none !important;
           }
         }
       `}</style>
