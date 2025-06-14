@@ -73,7 +73,7 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
       <div className="modal-fade-scale-container">
         <div className={`modal-fade-scale-front${showNFTModal ? ' fade-scale-out' : ''}`}>
           <div className="mission-modal-content">
-            <h1 className="mission-title">MISSION SELECTION</h1>
+            <h1 className="mission-title">SELECT JOBS</h1>
             <div className={`missions-row-scroll${focusMode ? ' focus-mode' : ''}`}
                  onMouseEnter={handleRowMouseEnter}
                  onMouseLeave={handleRowMouseLeave}>
@@ -170,10 +170,10 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
         }
         .mission-title {
           text-align: center;
-          font-size: 38px;
+          font-size: 34.2px;
           font-weight: 700;
           color: #ff6fff;
-          margin-bottom: 18px;
+          margin-bottom: 8px;
           text-shadow: 0 0 12px #ff00ff99;
           letter-spacing: 2px;
         }
@@ -195,6 +195,9 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
           margin-right: auto;
           position: relative;
           overflow: visible;
+          box-sizing: content-box;
+          padding-left: 32px;
+          padding-right: 32px;
         }
         .missions-row-scroll::after {
           content: '';
@@ -485,6 +488,9 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
             overflow-x: auto !important;
             scrollbar-width: thin;
             scrollbar-color: #ff00ff #181828;
+            box-sizing: content-box;
+            padding-left: 48px !important;
+            padding-right: 48px !important;
           }
           .missions-row-scroll::-webkit-scrollbar {
             height: 10px;
