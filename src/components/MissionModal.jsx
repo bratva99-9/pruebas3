@@ -481,7 +481,7 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
       <style>{`
         @media (max-width: 900px) and (orientation: landscape) {
           .missions-row-scroll {
-            transform: scale(0.67);
+            transform: scale(0.64);
             transform-origin: center center;
             width: 100vw !important;
             max-width: 100vw !important;
@@ -489,10 +489,11 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
             scrollbar-width: thin;
             scrollbar-color: #ff00ff #181828;
             box-sizing: content-box;
-            padding-left: 40px !important;
-            padding-right: 120px !important;
+            padding-left: 0px !important;
+            padding-right: 130px !important;
             padding-top: 0 !important;
-            margin-top: -10px !important;
+            margin-top: -14px !important;
+            overflow: visible !important;
           }
           .mission-modal-content {
             overflow: visible !important;
@@ -502,7 +503,7 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
           }
           .mission-title {
             margin-top: 0 !important;
-            margin-bottom: 0 !important;
+            margin-bottom: 1px !important;
           }
           .missions-row-scroll::-webkit-scrollbar {
             height: 10px;
