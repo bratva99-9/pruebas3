@@ -280,6 +280,9 @@ const Home = () => {
           flex-direction: column;
           align-items: center;
           justify-content: center;
+          overflow-x: auto;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
         }
         .home-image-row {
           display: flex;
@@ -288,6 +291,8 @@ const Home = () => {
           justify-content: center;
           width: 100%;
           margin: 0;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
         }
         .home-image-container {
           position: relative;
