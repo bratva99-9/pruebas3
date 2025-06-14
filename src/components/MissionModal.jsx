@@ -481,7 +481,7 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
           .mission-modal-content,
           .modal-fade-scale-container,
           .missions-row-scroll {
-            transform: scale(0.8);
+            transform: scale(0.6);
             transform-origin: top center;
             width: 100vw !important;
             max-width: 100vw !important;
