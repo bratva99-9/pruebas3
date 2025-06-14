@@ -5,6 +5,7 @@ import MissionStatus from '../components/missionstatus';
 import InventoryModal from '../components/InventoryModal';
 import { UserService } from '../UserService';
 import OnlyFapsModal from '../components/onlyfapsmodal';
+import GiftHistoryModal from '../components/gifthistorymodal';
 
 const buildingSprites = [
   // Elimina estas líneas:
@@ -118,6 +119,7 @@ const Home = () => {
   const [showOnlyFaps, setShowOnlyFaps] = useState(false);
   const [onlyFapsGirl, setOnlyFapsGirl] = useState('Sandra');
   const [showInventory, setShowInventory] = useState(false);
+  const [showGiftHistory, setShowGiftHistory] = useState(false);
   const history = useHistory();
   const [toasts, setToasts] = useState([]);
   const [showRotateWarning, setShowRotateWarning] = useState(false);
@@ -144,6 +146,7 @@ const Home = () => {
     setShowMissionStatus(false);
     setShowOnlyFaps(false);
     setShowInventory(false);
+    setShowGiftHistory(false);
     switch (action) {
       case 'home':
         // Solo cerrar modales
@@ -161,7 +164,7 @@ const Home = () => {
         window.open('https://neftyblocks.com/collection/nightclubnft/blends', '_blank');
         break;
       case 'history':
-        addToast('This feature is coming soon!');
+        setShowGiftHistory(true);
         break;
       case 'settings':
         addToast('Settings will be available in a future update!');
@@ -258,6 +261,12 @@ const Home = () => {
       {showInventory && (
         <InventoryModal
           onClose={() => setShowInventory(false)}
+        />
+      )}
+      {showGiftHistory && (
+        <GiftHistoryModal
+          onClose={() => setShowGiftHistory(false)}
+          user={UserService.getName()}
         />
       )}
       {toasts.map((t, i) => (
