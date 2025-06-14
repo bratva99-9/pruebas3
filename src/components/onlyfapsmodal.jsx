@@ -600,7 +600,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           .cancel-btn {
             font-size: 13px !important;
             padding: 6px 22px !important;
-            margin-top: 24px !important;
+            margin-top: 10px !important;
           }
         }
       `}</style>
