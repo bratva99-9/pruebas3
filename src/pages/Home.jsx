@@ -188,58 +188,56 @@ const Home = () => {
   return (
     <div className="home-main-wrapper">
       <div className="home-center-container">
-        <div className="mobile-scroll-wrapper">
-          <div className="home-image-row">
-            <div className="home-image-container fab-rounded">
-              <div className="top-info-bar inside-map">
-                <div className="top-info-item user-name">{UserService.getName()}</div>
-                <div className="top-info-item wax-balance">{UserService.formatWAXOnly()} WAX</div>
-                <div className="top-info-item sexy-balance">
-                  {UserService.formatSEXYOnly()} SEXY
-                  <span
-                    style={{ marginLeft: 6, cursor: 'pointer', color: '#00ffff', fontWeight: 700, fontSize: 20, verticalAlign: 'middle' }}
-                    title="Buy/Swap SEXY"
-                    onClick={() => window.open('https://swap.tacocrypto.io/swap?output=SEXY-nightclub.gm&input=WAX-eosio.token', '_blank')}
-                  >
-                    +
-                  </span>
-                </div>
-                <div className="top-info-item sexy-balance2">
-                  {UserService.formatSEXYOnly()} SEXY+
-                  <span
-                    style={{ marginLeft: 6, cursor: 'pointer', color: '#00ffff', fontWeight: 700, fontSize: 20, verticalAlign: 'middle' }}
-                    title="Buy/Swap SEXY"
-                    onClick={() => window.open('https://swap.tacocrypto.io/swap?output=SEXY-nightclub.gm&input=WAX-eosio.token', '_blank')}
-                  >
-                    +
-                  </span>
-                </div>
+        <div className="home-image-row">
+          <div className="home-image-container fab-rounded">
+            <div className="top-info-bar inside-map">
+              <div className="top-info-item user-name">{UserService.getName()}</div>
+              <div className="top-info-item wax-balance">{UserService.formatWAXOnly()} WAX</div>
+              <div className="top-info-item sexy-balance">
+                {UserService.formatSEXYOnly()} SEXY
+                <span
+                  style={{ marginLeft: 6, cursor: 'pointer', color: '#00ffff', fontWeight: 700, fontSize: 20, verticalAlign: 'middle' }}
+                  title="Buy/Swap SEXY"
+                  onClick={() => window.open('https://swap.tacocrypto.io/swap?output=SEXY-nightclub.gm&input=WAX-eosio.token', '_blank')}
+                >
+                  +
+                </span>
               </div>
-              <div className="fab-menu-vertical">
-                {menuOptions.map(opt => (
-                  <div className="fab-menu-btn-pill-wrapper" key={opt.action}>
-                    <button
-                      className="fab-menu-btn"
-                      onClick={() => handleMenuClick(opt.action)}
-                      title={opt.label}
-                      tabIndex={0}
-                    >
-                      <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
-                    </button>
-                    <span className="fab-menu-pill">{opt.label}</span>
-                  </div>
-                ))}
+              <div className="top-info-item sexy-balance2">
+                {UserService.formatSEXYOnly()} SEXY+
+                <span
+                  style={{ marginLeft: 6, cursor: 'pointer', color: '#00ffff', fontWeight: 700, fontSize: 20, verticalAlign: 'middle' }}
+                  title="Buy/Swap SEXY"
+                  onClick={() => window.open('https://swap.tacocrypto.io/swap?output=SEXY-nightclub.gm&input=WAX-eosio.token', '_blank')}
+                >
+                  +
+                </span>
               </div>
-              <img src="/mapa1.png" alt="Mapa" className="home-image" />
-              <div
-                className="mission-button edificio1-map"
-                onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
-              />
-              <div
-                className="mission-button edificio2-map"
-                onClick={() => setShowMission(true)}
-              />
             </div>
+            <div className="fab-menu-vertical">
+              {menuOptions.map(opt => (
+                <div className="fab-menu-btn-pill-wrapper" key={opt.action}>
+                  <button
+                    className="fab-menu-btn"
+                    onClick={() => handleMenuClick(opt.action)}
+                    title={opt.label}
+                    tabIndex={0}
+                  >
+                    <span className="fab-menu-icon" aria-hidden="true">{getMenuIcon(opt.icon)}</span>
+                  </button>
+                  <span className="fab-menu-pill">{opt.label}</span>
+                </div>
+              ))}
+            </div>
+            <img src="/mapa1.png" alt="Mapa" className="home-image" />
+            <div
+              className="mission-button edificio1-map"
+              onClick={() => { setOnlyFapsGirl('Sandra'); setShowOnlyFaps(true); }}
+            />
+            <div
+              className="mission-button edificio2-map"
+              onClick={() => setShowMission(true)}
+            />
           </div>
         </div>
       </div>
@@ -562,16 +560,6 @@ const Home = () => {
           html, body, .home-main-wrapper, .App {
             overflow: auto !important;
             touch-action: pan-x pan-y !important;
-          }
-          .mobile-scroll-wrapper {
-            width: 100vw;
-            overflow-x: auto !important;
-            overflow-y: hidden !important;
-            -webkit-overflow-scrolling: touch;
-          }
-          .home-image-row {
-            min-width: 855px !important;
-            width: 855px !important;
           }
         }
       `}</style>
