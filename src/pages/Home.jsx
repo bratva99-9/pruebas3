@@ -104,7 +104,7 @@ const Home = () => {
             <div className="top-info-item sexy-balance">{UserService.formatSEXYOnly()} SEXY</div>
             <div className="top-info-item sexy-balance2">{UserService.formatSEXYOnly()} SEXY+</div>
           </div>
-          <div className="fab-menu-vertical inside-map">
+          <div className="fab-menu-vertical" style={{ top: '50%', transform: 'translateY(-50%)', left: 16 }}>
             {menuOptions.map(opt => (
               <div className="fab-menu-btn-pill-wrapper" key={opt.action}>
                 <button
@@ -129,16 +129,6 @@ const Home = () => {
             onClick={() => setShowMission(true)}
           />
         </div>
-      </div>
-      <div className="buildings-row">
-        {buildingSprites.slice(1).map((sprite, idx) => (
-          <div
-            key={idx}
-            className="mission-button"
-            style={{ backgroundImage: `url(${sprite})` }}
-            onClick={() => setShowMission(true)}
-          />
-        ))}
       </div>
       {showMission && (
         <MissionModal
@@ -228,12 +218,19 @@ const Home = () => {
           color: #ff36ba;
           font-size: 1.5rem;
           cursor: pointer;
-          transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+          transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, color 0.2s;
         }
-        .fab-menu-btn:active, .fab-menu-btn:focus {
-          background: #ff36ba22;
+        .fab-menu-btn:hover, .fab-menu-btn:focus {
+          background: #ff36ba44;
           border-color: #ff36ba;
-          box-shadow: 0 0 8px #ff36ba88;
+          color: #fff;
+          box-shadow: 0 0 12px #ff36ba88;
+        }
+        .fab-menu-btn:active {
+          background: #ff36ba88;
+          border-color: #ff36ba;
+          color: #fff;
+          box-shadow: 0 0 18px #ff36ba;
         }
         .fab-menu-pill {
           background: #ff36ba;
@@ -243,27 +240,8 @@ const Home = () => {
           font-size: 1rem;
           font-weight: 500;
           margin-left: 4px;
-        }
-        .buildings-row {
           display: flex;
-          flex-direction: row;
-          justify-content: center;
-          gap: 18px;
-          width: 100%;
-          margin-bottom: 24px;
-        }
-        .mission-button {
-          width: 64px;
-          height: 64px;
-          background-size: cover;
-          background-position: center;
-          border: none !important;
-          border-radius: 0 !important;
-          cursor: pointer;
-          transition: box-shadow 0.2s;
-        }
-        .mission-button:active, .mission-button:focus {
-          box-shadow: 0 0 12px #ff36ba88;
+          align-items: center;
         }
         .edificio-zindex {
           position: absolute;
