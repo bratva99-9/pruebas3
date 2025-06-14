@@ -173,7 +173,7 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
           font-size: 29.07px;
           font-weight: 700;
           color: #ff6fff;
-          margin-bottom: 2px;
+          margin-bottom: 12px;
           text-shadow: 0 0 12px #ff00ff99;
           letter-spacing: 2px;
         }
@@ -489,8 +489,8 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
             scrollbar-width: thin;
             scrollbar-color: #ff00ff #181828;
             box-sizing: content-box;
-            padding-left: 0px !important;
-            padding-right: 130px !important;
+            padding-left: -20px !important;
+            padding-right: 140px !important;
             padding-top: 0 !important;
             margin-top: -14px !important;
             overflow: visible !important;
