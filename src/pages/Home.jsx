@@ -566,35 +566,41 @@ const Home = () => {
             margin: 0 !important;
           }
           .home-image-container {
-            width: 812px !important; /* 855px * 0.95 */
-            height: 541.5px !important; /* 570px * 0.95 */
-            min-width: 812px !important;
-            min-height: 541.5px !important;
+            width: 855px !important;
+            height: 570px !important;
+            min-width: 855px !important;
+            min-height: 570px !important;
             margin: 0 !important;
+            box-shadow: none !important;
           }
           .home-image-row {
-            min-width: 812px !important;
+            min-width: 855px !important;
             margin: 0 !important;
+            padding-top: 0 !important;
           }
           .fab-menu-btn {
-            width: 42.75px !important; /* 45px * 0.95 */
-            height: 42.75px !important;
-            min-width: 42.75px !important;
-            min-height: 42.75px !important;
-            max-width: 42.75px !important;
-            max-height: 42.75px !important;
+            width: 45px !important;
+            height: 45px !important;
+            min-width: 45px !important;
+            min-height: 45px !important;
+            max-width: 45px !important;
+            max-height: 45px !important;
           }
           .edificio1-map {
-            left: calc(451.7px * 0.95) !important;
-            top: calc(270px * 0.95) !important;
-            width: calc(240.8px * 0.95) !important;
-            height: calc(321.1px * 0.95) !important;
+            left: 451.7px !important;
+            top: 270px !important;
+            width: 240.8px !important;
+            height: 321.1px !important;
           }
           .edificio2-map {
-            left: calc(617.3px * 0.95) !important;
-            top: calc(200.4px * 0.95) !important;
-            width: calc(219.2px * 0.95) !important;
-            height: calc(273px * 0.95) !important;
+            left: 617.3px !important;
+            top: 200.4px !important;
+            width: 219.2px !important;
+            height: 273px !important;
+          }
+          .home-center-container {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
           }
         }
       `}</style>
