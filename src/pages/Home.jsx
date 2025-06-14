@@ -161,12 +161,16 @@ const Home = () => {
       )}
       <style jsx>{`
         .home-main-wrapper {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 16px;
+          width: 100%;
           min-height: 100vh;
           display: flex;
           flex-direction: column;
           background: hsl(245, 86.70%, 2.90%);
           position: relative;
-          overflow: hidden;
+          overflow-x: hidden;
         }
         .home-image-row {
           display: flex;
@@ -189,6 +193,7 @@ const Home = () => {
           justify-content: center;
           width: 855px;
           height: 570px;
+          max-width: 100%;
         }
         .fab-rounded { border-radius: 32px !important; }
         .home-image {
@@ -197,11 +202,68 @@ const Home = () => {
           object-fit: contain;
           display: block;
         }
-        @media (max-width: 1100px) {
-          .home-image-container {
-            width: 98vw;
-            max-width: 98vw;
-          }
+        .fab-menu-vertical {
+          position: absolute;
+          left: 16px;
+          top: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          z-index: 10;
+        }
+        .fab-menu-btn-pill-wrapper {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 8px;
+        }
+        .fab-menu-btn {
+          background: #181828;
+          border: 2px solid #ff36ba;
+          border-radius: 50%;
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #ff36ba;
+          font-size: 1.5rem;
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s;
+        }
+        .fab-menu-btn:active, .fab-menu-btn:focus {
+          background: #ff36ba22;
+          border-color: #ff36ba;
+        }
+        .fab-menu-pill {
+          background: #ff36ba;
+          color: #fff;
+          border-radius: 12px;
+          padding: 4px 12px;
+          font-size: 1rem;
+          font-weight: 500;
+          margin-left: 4px;
+        }
+        .buildings-row {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          gap: 18px;
+          width: 100%;
+          margin-bottom: 24px;
+        }
+        .mission-button {
+          width: 64px;
+          height: 64px;
+          background-size: cover;
+          background-position: center;
+          border-radius: 16px;
+          border: 2px solid #ff36ba;
+          cursor: pointer;
+          transition: box-shadow 0.2s;
+        }
+        .mission-button:active, .mission-button:focus {
+          box-shadow: 0 0 12px #ff36ba88;
         }
         .edificio-zindex {
           position: absolute;
@@ -284,30 +346,6 @@ const Home = () => {
           display: flex;
           align-items: center;
         }
-        .fab-menu-btn {
-          width: 43.7px;
-          height: 43.7px;
-          border-radius: 50%;
-          background: rgba(10, 6, 22, 0.92);
-          border: 2px solid #ff36ba55;
-          box-shadow: 0 2px 8px #ff36ba22;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          margin: 0;
-          padding: 0;
-          cursor: pointer;
-          transition: background 0.18s, border 0.18s, transform 0.18s;
-          outline: none;
-          z-index: 2;
-        }
-        .fab-menu-btn:hover,
-        .fab-menu-btn:focus {
-          background: rgba(18, 10, 40, 0.95);
-          border: 2.5px solid #ff36ba;
-          transform: scale(1.03);
-        }
         .fab-menu-icon {
           width: 20px;
           height: 20px;
@@ -322,25 +360,6 @@ const Home = () => {
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
-        }
-        .fab-menu-pill {
-          position: absolute;
-          left: 52px;
-          top: 50%;
-          transform: translateY(-50%) scaleX(0.92);
-          background: rgba(24,24,40,0.92);
-          color: #b0b3c6;
-          padding: 6px 18px 6px 16px;
-          border-radius: 22px;
-          font-size: 0.93em;
-          font-weight: 500;
-          white-space: nowrap;
-          opacity: 0;
-          pointer-events: none;
-          border: 1.5px solid #ff36ba55;
-          box-shadow: 0 2px 8px #ff36ba33;
-          transition: opacity 0.18s, transform 0.22s cubic-bezier(0.4,0,0.2,1);
-          z-index: 1;
         }
         .fab-menu-btn-pill-wrapper:hover .fab-menu-pill,
         .fab-menu-btn-pill-wrapper:focus-within .fab-menu-pill {
@@ -391,6 +410,71 @@ const Home = () => {
         }
         body, html {
           overflow: hidden !important;
+        }
+        @media (max-width: 900px) {
+          .home-main-wrapper {
+            padding: 0 4vw;
+          }
+          .home-image-row {
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 18px;
+            margin-top: 12px;
+          }
+          .home-image-container {
+            width: 98vw;
+            max-width: 98vw;
+            height: auto;
+            min-height: 320px;
+            border-radius: 18px;
+          }
+          .fab-menu-vertical {
+            left: 8px;
+            top: 8px;
+            gap: 8px;
+          }
+          .buildings-row {
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+          }
+        }
+        @media (max-width: 600px) {
+          .home-main-wrapper {
+            padding: 0 2vw;
+          }
+          .home-image-container {
+            width: 100vw;
+            max-width: 100vw;
+            min-height: 180px;
+            border-radius: 10px;
+            padding: 0;
+          }
+          .fab-menu-vertical {
+            flex-direction: row;
+            left: 0;
+            right: 0;
+            top: auto;
+            bottom: 8px;
+            width: 100vw;
+            justify-content: center;
+            background: none;
+            gap: 4px;
+          }
+          .fab-menu-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+          }
+          .fab-menu-pill {
+            font-size: 0.9rem;
+            padding: 2px 8px;
+          }
+          .buildings-row {
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+          }
         }
       `}</style>
     </div>
