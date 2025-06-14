@@ -662,6 +662,65 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
           padding: 0;
           margin: 0;
         }
+        @media (max-width: 900px) and (orientation: landscape) {
+          .mission-title-nftmodal {
+            font-size: 26.6px !important;
+            margin-bottom: 0px !important;
+            line-height: 1.05 !important;
+            padding-bottom: 0 !important;
+          }
+          .mission-description-large {
+            font-size: 0.84rem !important;
+            margin-top: 0px !important;
+            margin-bottom: 0px !important;
+            padding: 0 8px !important;
+            line-height: 1.10 !important;
+          }
+          .mission-stats-horizontal {
+            font-size: 1.1rem !important;
+            gap: 2px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+          .nftmodal-divider {
+            margin: 6px auto 6px auto !important;
+          }
+          .nft-modal-content {
+            padding-top: 0 !important;
+            margin-top: 5px !important;
+          }
+          .nfts-grid {
+            gap: 36.8px !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            margin-top: 0 !important;
+            max-width: 115vw !important;
+            width: 115vw !important;
+            min-width: 115vw !important;
+            justify-content: space-between !important;
+            display: flex !important;
+          }
+          .nft-card {
+            min-width: 80.5px !important;
+            max-width: 80.5px !important;
+            width: 80.5px !important;
+            height: 138px !important;
+            margin-top: 0 !important;
+          }
+          .nftmodal-top-buttons-bar {
+            width: 100vw !important;
+            max-width: 100vw !important;
+            gap: 0 !important;
+            margin-bottom: 6px !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+          }
+          .fixed-bottom-btns {
+            width: 100vw !important;
+            max-width: 100vw !important;
+            gap: 25.6px !important;
+          }
+        }
       `}</style>
     </div>
   );
