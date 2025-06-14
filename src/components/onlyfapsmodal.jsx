@@ -89,7 +89,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
   return (
     <div className="onlyfaps-modal-bg-full">
       <div className="onlyfaps-modal-full">
-        <div className="onlyfaps-modal-inner">
+        <div className="onlyfaps-modal-inner" style={{ transform: 'scale(0.95)', marginTop: '-24px', overflowY: 'auto', height: '120vh' }}>
           {/* Encabezado estilo NFTModal */}
           <div className="girl-header-nftmodal">
             <div className="girl-header-title-row">
@@ -197,12 +197,32 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .onlyfaps-modal-inner {
           width: 100%;
           max-width: 1200px;
-          height: 90vh;
+          height: 100vh;
           display: flex;
           flex-direction: column;
           align-items: center;
-          overflow-y: auto;
           background: none;
+          overflow: hidden;
+          margin-top: -38px;
+        }
+        /* Solo PC: el header fijo y la grilla scrollable */
+        @media (min-width: 901px) {
+          .onlyfaps-modal-inner {
+            overflow: hidden !important;
+          }
+          .girl-header-nftmodal {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #09081a;
+            padding-bottom: 0;
+            margin-bottom: 0;
+          }
+          .photos-grid-full.scrollable-nfts-fix.grid-5-cols {
+            overflow-y: auto !important;
+            max-height: calc(90vh - 220px) !important;
+            margin-bottom: 0 !important;
+          }
         }
         .modal-close-btn {
           position: absolute;
@@ -267,16 +287,20 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .photos-grid-full.scrollable-nfts-fix.grid-5-cols {
           display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 22px;
-          width: 90vw;
-          max-width: 1600px;
+          grid-template-columns: repeat(5, 151px);
+          grid-auto-rows: 269px;
+          gap: 36px 22px;
+          width: auto;
+          max-width: 900px;
           margin: 0 auto;
-          padding: 0 20px 24px 20px;
+          padding: 24px 20px 24px 20px;
           overflow-y: auto;
-          max-height: calc(100vh - 120px);
-          justify-items: stretch;
-          align-items: stretch;
+          flex: 1 1 auto;
+          max-height: none;
+          min-height: 0;
+          margin-bottom: 0;
+          justify-items: center;
+          align-items: start;
           scrollbar-width: thin;
           scrollbar-color: #ff00ff #181828;
         }
@@ -293,8 +317,13 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .photo-card {
           position: relative;
-          aspect-ratio: 10/20;
-          height: 304px;
+          aspect-ratio: 9/16 !important;
+          width: 137px;
+          max-width: 151px;
+          min-width: 137px;
+          height: 244px;
+          max-height: 269px;
+          min-height: 244px;
           border-radius: 12px;
           overflow: hidden;
           background: none;
@@ -306,19 +335,18 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         .photo-card.locked {
           filter: brightness(0.5);
         }
-        .girl-media {
+        .girl-media, .placeholder-media {
           width: 100%;
-          height: 95%;
-          aspect-ratio: 10/20;
+          aspect-ratio: 9/16 !important;
+          height: 100%;
+        }
+        .girl-media {
           object-fit: cover;
           display: block;
           border-radius: 12px;
           background: #19191d;
         }
         .placeholder-media {
-          width: 100%;
-          height: 95%;
-          aspect-ratio: 10/20;
           background: #2a003f;
           display: flex;
           align-items: center;
@@ -379,16 +407,15 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .cancel-btn {
           position: static;
-          margin: 24px auto 0 auto;
-          display: block;
+          margin: 38px auto 0 auto;
+          background: #07304b !important;
+          border: 2px solid #00ffff !important;
+          color: #fff !important;
+          box-shadow: none !important;
           font-size: 15px;
           font-weight: 500;
-          color: #fff;
-          background: rgba(0,255,255,0.10);
-          border: 2px solid #00ffff;
           border-radius: 14px;
           padding: 8px 32px;
-          box-shadow: none;
           text-shadow: none;
           letter-spacing: 1px;
           cursor: pointer;
@@ -411,7 +438,7 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
           display: flex;
           justify-content: center;
           align-items: center;
-          margin: 0 0 18px 0;
+          margin: 0 0 8px 0;
         }
         .selected-count-style.selected-count-btn.btn-small {
           font-size: 14px;
@@ -461,43 +488,43 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .girl-header-title {
           color: #ff36ba;
-          font-size: 2.6rem;
+          font-size: 2.08rem;
           font-weight: 800;
-          letter-spacing: 2px;
-          text-shadow: 0 0 20px #ff36ba44;
-          margin: 0 12px 0 12px;
+          letter-spacing: 1.6px;
+          text-shadow: 0 0 16px #ff36ba44;
+          margin: 0 8px 0 8px;
           text-transform: capitalize;
-          line-height: 1.1;
+          line-height: 1.05;
         }
         .girl-header-description {
           color: #bfc2d1;
-          font-size: 1.2rem;
+          font-size: 0.96rem;
           font-weight: 400;
-          margin: 6px 0 18px 0;
+          margin: 2px 0 10px 0;
           text-align: center;
           max-width: 700px;
         }
         .girl-header-stats {
           display: flex;
-          gap: 32px;
-          margin-bottom: 18px;
+          gap: 25px;
+          margin-bottom: 8px;
         }
         .nftmodal-divider {
           width: 900px;
           max-width: 900px;
           height: 2px;
           background: linear-gradient(90deg, rgba(255,0,255,0.12) 0%, rgba(0,255,255,0.12) 100%);
-          margin: 18px auto 18px auto;
+          margin: 8px auto 8px auto;
           border-radius: 2px;
         }
         .girl-header-stat {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 6px;
         }
         .stat-icon {
-          font-size: 18px;
-          width: 22px;
+          font-size: 14.4px;
+          width: 17.6px;
           text-align: center;
           opacity: 0.85;
           filter: grayscale(1) brightness(1.2);
@@ -507,10 +534,74 @@ const OnlyFapsModal = ({ girlName, onClose }) => {
         }
         .stat-text {
           color: #bfc2d1;
-          font-size: 1.1rem;
+          font-size: 0.88rem;
           font-weight: 500;
-          letter-spacing: 0.01em;
+          letter-spacing: 0.008em;
           text-shadow: none;
+        }
+        @media (max-width: 900px) and (orientation: landscape) {
+          .onlyfaps-modal-inner {
+            transform: scale(0.90) !important;
+            margin-top: -32px !important;
+            height: 125vh !important;
+          }
+          .girl-header-title {
+            font-size: 1.78rem !important;
+            letter-spacing: 1.1px !important;
+            margin: 0 6px 0 6px !important;
+          }
+          .girl-header-description {
+            font-size: 0.80rem !important;
+            margin: 2px 0 6px 0 !important;
+          }
+          .girl-header-stats {
+            gap: 18px !important;
+            margin-bottom: 4px !important;
+          }
+          .girl-header-stat {
+            gap: 4px !important;
+          }
+          .stat-icon {
+            font-size: 12.4px !important;
+            width: 13.7px !important;
+          }
+          .stat-text {
+            font-size: 0.71rem !important;
+          }
+          .nftmodal-divider {
+            margin: 4px auto 4px auto !important;
+          }
+          .nft-count-center-row {
+            margin: 0 0 4px 0 !important;
+          }
+          .selected-count-style.selected-count-btn.btn-small {
+            font-size: 11.8px !important;
+            padding: 4px 13px !important;
+            min-width: 80px !important;
+          }
+          .photos-grid-full.scrollable-nfts-fix.grid-5-cols {
+            gap: 18px 10px !important;
+            padding: 12px 6px 12px 6px !important;
+            max-width: 100vw !important;
+            grid-template-columns: repeat(5, 136px) !important;
+            grid-auto-rows: 242px !important;
+          }
+          .photo-card {
+            width: 124px !important;
+            max-width: 136px !important;
+            min-width: 124px !important;
+            height: 220px !important;
+            max-height: 242px !important;
+            min-height: 220px !important;
+          }
+          .girl-media, .placeholder-media {
+            border-radius: 10px !important;
+          }
+          .cancel-btn {
+            font-size: 13px !important;
+            padding: 6px 22px !important;
+            margin-top: 24px !important;
+          }
         }
       `}</style>
     </div>
