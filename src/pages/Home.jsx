@@ -538,6 +538,16 @@ const Home = () => {
           html, body {
             overflow: auto !important;
           }
+          .home-main-wrapper {
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+            min-width: 855px !important;
+            min-height: 570px !important;
+          }
+          .App {
+            overflow-x: auto !important;
+            min-width: 855px !important;
+          }
         }
       `}</style>
     </div>
