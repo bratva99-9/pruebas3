@@ -561,22 +561,40 @@ const Home = () => {
             overflow: auto !important;
             touch-action: pan-x pan-y !important;
           }
+          .home-center-container {
+            padding: 0 !important;
+            margin: 0 !important;
+          }
           .home-image-container {
-            width: 769.5px !important; /* 855px * 0.90 */
-            height: 513px !important; /* 570px * 0.90 */
-            min-width: 769.5px !important;
-            min-height: 513px !important;
+            width: 812px !important; /* 855px * 0.95 */
+            height: 541.5px !important; /* 570px * 0.95 */
+            min-width: 812px !important;
+            min-height: 541.5px !important;
+            margin: 0 !important;
           }
           .home-image-row {
-            min-width: 769.5px !important;
+            min-width: 812px !important;
+            margin: 0 !important;
           }
           .fab-menu-btn {
-            width: 40.5px !important; /* 45px * 0.90 */
-            height: 40.5px !important;
-            min-width: 40.5px !important;
-            min-height: 40.5px !important;
-            max-width: 40.5px !important;
-            max-height: 40.5px !important;
+            width: 42.75px !important; /* 45px * 0.95 */
+            height: 42.75px !important;
+            min-width: 42.75px !important;
+            min-height: 42.75px !important;
+            max-width: 42.75px !important;
+            max-height: 42.75px !important;
+          }
+          .edificio1-map {
+            left: calc(451.7px * 0.95) !important;
+            top: calc(270px * 0.95) !important;
+            width: calc(240.8px * 0.95) !important;
+            height: calc(321.1px * 0.95) !important;
+          }
+          .edificio2-map {
+            left: calc(617.3px * 0.95) !important;
+            top: calc(200.4px * 0.95) !important;
+            width: calc(219.2px * 0.95) !important;
+            height: calc(273px * 0.95) !important;
           }
         }
       `}</style>
