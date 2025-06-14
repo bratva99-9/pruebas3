@@ -179,10 +179,10 @@ const Home = () => {
         }
         .home-image-container {
           position: relative;
-          border-radius: 0 !important;
-          border: none !important;
-          box-shadow: none !important;
-          overflow: auto;
+          border: 3px solid #ff36ba;
+          border-radius: 32px;
+          box-shadow: 0 0 28px rgba(255, 54, 186, 0.5);
+          overflow: hidden;
           background: none !important;
           display: flex;
           align-items: flex-start;
@@ -207,6 +207,10 @@ const Home = () => {
           flex-direction: column;
           gap: 12px;
           z-index: 10;
+          align-items: flex-start;
+          justify-content: flex-start;
+          padding-top: 8px;
+          padding-bottom: 8px;
         }
         .fab-menu-btn-pill-wrapper {
           display: flex;
@@ -254,8 +258,8 @@ const Home = () => {
           height: 64px;
           background-size: cover;
           background-position: center;
-          border-radius: 16px;
-          border: 2px solid #ff36ba;
+          border: none !important;
+          border-radius: 0 !important;
           cursor: pointer;
           transition: box-shadow 0.2s;
         }
@@ -420,23 +424,9 @@ const Home = () => {
             max-width: 100vw;
             height: auto;
             min-height: 320px;
-            border-radius: 0 !important;
-            border: none !important;
-            box-shadow: none !important;
-            padding: 0 !important;
-            overflow-x: auto;
-            overflow-y: hidden;
-            background: none !important;
-          }
-        }
-        @media (max-width: 600px) {
-          .home-image-container {
-            width: 100vw;
-            max-width: 100vw;
-            min-height: 180px;
-            border-radius: 0 !important;
-            border: none !important;
-            box-shadow: none !important;
+            border: 3px solid #ff36ba;
+            border-radius: 18px;
+            box-shadow: 0 0 28px rgba(255, 54, 186, 0.5);
             padding: 0 !important;
             overflow-x: auto;
             overflow-y: hidden;
@@ -446,6 +436,29 @@ const Home = () => {
             left: 8px;
             top: 8px;
             gap: 8px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+          }
+        }
+        @media (max-width: 600px) {
+          .home-image-container {
+            width: 100vw;
+            max-width: 100vw;
+            min-height: 180px;
+            border: 3px solid #ff36ba;
+            border-radius: 10px;
+            box-shadow: 0 0 18px rgba(255, 54, 186, 0.5);
+            padding: 0 !important;
+            overflow-x: auto;
+            overflow-y: hidden;
+            background: none !important;
+          }
+          .fab-menu-vertical {
+            left: 8px;
+            top: 8px;
+            gap: 8px;
+            padding-top: 2px;
+            padding-bottom: 2px;
           }
         }
       `}</style>
