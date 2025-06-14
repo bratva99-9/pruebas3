@@ -29,10 +29,10 @@ function getMenuIcon(name) {
     case 'home': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10L10 4l7 6"/><path d="M5 10v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6"/></svg>);
     case 'target': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="10" cy="10" r="8"/><circle cx="10" cy="10" r="3"/></svg>);
     case 'gift': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="16" height="9" rx="2"/><path d="M2 7h16"/><path d="M10 7v9"/><path d="M7 3a2 2 0 1 1 4 0c0 1-2 3-2 3s-2-2-2-3z"/></svg>);
-    case 'image': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="16" height="10" rx="2"/><circle cx="7" cy="9" r="1.5"/><path d="M2 15l4-4a2 2 0 0 1 3 0l5 5"/></svg>);
+    case 'image': return (<svg width="20" height="20" fill="none" stroke="#00ffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="14" height="10" rx="2"/><circle cx="8" cy="10" r="2"/><path d="M3 15l4-4a2 2 0 0 1 3 0l5 5"/></svg>);
     case 'cart': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="7" cy="17" r="1"/><circle cx="15" cy="17" r="1"/><path d="M2 2h2l3.6 9.59a1 1 0 0 0 1 .41h7.72a1 1 0 0 0 1-.76l1.38-5.52H5.21"/></svg>);
-    case 'wrench': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 13.3a4 4 0 0 1-5.6-5.6l-5.1-5.1a2 2 0 1 1 2.8-2.8l5.1 5.1a4 4 0 0 1 5.6 5.6z"/></svg>);
-    case 'settings': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="10" cy="10" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>);
+    case 'wrench': return (<svg width="20" height="20" fill="none" stroke="#00ffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="8" width="12" height="8" rx="2"/><path d="M8 8V6a2 2 0 1 1 4 0v2"/></svg>);
+    case 'settings': return (<svg width="20" height="20" fill="none" stroke="#ff36ba" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="5" width="10" height="10" rx="2"/><path d="M9 9h2v2H9z"/></svg>);
     case 'logout': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>);
     case 'help': return (<svg width="20" height="20" fill="none" stroke="#b0b3c6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 14v-2a2 2 0 1 1 2-2"/><circle cx="10" cy="17" r="1"/></svg>);
     default: return null;
@@ -192,9 +192,9 @@ const Home = () => {
         .fab-menu-vertical {
           position: absolute;
           left: 13px;
-          top: 32px;
+          top: 42px;
           transform: none;
-          width: 46px;
+          width: 45px;
           align-items: stretch;
           display: flex;
           flex-direction: column;
@@ -203,11 +203,11 @@ const Home = () => {
         }
         .fab-menu-btn {
           width: 100%;
-          min-width: 46px;
-          max-width: 46px;
-          height: 46px;
-          min-height: 46px;
-          max-height: 46px;
+          min-width: 45px;
+          max-width: 45px;
+          height: 45px;
+          min-height: 45px;
+          max-height: 45px;
         }
         .fab-menu-btn-pill-wrapper {
           display: flex;
@@ -263,8 +263,9 @@ const Home = () => {
           font-size: 1rem;
           font-weight: 500;
           margin-left: 8px;
-          display: flex;
+          display: inline-flex;
           align-items: center;
+          white-space: nowrap;
           opacity: 0;
           pointer-events: none;
           transform: translateY(0) scaleX(0.92);
