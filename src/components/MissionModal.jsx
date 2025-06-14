@@ -482,21 +482,30 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
         @media (max-width: 900px) and (orientation: landscape) {
           .missions-row-scroll {
             transform: scale(0.64);
-            transform-origin: center center;
+            transform-origin: left top;
             width: 100vw !important;
             max-width: 100vw !important;
             overflow-x: auto !important;
             scrollbar-width: thin;
             scrollbar-color: #ff00ff #181828;
             box-sizing: content-box;
-            padding-left: -20px !important;
+            padding-left: 0 !important;
             padding-right: 140px !important;
             padding-top: 0 !important;
-            margin-top: -14px !important;
+            margin-top: -32px !important;
             overflow: visible !important;
+            position: relative;
+          }
+          .missions-row-scroll::before {
+            content: '';
+            display: block;
+            min-width: 60px;
+            height: 1px;
+            flex-shrink: 0;
           }
           .mission-modal-content {
             overflow: visible !important;
+            padding-top: 0 !important;
           }
           .mission-card {
             overflow: visible !important;
@@ -504,17 +513,6 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
           .mission-title {
             margin-top: 0 !important;
             margin-bottom: 1px !important;
-          }
-          .missions-row-scroll::-webkit-scrollbar {
-            height: 10px;
-            background: #181828;
-          }
-          .missions-row-scroll::-webkit-scrollbar-thumb {
-            background: linear-gradient(90deg, #ff00ff 0%, #7f36ff 100%);
-            border-radius: 8px;
-          }
-          .missions-row-scroll::-webkit-scrollbar-track {
-            background: #181828;
           }
         }
       `}</style>
