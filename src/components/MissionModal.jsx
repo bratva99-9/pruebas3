@@ -475,6 +475,30 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
           opacity: 1;
         }
       `}</style>
+      <style>{`
+        @media (max-width: 900px) and (orientation: landscape) {
+          .missions-row-scroll {
+            transform: scale(0.75);
+            transform-origin: center center;
+            width: 100vw !important;
+            max-width: 100vw !important;
+            overflow-x: auto !important;
+            scrollbar-width: thin;
+            scrollbar-color: #ff00ff #181828;
+          }
+          .missions-row-scroll::-webkit-scrollbar {
+            height: 10px;
+            background: #181828;
+          }
+          .missions-row-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #ff00ff 0%, #7f36ff 100%);
+            border-radius: 8px;
+          }
+          .missions-row-scroll::-webkit-scrollbar-track {
+            background: #181828;
+          }
+        }
+      `}</style>
     </div>
   );
 };
