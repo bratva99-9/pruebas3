@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import MissionModal from '../components/MissionModal';
 import MissionStatus from '../components/missionstatus';
@@ -120,6 +120,24 @@ const Home = () => {
   const [showInventory, setShowInventory] = useState(false);
   const history = useHistory();
   const [toasts, setToasts] = useState([]);
+  const [showRotateWarning, setShowRotateWarning] = useState(false);
+
+  useEffect(() => {
+    function checkOrientation() {
+      if (window.innerWidth < window.innerHeight && window.innerWidth < 900) {
+        setShowRotateWarning(true);
+      } else {
+        setShowRotateWarning(false);
+      }
+    }
+    checkOrientation();
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('orientationchange', checkOrientation);
+    return () => {
+      window.removeEventListener('resize', checkOrientation);
+      window.removeEventListener('orientationchange', checkOrientation);
+    };
+  }, []);
 
   const handleMenuClick = (action) => {
     setShowMission(false);
@@ -264,6 +282,12 @@ const Home = () => {
           {t.msg}
         </div>
       ))}
+      {showRotateWarning && (
+        <div className="rotate-warning">
+          Please rotate your device to landscape mode to play.<br/>
+          <span style={{fontSize: '1.7em', marginTop: 16, display: 'block'}}>🔄</span>
+        </div>
+      )}
       <style jsx>{`
         .home-main-wrapper {
           min-height: 100vh;
@@ -509,6 +533,11 @@ const Home = () => {
         }
         body, html {
           overflow: hidden !important;
+        }
+        @media (max-width: 900px) {
+          html, body {
+            overflow: auto !important;
+          }
         }
       `}</style>
     </div>
