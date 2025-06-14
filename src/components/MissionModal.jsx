@@ -173,7 +173,7 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
           font-size: 29.07px;
           font-weight: 700;
           color: #ff6fff;
-          margin-bottom: 4px;
+          margin-bottom: 2px;
           text-shadow: 0 0 12px #ff00ff99;
           letter-spacing: 2px;
         }
@@ -481,7 +481,7 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
       <style>{`
         @media (max-width: 900px) and (orientation: landscape) {
           .missions-row-scroll {
-            transform: scale(0.75);
+            transform: scale(0.9);
             transform-origin: center center;
             width: 100vw !important;
             max-width: 100vw !important;
@@ -489,9 +489,10 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
             scrollbar-width: thin;
             scrollbar-color: #ff00ff #181828;
             box-sizing: content-box;
-            padding-left: 48px !important;
+            padding-left: 80px !important;
             padding-right: 48px !important;
-            padding-top: 4px !important;
+            padding-top: 2px !important;
+            margin-top: 2px !important;
           }
           .missions-row-scroll::-webkit-scrollbar {
             height: 10px;
