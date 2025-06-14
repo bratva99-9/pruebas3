@@ -489,17 +489,17 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
             scrollbar-width: thin;
             scrollbar-color: #ff00ff #181828;
             box-sizing: content-box;
-            padding-left: 0 !important;
-            padding-right: 140px !important;
+            padding-left: 20px !important;
+            padding-right: 100px !important;
             padding-top: 0 !important;
-            margin-top: -32px !important;
+            margin-top: -16px !important;
             overflow: visible !important;
             position: relative;
           }
           .missions-row-scroll::before {
             content: '';
             display: block;
-            min-width: 60px;
+            min-width: 20px;
             height: 1px;
             flex-shrink: 0;
           }
