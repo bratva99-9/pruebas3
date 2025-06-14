@@ -561,26 +561,22 @@ const Home = () => {
             overflow: auto !important;
             touch-action: pan-x pan-y !important;
           }
-          .home-center-container {
-            padding-top: 32px !important;
-            padding-bottom: 32px !important;
-          }
           .home-image-container {
-            width: 812px !important; /* 855px * 0.95 */
-            height: 541.5px !important; /* 570px * 0.95 */
-            min-width: 812px !important;
-            min-height: 541.5px !important;
+            width: 769.5px !important; /* 855px * 0.90 */
+            height: 513px !important; /* 570px * 0.90 */
+            min-width: 769.5px !important;
+            min-height: 513px !important;
           }
           .home-image-row {
-            min-width: 812px !important;
+            min-width: 769.5px !important;
           }
           .fab-menu-btn {
-            width: 42.75px !important; /* 45px * 0.95 */
-            height: 42.75px !important;
-            min-width: 42.75px !important;
-            min-height: 42.75px !important;
-            max-width: 42.75px !important;
-            max-height: 42.75px !important;
+            width: 40.5px !important; /* 45px * 0.90 */
+            height: 40.5px !important;
+            min-width: 40.5px !important;
+            min-height: 40.5px !important;
+            max-width: 40.5px !important;
+            max-height: 40.5px !important;
           }
         }
       `}</style>
