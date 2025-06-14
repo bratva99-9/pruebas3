@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { UserService } from '../UserService';
 
 const SCHEMAS = [
-  { id: 'all', name: 'All' },
   { id: 'girls', name: 'Girls' },
   { id: 'photos', name: 'Photos' },
   { id: 'items', name: 'Items' },
@@ -16,7 +15,7 @@ const PAGE_SIZE = 10;
 const InventoryModal = ({ onClose }) => {
   const [nfts, setNfts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('girls');
   const [filteredNfts, setFilteredNfts] = useState([]);
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
 
@@ -27,15 +26,11 @@ const InventoryModal = ({ onClose }) => {
 
   useEffect(() => {
     setDisplayCount(PAGE_SIZE);
-    if (selectedCategory === 'all') {
-      setFilteredNfts(nfts);
-    } else {
-      setFilteredNfts(
-        nfts.filter(
-          nft => nft.schema && nft.schema.schema_name && nft.schema.schema_name.toLowerCase() === selectedCategory
-        )
-      );
-    }
+    setFilteredNfts(
+      nfts.filter(
+        nft => nft.schema && nft.schema.schema_name && nft.schema.schema_name.toLowerCase() === selectedCategory
+      )
+    );
   }, [selectedCategory, nfts]);
 
   const fetchNFTs = async () => {
@@ -303,6 +298,74 @@ const InventoryModal = ({ onClose }) => {
         @keyframes fadeInModal {
           from { opacity: 0; }
           to { opacity: 1; }
+        }
+        @media (max-width: 900px) and (orientation: landscape) {
+          .inventory-title {
+            font-size: 22px !important;
+            margin-top: 8px !important;
+            margin-bottom: 10px !important;
+            letter-spacing: 1px !important;
+          }
+          .category-filters {
+            margin-top: 0 !important;
+            margin-bottom: 10px !important;
+            gap: 6px !important;
+          }
+          .category-btn {
+            font-size: 11px !important;
+            padding: 4px 10px !important;
+            border-radius: 8px !important;
+          }
+          .nfts-grid {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 18px !important;
+            overflow-x: auto !important;
+            overflow-y: visible !important;
+            width: 100vw !important;
+            max-width: 100vw !important;
+            padding: 30px 10px 30px 10px !important;
+            margin: 0 !important;
+            justify-content: flex-start !important;
+            align-items: flex-start !important;
+            scrollbar-color: #ff00ff #181828 !important;
+            scrollbar-width: thin !important;
+          }
+          .nfts-grid::-webkit-scrollbar {
+            height: 10px;
+            background: #181828;
+          }
+          .nfts-grid::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #ff00ff 0%, #b266ff 100%);
+            border-radius: 8px;
+          }
+          .nfts-grid::-webkit-scrollbar-track {
+            background: #181828;
+          }
+          .nft-card {
+            min-width: 84px !important;
+            max-width: 84px !important;
+            width: 84px !important;
+            height: 149px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border-radius: 14px !important;
+            box-shadow: 0 2px 10px 0 #ff36ba33;
+            background: rgba(36,0,56,0.22);
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+          }
+          .nft-media video, .nft-media img, .nft-media div {
+            border-radius: 12px !important;
+            min-width: 100% !important;
+            min-height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            object-fit: cover !important;
+            aspect-ratio: 9/16 !important;
+          }
         }
       `}</style>
     </div>
