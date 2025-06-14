@@ -194,7 +194,7 @@ const Home = () => {
           left: 13px;
           top: 32px;
           transform: none;
-          width: 48px;
+          width: 46px;
           align-items: stretch;
           display: flex;
           flex-direction: column;
@@ -203,8 +203,11 @@ const Home = () => {
         }
         .fab-menu-btn {
           width: 100%;
-          min-width: 48px;
-          max-width: 48px;
+          min-width: 46px;
+          max-width: 46px;
+          height: 46px;
+          min-height: 46px;
+          max-height: 46px;
         }
         .fab-menu-btn-pill-wrapper {
           display: flex;
