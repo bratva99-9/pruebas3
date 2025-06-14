@@ -179,6 +179,8 @@ const Home = () => {
         }
         .home-image-container {
           position: relative;
+          width: 855px;
+          height: 570px;
           border: 3px solid #ff36ba;
           border-radius: 32px;
           box-shadow: 0 0 28px rgba(255, 54, 186, 0.5);
@@ -187,8 +189,7 @@ const Home = () => {
           display: flex;
           align-items: flex-start;
           justify-content: center;
-          width: 855px;
-          height: 570px;
+          margin: 0 auto;
           padding: 0 !important;
           max-width: none;
         }
@@ -205,12 +206,9 @@ const Home = () => {
           top: 16px;
           display: flex;
           flex-direction: column;
+          align-items: center;
           gap: 12px;
           z-index: 10;
-          align-items: flex-start;
-          justify-content: flex-start;
-          padding-top: 8px;
-          padding-bottom: 8px;
         }
         .fab-menu-btn-pill-wrapper {
           display: flex;
@@ -230,11 +228,12 @@ const Home = () => {
           color: #ff36ba;
           font-size: 1.5rem;
           cursor: pointer;
-          transition: background 0.2s, border-color 0.2s;
+          transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
         .fab-menu-btn:active, .fab-menu-btn:focus {
           background: #ff36ba22;
           border-color: #ff36ba;
+          box-shadow: 0 0 8px #ff36ba88;
         }
         .fab-menu-pill {
           background: #ff36ba;
@@ -411,55 +410,6 @@ const Home = () => {
         }
         body, html {
           overflow: hidden !important;
-        }
-        @media (max-width: 900px) {
-          .home-image-row {
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 18px;
-            margin-top: 12px;
-          }
-          .home-image-container {
-            width: 100vw;
-            max-width: 100vw;
-            height: auto;
-            min-height: 320px;
-            border: 3px solid #ff36ba;
-            border-radius: 18px;
-            box-shadow: 0 0 28px rgba(255, 54, 186, 0.5);
-            padding: 0 !important;
-            overflow-x: auto;
-            overflow-y: hidden;
-            background: none !important;
-          }
-          .fab-menu-vertical {
-            left: 8px;
-            top: 8px;
-            gap: 8px;
-            padding-top: 4px;
-            padding-bottom: 4px;
-          }
-        }
-        @media (max-width: 600px) {
-          .home-image-container {
-            width: 100vw;
-            max-width: 100vw;
-            min-height: 180px;
-            border: 3px solid #ff36ba;
-            border-radius: 10px;
-            box-shadow: 0 0 18px rgba(255, 54, 186, 0.5);
-            padding: 0 !important;
-            overflow-x: auto;
-            overflow-y: hidden;
-            background: none !important;
-          }
-          .fab-menu-vertical {
-            left: 8px;
-            top: 8px;
-            gap: 8px;
-            padding-top: 2px;
-            padding-bottom: 2px;
-          }
         }
       `}</style>
     </div>
