@@ -2,12 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { UserService } from '../UserService';
 import NFTModal from './NFTModal';
 
-// Importa manualmente las imágenes SVG o WEBP
-import missionImg1 from '../images/1.svg';
-import missionImg2 from '../images/2.svg';
-import missionImg3 from '../images/3.svg';
-import missionImg4 from '../images/4.svg';
-import missionImg5 from '../images/5.svg';
+// Importa manualmente las imágenes WEBP
+import missionImg1 from '../images/1.webp';
+import missionImg2 from '../images/2.webp';
+import missionImg3 from '../images/3.webp';
+import missionImg4 from '../images/4.webp';
+import missionImg5 from '../images/5.webp';
 
 const missionImages = {
   1: missionImg1,
