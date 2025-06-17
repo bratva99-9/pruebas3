@@ -38,12 +38,42 @@ const GiftHistoryModal = ({ onClose }) => {
         // Buscar video por asset_id (igual que MissionStatus)
         const withVideos = await Promise.all(rows.map(async (item) => {
           let video = '';
-          if (item.asset_id) {
+          let collection = item.collection_name;
+          let templateId = item.template_id ? String(item.template_id).trim() : '';
+          // Si no hay collection_name pero hay asset_id, buscar la colección primero
+          if (!collection && item.asset_id) {
             try {
               const assetRes = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${item.asset_id}`);
               const assetData = await assetRes.json();
-              video = assetData?.data?.data?.video || '';
-            } catch {}
+              collection = assetData?.data?.collection?.collection_name;
+              // Si no hay template_id, intentar obtenerlo del asset
+              if (!templateId && assetData?.data?.template?.template_id) {
+                templateId = String(assetData.data.template.template_id).trim();
+              }
+            } catch (err) {
+              console.error('Error fetching asset for collection/template:', err);
+            }
+          }
+          // Buscar el video por template si hay collection y templateId
+          if (collection && templateId) {
+            try {
+              const templateRes = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/template/${collection}/${templateId}`);
+              const templateData = await templateRes.json();
+              video = templateData?.data?.immutable_data?.video || '';
+            } catch (err) {
+              console.error('Error fetching template data:', err);
+              video = '';
+            }
+          } else if (item.asset_id) {
+            // Fallback: buscar video por asset
+            try {
+              const assetRes = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${item.asset_id}`);
+              const assetData = await assetRes.json();
+              video = assetData && assetData.data && assetData.data.data && assetData.data.data.video ? assetData.data.data.video : '';
+            } catch (err) {
+              console.error('Error fetching asset data:', err);
+              video = '';
+            }
           }
           return { ...item, video };
         }));
@@ -70,25 +100,21 @@ const GiftHistoryModal = ({ onClose }) => {
         </div>
         <div className="gifthistory-list-noborder">
           {loading ? (
-            <div className="loading">Cargando...</div>
+            <div className="loading">Loading...</div>
           ) : history.length === 0 ? (
-            <div className="no-history">No hay historial de gifts.</div>
+            <div className="no-history">No gift history.</div>
           ) : (
             <div className="gifthistory-scroll-list">
-              {history.map((item, idx) => (
-                <div className="gifthistory-row-noborder" key={item.id || idx}>
-                  <div className="gifthistory-video-noborder">
-                    {item.video ? (
-                      <video src={`https://ipfs.io/ipfs/${item.video}`} autoPlay loop muted playsInline style={{ width: 60, height: 106, borderRadius: 8, objectFit: 'cover', background: '#181828' }} />
-                    ) : (
-                      <div className="no-video">Sin video</div>
-                    )}
-                  </div>
-                  <div className="gifthistory-info-noborder">
-                    <div className="gifthistory-schema-noborder">Schema: <b>{item.schema}</b></div>
-                    <div className="gifthistory-date-noborder">Fecha: <b>{item.timestamp ? new Date(item.timestamp * 1000).toLocaleString() : '-'}</b></div>
-                    <div className="gifthistory-reward-noborder">Reward: <b>{item.reward_name}</b></div>
-                  </div>
+              <div className="gifthistory-row-noborder responsive-row header-row">
+                <span className="schema">Schema</span>
+                <span className="reward">Reward</span>
+                <span className="date">Date</span>
+              </div>
+              {history.slice(0, 10).map((item, idx) => (
+                <div className="gifthistory-row-noborder responsive-row" key={item.id || idx}>
+                  <span className="schema">{item.schema}</span>
+                  <span className="reward">{item.reward_name}</span>
+                  <span className="date">{item.timestamp ? new Date(item.timestamp * 1000).toLocaleString() : '-'}</span>
                 </div>
               ))}
             </div>
@@ -108,6 +134,7 @@ const GiftHistoryModal = ({ onClose }) => {
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
+          padding-top: 5px;
         }
         .nft-modal-content.gifthistory-modal-content-noborder {
           width: 100vw;
@@ -126,20 +153,22 @@ const GiftHistoryModal = ({ onClose }) => {
           width: 100vw;
           max-width: 600px;
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           justify-content: center;
-          margin: 0 auto 18px auto;
+          margin: 0 auto 10px auto;
           position: relative;
+          height: 48px;
         }
         .gifthistory-title-noborder {
           color: #ff36ba;
-          font-size: 2.3rem;
+          font-size: 1.6rem;
           font-weight: 800;
           letter-spacing: 2px;
           text-shadow: 0 0 20px #ff36ba44;
-          margin: 32px 0 18px 0;
+          margin: 5px 0 5px 0;
           text-align: center;
           flex: 1;
+          line-height: 48px;
         }
         .close-x-gifthistory {
           background: none;
@@ -151,7 +180,7 @@ const GiftHistoryModal = ({ onClose }) => {
           margin: 0;
           position: absolute;
           right: 32px;
-          top: 38px;
+          top: 5px;
         }
         .gifthistory-list-noborder {
           width: 100vw;
@@ -159,7 +188,7 @@ const GiftHistoryModal = ({ onClose }) => {
           display: flex;
           flex-direction: column;
           align-items: center;
-          height: 60vh;
+          height: 80vh;
           overflow: hidden;
         }
         .gifthistory-scroll-list {
@@ -185,50 +214,59 @@ const GiftHistoryModal = ({ onClose }) => {
         .gifthistory-scroll-list::-webkit-scrollbar-track {
           background: #181828;
         }
-        .gifthistory-row-noborder {
+        .gifthistory-row-noborder.responsive-row {
           display: flex;
           flex-direction: row;
           align-items: center;
+          justify-content: space-between;
           background: none;
           border-radius: 0;
-          padding: 0 0 0 0;
-          gap: 18px;
+          padding: 0 12px;
+          gap: 12px;
           width: 100vw;
           max-width: 520px;
           margin: 0 auto;
           border-bottom: 1px solid #ff36ba33;
-          min-height: 110px;
-        }
-        .gifthistory-video-noborder {
-          flex-shrink: 0;
-          margin-left: 12px;
-        }
-        .gifthistory-info-noborder {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
+          min-height: 38px;
+          font-size: 1.08rem;
           color: #fff;
-          font-size: 1.05rem;
         }
-        .gifthistory-schema-noborder, .gifthistory-date-noborder, .gifthistory-reward-noborder {
-          font-size: 1.05rem;
-        }
-        .loading, .no-history {
+        .gifthistory-row-noborder.responsive-row.header-row {
+          font-weight: 900;
           color: #ff36ba;
-          text-align: center;
-          font-size: 1.2rem;
-          margin: 32px 0;
+          border-bottom: 2px solid #ff36ba99;
+          background: none;
+          min-height: 32px;
+          font-size: 1.08rem;
         }
-        .no-video {
-          color: #b266ff;
-          font-size: 1.1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 60px;
-          height: 106px;
-          background: #181828;
-          border-radius: 8px;
+        .schema {
+          flex: 1 1 30%;
+          font-weight: 700;
+          color: #ffb6ff;
+          text-align: left;
+        }
+        .reward {
+          flex: 1 1 30%;
+          font-weight: 600;
+          color: #fff;
+          text-align: center;
+        }
+        .date {
+          flex: 1 1 40%;
+          font-weight: 400;
+          color: #bfc2d1;
+          text-align: right;
+          font-size: 0.98rem;
+        }
+        @media (max-width: 600px) {
+          .gifthistory-row-noborder.responsive-row {
+            font-size: 0.98rem;
+            padding: 0 4px;
+            gap: 6px;
+          }
+          .schema, .reward, .date {
+            font-size: 0.93rem;
+          }
         }
       `}</style>
     </div>

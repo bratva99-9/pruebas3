@@ -1,7 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { UserService } from '../UserService';
 import NFTModal from './NFTModal';
-import missionImg from '../images/1.webp';
+
+// Importa manualmente las imágenes SVG
+import missionImg1 from '../images/1.svg';
+import missionImg2 from '../images/2.svg';
+import missionImg3 from '../images/3.svg';
+import missionImg4 from '../images/4.svg';
+import missionImg5 from '../images/5.svg';
+
+const missionImages = {
+  1: missionImg1,
+  2: missionImg2,
+  3: missionImg3,
+  4: missionImg4,
+  5: missionImg5,
+};
 
 const MissionModal = ({ onClose, onForceCloseAll }) => {
   const [missions, setMissions] = useState([]);
@@ -58,6 +72,10 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
   const handleRowMouseEnter = () => setFocusMode(true);
   const handleRowMouseLeave = () => setFocusMode(false);
 
+  function getMissionImage(missionId) {
+    return missionImages[missionId] || '';
+  }
+
   if (loading) {
     return (
       <div className="mission-modal-fullscreen">
@@ -84,11 +102,15 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
                   onClick={() => handleMissionSelect(mission)}
                 >
                   <div className="mission-bg-image">
+                    {console.log('mission.id:', mission.id, 'img:', getMissionImage(mission.id))}
                     <img 
-                      src={missionImg} 
+                      src={getMissionImage(mission.id)} 
                       alt={mission.name}
                       className="mission-bg-img"
+                      style={{ background: '#222', minHeight: 100 }}
+                      onError={e => { e.target.style.display = 'none'; }}
                     />
+                    {!getMissionImage(mission.id) && <div style={{color:'#fff'}}>No image</div>}
                   </div>
                   <div className="mission-content">
                     <div className="mission-header-box">
