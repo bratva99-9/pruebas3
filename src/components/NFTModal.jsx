@@ -14,6 +14,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   const [showMissionStatus, setShowMissionStatus] = useState(false);
   const [cooldowns, setCooldowns] = useState({});
   const [now, setNow] = useState(Math.floor(Date.now() / 1000));
+  const [templateStats, setTemplateStats] = useState({});
 
   const MAX_SELECTED = 10;
   const history = useHistory();
@@ -62,6 +63,85 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
       setNow(Math.floor(Date.now() / 1000));
     }, 1000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Fetch de stats de templates
+  useEffect(() => {
+    const fetchTemplateStats = async () => {
+      const endpoints = [
+        'https://wax.greymass.com/v1/chain/get_table_rows',
+        'https://wax.eosusa.io/v1/chain/get_table_rows',
+        'https://wax.pink.gg/v1/chain/get_table_rows',
+        'https://wax.cryptolions.io/v1/chain/get_table_rows',
+        'https://api.wax.alohaeos.com/v1/chain/get_table_rows'
+      ];
+
+      const requestBody = {
+        code: 'nightclubapp',
+        scope: 'nightclubapp',
+        table: 'templerew',
+        limit: 100,
+        json: true
+      };
+
+      console.log('🔍 Intentando obtener datos de templerew...');
+      console.log('📋 Request body:', requestBody);
+
+      for (let i = 0; i < endpoints.length; i++) {
+        const endpoint = endpoints[i];
+        try {
+          console.log(`🌐 Probando endpoint ${i + 1}/${endpoints.length}: ${endpoint}`);
+          
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+          });
+
+          if (!res.ok) {
+            console.log(`❌ Endpoint ${endpoint} respondió con status: ${res.status}`);
+            continue;
+          }
+
+          const data = await res.json();
+          console.log(`✅ Endpoint ${endpoint} respondió exitosamente`);
+          console.log('📊 Respuesta completa:', data);
+          console.log('📋 Filas recibidas:', data.rows);
+          console.log('📋 Número de filas:', data.rows ? data.rows.length : 0);
+
+          if (data.rows && data.rows.length > 0) {
+            const stats = {};
+            data.rows.forEach((row, index) => {
+              console.log(`📝 Procesando fila ${index}:`, row);
+              if (row.template_id !== undefined) {
+                stats[String(row.template_id)] = row;
+                console.log(`✅ Template ${row.template_id} agregado con stats:`, row);
+              } else {
+                console.log(`⚠️ Fila ${index} no tiene template_id:`, row);
+              }
+            });
+            
+            setTemplateStats(stats);
+            console.log('🎉 templateStats final cargado:', stats);
+            console.log('🔑 Keys disponibles:', Object.keys(stats));
+            return; // Salir del bucle si encontramos datos
+          } else {
+            console.log(`⚠️ Endpoint ${endpoint} devolvió array vacío`);
+          }
+        } catch (err) {
+          console.log(`❌ Error con endpoint ${endpoint}:`, err.message);
+        }
+      }
+
+      // Si llegamos aquí, ningún endpoint funcionó
+      console.log('💥 Ningún endpoint devolvió datos válidos');
+      setTemplateStats({});
+    };
+    
+    fetchTemplateStats();
   }, []);
 
   // Filtrar NFTs por colección, schema y que tengan video
@@ -136,6 +216,12 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   const formatNumber = (num, suffix = '') => {
     if (num === undefined || num === null) return 'No disponible';
     return Number(num) % 1 === 0 ? `${Number(num)}${suffix}` : `${Number(num).toFixed(1)}${suffix}`;
+  };
+
+  // Utilidad para formatear enteros/decimales como en la misión
+  const formatSmart = v => {
+    if (isNaN(v)) return 'N/A';
+    return Number(v) % 1 === 0 ? Number(v) : Number(v).toFixed(2);
   };
 
   if (loading) {
@@ -221,7 +307,7 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
           </div>
         ) : (
           <div className="nfts-grid unified-width compact-width">
-            {filteredNFTs.slice(0, displayCount).map((nft) => {
+            {filteredNFTs.slice(0, displayCount).map((nft, idx) => {
               const isSelected = selectedNFTs.includes(nft.asset_id);
               const videoUrl = nft.data.video.startsWith('Qm')
                 ? `https://ipfs.io/ipfs/${nft.data.video}`
@@ -236,10 +322,31 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
                 const s = diff % 60;
                 cooldownLeft = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
               }
+              const templateId = nft.template && nft.template.template_id;
+              const stats = templateStats[String(templateId)] || {};
+              // Utilidades para formatear y calcular
+              const toNum = v => (v === undefined || v === null || isNaN(Number(v))) ? 1 : Number(v);
+              const format2 = v => isNaN(v) ? 'N/A' : Number(v).toFixed(2);
+              // Cálculos
+              const finalDurationMin = mission.duration_minutes * toNum(stats.dur_mult);
+              const totalTokens = 1 * toNum(stats.reward_mult);
+              const totalGiftChance = 1 * toNum(stats.drop_mult);
+              const totalCooldownMin = 60 * toNum(stats.cool_mult);
+              // Formato en horas/minutos tipo '3 hour 15 min' o '15 minutes'
+              const formatTime = (min) => {
+                if (isNaN(min)) return 'N/A';
+                if (min < 60) return `${formatSmart(min)} minutes`;
+                const h = Math.floor(min / 60);
+                const m = Math.round(min % 60);
+                let str = '';
+                if (h > 0) str += `${h} hour${h > 1 ? 's' : ''}`;
+                if (m > 0) str += (h > 0 ? ' ' : '') + `${m} min`;
+                return str;
+              };
               return (
                 <div 
                   key={nft.asset_id}
-                  className={`nft-card${isSelected ? ' selected' : ''}`}
+                  className={`nft-card nft-flip-card${isSelected ? ' selected' : ''}`}
                   onClick={() => { if (!inCooldown) toggleNFTSelection(nft.asset_id); }}
                   style={{
                     minWidth: 139,
@@ -262,41 +369,85 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
                     cursor: inCooldown ? 'not-allowed' : 'pointer',
                   }}
                 >
-                  <video
-                    src={videoUrl}
-                    loop
-                    muted
-                    playsInline
-                    autoPlay
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
-                      background: 'black',
-                      borderRadius: 18,
-                      margin: 0,
-                      padding: 0,
-                      boxShadow: isSelected ? '0 0 18px 4px #ff36ba66' : 'none',
-                      border: isSelected ? '4px solid #ff00ffcc' : 'none',
-                      backgroundColor: 'black',
-                      filter: inCooldown ? 'grayscale(1) blur(2.5px)' : 'none',
-                      transform: 'none',
-                      transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1)',
-                      zIndex: isSelected ? 99999 : 21,
-                    }}
-                    preload="none"
-                    controls={false}
-                    onError={e => {
-                      console.error('Video error:', e);
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                  {inCooldown && (
-                    <div className="cooldown-overlay-minimal">
-                      <span className="cooldown-text-minimal">{cooldownLeft}</span>
+                  <div className="nft-flip-inner">
+                    <div className="nft-flip-front">
+                      <video
+                        src={videoUrl}
+                        loop
+                        muted
+                        playsInline
+                        autoPlay
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block',
+                          background: 'black',
+                          borderRadius: 18,
+                          margin: 0,
+                          padding: 0,
+                          boxShadow: isSelected ? '0 0 18px 4px #ff36ba66' : 'none',
+                          border: isSelected ? '4px solid #ff00ffcc' : 'none',
+                          backgroundColor: 'black',
+                          filter: inCooldown ? 'grayscale(1) blur(2.5px)' : 'none',
+                          transform: 'none',
+                          transition: 'box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1)',
+                          zIndex: isSelected ? 99999 : 21,
+                        }}
+                        preload="none"
+                        controls={false}
+                        onError={e => {
+                          console.error('Video error:', e);
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                      {inCooldown && (
+                        <div className="cooldown-overlay-minimal">
+                          <span className="cooldown-text-minimal">{cooldownLeft}</span>
+                        </div>
+                      )}
                     </div>
-                  )}
+                    <div className="nft-flip-back">
+                      <div className="mission-stats-bottom nft-nftstats-bottom-missionstyle-smallcentered">
+                        <div className="stat">
+                          <span className="stat-icon">
+                            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8.5" stroke="#bfc2d1" strokeWidth="1.2"/><path d="M10 5.5V10L13 12" stroke="#bfc2d1" strokeWidth="1.2" strokeLinecap="round"/></svg>
+                          </span>
+                          <span className="stat-text">{formatTime(finalDurationMin)}</span>
+                        </div>
+                        <div className="stat">
+                          <span className="stat-icon">
+                            <svg width="17" height="17" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="11" cy="11" r="9" fill="#ffe066" stroke="#ff00ff" strokeWidth="1.5"/>
+                              <circle cx="11" cy="11" r="7" fill="#fffbe6" fillOpacity="0.7"/>
+                              <path d="M11 15.2c-2.2-1.6-4-3.1-4-4.7a2 2 0 0 1 4-1.1A2 2 0 0 1 15 10.5c0 1.6-1.8 3.1-4 4.7z" fill="#ff00ff" stroke="#ff00ff" strokeWidth="0.5"/>
+                            </svg>
+                          </span>
+                          <span className="stat-text">{formatSmart(totalTokens)} SEXY</span>
+                        </div>
+                        <div className="stat">
+                          <span className="stat-icon">
+                            <svg width="17" height="17" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect x="4.5" y="9.5" width="13" height="7" rx="2" fill="#ff00ff" fillOpacity="0.13" stroke="#ff00ff" strokeWidth="1.1"/>
+                              <rect x="8.5" y="4.5" width="5" height="5" rx="1.5" fill="#ff00ff" fillOpacity="0.18" stroke="#ff00ff" strokeWidth="1"/>
+                              <path d="M4.5 12H17.5" stroke="#ff00ff" strokeWidth="1"/>
+                              <path d="M11 9.5V16" stroke="#ff00ff" strokeWidth="1"/>
+                              <path d="M8.5 7C7.5 5.5 10 4 11 7" stroke="#ff00ff" strokeWidth="1" strokeLinecap="round"/>
+                              <path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff00ff" strokeWidth="1" strokeLinecap="round"/>
+                            </svg>
+                          </span>
+                          <span className="stat-text stat-gift-chance">{formatSmart(totalGiftChance)}%</span>
+                        </div>
+                        <div className="stat">
+                          <span className="stat-icon">
+                            {/* Icono de reloj clásico para cooldown */}
+                            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8.5" stroke="#bfc2d1" strokeWidth="1.2"/><path d="M10 5V10L13 12" stroke="#bfc2d1" strokeWidth="1.2" strokeLinecap="round"/><circle cx="10" cy="10" r="1.2" fill="#bfc2d1"/></svg>
+                          </span>
+                          <span className="stat-text">{formatTime(totalCooldownMin)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               );
             })}
@@ -362,34 +513,38 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
           margin-right: auto;
         }
         .nft-card {
-          min-width: 139px;
-          max-width: 139px;
-          width: 139px;
-          height: 236px;
-          border: 1.2px solid #ff36ba99;
-          border-radius: 18px;
-          box-shadow: 0 0 14px 3px #ff36ba33, 0 0 0 1.2px #ff00ff33;
-          background: transparent;
-          overflow: hidden;
-          padding: 0;
-          margin: 0;
-          display: flex;
-          alignItems: center;
-          justifyContent: center;
+          border-radius: 18px !important;
+        }
+        .nft-flip-front, .nft-flip-back {
+          border-radius: 18px !important;
+        }
+        .nft-flip-inner {
           position: relative;
-          transition: box-shadow 0.32s cubic-bezier(0.4,0,0.2,1), border 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1);
-          z-index: 21;
+          width: 100%;
+          height: 100%;
+          transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+          transform-style: preserve-3d;
         }
-        .nft-card.selected {
-          border: 2px solid #ff36ba;
-          box-shadow: 0 0 18px 4px #ff36ba66, 0 0 0 2.5px #ff00ff99 !important;
-          background: linear-gradient(135deg, rgba(255,0,255,0.08) 0%, rgba(0,255,255,0.08) 100%) !important;
+        .nft-flip-card:hover .nft-flip-inner {
+          transform: rotateY(180deg);
         }
-        .nft-card:hover {
-          box-shadow: 0 0 20px 0px rgba(255, 0, 255, 0.4);
-          border: 1px solid rgba(255, 0, 255, 0.6);
-          background: linear-gradient(45deg, rgba(255, 0, 255, 0.1), rgba(0, 255, 255, 0.1));
-          transform: translateY(-2px);
+        .nft-flip-front, .nft-flip-back {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+          overflow: hidden;
+        }
+        .nft-flip-back {
+          transform: rotateY(180deg);
+          background: #181828;
+          color: #fff;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.08rem;
+          gap: 7px;
         }
         .mission-title-nftmodal {
           text-align: center;
@@ -740,6 +895,81 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
             margin-top: -50px !important;
             padding-top: 9px !important;
           }
+        }
+        .nft-card.nft-hover-stats {
+          position: relative;
+        }
+        .nft-hover-stats-overlay {
+          display: none;
+          position: absolute;
+          left: 0; top: 50%; right: 0; bottom: 0;
+          width: 100%;
+          height: 50%;
+          background: linear-gradient(180deg, rgba(10,10,46,0.92) 90%, rgba(10,10,46,0.0) 100%);
+          border-radius: 0 0 18px 18px;
+          z-index: 100;
+          align-items: flex-end;
+          justify-content: center;
+          pointer-events: none;
+        }
+        .nft-card.nft-hover-stats:hover .nft-hover-stats-overlay {
+          display: flex;
+        }
+        .nft-nftstats-bottom-missionstyle-smallcentered {
+          width: 100%;
+          background: rgba(30, 30, 50, 0.30);
+          border-radius: 0 0 18px 18px;
+          box-shadow: 0 2px 12px 0 #0002;
+          padding-bottom: 10px;
+          padding-top: 10px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          z-index: 15;
+        }
+        .nft-nftstats-bottom-missionstyle-smallcentered .stat {
+          color: #bfc2d1;
+          font-size: 13px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-weight: 400;
+          text-shadow: none;
+          margin-bottom: 2px;
+          letter-spacing: 0.01em;
+          justify-content: center;
+        }
+        .nft-nftstats-bottom-missionstyle-smallcentered .stat-text {
+          color: #bfc2d1;
+          font-size: 13px;
+          font-weight: 400;
+          letter-spacing: 0.01em;
+          text-shadow: none;
+          opacity: 0.85;
+        }
+        .nft-nftstats-bottom-missionstyle-smallcentered .stat-icon {
+          font-size: 14px;
+          width: 16px;
+          text-align: center;
+          opacity: 0.7;
+          filter: grayscale(1) brightness(1.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: opacity 0.2s;
+        }
+        .nft-nftstats-bottom-missionstyle-smallcentered .stat-gift-chance {
+          color: #bfc2d1;
+          font-weight: 400;
+          opacity: 0.95;
+          letter-spacing: 0.01em;
+          font-size: 13px;
+          text-shadow: none;
+        }
+        .nft-card.selected {
+          border: 2.5px solid #ff36ba !important;
+          box-shadow: 0 0 18px 4px #ff36ba66, 0 0 0 2.5px #ff00ff99 !important;
+          background: linear-gradient(135deg, rgba(255,0,255,0.08) 0%, rgba(0,255,255,0.08) 100%) !important;
         }
       `}</style>
     </div>
