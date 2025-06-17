@@ -6,7 +6,8 @@ const SCHEMAS = [
   { id: 'photos', name: 'Photos' },
   { id: 'items', name: 'Items' },
   { id: 'videos', name: 'Videos' },
-  { id: 'shards', name: 'Shards' }
+  { id: 'shards', name: 'Shards' },
+  { id: 'packs', name: 'Packs' }
 ];
 
 const COLLECTION = 'nightclubnft';
@@ -89,6 +90,19 @@ const InventoryModal = ({ onClose }) => {
             </button>
           ))}
         </div>
+        {selectedCategory === 'packs' && (
+          <div style={{width:'100%',display:'flex',justifyContent:'flex-start',marginBottom:16}}>
+            <a
+              href="https://neftyblocks.com/collection/nightclubnft/packs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="packs-link-btn"
+              style={{textDecoration:'none'}}
+            >
+              Go to Packs
+            </a>
+          </div>
+        )}
         <div className="nfts-grid">
           {filteredNfts.length === 0 ? (
             <div style={{color:'#fff', gridColumn:'1/-1', textAlign:'center', fontSize:'1.2rem', opacity:0.7}}>No NFTs in this category.</div>
@@ -122,7 +136,20 @@ const InventoryModal = ({ onClose }) => {
           })}
         </div>
         <div className="modal-bottom-bar">
-          <button className="close-btn" onClick={onClose}>Close</button>
+          {selectedCategory === 'packs' && (
+            <a
+              href="https://neftyblocks.com/collection/nightclubnft/packs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="open-packs-btn"
+              style={{textDecoration:'none', pointerEvents:'auto', position:'static', marginRight:'auto'}}
+            >
+              Open Packs
+            </a>
+          )}
+          <div className="modal-bottom-center-btns">
+            <button className="close-btn" onClick={onClose}>Close</button>
+          </div>
           <button
             className="load-more-btn"
             onClick={handleLoadMore}
@@ -255,6 +282,15 @@ const InventoryModal = ({ onClose }) => {
           padding: 0 24px;
           pointer-events: none;
         }
+        .modal-bottom-bar > * {
+          pointer-events: auto;
+        }
+        .modal-bottom-center-btns {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
         .close-btn {
           font-size: 15px;
           font-weight: 500;
@@ -266,7 +302,6 @@ const InventoryModal = ({ onClose }) => {
           cursor: pointer;
           transition: all 0.3s ease;
           margin: 0 24px;
-          pointer-events: auto;
         }
         .close-btn:hover {
           background: rgba(255,0,255,0.13);
@@ -283,9 +318,7 @@ const InventoryModal = ({ onClose }) => {
           cursor: pointer;
           transition: all 0.3s ease;
           margin-left: auto;
-          pointer-events: auto;
-          position: absolute;
-          right: 24px;
+          margin-right: 24px;
         }
         .load-more-btn:hover:enabled {
           background: rgba(255,0,255,0.13);
@@ -294,6 +327,49 @@ const InventoryModal = ({ onClose }) => {
         .load-more-btn:disabled {
           opacity: 0.5;
           cursor: not-allowed;
+        }
+        .packs-link-btn {
+          font-size: 15px;
+          font-weight: 500;
+          color: #fff;
+          background: #00cfff;
+          border: 2px solid #00ffff;
+          border-radius: 14px;
+          padding: 8px 32px;
+          box-shadow: 0 0 12px #00ffff44;
+          text-shadow: none;
+          letter-spacing: 1px;
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
+          margin-right: 18px;
+          margin-bottom: 0;
+          display: inline-block;
+        }
+        .packs-link-btn:hover {
+          background: #00aaff;
+          border-color: #00ffff;
+          color: #fff;
+          box-shadow: 0 0 18px #00ffff99;
+        }
+        .open-packs-btn {
+          font-size: 15px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(0,255,255,0.10);
+          border: 2px solid #00ffff;
+          border-radius: 14px;
+          padding: 8px 32px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          margin-right: auto;
+          margin-left: 0;
+          text-align: center;
+          display: inline-block;
+          position: static;
+        }
+        .open-packs-btn:hover {
+          background: rgba(255,0,255,0.13);
+          border-color: #ff00ff;
         }
         @keyframes fadeInModal {
           from { opacity: 0; }
@@ -365,6 +441,33 @@ const InventoryModal = ({ onClose }) => {
             max-height: 100% !important;
             object-fit: cover !important;
             aspect-ratio: 9/16 !important;
+          }
+          .nfts-grid > div[style*='No NFTs in this category.'] {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            height: 100vh !important;
+            width: 100vw !important;
+            font-size: 1.2rem !important;
+            opacity: 0.7 !important;
+            color: #fff !important;
+            text-align: center !important;
+          }
+        }
+        @media (min-width: 901px) {
+          .nfts-grid {
+            gap: 28.8px;
+          }
+          .nft-card {
+            height: 244.8px;
+            aspect-ratio: 9/16;
+            min-width: 90.72% !important;
+            max-width: 90.72% !important;
+            width: 90.72% !important;
+            border-radius: 16.2px;
+          }
+          .nft-media {
+            border-radius: 16.2px;
           }
         }
       `}</style>
