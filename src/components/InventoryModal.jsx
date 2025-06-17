@@ -456,18 +456,18 @@ const InventoryModal = ({ onClose }) => {
         }
         @media (min-width: 901px) {
           .nfts-grid {
-            gap: 28.8px;
+            gap: 32px;
           }
           .nft-card {
-            height: 244.8px;
+            height: 272px;
             aspect-ratio: 9/16;
-            min-width: 90.72% !important;
-            max-width: 90.72% !important;
-            width: 90.72% !important;
-            border-radius: 16.2px;
+            min-width: unset !important;
+            max-width: unset !important;
+            width: unset !important;
+            border-radius: 18px;
           }
           .nft-media {
-            border-radius: 16.2px;
+            border-radius: 18px;
           }
         }
       `}</style>
