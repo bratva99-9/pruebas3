@@ -208,7 +208,7 @@ const Home = () => {
                 </span>
               </div>
               <div className="top-info-item waxxx-balance">
-                {UserService.formatSEXYOnly()} WAXXX
+                {UserService.formatWAXXXOnly()} WAXXX
                 <span
                   style={{ marginLeft: 6, cursor: 'pointer', color: '#00ffff', fontWeight: 700, fontSize: 20, verticalAlign: 'middle' }}
                   title="Buy/Swap WAXXX"

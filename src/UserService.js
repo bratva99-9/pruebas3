@@ -38,6 +38,7 @@ export class User {
   // Balances como strings
   balance = "0.00000000 WAX";
   sexyBalance = "0.00000000 SEXY";
+  waxxxBalance = "0.00000000 WAXXX";
 
   // Callback cuando cambia el estado de login
   callbackServerUserData = undefined;
@@ -88,6 +89,7 @@ export class User {
   async reloadBalances() {
     await this.getBalance();
     await this.getSexyBalance();
+    await this.getWaxxxBalance();
   }
 
   // WAX on‐chain balance
@@ -122,6 +124,24 @@ export class User {
       console.error("Error al obtener balance de SEXY:", err.message);
       this.sexyBalance = "0.00000000 SEXY";
       storeAppDispatch(setPlayerSexy(this.sexyBalance));
+    }
+  }
+
+  // WAXXX token balance
+  async getWaxxxBalance() {
+    if (!this.authName) return;
+    
+    try {
+      const result = await this.rpc.get_currency_balance(
+        'nightclub.gm',
+        this.authName,
+        'WAXXX'
+      );
+      this.waxxxBalance = result.length > 0 ? result[0] : "0.00000000 WAXXX";
+      // Aquí podrías agregar un dispatch para WAXXX si lo necesitas
+    } catch (err) {
+      console.error("Error al obtener balance de WAXXX:", err.message);
+      this.waxxxBalance = "0.00000000 WAXXX";
     }
   }
 
@@ -411,6 +431,12 @@ export class User {
     return isNaN(sexy) ? "0.00 SEXY" : `${sexy.toFixed(2)} SEXY`;
   }
 
+  // Formatea el balance WAXXX con 2 decimales y sufijo
+  formatWAXXXBalance() {
+    const waxxx = parseFloat(this.waxxxBalance);
+    return isNaN(waxxx) ? "0.00 WAXXX" : `${waxxx.toFixed(2)} WAXXX`;
+  }
+
   // Sólo número WAX (2 decimales, sin sufijo)
   formatWAXOnly() {
     const wax = parseFloat(this.balance);
@@ -421,6 +447,12 @@ export class User {
   formatSEXYOnly() {
     const sexy = parseFloat(this.sexyBalance);
     return isNaN(sexy) ? "0.00" : sexy.toFixed(2);
+  }
+
+  // Sólo número WAXXX (2 decimales, sin sufijo)
+  formatWAXXXOnly() {
+    const waxxx = parseFloat(this.waxxxBalance);
+    return isNaN(waxxx) ? "0.00" : waxxx.toFixed(2);
   }
 }
 

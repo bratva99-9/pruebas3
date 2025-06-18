@@ -90,19 +90,6 @@ const InventoryModal = ({ onClose }) => {
             </button>
           ))}
         </div>
-        {selectedCategory === 'packs' && (
-          <div style={{width:'100%',display:'flex',justifyContent:'flex-start',marginBottom:16}}>
-            <a
-              href="https://neftyblocks.com/collection/nightclubnft/packs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="packs-link-btn"
-              style={{textDecoration:'none'}}
-            >
-              Go to Packs
-            </a>
-          </div>
-        )}
         <div className="nfts-grid">
           {filteredNfts.length === 0 ? (
             <div style={{color:'#fff', gridColumn:'1/-1', textAlign:'center', fontSize:'1.2rem', opacity:0.7}}>No NFTs in this category.</div>
@@ -136,17 +123,6 @@ const InventoryModal = ({ onClose }) => {
           })}
         </div>
         <div className="modal-bottom-bar">
-          {selectedCategory === 'packs' && (
-            <a
-              href="https://neftyblocks.com/collection/nightclubnft/packs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="open-packs-btn"
-              style={{textDecoration:'none', pointerEvents:'auto', position:'static', marginRight:'auto'}}
-            >
-              Open Packs
-            </a>
-          )}
           <div className="modal-bottom-center-btns">
             <button className="close-btn" onClick={onClose}>Close</button>
           </div>
@@ -328,49 +304,6 @@ const InventoryModal = ({ onClose }) => {
           opacity: 0.5;
           cursor: not-allowed;
         }
-        .packs-link-btn {
-          font-size: 15px;
-          font-weight: 500;
-          color: #fff;
-          background: #00cfff;
-          border: 2px solid #00ffff;
-          border-radius: 14px;
-          padding: 8px 32px;
-          box-shadow: 0 0 12px #00ffff44;
-          text-shadow: none;
-          letter-spacing: 1px;
-          cursor: pointer;
-          transition: background 0.2s, border-color 0.2s, color 0.2s;
-          margin-right: 18px;
-          margin-bottom: 0;
-          display: inline-block;
-        }
-        .packs-link-btn:hover {
-          background: #00aaff;
-          border-color: #00ffff;
-          color: #fff;
-          box-shadow: 0 0 18px #00ffff99;
-        }
-        .open-packs-btn {
-          font-size: 15px;
-          font-weight: 500;
-          color: #fff;
-          background: rgba(0,255,255,0.10);
-          border: 2px solid #00ffff;
-          border-radius: 14px;
-          padding: 8px 32px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          margin-right: auto;
-          margin-left: 0;
-          text-align: center;
-          display: inline-block;
-          position: static;
-        }
-        .open-packs-btn:hover {
-          background: rgba(255,0,255,0.13);
-          border-color: #ff00ff;
-        }
         @keyframes fadeInModal {
           from { opacity: 0; }
           to { opacity: 1; }
@@ -459,7 +392,7 @@ const InventoryModal = ({ onClose }) => {
             gap: 32px;
           }
           .nft-card {
-            height: 272px;
+            height: 245px;
             aspect-ratio: 9/16;
             min-width: unset !important;
             max-width: unset !important;
