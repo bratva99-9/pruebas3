@@ -195,6 +195,7 @@ const Home = () => {
           <div className="home-image-container fab-rounded">
             <div className="top-info-bar inside-map">
               <div className="top-info-item user-name">{UserService.getName()}</div>
+              <div className="top-info-item user-level">Lvl 1</div>
               <div className="top-info-item wax-balance">{UserService.formatWAXOnly()} WAX</div>
               <div className="top-info-item sexy-balance">
                 {UserService.formatSEXYOnly()} SEXY
@@ -206,12 +207,12 @@ const Home = () => {
                   +
                 </span>
               </div>
-              <div className="top-info-item sexy-balance2">
-                {UserService.formatSEXYOnly()} SEXY+
+              <div className="top-info-item waxxx-balance">
+                {UserService.formatSEXYOnly()} WAXXX
                 <span
                   style={{ marginLeft: 6, cursor: 'pointer', color: '#00ffff', fontWeight: 700, fontSize: 20, verticalAlign: 'middle' }}
-                  title="Buy/Swap SEXY"
-                  onClick={() => window.open('https://swap.tacocrypto.io/swap?output=SEXY-nightclub.gm&input=WAX-eosio.token', '_blank')}
+                  title="Buy/Swap WAXXX"
+                  onClick={() => window.open('https://swap.tacocrypto.io/swap?output=WAXXX-nightclub.gm&input=WAX-eosio.token', '_blank')}
                 >
                   +
                 </span>
@@ -521,8 +522,9 @@ const Home = () => {
           transform: scale(1.05);
         }
         .user-name { color: #ffb9fa; }
+        .user-level { color: #ff36ba; }
         .wax-balance { color: #00ffff; }
-        .sexy-balance, .sexy-balance2 { color: #ff36ba; }
+        .sexy-balance, .waxxx-balance { color: #ff36ba; }
         .responsive-scale-wrapper {
           will-change: transform;
           overflow: visible;
