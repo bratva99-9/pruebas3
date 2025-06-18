@@ -319,7 +319,7 @@ const Home = () => {
           min-height: 100vh;
           display: flex;
           flex-direction: column;
-          background: #181828;
+          background: hsl(245, 86.70%, 2.90%);
           position: relative;
           overflow: hidden;
         }
@@ -548,7 +548,7 @@ const Home = () => {
         .rotate-warning-bg-modern {
           position: fixed;
           inset: 0;
-          background: linear-gradient(135deg, #181828 0%, #23233a 100%);
+          background: hsl(245, 86.70%, 2.90%);
           display: flex;
           flex-direction: column;
           align-items: center;
