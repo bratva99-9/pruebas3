@@ -293,9 +293,25 @@ const Home = () => {
         </div>
       ))}
       {showRotateWarning && (
-        <div className="rotate-warning">
-          Please rotate your device to landscape mode to play.<br/>
-          <span style={{fontSize: '1.7em', marginTop: 16, display: 'block'}}>🔄</span>
+        <div className="rotate-warning-bg-modern">
+          <div className="rotate-svg-anim-modern-only">
+            <svg
+              width="120" height="120" viewBox="0 0 120 120" fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="phone-rotate-anim"
+            >
+              <g>
+                <rect x="36" y="16" width="48" height="88" rx="14" fill="#23233a" stroke="#7f36ff" strokeWidth="3.5"/>
+                <rect x="42" y="24" width="36" height="72" rx="8" fill="#181828"/>
+                <rect x="54" y="18" width="12" height="5" rx="2.5" fill="#181828"/>
+                <rect x="82" y="40" width="2.5" height="10" rx="1.2" fill="#ff36ba"/>
+                <rect x="35.5" y="38" width="2" height="8" rx="1" fill="#ff36ba"/>
+                <rect x="58" y="22" width="4" height="2" rx="1" fill="#44446a"/>
+              </g>
+            </svg>
+          </div>
+          <div className="rotate-title-modern">Rotate your device</div>
+          <div className="rotate-sub-modern">Please turn your phone to landscape mode for the best experience.</div>
         </div>
       )}
       <style jsx>{`
@@ -303,7 +319,7 @@ const Home = () => {
           min-height: 100vh;
           display: flex;
           flex-direction: column;
-          background: hsl(245, 86.70%, 2.90%);
+          background: #181828;
           position: relative;
           overflow: hidden;
         }
@@ -529,18 +545,58 @@ const Home = () => {
           will-change: transform;
           overflow: visible;
         }
-        .rotate-warning {
+        .rotate-warning-bg-modern {
           position: fixed;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: rgba(20,20,30,0.92);
-          color: #fff;
+          inset: 0;
+          background: linear-gradient(135deg, #181828 0%, #23233a 100%);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
           z-index: 9999;
+          transition: background 0.3s;
+        }
+        .rotate-svg-anim-modern-only {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.3em;
+          filter: drop-shadow(0 0 16px #ff36ba) drop-shadow(0 0 32px #7f36ff);
+          animation: fadeIn 0.7s;
+          margin-bottom: 16px;
+        }
+        .phone-rotate-anim {
+          animation: phoneRotateAnim 2.8s infinite cubic-bezier(.77,0,.18,1);
+          transform-origin: 60px 60px;
+        }
+        @keyframes phoneRotateAnim {
+          0%   { transform: rotate(0deg); }
+          18%  { transform: rotate(0deg); }
+          38%  { transform: rotate(90deg); }
+          62%  { transform: rotate(90deg); }
+          82%  { transform: rotate(0deg); }
+          100% { transform: rotate(0deg); }
+        }
+        .rotate-title-modern {
+          font-size: 1.89em;
+          font-weight: 800;
+          background: linear-gradient(90deg, #ff36ba 0%, #7f36ff 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          text-shadow: 0 0 8px #ff36ba55, 0 0 16px #7f36ff33;
+          margin-bottom: 6px;
+          letter-spacing: 1px;
           text-align: center;
-          padding: 32px;
+        }
+        .rotate-sub-modern {
+          font-size: 0.99em;
+          color: #ffb9fa;
+          opacity: 0.92;
+          margin-bottom: 0;
+          text-align: center;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
         }
         body, html {
           overflow: hidden !important;
