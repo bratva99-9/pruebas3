@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { UserService } from '../UserService';
 
-function formatReward(reward) {
+function formatReward(reward, decimals = 0) {
   if (!reward) return '0';
   const [num] = reward.split(' ');
-  return Number(num) % 1 === 0 ? parseInt(num) : Number(num);
+  const n = Number(num);
+  if (isNaN(n)) return '0';
+  if (decimals === 0) return n % 1 === 0 ? parseInt(n) : n;
+  return n.toFixed(decimals);
 }
 
-function formatDropChance(chance) {
+function formatDropChance(chance, decimals = 2) {
   if (!chance) return '0%';
-  return `${parseInt(Number(chance))}%`;
+  const num = Number(chance);
+  if (isNaN(num)) return '0%';
+  return `${num.toFixed(decimals)}%`;
 }
 
 function getTimeLeft(endTime) {
@@ -27,6 +32,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
   const [loading, setLoading] = useState(true);
   const [now, setNow] = useState(Math.floor(Date.now() / 1000));
   const [toast, setToast] = useState(null);
+  const [isMobileLandscape, setIsMobileLandscape] = useState(false);
 
   // Función para mostrar notificación
   const showToast = (message, type = 'success') => {
@@ -86,6 +92,16 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
     return () => clearInterval(interval);
   }, []);
 
+  // Detectar si es móvil horizontal
+  useEffect(() => {
+    const checkMobileLandscape = () => {
+      setIsMobileLandscape(window.innerWidth <= 900 && window.innerWidth > window.innerHeight);
+    };
+    checkMobileLandscape();
+    window.addEventListener('resize', checkMobileLandscape);
+    return () => window.removeEventListener('resize', checkMobileLandscape);
+  }, []);
+
   return (
     <div className="nft-modal-fullscreen">
       <div className="nft-modal-content">
@@ -139,7 +155,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
                                 <path d="M11 15.2c-2.2-1.6-4-3.1-4-4.7a2 2 0 0 1 4-1.1A2 2 0 0 1 15 10.5c0 1.6-1.8 3.1-4 4.7z" fill="#ff00ff" stroke="#ff00ff" strokeWidth="0.7"/>
                               </svg>
                             </span>
-                            <span className="stat-text">{formatReward(mission.reward)} SEXY</span>
+                            <span className="stat-text">{formatReward(mission.reward, isMobileLandscape ? 2 : 0)} SEXY</span>
                           </div>
                           <div className="mission-stat">
                             <span className="stat-icon">
@@ -152,7 +168,7 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
                                 <path d="M13.5 7C14.5 5.5 12 4 11 7" stroke="#ff00ff" strokeWidth="1.2" strokeLinecap="round"/>
                               </svg>
                             </span>
-                            <span className="stat-text">{formatDropChance(mission.nft_drop_chance)}</span>
+                            <span className="stat-text">{formatDropChance(mission.nft_drop_chance, 2)}</span>
                           </div>
                           <div className="mission-stat">
                             <span className="stat-icon">
