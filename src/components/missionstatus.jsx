@@ -114,8 +114,8 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
             {missions.length === 0 ? (
               <div className="no-missions-centered-full">
                 <div className="no-missions-text-en">
-                  You have no active missions at the moment.<br />
-                  Send a girl on a mission to start earning rewards!
+                  You have no active jobs at the moment.<br />
+                  Send a girl on a job to start earning rewards!
                 </div>
               </div>
             ) : (
@@ -186,19 +186,19 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
                       <button className="btn-mission-action" onClick={async () => {
                         try {
                           await UserService.claimMission([mission.asset_id]);
-                          showToast('¡Recompensa reclamada!', 'success');
+                          showToast('Reward claimed!', 'success');
                           setTimeout(fetchMissions, 2000);
                         } catch (err) {
-                          showToast('Error al reclamar: ' + (err.message || err), 'error');
+                          showToast('Error claiming reward', 'error');
                         }
                       }}>Claim</button>
                       <button className="btn-mission-action btn-mission-cancel" onClick={async () => {
                         try {
                           await UserService.cancelMission(mission.asset_id);
-                          showToast('¡Misión cancelada!', 'success');
+                          showToast('Mission cancelled!', 'success');
                           setTimeout(fetchMissions, 2000);
                         } catch (err) {
-                          showToast('Error al cancelar: ' + (err.message || err), 'error');
+                          showToast('Error cancelling mission', 'error');
                         }
                       }}>Cancel</button>
                     </div>
@@ -217,10 +217,10 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
             onClick={async () => {
               try {
                 await UserService.claimRewards();
-                showToast('¡Recompensas reclamadas!', 'success');
+                showToast('Rewards claimed!', 'success');
                 setTimeout(fetchMissions, 2000);
               } catch (err) {
-                showToast('Error al reclamar todas: ' + (err.message || err), 'error');
+                showToast('Error claiming rewards', 'error');
               }
             }}
           >
@@ -229,7 +229,26 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
         </div>
       </div>
       {toast && (
-        <div className={`custom-toast-blue`}>{toast.message}</div>
+        <div style={{
+          position: 'absolute',
+          top: 30,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'rgba(24,24,40,0.95)',
+          color: '#fff',
+          border: '2px solid #ff36ba',
+          borderRadius: 14,
+          padding: '12px 32px',
+          fontSize: 16,
+          fontWeight: 600,
+          zIndex: 12000,
+          boxShadow: '0 4px 24px #ff36ba44',
+          textAlign: 'center',
+          minWidth: 200,
+          transition: 'top 0.3s',
+        }}>
+          {toast.message}
+        </div>
       )}
       <style jsx>{`
         .nft-modal-fullscreen {
