@@ -126,6 +126,7 @@ const Home = () => {
   const history = useHistory();
   const [toasts, setToasts] = useState([]);
   const [showRotateWarning, setShowRotateWarning] = useState(false);
+  const [, setForceUpdate] = useState(0); // Dummy state for forcing re-renders
 
   useEffect(() => {
     function checkOrientation() {
@@ -187,9 +188,10 @@ const Home = () => {
 
   const handleSwapSuccess = () => {
     addToast('Swap successful!');
-    setTimeout(() => {
-      UserService.reloadBalances();
-    }, 3000);
+    setTimeout(async () => {
+      await UserService.reloadBalances();
+      setForceUpdate(c => c + 1); // Trigger re-render
+    }, 4500); // User request: 4-5 seconds
   };
 
   const openSwapModal = (inputToken, outputToken) => {
