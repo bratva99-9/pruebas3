@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import MissionModal from '../components/MissionModal';
 import MissionStatus from '../components/missionstatus';
 import InventoryModal from '../components/InventoryModal';
+import SwapModal from '../components/SwapModal';
 import { UserService } from '../UserService';
 import OnlyFapsModal from '../components/onlyfapsmodal';
 import GiftHistoryModal from '../components/gifthistorymodal';
@@ -120,6 +121,8 @@ const Home = () => {
   const [onlyFapsGirl, setOnlyFapsGirl] = useState('Sandra');
   const [showInventory, setShowInventory] = useState(false);
   const [showGiftHistory, setShowGiftHistory] = useState(false);
+  const [showSwapModal, setShowSwapModal] = useState(false);
+  const [swapConfig, setSwapConfig] = useState({ input: 'WAX', output: 'SEXY' });
   const history = useHistory();
   const [toasts, setToasts] = useState([]);
   const [showRotateWarning, setShowRotateWarning] = useState(false);
@@ -147,6 +150,7 @@ const Home = () => {
     setShowOnlyFaps(false);
     setShowInventory(false);
     setShowGiftHistory(false);
+    setShowSwapModal(false);
     switch (action) {
       case 'home':
         // Solo cerrar modales
@@ -181,6 +185,11 @@ const Home = () => {
     }
   };
 
+  const openSwapModal = (inputToken, outputToken) => {
+    setSwapConfig({ input: inputToken, output: outputToken });
+    setShowSwapModal(true);
+  };
+
   function addToast(msg) {
     setToasts(prev => [{ id: Date.now(), msg }, ...prev]);
     setTimeout(() => {
@@ -202,7 +211,7 @@ const Home = () => {
                 <span
                   style={{ marginLeft: 6, cursor: 'pointer', color: '#00ffff', fontWeight: 700, fontSize: 20, verticalAlign: 'middle' }}
                   title="Buy/Swap SEXY"
-                  onClick={() => window.open('https://swap.tacocrypto.io/swap?output=SEXY-nightclub.gm&input=WAX-eosio.token', '_blank')}
+                  onClick={() => openSwapModal('WAX', 'SEXY')}
                 >
                   +
                 </span>
@@ -212,7 +221,7 @@ const Home = () => {
                 <span
                   style={{ marginLeft: 6, cursor: 'pointer', color: '#00ffff', fontWeight: 700, fontSize: 20, verticalAlign: 'middle' }}
                   title="Buy/Swap WAXXX"
-                  onClick={() => window.open('https://swap.tacocrypto.io/swap?output=WAXXX-nightclub.gm&input=WAX-eosio.token', '_blank')}
+                  onClick={() => openSwapModal('WAX', 'WAXXX')}
                 >
                   +
                 </span>
@@ -268,6 +277,13 @@ const Home = () => {
         <GiftHistoryModal
           onClose={() => setShowGiftHistory(false)}
           user={UserService.getName()}
+        />
+      )}
+      {showSwapModal && (
+        <SwapModal
+          onClose={() => setShowSwapModal(false)}
+          defaultInput={swapConfig.input}
+          defaultOutput={swapConfig.output}
         />
       )}
       {toasts.map((t, i) => (
