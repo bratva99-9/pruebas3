@@ -270,8 +270,67 @@ class SwapService {
       expireSeconds: 30
     });
   }
+
+  // Devuelve la cotización y el fee real del pool
+  async getQuoteWithFee(inputToken, outputToken, amount) {
+    const inputData = this.supportedTokens.find(t => t.symbol === inputToken);
+    const outputData = this.supportedTokens.find(t => t.symbol === outputToken);
+
+    if (!inputData || !outputData) {
+      throw new Error("Token no soportado");
+    }
+
+    const pools = await this.getAlcorPools();
+
+    const matchingPools = pools.filter(p => {
+      const tokenA_match = p.tokenA.symbol === inputData.symbol && p.tokenA.contract === inputData.contract;
+      const tokenB_match = p.tokenB.symbol === outputData.symbol && p.tokenB.contract === outputData.contract;
+      const reverse_match = p.tokenA.symbol === outputData.symbol && p.tokenA.contract === outputData.contract &&
+                            p.tokenB.symbol === inputData.symbol && p.tokenB.contract === inputData.contract;
+      return (tokenA_match && tokenB_match) || reverse_match;
+    });
+
+    if (matchingPools.length === 0) {
+      throw new Error(`No se encontró un pool de liquidez para el par ${inputToken}/${outputToken}.`);
+    }
+
+    const bestPool = matchingPools.reduce((best, current) => {
+      const bestLiquidity = (best.tokenA.quantity || 0) + (best.tokenB.quantity || 0);
+      const currentLiquidity = (current.tokenA.quantity || 0) + (current.tokenB.quantity || 0);
+      return currentLiquidity > bestLiquidity ? current : best;
+    });
+    const pool = bestPool;
+    const isReversed = pool.tokenA.symbol !== inputData.symbol;
+    const quote = this.calculateQuote(pool, isReversed, amount);
+    const fee = pool.fee / 10000;
+    return { quote, fee };
+  }
+
+  // Genera solo el memo para el swap de Alcor
+  async getSwapMemo(inputToken, outputToken, minExpected, user) {
+    const inputData = this.supportedTokens.find(t => t.symbol === inputToken);
+    const outputData = this.supportedTokens.find(t => t.symbol === outputToken);
+    if (!inputData || !outputData) throw new Error("Token no soportado.");
+
+    const pools = await this.getAlcorPools();
+    const matchingPools = pools.filter(p => 
+        (p.tokenA.symbol === inputData.symbol && p.tokenA.contract === inputData.contract && p.tokenB.symbol === outputData.symbol && p.tokenB.contract === outputData.contract) ||
+        (p.tokenA.symbol === outputData.symbol && p.tokenA.contract === outputData.contract && p.tokenB.symbol === inputData.symbol && p.tokenB.contract === inputData.contract)
+    );
+    if (matchingPools.length === 0) throw new Error("Pool no encontrado.");
+
+    const bestPool = matchingPools.reduce((best, current) => {
+        const bestLiquidity = (best.tokenA.quantity || 0) + (best.tokenB.quantity || 0);
+        const currentLiquidity = (current.tokenA.quantity || 0) + (current.tokenB.quantity || 0);
+        return currentLiquidity > bestLiquidity ? current : best;
+    });
+
+    const poolId = bestPool.id;
+    const minReceived = `${minExpected.toFixed(outputData.precision)} ${outputData.symbol}@${outputData.contract}`;
+    const receiver = user;
+    return `swapexactin#${poolId}#${receiver}#${minReceived}#`;
+  }
 }
 
 // Exportar una instancia singleton
-export const swapService = new SwapService();
-export default swapService; 
+export default new SwapService(); 

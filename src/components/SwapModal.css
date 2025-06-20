@@ -1,0 +1,241 @@
+/* SwapModal.css - estilo inspirado en Taco Swap, pero con colores propios */
+
+.swap-modal-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(20, 20, 30, 0.85);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swap-modal {
+  background: #181828;
+  border-radius: 48px;
+  box-shadow: none;
+  padding: 28px 22px 20px 22px;
+  min-width: 340px;
+  max-width: 95vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  border: none;
+  overflow: visible;
+}
+
+.swap-modal::before {
+  content: '';
+  position: absolute;
+  top: -6px; left: -6px; right: -6px; bottom: -6px;
+  border-radius: 56px;
+  z-index: 0;
+  background: linear-gradient(90deg, #ff36ba 0%, #7c3aed 100%);
+  pointer-events: none;
+}
+
+.swap-modal > * {
+  position: relative;
+  z-index: 1;
+}
+
+.swap-title {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.swap-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.swap-label {
+  color: #bdbdfc;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.swap-input-group {
+  display: flex;
+  align-items: center;
+  background: #23233a;
+  border-radius: 16px;
+  padding: 0 6px;
+  border: 1.5px solid #28284a;
+  width: 100%;
+  justify-content: center;
+}
+
+.swap-input {
+  flex: 1;
+  padding: 10px 4px 10px 0;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  outline: none;
+  text-align: right;
+  border-radius: 8px;
+  min-width: 80px;
+}
+.swap-input:focus {
+  background: transparent;
+}
+
+/* Ocultar spinners de los inputs tipo number y text en todos los navegadores */
+.swap-input::-webkit-inner-spin-button, 
+.swap-input::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
+  display: none !important;
+}
+.swap-input[type=number],
+.swap-input[type=text] {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+.swap-input::-ms-input-spinner {
+  display: none !important;
+}
+
+.swap-token-select {
+  font-size: 1rem;
+  padding: 4px 6px;
+  border-radius: 10px;
+  background: #29294a;
+  color: #fff;
+  border: none;
+  margin-left: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.swap-arrow {
+  color: #bdbdfc;
+  font-size: 1.5rem;
+  margin: 6px 0 6px 0;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.swap-balance {
+  color: #bdbdfc;
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+  text-align: right;
+}
+
+.swap-error {
+  color: #ff6b81;
+  background: #2a1a1a;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 10px 0 0 0;
+  font-size: 0.98rem;
+  text-align: center;
+}
+
+.swap-button, .swap-execute-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px 0;
+  background: #29294a;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none !important;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+  letter-spacing: 0.5px;
+  box-shadow: none !important;
+}
+.swap-button:disabled, .swap-execute-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.swap-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none !important;
+  color: #bdbdfc;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  box-shadow: none !important;
+}
+.swap-close-btn:hover {
+  color: #fff;
+}
+
+/* Centrar detalles avanzados y eliminar fondo/borde */
+.swap-advanced-details {
+  margin-top: 8px;
+  padding-top: 8px;
+  text-align: center;
+  width: 100%;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #bdbdfc;
+}
+
+/* Centrar el info box */
+.swap-info-box {
+  width: 100%;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #bdbdfc;
+  background: #23233a;
+  border-radius: 8px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+/* Botón de detalles como icono */
+.swap-details-toggle {
+  background: none;
+  border: none !important;
+  color: #bdbdfc !important;
+  cursor: pointer;
+  margin: 12px auto 0 auto;
+  padding: 0;
+  font-weight: 600;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: none !important;
+}
+.swap-details-toggle svg path {
+  stroke: #bdbdfc !important;
+}
+
+.swap-details-toggle:focus {
+  outline: none;
+}
+
+@media (max-width: 500px) {
+  .swap-modal {
+    min-width: 90vw;
+    padding: 14px 4vw 14px 4vw;
+  }
+} 
