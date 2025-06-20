@@ -454,6 +454,25 @@ export class User {
     const waxxx = parseFloat(this.waxxxBalance);
     return isNaN(waxxx) ? "0.00" : waxxx.toFixed(2);
   }
+
+  // Devuelve el balance numérico por símbolo
+  getBalanceBySymbol(symbol) {
+    let balanceString = "0.0";
+    switch(symbol) {
+      case 'WAX':
+        balanceString = this.balance;
+        break;
+      case 'SEXY':
+        balanceString = this.sexyBalance;
+        break;
+      case 'WAXXX':
+        balanceString = this.waxxxBalance;
+        break;
+      default:
+        balanceString = "0.0";
+    }
+    return parseFloat(balanceString) || 0;
+  }
 }
 
 // Exporta la instancia única

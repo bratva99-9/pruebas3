@@ -1,38 +1,33 @@
-/* SwapModal.css - estilo inspirado en Taco Swap, pero con colores propios */
+/* SwapModal.css - Modern dark theme with gradient border */
 
 .swap-modal-bg {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(20, 20, 30, 0.85);
+  background: hsla(245, 87%, 3%, 0.7); /* Dark background from Home page, slightly transparent */
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(8px);
 }
 
 .swap-modal {
-  background: #181828;
-  border-radius: 48px;
-  box-shadow: none;
-  padding: 28px 22px 20px 22px;
-  min-width: 340px;
+  background: hsl(245, 86.70%, 2.90%); /* Exact dark background from Home page */
+  border-radius: 28px; /* Slightly smaller */
+  box-shadow: 0 0 24px rgba(255, 54, 186, 0.45); /* Slightly tighter shadow */
+  padding: 20px 20px 14px 20px; /* Reduced further */
+  min-width: 330px; /* Slightly smaller */
   max-width: 95vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  border: none;
+  border: 3px solid #ff36ba; /* Same as home map container */
   overflow: visible;
 }
 
 .swap-modal::before {
-  content: '';
-  position: absolute;
-  top: -6px; left: -6px; right: -6px; bottom: -6px;
-  border-radius: 56px;
-  z-index: 0;
-  background: linear-gradient(90deg, #ff36ba 0%, #7c3aed 100%);
-  pointer-events: none;
+  display: none; /* No longer needed */
 }
 
 .swap-modal > * {
@@ -42,11 +37,12 @@
 
 .swap-title {
   color: #fff;
-  font-size: 1.25rem;
+  font-size: 1.2rem; /* Slightly smaller */
   font-weight: 700;
-  margin-bottom: 18px;
+  margin-bottom: 12px; /* Reduced further */
   letter-spacing: 0.5px;
   text-align: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .swap-row {
@@ -54,11 +50,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 7px; /* Reduced further */
+  text-align: left;
 }
 
 .swap-label {
-  color: #bdbdfc;
+  color: #f0dfff;
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 6px;
@@ -68,26 +65,28 @@
 .swap-input-group {
   display: flex;
   align-items: center;
-  background: #23233a;
-  border-radius: 16px;
-  padding: 0 6px;
-  border: 1.5px solid #28284a;
+  background: #181828; /* A dark color that fits the theme */
+  border-radius: 14px; /* Slightly smaller */
+  padding: 0 5px; /* Reduced */
+  border: 1.5px solid #ff36ba55;
   width: 100%;
   justify-content: center;
 }
 
 .swap-input {
   flex: 1;
-  padding: 10px 4px 10px 0;
+  padding: 8px 4px 8px 0; /* Reduced */
   border: none;
   background: transparent;
   color: #fff;
-  font-size: 1rem;
+  font-size: 0.95rem; /* Slightly smaller */
   font-weight: 600;
   outline: none;
   text-align: right;
   border-radius: 8px;
   min-width: 80px;
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
 }
 .swap-input:focus {
   background: transparent;
@@ -110,12 +109,12 @@
 }
 
 .swap-token-select {
-  font-size: 1rem;
-  padding: 4px 6px;
-  border-radius: 10px;
+  font-size: 0.95rem; /* Slightly smaller */
+  padding: 3px 5px; /* Reduced */
+  border-radius: 9px; /* Slightly smaller */
   background: #29294a;
   color: #fff;
-  border: none;
+  border: 1px solid #e83ae333;
   margin-left: 8px;
   font-weight: 700;
   cursor: pointer;
@@ -123,50 +122,177 @@
 }
 
 .swap-arrow {
-  color: #bdbdfc;
-  font-size: 1.5rem;
-  margin: 6px 0 6px 0;
+  color: #f0dfff;
+  font-size: 1.4rem; /* Slightly smaller */
+  margin: 2px 0; /* Reduced further */
   text-align: center;
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
+/* Force the switch button to be invisible */
+.swap-arrow button {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  line-height: 1;
+  box-shadow: none !important;
+}
+
 .swap-balance {
-  color: #bdbdfc;
-  font-size: 0.95rem;
-  margin-bottom: 2px;
-  text-align: right;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* Align to the right */
+  align-items: center;
+  color: #f0dfff;
+  font-size: 0.8rem; /* Slightly smaller */
+  margin-bottom: 4px;
+  padding: 0 8px;
+  gap: 5px; /* Reduced */
+}
+
+.swap-balance-label {
+  opacity: 0.7;
+}
+
+.swap-balance-value {
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+
+.swap-balance-value:hover {
+  color: #fff;
+}
+
+.swap-max-btn {
+  display: none; /* No longer needed */
+}
+
+.swap-percentage-selector {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 2px;
+  margin-bottom: 6px;
+}
+
+.swap-percentage-btn {
+  background: none;
+  border: none;
+  color: #f0dfff;
+  opacity: 0.6;
+  cursor: pointer;
+  font-size: 0.85rem; /* Slightly smaller */
+  font-weight: 600;
+  padding: 2px;
+  transition: opacity 0.2s, color 0.2s;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+}
+.swap-percentage-btn:hover {
+  opacity: 1;
+  color: #fff;
+}
+
+.swap-slider-container {
+  width: 100%;
+  padding: 0 4px;
+  margin-bottom: 6px; /* Reduced further */
+}
+
+.swap-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 2px;
+  outline: none;
+  transition: opacity .2s;
+  background-image: linear-gradient(to right, #e83ae3, #e83ae3);
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 5px #e83ae3;
+}
+
+.swap-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 3px solid #e83ae3;
+  box-shadow: 0 0 5px #e83ae3;
+}
+
+.swap-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 3px solid #e83ae3;
+  box-shadow: 0 0 5px #e83ae3;
 }
 
 .swap-error {
-  color: #ff6b81;
-  background: #2a1a1a;
+  color: #ffc2d1;
+  background: rgba(255, 0, 50, 0.2);
+  border: 1px solid #ff36ba;
   border-radius: 8px;
   padding: 8px 12px;
-  margin: 10px 0 0 0;
+  margin: 8px 0 0 0; /* Reduced from 10px */
   font-size: 0.98rem;
   text-align: center;
 }
 
 .swap-button, .swap-execute-btn {
   width: 100%;
-  margin-top: 10px;
-  padding: 12px 0;
-  background: #29294a;
+  position: relative; /* For pseudo-element border */
+  z-index: 1; /* For pseudo-element border */
+  margin-top: 6px; /* Reduced further */
+  padding: 9px 0; /* Reduced further */
+  background: linear-gradient(90deg, #8338ec, #e83ae3);
+  background-size: 200% auto;
   color: #fff;
-  font-size: 1.1rem;
+  font-size: 1rem; /* Slightly smaller */
   font-weight: 700;
-  border: none !important;
-  border-radius: 16px;
+  border: none; /* Border is handled by pseudo-element */
+  border-radius: 14px; /* Slightly smaller */
   cursor: pointer;
-  transition: background 0.2s, opacity 0.2s;
+  transition: background-position 0.3s ease-out, opacity 0.2s;
   letter-spacing: 0.5px;
-  box-shadow: none !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
+
+.swap-button::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: -2px; right: -2px; bottom: -2px;
+  background: linear-gradient(90deg, #e83ae3, #8338ec);
+  border-radius: 16px; /* Button border-radius + border width */
+  z-index: -1;
+  filter: blur(4px);
+  opacity: 0.75;
+  transition: opacity 0.3s;
+}
+
+.swap-button:hover::before {
+  opacity: 1;
+}
+
 .swap-button:disabled, .swap-execute-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  background-position: left center;
 }
 
 .swap-close-btn {
@@ -175,7 +301,7 @@
   right: 10px;
   background: none;
   border: none !important;
-  color: #bdbdfc;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 1.2rem;
   cursor: pointer;
   transition: color 0.2s;
@@ -200,12 +326,12 @@
 /* Centrar el info box */
 .swap-info-box {
   width: 100%;
-  margin-top: 12px;
-  font-size: 0.9rem;
-  color: #bdbdfc;
-  background: #23233a;
+  margin-top: 8px; /* Reduced further */
+  font-size: 0.85rem; /* Slightly smaller */
+  color: #f0dfff;
+  background: #181828; /* A dark color that fits the theme */
   border-radius: 8px;
-  padding: 8px 10px;
+  padding: 7px 9px; /* Reduced */
   text-align: center;
 }
 
@@ -213,7 +339,7 @@
 .swap-details-toggle {
   background: none;
   border: none !important;
-  color: #bdbdfc !important;
+  color: #f0dfff !important;
   cursor: pointer;
   margin: 12px auto 0 auto;
   padding: 0;
@@ -226,7 +352,7 @@
   box-shadow: none !important;
 }
 .swap-details-toggle svg path {
-  stroke: #bdbdfc !important;
+  stroke: #f0dfff !important;
 }
 
 .swap-details-toggle:focus {
@@ -237,5 +363,62 @@
   .swap-modal {
     min-width: 90vw;
     padding: 14px 4vw 14px 4vw;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .swap-modal {
+    padding: 8px 12px; /* Further reduced */
+    transform-origin: center;
+    max-width: 340px; /* Reduced further to prevent stretching */
+  }
+  .swap-title {
+    font-size: 1rem; /* Further reduced */
+    margin-bottom: 5px; /* Final reduction */
+  }
+  .swap-slider-container {
+    margin-bottom: 4px; /* Further reduced */
+  }
+  .swap-percentage-selector {
+    margin-bottom: 3px; /* Further reduced */
+  }
+  .swap-percentage-btn {
+    font-size: 0.75rem; /* Further reduced */
+  }
+  .swap-row {
+    margin-bottom: 3px; /* Final reduction */
+  }
+  .swap-input-group {
+    padding: 0 4px;
+    border-radius: 12px; /* Further reduced */
+  }
+  .swap-input {
+    font-size: 0.85rem; /* Further reduced */
+    padding: 4px 4px 4px 0; /* Further reduced */
+  }
+  .swap-token-select {
+    font-size: 0.85rem; /* Further reduced */
+    padding: 1px 3px; /* Further reduced */
+  }
+  .swap-arrow {
+    margin: 1px 0; /* Further reduced */
+    transform: scale(0.9);
+  }
+  .swap-balance {
+    margin-bottom: 2px;
+    font-size: 0.75rem;
+  }
+  .swap-button, .swap-execute-btn {
+    padding: 6px 0; /* Further reduced */
+    font-size: 0.9rem; /* Further reduced */
+    border-radius: 12px;
+  }
+  .swap-button::before {
+    border-radius: 14px;
+  }
+  .swap-info-box {
+    padding: 5px 7px; /* Further reduced */
+    font-size: 0.75rem; /* Further reduced */
+    margin-top: 4px; /* Final reduction */
   }
 } 

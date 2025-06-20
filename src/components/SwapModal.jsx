@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { UserService } from '../UserService';
 import swapService from '../services/SwapService';
 import './SwapModal.css';
 
-const SwapModal = ({ onClose, defaultInput = 'WAX', defaultOutput = 'SEXY' }) => {
+const SwapModal = ({ onClose, onSuccess, defaultInput = 'WAX', defaultOutput = 'SEXY' }) => {
   const [fromToken, setFromToken] = useState(defaultInput);
   const [toToken, setToToken] = useState(defaultOutput);
   const [inputAmount, setInputAmount] = useState('');
   const [outputAmount, setOutputAmount] = useState(0);
+  const [fromTokenBalance, setFromTokenBalance] = useState(0);
+  const [toTokenBalance, setToTokenBalance] = useState(0);
+  const [percentage, setPercentage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [swapLoading, setSwapLoading] = useState(false);
@@ -25,51 +28,70 @@ const SwapModal = ({ onClose, defaultInput = 'WAX', defaultOutput = 'SEXY' }) =>
   const swapAmount = parseFloat(inputAmount || 0) - commissionAmount;
 
   useEffect(() => {
-    let isMounted = true;
+    const fromBalance = UserService.getBalanceBySymbol(fromToken);
+    setFromTokenBalance(fromBalance);
+    const toBalance = UserService.getBalanceBySymbol(toToken);
+    setToTokenBalance(toBalance);
+  }, [fromToken, toToken]);
 
-    const fetchQuote = async () => {
-      if (!inputAmount || parseFloat(inputAmount) <= 0 || !fromToken || !toToken) {
-        if (isMounted) {
-          setOutputAmount(0);
-        }
-        return;
+  const getQuote = useCallback(async (isMounted) => {
+    if (!inputAmount || parseFloat(inputAmount) <= 0 || !fromToken || !toToken) {
+      if (isMounted) setOutputAmount(0);
+      return;
+    }
+
+    if (isMounted) {
+      setLoading(true);
+      setError('');
+    }
+    
+    try {
+      if (swapAmount > 0) {
+          const quoteResult = await swapService.getQuoteWithFee(fromToken, toToken, swapAmount);
+          if (isMounted) {
+            setOutputAmount(quoteResult.quote || 0);
+          }
+      } else {
+          if (isMounted) setOutputAmount(0);
       }
 
+    } catch (err) {
+      console.error("Error getting quote:", err);
       if (isMounted) {
-        setLoading(true);
-        setError('');
+        setError(err.message || 'Error al obtener cotización');
+        setOutputAmount(0);
       }
-      
-      try {
-        if (swapAmount > 0) {
-            const quoteResult = await swapService.getQuoteWithFee(fromToken, toToken, swapAmount);
-            if (isMounted) {
-              setOutputAmount(quoteResult.quote || 0);
-            }
-        } else {
-            if (isMounted) setOutputAmount(0);
-        }
+    } finally {
+      if (isMounted) setLoading(false);
+    }
+  }, [inputAmount, fromToken, toToken, swapAmount]);
 
-      } catch (err) {
-        console.error("Error getting quote:", err);
-        if (isMounted) {
-          setError(err.message || 'Error al obtener cotización');
-          setOutputAmount(0);
-        }
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
+  useEffect(() => {
+    let isMounted = true;
     const debounceTimeout = setTimeout(() => {
-      fetchQuote();
+      getQuote(isMounted);
     }, 500);
 
     return () => {
       isMounted = false;
       clearTimeout(debounceTimeout);
     };
-  }, [inputAmount, fromToken, toToken, swapService, swapAmount]);
+  }, [getQuote]);
+
+  useEffect(() => {
+    const safeInputAmount = parseFloat(inputAmount) || 0;
+    if (fromTokenBalance > 0 && safeInputAmount > 0) {
+        const maxAmount = fromToken === 'WAX' ? Math.max(0, fromTokenBalance - 0.1) : fromTokenBalance;
+        if (maxAmount > 0) {
+            const newPercentage = Math.min(100, (safeInputAmount / maxAmount) * 100);
+            setPercentage(newPercentage);
+        } else {
+            setPercentage(0);
+        }
+    } else {
+        setPercentage(0);
+    }
+  }, [inputAmount, fromTokenBalance, fromToken]);
 
   const handleSwap = async () => {
     if (!UserService.session) {
@@ -124,7 +146,7 @@ const SwapModal = ({ onClose, defaultInput = 'WAX', defaultOutput = 'SEXY' }) =>
 
       await UserService.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 30 });
 
-      alert('¡Swap exitoso!');
+      if (onSuccess) onSuccess();
       onClose();
     } catch (err) {
       console.error('Error executing swap:', err);
@@ -142,6 +164,39 @@ const SwapModal = ({ onClose, defaultInput = 'WAX', defaultOutput = 'SEXY' }) =>
     }
   };
 
+  const handleMaxClick = () => {
+    const tokenData = swapService.supportedTokens.find(t => t.symbol === fromToken);
+    const precision = tokenData ? tokenData.precision : 4;
+    // Deja un pequeño margen para cubrir posibles fees de transacción de RAM
+    const maxAmount = fromToken === 'WAX' ? Math.max(0, fromTokenBalance - 0.1) : fromTokenBalance;
+    setInputAmount(maxAmount.toFixed(precision));
+  };
+
+  const handlePercentageClick = (newPercentage) => {
+    setPercentage(newPercentage);
+
+    if (fromTokenBalance > 0) {
+        const tokenData = swapService.supportedTokens.find(t => t.symbol === fromToken);
+        const precision = tokenData ? tokenData.precision : 4;
+        const maxAmount = fromToken === 'WAX' ? Math.max(0, fromTokenBalance - 0.1) : fromTokenBalance;
+        const newAmount = (maxAmount * newPercentage) / 100;
+        setInputAmount(newAmount.toFixed(precision));
+    }
+  };
+
+  const handleSliderChange = (e) => {
+    const newPercentage = Number(e.target.value);
+    setPercentage(newPercentage);
+
+    if (fromTokenBalance > 0) {
+        const tokenData = swapService.supportedTokens.find(t => t.symbol === fromToken);
+        const precision = tokenData ? tokenData.precision : 4;
+        const maxAmount = fromToken === 'WAX' ? Math.max(0, fromTokenBalance - 0.1) : fromTokenBalance;
+        const newAmount = (maxAmount * newPercentage) / 100;
+        setInputAmount(newAmount.toFixed(precision));
+    }
+  };
+
   const switchTokens = () => {
     const currentFrom = fromToken;
     setFromToken(toToken);
@@ -155,8 +210,34 @@ const SwapModal = ({ onClose, defaultInput = 'WAX', defaultOutput = 'SEXY' }) =>
         <button onClick={onClose} className="swap-close-btn">&times;</button>
         <h2 className="swap-title">Swap Tokens</h2>
         
+        <div className="swap-slider-container">
+          <div className="swap-percentage-selector">
+            {[0, 25, 50, 75, 100].map(p => (
+              <span key={p} onClick={() => handlePercentageClick(p)} className="swap-percentage-btn">
+                {p}%
+              </span>
+            ))}
+          </div>
+          <input 
+            type="range" 
+            min="0" 
+            max="100" 
+            step="1"
+            value={percentage}
+            onChange={handleSliderChange}
+            className="swap-slider"
+            style={{ backgroundSize: `${percentage}% 100%` }}
+          />
+        </div>
+
         {/* From */}
         <div className="swap-row">
+            <div className="swap-balance">
+              <span className="swap-balance-label">Balance:</span>
+              <span onClick={handleMaxClick} className="swap-balance-value" title="Use maximum balance">
+                {fromTokenBalance.toFixed(4)}
+              </span>
+            </div>
             <div className="swap-input-group">
                 <input
                     type="text"
@@ -176,14 +257,18 @@ const SwapModal = ({ onClose, defaultInput = 'WAX', defaultOutput = 'SEXY' }) =>
         <div className="swap-arrow">
              <button onClick={switchTokens} style={{background: 'none', border: 'none', cursor: 'pointer', padding: 0}} title="Switch pairs">
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9 11V5.5M9 5.5L6 8.5M9 5.5L12 8.5" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M19 17V22.5M19 22.5L16 19.5M19 22.5L22 19.5" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M9 11V5.5M9 5.5L6 8.5M9 5.5L12 8.5" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M19 17V22.5M19 22.5L16 19.5M19 22.5L22 19.5" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
              </button>
         </div>
 
         {/* To */}
         <div className="swap-row">
+            <div className="swap-balance">
+              <span className="swap-balance-label">Balance:</span>
+              <span className="swap-balance-value">{toTokenBalance.toFixed(4)}</span>
+            </div>
             <div className="swap-input-group">
                 <input
                     type="text"
@@ -207,12 +292,12 @@ const SwapModal = ({ onClose, defaultInput = 'WAX', defaultOutput = 'SEXY' }) =>
             {showAdvanced ? (
               <>
                 <span>Hide advanced details</span>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12 10L8 6L4 10" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12 10L8 6L4 10" stroke="#f0dfff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </>
             ) : (
               <>
                 <span>Show advanced details</span>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="#f0dfff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </>
             )}
           </button>

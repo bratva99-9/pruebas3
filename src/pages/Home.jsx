@@ -185,6 +185,13 @@ const Home = () => {
     }
   };
 
+  const handleSwapSuccess = () => {
+    addToast('Swap successful!');
+    setTimeout(() => {
+      UserService.reloadBalances();
+    }, 3000);
+  };
+
   const openSwapModal = (inputToken, outputToken) => {
     setSwapConfig({ input: inputToken, output: outputToken });
     setShowSwapModal(true);
@@ -194,7 +201,7 @@ const Home = () => {
     setToasts(prev => [{ id: Date.now(), msg }, ...prev]);
     setTimeout(() => {
       setToasts(prev => prev.slice(0, -1));
-    }, 5000);
+    }, 3000);
   }
 
   return (
@@ -282,6 +289,7 @@ const Home = () => {
       {showSwapModal && (
         <SwapModal
           onClose={() => setShowSwapModal(false)}
+          onSuccess={handleSwapSuccess}
           defaultInput={swapConfig.input}
           defaultOutput={swapConfig.output}
         />
