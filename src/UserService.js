@@ -1,4 +1,5 @@
 import { SessionKit } from '@wharfkit/session';
+import { ContractKit } from '@wharfkit/contract';
 import { WebRenderer } from '@wharfkit/web-renderer';
 import { WalletPluginCloudWallet } from '@wharfkit/wallet-plugin-cloudwallet';
 import { WalletPluginAnchor } from '@wharfkit/wallet-plugin-anchor';
@@ -6,6 +7,7 @@ import { WalletPluginWombat } from '@wharfkit/wallet-plugin-wombat';
 // import { WalletPluginTokenPocket } from '@wharfkit/wallet-plugin-tokenpocket';
 // import { WalletPluginScatter } from '@wharfkit/wallet-plugin-scatter';
 import { WalletPluginWebAuth } from '@proton/wharfkit-plugin-webauth';
+import { nightclubABI } from './abi'; // Corregimos la ruta de importación a './abi'
 
 // Wharfkit Configuration
 const appName = 'Night Club Game';
@@ -16,7 +18,10 @@ const chain = {
 
 // Main SessionKit for all wallets EXCEPT when we force one
 const walletPlugins = [
-    new WalletPluginCloudWallet(),
+    new WalletPluginCloudWallet({
+        // Forzamos el modo de redirección para mejorar la compatibilidad móvil
+        loginPopup: false 
+    }),
     new WalletPluginAnchor(),
     new WalletPluginWombat(),
     // Se elimina TokenPocket de la lista de plugins
@@ -68,6 +73,7 @@ const sessionKit = new SessionKit({
 export class User {
     session = undefined;
     authName = undefined;
+    contract = undefined;
 
     balance = "0.00000000 WAX";
     sexyBalance = "0.0000 SEXY";
@@ -79,6 +85,10 @@ export class User {
             if (restored) {
                 this.session = restored;
                 this.authName = restored.actor.toString();
+                // Se crea el ContractKit aquí, una vez que tenemos una sesión y un cliente válidos.
+                const contractKit = new ContractKit({ client: this.session.client });
+                // Se carga el contrato 'nightclubapp' y se le pasa el ABI manualmente.
+                this.contract = await contractKit.load('nightclubapp', { abi: nightclubABI });
                 await this.reloadBalances();
             }
         } catch (error) {
@@ -91,11 +101,14 @@ export class User {
     }
 
     async login() {
-        // Se revierte a la función de login original y simple
         try {
             const response = await sessionKit.login();
             this.session = response.session;
             this.authName = response.session.actor.toString();
+            // Se crea el ContractKit aquí también, después de un inicio de sesión exitoso.
+            const contractKit = new ContractKit({ client: this.session.client });
+            // Se carga el contrato 'nightclubapp' y se le pasa el ABI manualmente.
+            this.contract = await contractKit.load('nightclubapp', { abi: nightclubABI });
             await this.reloadBalances();
             return this.session;
         } catch (error) {
@@ -113,6 +126,7 @@ export class User {
             await sessionKit.logout();
             this.session = undefined;
             this.authName = undefined;
+            this.contract = undefined; // Limpiamos la instancia del contrato al cerrar sesión
         } catch (error) {
             console.error("Logout error:", error);
             throw error;
@@ -284,47 +298,51 @@ export class User {
     async claimMission(asset_ids) {
         if (!this.session) throw new Error("Not logged in");
 
-        const actions = asset_ids.map(id => ({
+        // Corregido: El contrato espera un único campo 'asset_ids' que es un array.
+        const action = {
             account: 'nightclubapp',
             name: 'claim',
-            authorization: [{ actor: this.authName, permission: 'active' }],
+            authorization: [this.session.permissionLevel],
             data: { 
                 user: this.authName,
-                asset_id: id 
+                asset_ids: asset_ids // Ahora pasamos el array completo.
             },
-        }));
+        };
 
-        return this.transact(actions);
+        return this.session.transact({ action });
     }
     
     async cancelMission(asset_ids) {
         if (!this.session) throw new Error("Not logged in");
     
-        const actions = asset_ids.map(id => ({
+        // Corregido: El contrato espera un único campo 'asset_ids' que es un array.
+        const action = {
             account: 'nightclubapp',
-            name: 'cancelmission',
-            authorization: [{ actor: this.authName, permission: 'active' }],
+            name: 'cancelmiss',
+            authorization: [this.session.permissionLevel],
             data: { 
-                asset_id: id 
+                user: this.authName,
+                asset_ids: asset_ids // Ahora pasamos el array completo.
             },
-        }));
+        };
     
-        return this.transact(actions);
+        return this.session.transact({ action });
     }
 
     async claimAllMissions() {
         if (!this.session) throw new Error("Not logged in");
 
-        const actions = [{
+        // Se construye la acción manualmente.
+        const action = {
             account: 'nightclubapp',
             name: 'claimall',
-            authorization: [{ actor: this.authName, permission: 'active' }],
+            authorization: [this.session.permissionLevel],
             data: { 
                 user: this.authName
             },
-        }];
+        };
         
-        return this.transact(actions);
+        return this.session.transact({ action });
     }
 
     formatWAXOnly() {
