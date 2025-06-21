@@ -11,16 +11,15 @@ export default function LandingPage() {
 
   const handleLogin = async () => {
     try {
-      await UserService.login(() => {
-        if (UserService.isLogged()) {
-          history.push("/home");
-        } else {
-          dispatch(setPlayerLogout());
-          alert("Error al iniciar sesión");
-        }
-      });
+      await UserService.login();
+      if (UserService.isLogged()) {
+        history.push("/home");
+      }
     } catch (err) {
-      alert("Hubo un error en el login: " + err.message);
+      // The user may have closed the login modal
+      console.error("Login failed or was cancelled:", err);
+      // Optionally show a less intrusive error message
+      // alert("Login failed: " + err.message);
     }
   };
 

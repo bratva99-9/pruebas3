@@ -23,7 +23,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
     try {
       setLoading(true);
       const currentUser = UserService.getName();
-      console.log('Usuario actual:', currentUser);
       if (!currentUser) {
         console.error('No user logged in');
         setLoading(false);
@@ -35,7 +34,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
       const res = await fetch(url);
       const data = await res.json();
       const nfts = data.data || [];
-      console.log('NFTs recibidos:', nfts);
 
       setNfts(nfts);
       // Cooldowns
@@ -84,14 +82,9 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
         json: true
       };
 
-      console.log('🔍 Intentando obtener datos de templerew...');
-      console.log('📋 Request body:', requestBody);
-
       for (let i = 0; i < endpoints.length; i++) {
         const endpoint = endpoints[i];
         try {
-          console.log(`🌐 Probando endpoint ${i + 1}/${endpoints.length}: ${endpoint}`);
-          
           const res = await fetch(endpoint, {
             method: 'POST',
             headers: { 
@@ -102,42 +95,28 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
           });
 
           if (!res.ok) {
-            console.log(`❌ Endpoint ${endpoint} respondió con status: ${res.status}`);
             continue;
           }
 
           const data = await res.json();
-          console.log(`✅ Endpoint ${endpoint} respondió exitosamente`);
-          console.log('📊 Respuesta completa:', data);
-          console.log('📋 Filas recibidas:', data.rows);
-          console.log('📋 Número de filas:', data.rows ? data.rows.length : 0);
 
           if (data.rows && data.rows.length > 0) {
             const stats = {};
             data.rows.forEach((row, index) => {
-              console.log(`📝 Procesando fila ${index}:`, row);
               if (row.template_id !== undefined) {
                 stats[String(row.template_id)] = row;
-                console.log(`✅ Template ${row.template_id} agregado con stats:`, row);
-              } else {
-                console.log(`⚠️ Fila ${index} no tiene template_id:`, row);
               }
             });
             
             setTemplateStats(stats);
-            console.log('🎉 templateStats final cargado:', stats);
-            console.log('🔑 Keys disponibles:', Object.keys(stats));
-            return; // Salir del bucle si encontramos datos
-          } else {
-            console.log(`⚠️ Endpoint ${endpoint} devolvió array vacío`);
+            return; 
           }
         } catch (err) {
-          console.log(`❌ Error con endpoint ${endpoint}:`, err.message);
+          console.error(`Error fetching template stats from ${endpoint}:`, err);
         }
       }
 
-      // Si llegamos aquí, ningún endpoint funcionó
-      console.log('💥 Ningún endpoint devolvió datos válidos');
+      console.error('Failed to fetch template stats from all endpoints.');
       setTemplateStats({});
     };
     
@@ -155,7 +134,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
   );
 
   const toggleNFTSelection = (assetId) => {
-    console.log('Toggling NFT selection:', assetId);
     if (selectedNFTs.includes(assetId)) {
       setSelectedNFTs(prev => prev.filter(id => id !== assetId));
     } else {
@@ -174,7 +152,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
     setShowLoadingOverlay(true);
     try {
       const memo = `mission:${mission.id}`;
-      console.log('Sending mission with NFTs:', selectedNFTs, 'memo:', memo);
       await UserService.stakeNFTs(selectedNFTs, memo);
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3500);
@@ -397,7 +374,6 @@ const NFTModal = ({ mission, onClose, onForceCloseAll }) => {
                         preload="none"
                         controls={false}
                         onError={e => {
-                          console.error('Video error:', e);
                           e.target.style.display = 'none';
                         }}
                       />

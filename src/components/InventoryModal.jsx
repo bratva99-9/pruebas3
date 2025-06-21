@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { UserService } from '../UserService';
 
 const SCHEMAS = [
@@ -15,65 +15,57 @@ const PAGE_SIZE = 10;
 
 const InventoryModal = ({ onClose }) => {
   const [nfts, setNfts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Initially not loading
   const [selectedCategory, setSelectedCategory] = useState('girls');
-  const [filteredNfts, setFilteredNfts] = useState([]);
-  const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    fetchNFTs();
-    // eslint-disable-next-line
-  }, []);
+  const fetchNFTs = useCallback(async (category, reset = false) => {
+    if (!hasMore && !reset) return;
 
-  useEffect(() => {
-    setDisplayCount(PAGE_SIZE);
-    setFilteredNfts(
-      nfts.filter(
-        nft => nft.schema && nft.schema.schema_name && nft.schema.schema_name.toLowerCase() === selectedCategory
-      )
-    );
-  }, [selectedCategory, nfts]);
-
-  const fetchNFTs = async () => {
-    try {
-      setLoading(true);
-      const user = UserService.authName || (UserService.getName && UserService.getName());
-      if (!user) {
+    setLoading(true);
+    const user = UserService.authName || (UserService.getName && UserService.getName());
+    if (!user) {
         setNfts([]);
-        setFilteredNfts([]);
         setLoading(false);
         return;
-      }
-      // Fetch NFTs from all schemas
-      const queries = SCHEMAS.filter(s => s.id !== 'all').map(schema =>
-        fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${user}&collection_name=${COLLECTION}&schema_name=${schema.id}&limit=100`)
-          .then(res => res.json())
-      );
-      const results = await Promise.all(queries);
-      const nftsData = results.flatMap(r => Array.isArray(r.data) ? r.data : []);
-      setNfts(nftsData);
-      setFilteredNfts(nftsData);
-      setLoading(false);
-    } catch (error) {
-      setNfts([]);
-      setFilteredNfts([]);
-      setLoading(false);
     }
-  };
+
+    try {
+        const currentPage = reset ? 1 : page;
+        const response = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${user}&collection_name=${COLLECTION}&schema_name=${category}&page=${currentPage}&limit=${PAGE_SIZE}`);
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+            setNfts(prev => reset ? result.data : [...prev, ...result.data]);
+            setHasMore(result.data.length === PAGE_SIZE);
+            setPage(currentPage + 1);
+        } else {
+            setHasMore(false);
+        }
+    } catch (error) {
+        console.error("Error fetching NFTs:", error);
+        setHasMore(false);
+    } finally {
+        setLoading(false);
+    }
+  }, [page, hasMore]);
+
+
+  useEffect(() => {
+      setNfts([]); // Clear previous NFTs
+      setPage(1);
+      setHasMore(true);
+      fetchNFTs(selectedCategory, true); // Fetch new category, resetting previous data
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory]);
+
 
   const handleLoadMore = () => {
-    setDisplayCount(prev => prev + PAGE_SIZE);
+    if(!loading && hasMore) {
+        fetchNFTs(selectedCategory);
+    }
   };
-
-  if (loading) {
-    return (
-      <div className="inventory-modal-fullscreen">
-        <div className="inventory-modal-content">
-          <div className="loading">Loading inventory...</div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="inventory-modal-fullscreen">
@@ -91,9 +83,9 @@ const InventoryModal = ({ onClose }) => {
           ))}
         </div>
         <div className="nfts-grid">
-          {filteredNfts.length === 0 ? (
+          {nfts.length === 0 && !loading ? (
             <div style={{color:'#fff', gridColumn:'1/-1', textAlign:'center', fontSize:'1.2rem', opacity:0.7}}>No NFTs in this category.</div>
-          ) : filteredNfts.slice(0, displayCount).map(nft => {
+          ) : nfts.map(nft => {
             const videoHash = nft.data && nft.data.video && nft.data.video.length > 10 ? nft.data.video : null;
             const imgHash = nft.data && nft.data.img && nft.data.img.length > 10 ? nft.data.img : null;
             const fileUrl = videoHash
@@ -121,18 +113,21 @@ const InventoryModal = ({ onClose }) => {
               </div>
             );
           })}
+          {loading && <div style={{color:'#fff', gridColumn:'1/-1', textAlign:'center'}}>Loading...</div>}
         </div>
         <div className="modal-bottom-bar">
           <div className="modal-bottom-center-btns">
             <button className="close-btn" onClick={onClose}>Close</button>
           </div>
-          <button
-            className="load-more-btn"
-            onClick={handleLoadMore}
-            disabled={displayCount >= filteredNfts.length}
-          >
-            Load more NFTs
-          </button>
+          {hasMore && (
+            <button
+              className="load-more-btn"
+              onClick={handleLoadMore}
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'Load more NFTs'}
+            </button>
+          )}
         </div>
       </div>
       <style jsx>{`

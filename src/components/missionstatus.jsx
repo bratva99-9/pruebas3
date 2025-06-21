@@ -44,40 +44,16 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
   const fetchMissions = async () => {
     setLoading(true);
     try {
-      const currentUser = UserService.getName();
-      if (!currentUser) {
-        console.error('No hay usuario logueado');
-        setMissions([]);
-        setLoading(false);
-        return;
-      }
-      // Obtener todas las misiones y filtrar por usuario
-      const allMissions = await UserService.getUserMissions();
-      const userMissions = allMissions.filter(m => m.user === currentUser);
-      
-      // Obtener información de los NFTs para cada misión
-      const missionsWithNFTs = await Promise.all(userMissions.map(async (mission) => {
-        try {
-          const response = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${mission.asset_id}`);
-          const data = await response.json();
-          if (data.data && data.data.data && data.data.data.video) {
-            return {
-              ...mission,
-              video_url: data.data.data.video
-            };
-          }
-        } catch (err) {
-          console.error('Error al obtener información del NFT:', err);
-        }
-        return mission;
-      }));
-
-      setMissions(missionsWithNFTs);
+      // Llamada a la nueva función centralizada en UserService
+      const missionsWithData = await UserService.getMissionsWithDetails();
+      setMissions(missionsWithData || []);
     } catch (err) {
-      console.error('Error al obtener misiones:', err);
-      setMissions([]);
+      console.error('Error al cargar misiones y NFTs:', err);
+      showToast(err.message || 'Error al cargar los trabajos activos', 'error');
+      setMissions([]); // Asegurarse de limpiar en caso de error
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -120,10 +96,12 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
               </div>
             ) : (
               missions.map(mission => {
-                let videoUrl = mission.video_url;
-                if (videoUrl && videoUrl.startsWith('Qm')) {
-                  videoUrl = `https://ipfs.io/ipfs/${videoUrl}`;
-                }
+                // La URL del video ya se construye correctamente en 'fetchMissions'.
+                // No es necesario procesarla de nuevo aquí.
+                const videoUrl = mission.video_url;
+                const timeLeft = getTimeLeft(Number(mission.end_time));
+                const isCompleted = timeLeft === '¡Completada!';
+
                 return (
                   <div key={mission.asset_id} className="mission-status-card">
                     <div className="mission-video-container">
@@ -177,28 +155,35 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
                                 <path d="M10 5.5V10L13 12" stroke="#bfc2d1" strokeWidth="1.5" strokeLinecap="round"/>
                               </svg>
                             </span>
-                            <span className="stat-text">{getTimeLeft(Number(mission.end_time)) === '¡Completada!' ? 'Completed!' : getTimeLeft(Number(mission.end_time))}</span>
+                            <span className="stat-text">{isCompleted ? 'Completed!' : timeLeft}</span>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="mission-status-actions">
-                      <button className="btn-mission-action" onClick={async () => {
+                      <button 
+                        className="btn-mission-action" 
+                        disabled={!isCompleted}
+                        onClick={async () => {
+                        if (!mission.asset_id) return;
                         try {
                           await UserService.claimMission([mission.asset_id]);
                           showToast('Reward claimed!', 'success');
-                          setTimeout(fetchMissions, 2000);
+                          setTimeout(fetchMissions, 2000); // Recargar
                         } catch (err) {
-                          showToast('Error claiming reward', 'error');
+                           const errorMessage = (err.cause && err.cause.message) ? err.cause.message : err.message;
+                           showToast(errorMessage || 'Error claiming reward', 'error');
                         }
                       }}>Claim</button>
                       <button className="btn-mission-action btn-mission-cancel" onClick={async () => {
+                         if (!mission.asset_id) return;
                         try {
-                          await UserService.cancelMission(mission.asset_id);
+                          await UserService.cancelMission([String(mission.asset_id)]);
                           showToast('Mission cancelled!', 'success');
-                          setTimeout(fetchMissions, 2000);
+                          setTimeout(fetchMissions, 2000); // Recargar
                         } catch (err) {
-                          showToast('Error cancelling mission', 'error');
+                           const errorMessage = (err.cause && err.cause.message) ? err.cause.message : err.message;
+                           showToast(errorMessage || 'Error cancelling mission', 'error');
                         }
                       }}>Cancel</button>
                     </div>
@@ -216,11 +201,13 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
             disabled={missions.length === 0}
             onClick={async () => {
               try {
-                await UserService.claimRewards();
-                showToast('Rewards claimed!', 'success');
-                setTimeout(fetchMissions, 2000);
+                // El nuevo método para reclamar todas las recompensas
+                await UserService.claimAllMissions();
+                showToast('All rewards claimed!', 'success');
+                setTimeout(fetchMissions, 2000); // Recargar
               } catch (err) {
-                showToast('Error claiming rewards', 'error');
+                const errorMessage = (err.cause && err.cause.message) ? err.cause.message : err.message;
+                showToast(errorMessage || 'Error claiming rewards', 'error');
               }
             }}
           >
@@ -502,6 +489,17 @@ const MissionStatus = ({ onClose, onForceCloseAll }) => {
           transition: background 0.2s, border-color 0.2s, color 0.2s;
           margin: 0;
           white-space: nowrap;
+        }
+        .btn-mission-action:hover:disabled {
+          background: rgba(128, 128, 128, 0.2);
+          border-color: rgba(128, 128, 128, 0.4);
+          color: #888;
+        }
+        .btn-mission-action:disabled {
+          background: rgba(128, 128, 128, 0.2);
+          border-color: rgba(128, 128, 128, 0.4);
+          color: #888;
+          cursor: not-allowed;
         }
         .btn-mission-action:hover {
           background: rgba(255,0,255,0.13);

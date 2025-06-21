@@ -29,18 +29,28 @@ const MissionModal = ({ onClose, onForceCloseAll }) => {
   const [focusMode, setFocusMode] = useState(false);
 
   const fetchMissions = useCallback(async () => {
+    if (!UserService.isLogged()) {
+      console.log("Not logged in, can't fetch missions.");
+      setMissions([]);
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
-      const response = await UserService.rpc.get_table_rows({
+      // Corregido: Usar la sesión del UserService para obtener los tipos de misión
+      const response = await UserService.session.client.v1.chain.get_table_rows({
         code: 'nightclubapp',
         scope: 'nightclubapp',
-        table: 'missiontypes',
-        limit: 100
+        table: 'missiontypes', // La tabla correcta para las plantillas de misiones
+        limit: 100,
       });
+      console.log('[MissionModal] Raw response for mission types:', response);
       setMissions(response.rows || []);
-      setLoading(false);
     } catch (error) {
-      console.error('Error fetching missions:', error);
+      console.error('Error fetching mission types:', error);
+      setMissions([]);
+    } finally {
       setLoading(false);
     }
   }, []);

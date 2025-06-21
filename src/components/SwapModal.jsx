@@ -144,7 +144,7 @@ const SwapModal = ({ onClose, onSuccess, defaultInput = 'WAX', defaultOutput = '
             },
         });
 
-      await UserService.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 30 });
+      await UserService.transact(actions);
 
       if (onSuccess) onSuccess();
       onClose();

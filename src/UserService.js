@@ -1,479 +1,294 @@
-import { UALJs } from 'ual-plainjs-renderer';
-import { Wax } from '@eosdacio/ual-wax';
-import { isEmpty } from 'lodash';
-import { Anchor } from 'ual-anchor';
-import { JsonRpc } from 'eosjs';
+import { SessionKit } from '@wharfkit/session';
+import { WebRenderer } from '@wharfkit/web-renderer';
+import { WalletPluginAnchor } from '@wharfkit/wallet-plugin-anchor';
+import { WalletPluginCloudWallet } from '@wharfkit/wallet-plugin-cloudwallet';
 
-import { storeAppDispatch } from './GlobalState/Store';
-import {
-  setPlayerBalance,
-  setPlayerData,
-  setPlayerLogout,
-  setPlayerSexy
-} from './GlobalState/UserReducer';
+// Wharfkit Configuration
+const appName = 'ual_template';
+const chain = {
+    id: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
+    url: 'https://wax.eosphere.io'
+};
+const walletPlugins = [
+    new WalletPluginAnchor(),
+    new WalletPluginCloudWallet()
+];
+const webRenderer = new WebRenderer();
+const sessionKit = new SessionKit({
+    appName,
+    chains: [chain],
+    ui: webRenderer,
+    walletPlugins,
+});
 
 export class User {
-  // Nombre de la app para UAL
-  appName = 'ual_template';
+    session = undefined;
+    authName = undefined;
 
-  // Configuración de la cadena WAX
-  myChain = {
-    chainId: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
-    rpcEndpoints: [{
-      protocol: 'https',
-      host: 'wax.eosphere.io',
-      port: ''
-    }]
-  };
+    balance = "0.00000000 WAX";
+    sexyBalance = "0.0000 SEXY";
+    waxxxBalance = "0.0000 WAXXX";
 
-  // Instancia para llamadas RPC
-  rpc = new JsonRpc('https://wax.eosphere.io');
+    async init() {
+        try {
+            const restored = await sessionKit.restore();
+            if (restored) {
+                this.session = restored;
+                this.authName = restored.actor.toString();
+                await this.reloadBalances();
+            }
+        } catch (error) {
+            console.error("Error restoring session:", error);
+        }
+    }
 
-  // UAL session
-  ual;
-  authName = undefined;
-  serviceLoginName = undefined;
-  session = undefined;
+    getName() {
+        return this.authName;
+    }
 
-  // Balances como strings
-  balance = "0.00000000 WAX";
-  sexyBalance = "0.00000000 SEXY";
-  waxxxBalance = "0.00000000 WAXXX";
+    async login() {
+        try {
+            const response = await sessionKit.login();
+            this.session = response.session;
+            this.authName = response.session.actor.toString();
+            await this.reloadBalances();
+            return this.session;
+        } catch (error) {
+            console.error("Login error:", error);
+            throw error;
+        }
+    }
 
-  // Callback cuando cambia el estado de login
-  callbackServerUserData = undefined;
+    isLogged() {
+        return !!this.session;
+    }
 
-  // Devuelve el nombre de cuenta activo
-  getName() {
-    return this.authName;
-  }
+    async logout() {
+        try {
+            await sessionKit.logout();
+            this.session = undefined;
+            this.authName = undefined;
+        } catch (error) {
+            console.error("Logout error:", error);
+            throw error;
+        }
+    }
 
-  // Inicia el flujo de login (click al botón UAL)
-  login(callback) {
-    const ualButton = document.querySelector(".ual-button-gen");
-    if (ualButton) ualButton.click();
-    this.callbackServerUserData = callback;
-  }
+    async transact(actions) {
+        if (!this.session) {
+            throw new Error('Not logged in to transact.');
+        }
+        // Note: The `broadcast: true` option is default, so it's not strictly necessary
+        return this.session.transact({ actions });
+    }
 
-  // ¿Está logueado?
-  isLogged() {
-    return !isEmpty(this.authName) && !isEmpty(this.session);
-  }
+    async reloadBalances() {
+        if (!this.authName || !this.session) return;
+        
+        const rpc = this.session.client.v1.chain;
 
-  // Logout de UAL y redux
-  logout() {
-    this.authName = undefined;
-    this.session = undefined;
-    this.ual.logoutUser();
-    storeAppDispatch(setPlayerLogout());
-    if (this.callbackServerUserData) this.callbackServerUserData();
-  }
+        try {
+            const accountData = await rpc.get_account(this.authName);
+            this.balance = accountData.core_liquid_balance ? accountData.core_liquid_balance.toString() : "0.00000000 WAX";
+            
+            const sexyResult = await rpc.get_currency_balance('nightclub.gm', this.authName, 'SEXY');
+            this.sexyBalance = sexyResult.length > 0 ? sexyResult[0].toString() : "0.0000 SEXY";
 
-  // Callback que recibe UAL cuando el usuario se autentica
-  async ualCallback(userObject) {
-    this.session = userObject[0];
-    this.serviceLoginName = this.session.constructor.name;
-    this.authName = await this.session.getAccountName();
+            const waxxxResult = await rpc.get_currency_balance('nightclub.gm', this.authName, 'WAXXX');
+            this.waxxxBalance = waxxxResult.length > 0 ? waxxxResult[0].toString() : "0.0000 WAXXX";
 
-    storeAppDispatch(setPlayerData({
-      name: this.authName,
-      isLogged: this.isLogged(),
-      balance: this.balance
-    }));
+        } catch (err) {
+            console.error("Error reloading balances:", err);
+        }
+    }
 
-    await this.reloadBalances();
-    if (this.callbackServerUserData) this.callbackServerUserData();
-  }
+    getBalanceBySymbol(symbol) {
+        let balanceString = "0.0";
+        switch(symbol) {
+          case 'WAX':
+            balanceString = this.balance;
+            break;
+          case 'SEXY':
+            balanceString = this.sexyBalance;
+            break;
+          case 'WAXXX':
+            balanceString = this.waxxxBalance;
+            break;
+          default:
+            balanceString = "0.0";
+        }
+        return parseFloat(balanceString) || 0;
+    }
 
-  // Recarga ambos balances
-  async reloadBalances() {
-    await this.getBalance();
-    await this.getSexyBalance();
-    await this.getWaxxxBalance();
-  }
+    async getCooldowns() {
+        if (!this.session) return [];
+        try {
+            const result = await this.session.client.v1.chain.get_table_rows({
+                json: true,
+                code: 'nightclubapp',
+                scope: 'nightclubapp',
+                table: 'cooldowns',
+                limit: 1000,
+            });
+            return result.rows;
+        } catch (error) {
+            console.error('Error fetching cooldowns:', error);
+            return [];
+        }
+    }
 
-  // WAX on‐chain balance
-  getBalance() {
-    if (!this.authName) return;
+    async stakeNFTs(asset_ids, memo) {
+        if (!this.session) throw new Error("Not logged in");
+        const actions = [{
+            account: 'atomicassets',
+            name: 'transfer',
+            authorization: [{ actor: this.authName, permission: 'active' }],
+            data: {
+                from: this.authName,
+                to: 'nightclubapp',
+                asset_ids: asset_ids,
+                memo: memo,
+            },
+        }];
+        return this.transact(actions);
+    }
+
+    async getAvailableMissions() {
+        if (!this.session) return [];
+        try {
+            const result = await this.session.client.v1.chain.get_table_rows({
+                json: true,
+                code: 'nightclubapp',
+                scope: 'nightclubapp',
+                table: 'missiontempl', // Cargar las plantillas de misiones, no las activas
+                limit: 100,
+            });
+            return result.rows;
+        } catch (error) {
+            console.error('Error fetching available mission templates:', error);
+            throw error;
+        }
+    }
+
+    async getMissionsWithDetails() {
+        if (!this.authName) {
+            return [];
+        }
+
+        try {
+            const missions = await this.getActiveMissions();
+
+            if (missions.length === 0) {
+                return [];
+            }
+
+            const missionAssetIds = missions.map(m => m.asset_id);
+            const idsParam = missionAssetIds.join(',');
+            const assetsUrl = `https://wax.api.atomicassets.io/atomicassets/v1/assets?ids=${idsParam}`;
+            
+            const assetsResponse = await fetch(assetsUrl);
+            const assetsData = await assetsResponse.json();
+
+            if (!assetsData.success || !assetsData.data) {
+                console.error("Error fetching staked asset details. Returning missions without video.");
+                return missions.map(m => ({ ...m, video_url: null }));
+            }
+
+            const videoMap = new Map(
+                assetsData.data
+                    .filter(nft => nft.asset_id && nft.data && nft.data.video)
+                    .map(nft => [String(nft.asset_id), `https://ipfs.io/ipfs/${nft.data.video}`])
+            );
+
+            const missionsWithVideos = missions.map(mission => {
+                const missionAssetId = String(mission.asset_id);
+                const videoUrl = videoMap.get(missionAssetId);
+                return { ...mission, video_url: videoUrl || null };
+            });
+            
+            return missionsWithVideos;
+
+        } catch (error) {
+            console.error("Error in getMissionsWithDetails:", error);
+            return [];
+        }
+    }
+
+    async getActiveMissions() {
+        if (!this.session) return [];
+        try {
+            const result = await this.session.client.v1.chain.get_table_rows({
+                json: true,
+                code: 'nightclubapp',
+                scope: 'nightclubapp',
+                table: 'missions',
+                limit: 200,
+            });
+            
+            if (result.rows && result.rows.length > 0) {
+                const userMissions = result.rows.filter(row => row.user === this.authName);
+                return userMissions;
+            }
+            return [];
+        } catch (error) {
+            console.error('Error fetching active missions:', error);
+            throw error;
+        }
+    }
+
+    async claimMission(asset_ids) {
+        const actions = [{
+            account: 'nightclubapp',
+            name: 'claim',
+            authorization: [{ actor: this.authName, permission: 'active' }],
+            data: {
+                user: this.authName,
+                asset_ids: asset_ids,
+            },
+        }];
+        return this.transact(actions);
+    }
     
-    return this.rpc.get_account(this.authName)
-      .then(accountData => {
-        this.balance = accountData.core_liquid_balance || "0.00000000 WAX";
-        storeAppDispatch(setPlayerBalance(this.balance));
-      })
-      .catch(err => {
-        console.error("Error al obtener balance de WAX:", err.message);
-        this.balance = "0.00000000 WAX";
-        storeAppDispatch(setPlayerBalance(this.balance));
-      });
-  }
-
-  // SEXY token balance
-  async getSexyBalance() {
-    if (!this.authName) return;
-    
-    try {
-      const result = await this.rpc.get_currency_balance(
-        'nightclub.gm',
-        this.authName,
-        'SEXY'
-      );
-      this.sexyBalance = result.length > 0 ? result[0] : "0.00000000 SEXY";
-      storeAppDispatch(setPlayerSexy(this.sexyBalance));
-    } catch (err) {
-      console.error("Error al obtener balance de SEXY:", err.message);
-      this.sexyBalance = "0.00000000 SEXY";
-      storeAppDispatch(setPlayerSexy(this.sexyBalance));
-    }
-  }
-
-  // WAXXX token balance
-  async getWaxxxBalance() {
-    if (!this.authName) return;
-    
-    try {
-      const result = await this.rpc.get_currency_balance(
-        'nightclub.gm',
-        this.authName,
-        'WAXXX'
-      );
-      this.waxxxBalance = result.length > 0 ? result[0] : "0.00000000 WAXXX";
-      // Aquí podrías agregar un dispatch para WAXXX si lo necesitas
-    } catch (err) {
-      console.error("Error al obtener balance de WAXXX:", err.message);
-      this.waxxxBalance = "0.00000000 WAXXX";
-    }
-  }
-
-  // Enviar NFTs al contrato (misiones, stake, etc.)
-  async stakeNFTs(asset_ids, memo = "") {
-    if (!this.session || !this.authName) throw new Error("No wallet session activa.");
-    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay NFTs seleccionados.");
-
-    const actions = [{
-      account: "atomicassets",
-      name: "transfer",
-      authorization: [{ actor: this.authName, permission: "active" }],
-      data: {
-        from: this.authName,
-        to: "nightclubapp",
-        asset_ids,
-        memo
-      }
-    }];
-
-    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
-  }
-
-  // Obtener historial de recompensas NFT para el usuario
-  async getNFTRewardHistory() {
-    if (!this.authName) return [];
-    try {
-      const response = await fetch(`https://wax.greymass.com/v1/chain/get_table_rows`, {
-        method: 'POST',
-        body: JSON.stringify({
-          code: 'nightclubapp',
-          scope: 'nightclubapp',
-          table: 'nftrewhist',
-          limit: 100,
-          reverse: true,
-          json: true
-        }),
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const data = await response.json();
-      // Filtrar solo los del usuario actual
-      return (data.rows || []).filter(r => r.user === this.authName);
-    } catch (err) {
-      console.warn('No se pudo obtener el historial de recompensas NFT:', err);
-      return [];
-    }
-  }
-
-  // Reclamar todas las recompensas
-  async claimRewards() {
-    if (!this.session || !this.authName) throw new Error("No active session");
-
-    // 1. Obtener historial antes del claim
-    const prevRewards = await this.getNFTRewardHistory();
-    const prevIds = new Set(prevRewards.map(r => r.id));
-
-    // 2. Hacer claim
-    const actions = [{
-      account: "nightclubapp",
-      name: "claimall",
-      authorization: [{ actor: this.authName, permission: "active" }],
-      data: { user: this.authName }
-    }];
-    const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
-
-    // 3. Obtener historial después del claim
-    const newRewards = await this.getNFTRewardHistory();
-    const justWon = newRewards.filter(r => !prevIds.has(r.id));
-
-    // 4. Notificar
-    if (justWon.length > 0) {
-      window.dispatchEvent(new CustomEvent('nftRewards', { detail: justWon }));
-    } else {
-      window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
-    }
-
-    return result;
-  }
-
-  // Reclamar recompensa de una misión en específico
-  async claimMissionRewards(missionId) {
-    if (!this.session || !this.authName) throw new Error("No sesión activa");
-
-    // 1. Obtener historial antes del claim
-    const prevRewards = await this.getNFTRewardHistory();
-    const prevIds = new Set(prevRewards.map(r => r.id));
-
-    // 2. Hacer claim
-    const actions = [{
-      account: "nightclubapp",
-      name: "claimmission",
-      authorization: [{ actor: this.authName, permission: "active" }],
-      data: {
-        user: this.authName,
-        mission_id: missionId
-      }
-    }];
-    const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
-
-    // 3. Obtener historial después del claim
-    const newRewards = await this.getNFTRewardHistory();
-    const justWon = newRewards.filter(r => !prevIds.has(r.id));
-
-    // 4. Notificar
-    if (justWon.length > 0) {
-      window.dispatchEvent(new CustomEvent('nftRewards', { detail: justWon }));
-    } else {
-      window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
-    }
-
-    return result;
-  }
-
-  // Reclamar recompensa de una o varias misiones usando la acción 'claim'
-  async claimMission(asset_ids) {
-    if (!this.session || !this.authName) throw new Error("No sesión activa");
-    if (!Array.isArray(asset_ids) || asset_ids.length === 0) throw new Error("No hay asset_ids para reclamar");
-
-    // 1. Obtener historial antes del claim
-    const prevRewards = await this.getNFTRewardHistory();
-    const prevIds = new Set(prevRewards.map(r => r.id));
-
-    // 2. Hacer claim
-    const actions = [{
-      account: "nightclubapp",
-      name: "claim",
-      authorization: [{ actor: this.authName, permission: "active" }],
-      data: {
-        user: this.authName,
-        asset_ids: asset_ids
-      }
-    }];
-    const result = await this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
-
-    // 3. Obtener historial después del claim
-    const newRewards = await this.getNFTRewardHistory();
-    const justWon = newRewards.filter(r => !prevIds.has(r.id));
-
-    // 4. Notificar
-    if (justWon.length > 0) {
-      window.dispatchEvent(new CustomEvent('nftRewards', { detail: justWon }));
-    } else {
-      window.dispatchEvent(new CustomEvent('nftRewards', { detail: [{ empty: true }] }));
-    }
-
-    return result;
-  }
-
-  // Obtener misiones activas del usuario
-  async getUserActiveMissions() {
-    if (!this.authName) return [];
-    
-    try {
-      const response = await this.rpc.get_table_rows({
-        code: 'nightclubapp',
-        scope: this.authName,
-        table: 'activemissions',
-        limit: 100
-      });
-      return response.rows || [];
-    } catch (err) {
-      console.error("Error al obtener misiones activas:", err);
-      return [];
-    }
-  }
-
-  // Obtener tipos de misiones disponibles
-  async getMissionTypes() {
-    try {
-      const response = await this.rpc.get_table_rows({
-        code: 'nightclubapp',
-        scope: 'nightclubapp',
-        table: 'missiontypes',
-        limit: 100
-      });
-      return response.rows || [];
-    } catch (err) {
-      console.error("Error al obtener tipos de misiones:", err);
-      return [];
-    }
-  }
-
-  // Obtener misiones del usuario desde la tabla 'missions' (scope global)
-  async getUserMissions() {
-    if (!this.authName) return [];
-    try {
-      const response = await this.rpc.get_table_rows({
-        code: 'nightclubapp',
-        scope: 'nightclubapp',
-        table: 'missions',
-        limit: 1000
-      });
-      return response.rows || [];
-    } catch (err) {
-      console.error("Error al obtener misiones:", err);
-      return [];
-    }
-  }
-
-  // Cancelar una misión específica
-  async cancelMission(asset_id) {
-    if (!this.session || !this.authName) throw new Error("No sesión activa");
-
-    const actions = [{
-      account: "nightclubapp",
-      name: "cancelmiss",
-      authorization: [{ actor: this.authName, permission: "active" }],
-      data: {
-        user: this.authName,
-        asset_id: asset_id
-      }
-    }];
-
-    return this.session.signTransaction({ actions }, { blocksBehind: 3, expireSeconds: 60 });
-  }
-
-  // Obtener cooldowns de la tabla cooldowns
-  async getCooldowns() {
-    try {
-      const response = await this.rpc.get_table_rows({
-        code: 'nightclubapp',
-        scope: 'nightclubapp',
-        table: 'cooldowns',
-        limit: 1000
-      });
-      return response.rows || [];
-    } catch (err) {
-      console.error('Error al obtener cooldowns:', err);
-      return [];
-    }
-  }
-
-  // Inicializa UAL
-  init() {
-    this.ualCallback = this.ualCallback.bind(this);
-
-    const wax = new Wax([this.myChain], { appName: this.appName });
-    const anchor = new Anchor([this.myChain], { appName: this.appName });
-
-    const divUal = document.createElement('div');
-    divUal.setAttribute('id', 'ual-login');
-    document.body.appendChild(divUal);
-
-    const divLoginRoot = document.getElementById('ual-login');
-    this.ual = new UALJs(this.ualCallback, [this.myChain], this.appName, [wax, anchor], {
-      containerElement: divLoginRoot
-    });
-
-    this.ual.init();
-  }
-
-  // Singleton
-  static new() {
-    if (!User.instance) {
-      User.instance = new User();
-    }
-    return User.instance;
-  }
-
-  // Explorar todas las tablas ABI del contrato
-  async getContractTables() {
-    try {
-      const { abi } = await this.rpc.get_abi('nightclubapp');
-      if (abi && abi.tables) {
-        return abi.tables.map(table => ({
-          name: table.name,
-          type: table.type,
-          indexes: table.indexes
+    async cancelMission(asset_ids) {
+        const actions = asset_ids.map(id => ({
+            account: 'nightclubapp',
+            name: 'cancelmiss',
+            authorization: [{ actor: this.authName, permission: 'active' }],
+            data: {
+                user: this.authName,
+                asset_id: id,
+            },
         }));
-      }
-      return [];
-    } catch (err) {
-      console.error("Error obteniendo tablas del contrato:", err);
-      return [];
+        return this.transact(actions);
     }
-  }
 
-  // Formatea el balance WAX con 2 decimales y sufijo
-  formatWAXBalance() {
-    const wax = parseFloat(this.balance);
-    return isNaN(wax) ? "0.00 WAX" : `${wax.toFixed(2)} WAX`;
-  }
-
-  // Formatea el balance SEXY con 2 decimales y sufijo
-  formatSEXYBalance() {
-    const sexy = parseFloat(this.sexyBalance);
-    return isNaN(sexy) ? "0.00 SEXY" : `${sexy.toFixed(2)} SEXY`;
-  }
-
-  // Formatea el balance WAXXX con 2 decimales y sufijo
-  formatWAXXXBalance() {
-    const waxxx = parseFloat(this.waxxxBalance);
-    return isNaN(waxxx) ? "0.00 WAXXX" : `${waxxx.toFixed(2)} WAXXX`;
-  }
-
-  // Sólo número WAX (2 decimales, sin sufijo)
-  formatWAXOnly() {
-    const wax = parseFloat(this.balance);
-    return isNaN(wax) ? "0.00" : wax.toFixed(2);
-  }
-
-  // Sólo número SEXY (2 decimales, sin sufijo)
-  formatSEXYOnly() {
-    const sexy = parseFloat(this.sexyBalance);
-    return isNaN(sexy) ? "0.00" : sexy.toFixed(2);
-  }
-
-  // Sólo número WAXXX (2 decimales, sin sufijo)
-  formatWAXXXOnly() {
-    const waxxx = parseFloat(this.waxxxBalance);
-    return isNaN(waxxx) ? "0.00" : waxxx.toFixed(2);
-  }
-
-  // Devuelve el balance numérico por símbolo
-  getBalanceBySymbol(symbol) {
-    let balanceString = "0.0";
-    switch(symbol) {
-      case 'WAX':
-        balanceString = this.balance;
-        break;
-      case 'SEXY':
-        balanceString = this.sexyBalance;
-        break;
-      case 'WAXXX':
-        balanceString = this.waxxxBalance;
-        break;
-      default:
-        balanceString = "0.0";
+    async claimAllMissions() {
+        const actions = [{
+            account: 'nightclubapp',
+            name: 'claimall',
+            authorization: [{ actor: this.authName, permission: 'active' }],
+            data: {
+                user: this.authName,
+            },
+        }];
+        return this.transact(actions);
     }
-    return parseFloat(balanceString) || 0;
-  }
+
+    // Formatting functions remain the same
+    formatWAXOnly() {
+        const wax = parseFloat(this.balance);
+        return isNaN(wax) ? "0.0000" : wax.toFixed(4);
+    }
+
+    formatSEXYOnly() {
+        const sexy = parseFloat(this.sexyBalance);
+        return isNaN(sexy) ? "0.0000" : sexy.toFixed(4);
+    }
+    
+    formatWAXXXOnly() {
+        const waxxx = parseFloat(this.waxxxBalance);
+        return isNaN(waxxx) ? "0.00" : waxxx.toFixed(2);
+    }
 }
 
-// Exporta la instancia única
-export const UserService = User.new();
+export const UserService = new User();
