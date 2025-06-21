@@ -24,7 +24,6 @@ function App() {
           <Route exact path="/" component={LandingPage} />
           <ProtectedRoute exact path="/page2" component={Page2} />
           <ProtectedRoute exact path="/home" component={Home} />
-          <Redirect to="/" />
         </Switch>
       </BrowserRouter>
     </div>
