@@ -1,26 +1,21 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import App from './App';
+import Store from './GlobalState/Store';
 import reportWebVitals from './reportWebVitals';
 import { UserService } from './UserService';
 
-// Creamos una función asíncrona para poder usar await
-const renderApp = async () => {
-  // Primero, esperamos a que el servicio de usuario se inicialice.
-  // Esto es crucial para que `sessionKit.restore()` funcione con redirecciones.
-  await UserService.init();
+UserService.init();
 
-  const root = ReactDOM.createRoot(document.getElementById('root'));
-  root.render(
-    <React.StrictMode>
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={Store}>
       <App />
-    </React.StrictMode>
-  );
-};
-
-// Llamamos a la función para que se ejecute.
-renderApp();
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
