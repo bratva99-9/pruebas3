@@ -30,6 +30,9 @@ const walletPlugins = [
     new WalletPluginWebAuth()
 ];
 
+// Encontramos la instancia del plugin de Cloud Wallet para usarla directamente
+const cloudWalletPlugin = walletPlugins.find(p => p.id === 'cloud-wallet');
+
 const webRenderer = new WebRenderer({
     // Inyecta estilos CSS para forzar el tema oscuro y personalizarlo
     customStyle: `
@@ -105,6 +108,7 @@ export class User {
 
     async login() {
         try {
+            // Este método ahora siempre muestra el selector de wallets (para el botón secundario)
             const response = await sessionKit.login();
             this.session = response.session;
             this.authName = response.session.actor.toString();
@@ -116,6 +120,27 @@ export class User {
             return this.session;
         } catch (error) {
             console.error("Login error:", error);
+            throw error;
+        }
+    }
+
+    // Nueva función para el login directo con Cloud Wallet
+    async loginWithCloudWallet() {
+        if (!cloudWalletPlugin) {
+            console.error("Cloud Wallet plugin not found!");
+            throw new Error("Cloud Wallet configuration error.");
+        }
+        try {
+            // Llamamos a login pasando el plugin directamente para saltar el UI
+            const response = await sessionKit.login({ walletPlugin: cloudWalletPlugin });
+            this.session = response.session;
+            this.authName = response.session.actor.toString();
+            const contractKit = new ContractKit({ client: this.session.client });
+            this.contract = await contractKit.load('nightclubapp', { abi: nightclubABI });
+            await this.reloadBalances();
+            return this.session;
+        } catch (error) {
+            console.error("Cloud Wallet login error:", error);
             throw error;
         }
     }
