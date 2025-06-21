@@ -332,3 +332,42 @@ button:hover, .btn:hover, .btn-item:hover {
   padding: 0;
 }
 
+/* Estilos del Loading Spinner */
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #1a1a2e;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+.loading-screen.fade-out {
+  opacity: 0;
+}
+
+.loading-spinner {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 6px solid rgba(255, 54, 186, 0.2);
+  border-top-color: #ff00ff;
+  border-right-color: #b266ff;
+  animation: spin 1.2s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+

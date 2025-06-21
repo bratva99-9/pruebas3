@@ -1,13 +1,12 @@
 import React from "react";
-import fondo from "../images/inicio1.webp";
 import { useHistory } from "react-router-dom";
 import { UserService } from "../UserService";
-import { useDispatch } from "react-redux";
-import { setPlayerLogout } from "../GlobalState/UserReducer";
+import { Helmet } from 'react-helmet';
+import './LandingPage.css'; // Asumiendo que crearás este archivo para los estilos
+import logo from '../images/3DK_LOGO.png';
 
-export default function LandingPage() {
+const LandingPage = () => {
   const history = useHistory();
-  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     try {
@@ -16,57 +15,31 @@ export default function LandingPage() {
         history.push("/home");
       }
     } catch (err) {
-      // The user may have closed the login modal
       console.error("Login failed or was cancelled:", err);
-      // Optionally show a less intrusive error message
-      // alert("Login failed: " + err.message);
     }
   };
 
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        backgroundImage: `url(${fondo})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        filter: "brightness(0.85)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
-          padding: "40px",
-          borderRadius: "20px",
-          textAlign: "center",
-          color: "#fff",
-        }}
-      >
-        <h1 style={{ fontSize: "48px", marginBottom: "20px" }}>
-          Night Club Game
-        </h1>
-        <button
-          onClick={handleLogin}
-          style={{
-            padding: "14px 36px",
-            fontSize: "18px",
-            backgroundColor: "#e11d48",
-            color: "#fff",
-            border: "none",
-            borderRadius: "14px",
-            cursor: "pointer",
-            fontWeight: "bold",
-            boxShadow: "0 4px 24px #0004",
-          }}
-        >
-          Login to Play
-        </button>
+    <>
+      <Helmet>
+        <title>Night Club Game - Welcome to the Pleasure Dome</title>
+        <meta name="description" content="Enter the world of Night Club Game. Collect sexy NFT girls, complete missions, and earn rewards in this exciting blockchain experience." />
+        <meta property="og:title" content="Night Club Game - Welcome" />
+        <meta property="og:description" content="Collect, play, and earn with sexy NFT girls in the Night Club Game." />
+        <meta property="og:image" content="https://nightclub.game/logo512.png" />
+        <meta property="og:url" content="https://nightclub.game" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+      <div className="landing-container">
+        <div className="landing-box">
+          <h1 className="landing-title">Night Club Game</h1>
+          <button onClick={handleLogin} className="landing-button">
+            Login to Play
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
-}
+};
+
+export default LandingPage;

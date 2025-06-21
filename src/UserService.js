@@ -1,19 +1,63 @@
 import { SessionKit } from '@wharfkit/session';
 import { WebRenderer } from '@wharfkit/web-renderer';
-import { WalletPluginAnchor } from '@wharfkit/wallet-plugin-anchor';
 import { WalletPluginCloudWallet } from '@wharfkit/wallet-plugin-cloudwallet';
+import { WalletPluginAnchor } from '@wharfkit/wallet-plugin-anchor';
+import { WalletPluginWombat } from '@wharfkit/wallet-plugin-wombat';
+// import { WalletPluginTokenPocket } from '@wharfkit/wallet-plugin-tokenpocket';
+// import { WalletPluginScatter } from '@wharfkit/wallet-plugin-scatter';
+import { WalletPluginWebAuth } from '@proton/wharfkit-plugin-webauth';
 
 // Wharfkit Configuration
-const appName = 'ual_template';
+const appName = 'Night Club Game';
 const chain = {
     id: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
     url: 'https://wax.eosphere.io'
 };
+
+// Main SessionKit for all wallets EXCEPT when we force one
 const walletPlugins = [
+    new WalletPluginCloudWallet(),
     new WalletPluginAnchor(),
-    new WalletPluginCloudWallet()
+    new WalletPluginWombat(),
+    // Se elimina TokenPocket de la lista de plugins
+    // new WalletPluginTokenPocket(),
+    // new WalletPluginScatter(),
+    new WalletPluginWebAuth()
 ];
-const webRenderer = new WebRenderer();
+
+const webRenderer = new WebRenderer({
+    // Inyecta estilos CSS para forzar el tema oscuro y personalizarlo
+    customStyle: `
+        .wharf-kit-dialog-backdrop {
+            background-color: rgba(0, 0, 0, 0.7) !important;
+        }
+        .wharf-kit-dialog {
+            background: #1a1a2e !important;
+            color: #fff !important;
+            border-radius: 20px !important;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5) !important;
+        }
+        .wharf-kit-dialog-header {
+            background: transparent !important;
+            border-bottom: 1px solid rgba(255, 0, 255, 0.2) !important;
+        }
+        .wharf-kit-dialog-content .wharf-kit-wallet-list .wharf-kit-wallet-button {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 0, 255, 0.2) !important;
+        }
+        .wharf-kit-dialog-content .wharf-kit-wallet-list .wharf-kit-wallet-button:hover {
+            background: rgba(255, 0, 255, 0.15) !important;
+            border-color: #ff00ff !important;
+        }
+        .wharf-kit-dialog-footer button {
+            background: linear-gradient(135deg, #ff00ff 0%, #b266ff 100%) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 12px !important;
+            font-weight: bold !important;
+        }
+    `
+});
 const sessionKit = new SessionKit({
     appName,
     chains: [chain],
@@ -47,6 +91,7 @@ export class User {
     }
 
     async login() {
+        // Se revierte a la función de login original y simple
         try {
             const response = await sessionKit.login();
             this.session = response.session;
@@ -237,57 +282,67 @@ export class User {
     }
 
     async claimMission(asset_ids) {
-        const actions = [{
+        if (!this.session) throw new Error("Not logged in");
+
+        const actions = asset_ids.map(id => ({
             account: 'nightclubapp',
             name: 'claim',
             authorization: [{ actor: this.authName, permission: 'active' }],
-            data: {
+            data: { 
                 user: this.authName,
-                asset_ids: asset_ids,
+                asset_id: id 
             },
-        }];
+        }));
+
         return this.transact(actions);
     }
     
     async cancelMission(asset_ids) {
+        if (!this.session) throw new Error("Not logged in");
+    
         const actions = asset_ids.map(id => ({
             account: 'nightclubapp',
-            name: 'cancelmiss',
+            name: 'cancelmission',
             authorization: [{ actor: this.authName, permission: 'active' }],
-            data: {
-                user: this.authName,
-                asset_id: id,
+            data: { 
+                asset_id: id 
             },
         }));
+    
         return this.transact(actions);
     }
 
     async claimAllMissions() {
+        if (!this.session) throw new Error("Not logged in");
+
         const actions = [{
             account: 'nightclubapp',
             name: 'claimall',
             authorization: [{ actor: this.authName, permission: 'active' }],
-            data: {
-                user: this.authName,
+            data: { 
+                user: this.authName
             },
         }];
+        
         return this.transact(actions);
     }
 
-    // Formatting functions remain the same
     formatWAXOnly() {
-        const wax = parseFloat(this.balance);
-        return isNaN(wax) ? "0.0000" : wax.toFixed(4);
+        if (!this.balance) return '0.0000';
+        const num = parseFloat(this.balance.split(' ')[0]);
+        return num.toFixed(4);
     }
-
+    
     formatSEXYOnly() {
-        const sexy = parseFloat(this.sexyBalance);
-        return isNaN(sexy) ? "0.0000" : sexy.toFixed(4);
+        if (!this.sexyBalance) return '0.0000';
+        const num = parseFloat(this.sexyBalance.split(' ')[0]);
+        return num.toFixed(4);
     }
     
     formatWAXXXOnly() {
-        const waxxx = parseFloat(this.waxxxBalance);
-        return isNaN(waxxx) ? "0.00" : waxxx.toFixed(2);
+        if (!this.waxxxBalance) return '0.0000';
+        const num = parseFloat(this.waxxxBalance.split(' ')[0]);
+        return num.toFixed(4);
     }
 }
 
