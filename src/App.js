@@ -1,41 +1,17 @@
 // src/App.js
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.scss';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import LandingPage from './pages/LandingPage';
 import Page2 from './pages/Page2';
-import Home from './pages/Home'; // SOLO UNA VEZ ESTA IMPORTACIÓN
+import Home from './pages/Home';
 import ProtectedRoute from './ProtectedRoute';
-import { UserService } from './UserService';
 import { Buffer } from "buffer";
 window.Buffer = Buffer;
 
 function App() {
-  const [loading, setLoading] = useState(true);
-  const [isFadingOut, setIsFadingOut] = useState(false);
-
-  useEffect(() => {
-    const initialize = async () => {
-      await new Promise(resolve => setTimeout(resolve, 500)); // Pequeña pausa para que se vea el spinner
-      await UserService.init();
-      setIsFadingOut(true);
-      setTimeout(() => {
-        setLoading(false);
-      }, 500); // Debe coincidir con la duración de la transición en CSS
-    };
-    initialize();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className={`loading-screen ${isFadingOut ? 'fade-out' : ''}`}>
-        <div className="loading-spinner"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="App">
       <Helmet>
