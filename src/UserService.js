@@ -74,7 +74,6 @@ export class User {
     session = undefined;
     authName = undefined;
     contract = undefined;
-    isInitializing = true;
 
     balance = "0.00000000 WAX";
     sexyBalance = "0.0000 SEXY";
@@ -94,8 +93,6 @@ export class User {
             }
         } catch (error) {
             console.error("Error restoring session:", error);
-        } finally {
-            this.isInitializing = false;
         }
     }
 

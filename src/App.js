@@ -14,22 +14,24 @@ window.Buffer = Buffer;
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
-    const checkInitialization = async () => {
-      // Esperamos activamente hasta que el servicio de usuario confirme que ha terminado.
-      // Esto es más robusto que un temporizador fijo.
-      while (UserService.isInitializing) {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Consultamos cada 100ms
-      }
-      setLoading(false); // Ocultamos el spinner solo cuando esté listo
+    // Restauramos el método de inicialización original.
+    const initialize = async () => {
+      // La llamada a init se hace en index.js, pero mantenemos el spinner para la carga inicial de assets, etc.
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Un segundo para que todo cargue visualmente
+      setIsFadingOut(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     };
-    checkInitialization();
+    initialize();
   }, []);
 
   if (loading) {
     return (
-      <div className="loading-screen">
+      <div className={`loading-screen ${isFadingOut ? 'fade-out' : ''}`}>
         <div className="loading-spinner"></div>
       </div>
     );
@@ -47,7 +49,7 @@ function App() {
           <Route exact path="/" component={LandingPage} />
           <ProtectedRoute exact path="/page2" component={Page2} />
           <ProtectedRoute exact path="/home" component={Home} />
-          <Redirect to="/" />
+          {/* <Redirect to="/" /> // ELIMINADO: Esta línea era la causa raíz del problema de login en móvil */}
         </Switch>
       </BrowserRouter>
     </div>
