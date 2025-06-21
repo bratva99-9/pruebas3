@@ -3,20 +3,22 @@ import React, { useState, useEffect } from 'react';
 import { UserService } from './UserService';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(undefined);
+    const [authStatus, setAuthStatus] = useState(undefined);
 
     useEffect(() => {
-        const checkLoginStatus = () => {
+        const checkLoginStatus = async () => {
+            while (UserService.isInitializing) {
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+
             const status = UserService.isLogged();
-            setIsLoggedIn(status);
+            setAuthStatus(status);
         };
-        // Una pequeña demora para dar tiempo a que UserService.init() termine
-        const timer = setTimeout(checkLoginStatus, 100); 
-        return () => clearTimeout(timer);
+        
+        checkLoginStatus();
     }, []);
 
-    if (isLoggedIn === undefined) {
-        // Muestra el spinner mientras se comprueba el estado de la sesión
+    if (authStatus === undefined) {
         return (
             <div className="loading-screen">
                 <div className="loading-spinner"></div>
@@ -27,17 +29,10 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     return (
         <Route {...rest} render={
             props => {
-                if (isLoggedIn) {
+                if (authStatus) {
                     return <Component {...rest} {...props} />
                 } else {
-                    return <Redirect to={
-                        {
-                            pathname: '/', // Redirige a la landing page
-                            state: {
-                                from: props.location
-                            }
-                        }
-                    } />
+                    return <Redirect to={{ pathname: '/' }} />
                 }
             }
         } />
