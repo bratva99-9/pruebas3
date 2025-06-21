@@ -326,35 +326,34 @@ export class User {
     async claimMission(asset_ids) {
         if (!this.session) throw new Error("Not logged in");
 
-        // Corregido: El contrato espera un único campo 'asset_ids' que es un array.
+        // El contrato espera un único campo 'asset_ids' que es un array.
         const action = {
             account: 'nightclubapp',
             name: 'claim',
             authorization: [this.session.permissionLevel],
             data: { 
                 user: this.authName,
-                asset_ids: asset_ids // Ahora pasamos el array completo.
+                asset_ids: asset_ids // Pasamos el array completo.
             },
         };
 
-        return this.session.transact({ action });
+        return this.session.transact({ actions: [action] }); // Enviamos la acción dentro de un array de acciones
     }
     
     async cancelMission(asset_ids) {
         if (!this.session) throw new Error("Not logged in");
     
-        // Corregido: El contrato espera un único campo 'asset_ids' que es un array.
-        const action = {
+        const actions = asset_ids.map(asset_id => ({
             account: 'nightclubapp',
             name: 'cancelmiss',
             authorization: [this.session.permissionLevel],
             data: { 
                 user: this.authName,
-                asset_ids: asset_ids // Ahora pasamos el array completo.
+                asset_id: asset_id
             },
-        };
+        }));
     
-        return this.session.transact({ action });
+        return this.transact(actions);
     }
 
     async claimAllMissions() {
