@@ -8,15 +8,23 @@ import logo from '../images/3DK_LOGO.png';
 const LandingPage = () => {
   const history = useHistory();
 
-  const handleLogin = async () => {
-    try {
-      await UserService.login();
-      if (UserService.isLogged()) {
-        history.push("/home");
-      }
-    } catch (err) {
-      console.error("Login failed or was cancelled:", err);
-    }
+  const handleLogin = () => {
+    // Eliminamos async/await para mejorar la compatibilidad en móviles.
+    // La redirección debe ser un resultado más directo del evento de clic.
+    UserService.login()
+      .then(session => {
+        if (session) {
+          history.push("/home");
+        }
+        // Si la sesión es nula (el usuario cerró el popup), no hacemos nada.
+      })
+      .catch(err => {
+        // El error "The user rejected the request" es normal si el usuario cancela.
+        // No lo mostramos en consola para no generar ruido.
+        if (err.message && !err.message.includes('The user rejected the request')) {
+             console.error("Login failed:", err);
+        }
+      });
   };
 
   return (
