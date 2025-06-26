@@ -317,7 +317,7 @@ const InventoryModal = ({ onClose }) => {
         }
         .nft-card {
           background: none !important;
-          border-radius: 18px !important;
+          border-radius: 16.2px !important;
           overflow: hidden !important;
           box-shadow: none !important;
           padding: 0 !important;
@@ -326,7 +326,7 @@ const InventoryModal = ({ onClose }) => {
           align-items: stretch !important;
           justify-content: center !important;
           min-width: 0 !important;
-          height: 272px !important;
+          height: 244.8px !important;
           aspect-ratio: 9/16 !important;
         }
         .nft-media {
