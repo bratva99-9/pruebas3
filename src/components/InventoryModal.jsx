@@ -497,7 +497,7 @@ const InventoryModal = ({ onClose }) => {
         }
         @media (min-width: 901px) {
           .nfts-grid {
-            gap: 32px;
+            gap: 28.8px;
             overflow-y: auto;
             max-height: calc(100vh - 200px);
             scrollbar-width: thin;
