@@ -1,69 +1,73 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { UserService } from '../UserService';
+import React, { useState, useEffect, useCallback } from "react";
+import { UserService } from "../UserService";
 
 const SCHEMAS = [
-  { id: 'girls', name: 'Girls' },
-  { id: 'photos', name: 'Photos' },
-  { id: 'items', name: 'Items' },
-  { id: 'videos', name: 'Videos' },
-  { id: 'shards', name: 'Shards' },
-  { id: 'packs', name: 'Packs' }
+  { id: "girls", name: "Girls" },
+  { id: "photos", name: "Photos" },
+  { id: "items", name: "Items" },
+  { id: "videos", name: "Videos" },
+  { id: "shards", name: "Shards" },
+  { id: "packs", name: "Packs" },
 ];
 
-const COLLECTION = 'nightclubnft';
+const COLLECTION = "nightclubnft";
 const PAGE_SIZE = 10;
 
 const InventoryModal = ({ onClose }) => {
   const [nfts, setNfts] = useState([]);
   const [loading, setLoading] = useState(false); // Initially not loading
-  const [selectedCategory, setSelectedCategory] = useState('girls');
+  const [selectedCategory, setSelectedCategory] = useState("girls");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const fetchNFTs = useCallback(async (category, reset = false) => {
-    if (!hasMore && !reset) return;
+  const fetchNFTs = useCallback(
+    async (category, reset = false) => {
+      if (!hasMore && !reset) return;
 
-    setLoading(true);
-    const user = UserService.authName || (UserService.getName && UserService.getName());
-    if (!user) {
+      setLoading(true);
+      const user =
+        UserService.authName || (UserService.getName && UserService.getName());
+      if (!user) {
         setNfts([]);
         setLoading(false);
         return;
-    }
+      }
 
-    try {
+      try {
         const currentPage = reset ? 1 : page;
-        const response = await fetch(`https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${user}&collection_name=${COLLECTION}&schema_name=${category}&page=${currentPage}&limit=${PAGE_SIZE}`);
+        const response = await fetch(
+          `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${user}&collection_name=${COLLECTION}&schema_name=${category}&page=${currentPage}&limit=${PAGE_SIZE}`,
+        );
         const result = await response.json();
-        
+
         if (result.success && result.data) {
-            setNfts(prev => reset ? result.data : [...prev, ...result.data]);
-            setHasMore(result.data.length === PAGE_SIZE);
-            setPage(currentPage + 1);
+          setNfts((prev) => (reset ? result.data : [...prev, ...result.data]));
+          setHasMore(result.data.length === PAGE_SIZE);
+          setPage(currentPage + 1);
         } else {
-            setHasMore(false);
+          setHasMore(false);
         }
-    } catch (error) {
+      } catch (error) {
         console.error("Error fetching NFTs:", error);
         setHasMore(false);
-    } finally {
+      } finally {
         setLoading(false);
-    }
-  }, [page, hasMore]);
-
+      }
+    },
+    [page, hasMore],
+  );
 
   useEffect(() => {
-      setNfts([]); // Clear previous NFTs
-      setPage(1);
-      setHasMore(true);
-      fetchNFTs(selectedCategory, true); // Fetch new category, resetting previous data
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    setNfts([]); // Clear previous NFTs
+    setPage(1);
+    setHasMore(true);
+    fetchNFTs(selectedCategory, true); // Fetch new category, resetting previous data
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
 
-
   const handleLoadMore = () => {
-    if(!loading && hasMore) {
-        fetchNFTs(selectedCategory);
+    if (!loading && hasMore) {
+      fetchNFTs(selectedCategory);
     }
   };
 
@@ -72,10 +76,10 @@ const InventoryModal = ({ onClose }) => {
       <div className="inventory-modal-content">
         <h1 className="inventory-title">INVENTORY</h1>
         <div className="category-filters">
-          {SCHEMAS.map(category => (
+          {SCHEMAS.map((category) => (
             <button
               key={category.id}
-              className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
+              className={`category-btn ${selectedCategory === category.id ? "active" : ""}`}
               onClick={() => setSelectedCategory(category.id)}
             >
               {category.name}
@@ -84,47 +88,143 @@ const InventoryModal = ({ onClose }) => {
         </div>
         <div className="nfts-grid">
           {nfts.length === 0 && !loading ? (
-            <div style={{color:'#fff', gridColumn:'1/-1', textAlign:'center', fontSize:'1.2rem', opacity:0.7}}>No NFTs in this category.</div>
-          ) : nfts.map(nft => {
-            const videoHash = nft.data && nft.data.video && nft.data.video.length > 10 ? nft.data.video : null;
-            const imgHash = nft.data && nft.data.img && nft.data.img.length > 10 ? nft.data.img : null;
-            const fileUrl = videoHash
-              ? (videoHash.startsWith('http') ? videoHash : `https://ipfs.io/ipfs/${videoHash}`)
-              : (imgHash ? (imgHash.startsWith('http') ? imgHash : `https://ipfs.io/ipfs/${imgHash}`) : '');
-            return (
-              <div key={nft.asset_id} className="nft-card">
-                <div className="nft-media">
-                  {videoHash ? (
-                    <video
-                      src={fileUrl}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '9/16', borderRadius: '18px', background: '#19191d', display: 'block', maxHeight: '420px', minHeight: '240px' }}
-                      onError={e => { e.target.style.display = 'none'; }}
-                    />
-                  ) : imgHash ? (
-                    <img src={fileUrl} alt="NFT" style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '9/16', borderRadius: '18px', background: '#19191d', display: 'block', maxHeight: '420px', minHeight: '240px' }} />
-                  ) : (
-                    <div style={{width:'100%',height:'100%',background:'#181828',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center', aspectRatio:'9/16', borderRadius:'18px'}}>No media</div>
-                  )}
+            <div
+              style={{
+                color: "#fff",
+                gridColumn: "1/-1",
+                textAlign: "center",
+                fontSize: "1.2rem",
+                opacity: 0.7,
+              }}
+            >
+              No NFTs in this category.
+            </div>
+          ) : (
+            nfts.map((nft) => {
+              const videoHash =
+                nft.data && nft.data.video && nft.data.video.length > 10
+                  ? nft.data.video
+                  : null;
+              const imgHash =
+                nft.data && nft.data.img && nft.data.img.length > 10
+                  ? nft.data.img
+                  : null;
+              const fileUrl = videoHash
+                ? videoHash.startsWith("http")
+                  ? videoHash
+                  : `https://ipfs.io/ipfs/${videoHash}`
+                : imgHash
+                  ? imgHash.startsWith("http")
+                    ? imgHash
+                    : `https://ipfs.io/ipfs/${imgHash}`
+                  : "";
+              return (
+                <div key={nft.asset_id} className="nft-card">
+                  <div className="nft-media">
+                    {videoHash ? (
+                      <video
+                        src={fileUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          aspectRatio: "9/16",
+                          borderRadius: "18px",
+                          background: "#19191d",
+                          display: "block",
+                          maxHeight: "420px",
+                          minHeight: "240px",
+                        }}
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                        }}
+                      />
+                    ) : imgHash ? (
+                      <img
+                        src={fileUrl}
+                        alt="NFT"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          aspectRatio: "9/16",
+                          borderRadius: "18px",
+                          background: "#19191d",
+                          display: "block",
+                          maxHeight: "420px",
+                          minHeight: "240px",
+                        }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          background: "#181828",
+                          color: "#fff",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          aspectRatio: "9/16",
+                          borderRadius: "18px",
+                        }}
+                      >
+                        No media
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-          {loading && <div style={{color:'#fff', gridColumn:'1/-1', textAlign:'center'}}>Loading...</div>}
+              );
+            })
+          )}
+          {loading && (
+            <div
+              style={{ color: "#fff", gridColumn: "1/-1", textAlign: "center" }}
+            >
+              Loading...
+            </div>
+          )}
         </div>
-        <div className="modal-bottom-bar" style={{ position: 'fixed', left: '50%', bottom: '0', transform: 'translateX(-50%)', width: '100%', maxWidth: '1200px', margin: '0', padding: '0', zIndex: 10001, background: 'transparent', pointerEvents: 'auto' }}>
-          <button className="close-btn" onClick={onClose} style={{ position: 'absolute', left: '50%', bottom: '32px', transform: 'translateX(-50%)' }}>Close</button>
+        <div
+          className="modal-bottom-bar"
+          style={{
+            position: "fixed",
+            left: "50%",
+            bottom: "0",
+            transform: "translateX(-50%)",
+            width: "100%",
+            maxWidth: "1200px",
+            margin: "0",
+            padding: "0",
+            zIndex: 10001,
+            background: "transparent",
+            pointerEvents: "auto",
+          }}
+        >
+          <button
+            className="close-btn"
+            onClick={onClose}
+            style={{
+              position: "absolute",
+              left: "50%",
+              bottom: "32px",
+              transform: "translateX(-50%)",
+            }}
+          >
+            Close
+          </button>
           {hasMore && (
             <button
               className="load-more-btn"
               onClick={handleLoadMore}
               disabled={loading}
-              style={{ position: 'absolute', right: '24px', bottom: '32px' }}
+              style={{ position: "absolute", right: "24px", bottom: "32px" }}
             >
-              {loading ? 'Loading...' : 'Load more'}
+              {loading ? "Loading..." : "Load more"}
             </button>
           )}
         </div>
@@ -137,12 +237,12 @@ const InventoryModal = ({ onClose }) => {
           width: 100vw;
           height: 100vh;
           z-index: 9999;
-          background: hsl(245, 86.70%, 2.90%);
+          background: hsl(245, 86.7%, 2.9%);
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
-          animation: fadeInModal 0.5s cubic-bezier(0.4,0,0.2,1);
+          animation: fadeInModal 0.5s cubic-bezier(0.4, 0, 0.2, 1);
           overflow: hidden;
         }
         .inventory-modal-content {
@@ -182,7 +282,8 @@ const InventoryModal = ({ onClose }) => {
           font-size: 14px;
           font-weight: 500;
         }
-        .category-btn:hover, .category-btn.active {
+        .category-btn:hover,
+        .category-btn.active {
           background: linear-gradient(90deg, #ff6fd8, #f32cfc 80%);
           color: #fff;
           border-color: #ff00ff;
@@ -191,7 +292,7 @@ const InventoryModal = ({ onClose }) => {
         .nfts-grid {
           display: grid;
           grid-template-columns: repeat(5, 1fr);
-          gap: 32px;
+          gap: 28.8px;
           width: 100%;
           padding: 0 12px 0 12px;
           margin-bottom: 0;
@@ -260,7 +361,7 @@ const InventoryModal = ({ onClose }) => {
           font-size: 15px;
           font-weight: 500;
           color: #fff;
-          background: rgba(0,255,255,0.10);
+          background: rgba(0, 255, 255, 0.1);
           border: 2px solid #00ffff;
           border-radius: 14px;
           padding: 8px 32px;
@@ -270,14 +371,14 @@ const InventoryModal = ({ onClose }) => {
           box-shadow: none;
         }
         .close-btn:hover {
-          background: rgba(255,0,255,0.13);
+          background: rgba(255, 0, 255, 0.13);
           border-color: #ff00ff;
         }
         .load-more-btn {
           font-size: 15px;
           font-weight: 500;
           color: #fff;
-          background: rgba(0,255,255,0.10);
+          background: rgba(0, 255, 255, 0.1);
           border: 2px solid #00ffff;
           border-radius: 14px;
           padding: 8px 32px;
@@ -290,15 +391,19 @@ const InventoryModal = ({ onClose }) => {
           box-shadow: none;
         }
         .load-more-btn:hover {
-          background: rgba(255,0,255,0.13);
+          background: rgba(255, 0, 255, 0.13);
           border-color: #ff00ff;
         }
         .load-more-btn:disabled {
           cursor: not-allowed;
         }
         @keyframes fadeInModal {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
         @media (max-width: 900px) and (orientation: landscape) {
           .inventory-modal-fullscreen {
@@ -367,7 +472,9 @@ const InventoryModal = ({ onClose }) => {
             align-items: center !important;
             justify-content: flex-end !important;
           }
-          .nft-media video, .nft-media img, .nft-media div {
+          .nft-media video,
+          .nft-media img,
+          .nft-media div {
             border-radius: 12px !important;
             min-width: 100% !important;
             min-height: 100% !important;
@@ -376,7 +483,7 @@ const InventoryModal = ({ onClose }) => {
             object-fit: cover !important;
             aspect-ratio: 9/16 !important;
           }
-          .nfts-grid > div[style*='No NFTs in this category.'] {
+          .nfts-grid > div[style*="No NFTs in this category."] {
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
@@ -426,4 +533,4 @@ const InventoryModal = ({ onClose }) => {
   );
 };
 
-export default InventoryModal; 
+export default InventoryModal;
