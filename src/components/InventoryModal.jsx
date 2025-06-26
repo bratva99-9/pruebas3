@@ -525,7 +525,7 @@ const InventoryModal = ({ onClose }) => {
             border-radius: 16.2px;
           }
           .nft-media {
-            border-radius: 18px;
+            border-radius: 16.2px;
           }
         }
       `}</style>
