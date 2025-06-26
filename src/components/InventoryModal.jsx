@@ -289,12 +289,11 @@ const InventoryModal = ({ onClose }) => {
           margin-right: 24px;
           box-shadow: none;
         }
-        .load-more-btn:hover:enabled {
+        .load-more-btn:hover {
           background: rgba(255,0,255,0.13);
           border-color: #ff00ff;
         }
         .load-more-btn:disabled {
-          opacity: 0.5;
           cursor: not-allowed;
         }
         @keyframes fadeInModal {
@@ -392,6 +391,23 @@ const InventoryModal = ({ onClose }) => {
         @media (min-width: 901px) {
           .nfts-grid {
             gap: 32px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+            scrollbar-width: thin;
+            scrollbar-color: #ff00ff #181828;
+          }
+          .nfts-grid::-webkit-scrollbar {
+            width: 12px;
+            background: #181828;
+          }
+          .nfts-grid::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #ff00ff 0%, #7f36ff 100%);
+            border-radius: 8px;
+            border: 2px solid #ff6fff;
+          }
+          .nfts-grid::-webkit-scrollbar-track {
+            background: #181828;
+            border-radius: 8px;
           }
           .nft-card {
             height: 245px;
