@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "src/PhaserGameBuild",
+    "module": "ESNext",
+    "target": "ES2022",
+    "lib": ["es2022", "dom"],
+    "allowJs": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "rootDir": "src/Phaser-game/src"
+  },
+  "include": [
+    "src/Phaser-game/src/**/*.ts"
+  ]
+} 

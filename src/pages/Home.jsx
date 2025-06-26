@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import MissionModal from '../components/MissionModal';
 import MissionStatus from '../components/missionstatus';
 import InventoryModal from '../components/InventoryModal';
+import StoreModal from '../components/StoreModal';
 import SwapModal from '../components/SwapModal';
 import { UserService } from '../UserService';
 import OnlyFapsModal from '../components/onlyfapsmodal';
@@ -120,8 +121,10 @@ const Home = () => {
   const [showOnlyFaps, setShowOnlyFaps] = useState(false);
   const [onlyFapsGirl, setOnlyFapsGirl] = useState('Sandra');
   const [showInventory, setShowInventory] = useState(false);
+  const [showStore, setShowStore] = useState(false);
   const [showGiftHistory, setShowGiftHistory] = useState(false);
   const [showSwapModal, setShowSwapModal] = useState(false);
+  const [showPhaserGame, setShowPhaserGame] = useState(false);
   const [swapConfig, setSwapConfig] = useState({ input: 'WAX', output: 'SEXY' });
   const history = useHistory();
   const [toasts, setToasts] = useState([]);
@@ -150,8 +153,11 @@ const Home = () => {
     setShowMissionStatus(false);
     setShowOnlyFaps(false);
     setShowInventory(false);
+    setShowStore(false);
     setShowGiftHistory(false);
     setShowSwapModal(false);
+    setShowPhaserGame(false);
+    
     switch (action) {
       case 'home':
         // Solo cerrar modales
@@ -163,7 +169,7 @@ const Home = () => {
         setShowInventory(true);
         break;
       case 'buy':
-        window.open('https://neftyblocks.com/collection/nightclubnft', '_blank');
+        setShowStore(true);
         break;
       case 'upgrade':
         window.open('https://neftyblocks.com/collection/nightclubnft/blends', '_blank');
@@ -192,6 +198,14 @@ const Home = () => {
       await UserService.reloadBalances();
       setForceUpdate(c => c + 1); // Trigger re-render
     }, 4500); // User request: 4-5 seconds
+  };
+
+  const handleStoreSuccess = () => {
+    addToast('Purchase successful!');
+    setTimeout(async () => {
+      await UserService.reloadBalances();
+      setForceUpdate(c => c + 1); // Trigger re-render
+    }, 2000);
   };
 
   const openSwapModal = (inputToken, outputToken) => {
@@ -280,6 +294,13 @@ const Home = () => {
       {showInventory && (
         <InventoryModal
           onClose={() => setShowInventory(false)}
+        />
+      )}
+      {showStore && (
+        <StoreModal
+          user={UserService}
+          onClose={() => setShowStore(false)}
+          onSuccess={handleStoreSuccess}
         />
       )}
       {showGiftHistory && (
