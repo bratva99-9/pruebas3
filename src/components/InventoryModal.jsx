@@ -433,7 +433,7 @@ const InventoryModal = ({ onClose }) => {
           .nfts-grid {
             display: flex !important;
             flex-direction: row !important;
-            gap: 18px !important;
+            gap: 16.2px !important;
             overflow-x: auto !important;
             overflow-y: hidden !important;
             width: 100% !important;
