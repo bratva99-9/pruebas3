@@ -565,6 +565,7 @@ const InventoryModal = ({ onClose }) => {
             max-width: unset !important;
             width: unset !important;
             border-radius: 16.2px;
+            position: relative;
           }
           .nft-media {
             border-radius: 16.2px;
