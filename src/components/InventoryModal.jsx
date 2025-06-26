@@ -338,6 +338,7 @@ const InventoryModal = ({ onClose }) => {
           min-width: 0 !important;
           height: 244.8px !important;
           aspect-ratio: 9/16 !important;
+          position: relative !important;
         }
         .nft-media {
           width: 100%;
