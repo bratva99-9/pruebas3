@@ -115,7 +115,7 @@ const InventoryModal = ({ onClose }) => {
           })}
           {loading && <div style={{color:'#fff', gridColumn:'1/-1', textAlign:'center'}}>Loading...</div>}
         </div>
-        <div className="modal-bottom-bar" style={{ position: 'fixed', left: '50%', bottom: '0', transform: 'translateX(-50%)', width: '100%', maxWidth: '1200px', height: '60px', margin: '0 auto', zIndex: 10001, background: 'transparent', pointerEvents: 'auto' }}>
+        <div className="modal-bottom-bar" style={{ position: 'fixed', left: '50%', bottom: '0', transform: 'translateX(-50%)', width: '100%', maxWidth: '1200px', margin: '0', padding: '0', zIndex: 10001, background: 'transparent', pointerEvents: 'auto' }}>
           <button className="close-btn" onClick={onClose} style={{ position: 'absolute', left: '50%', bottom: '32px', transform: 'translateX(-50%)' }}>Close</button>
           {hasMore && (
             <button
@@ -193,16 +193,17 @@ const InventoryModal = ({ onClose }) => {
           grid-template-columns: repeat(5, 1fr);
           gap: 32px;
           width: 100%;
-          padding: 0 12px;
-          margin-bottom: 18px;
+          padding: 0 12px 0 12px;
+          margin-bottom: 0;
           scrollbar-width: thin;
           scrollbar-color: #ff00ff #181828;
-          max-height: 70vh;
-          overflow-y: auto;
+          flex: 1 1 auto;
+          min-height: 0;
+          max-height: none;
+          position: relative;
         }
         .nfts-grid::-webkit-scrollbar {
-          width: 12px;
-          background: #181828;
+          margin-bottom: -12px;
         }
         .nfts-grid::-webkit-scrollbar-thumb {
           background: linear-gradient(180deg, #ff00ff 0%, #7f36ff 100%);
@@ -214,18 +215,18 @@ const InventoryModal = ({ onClose }) => {
           background: #181828;
         }
         .nft-card {
-          background: none;
-          border-radius: 18px;
-          overflow: hidden;
-          box-shadow: none;
-          padding: 0;
-          margin: 0;
-          display: flex;
-          align-items: stretch;
-          justify-content: center;
-          min-width: 0;
-          height: 272px;
-          aspect-ratio: 9/16;
+          background: none !important;
+          border-radius: 18px !important;
+          overflow: hidden !important;
+          box-shadow: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          display: flex !important;
+          align-items: stretch !important;
+          justify-content: center !important;
+          min-width: 0 !important;
+          height: 272px !important;
+          aspect-ratio: 9/16 !important;
         }
         .nft-media {
           width: 100%;
@@ -360,8 +361,8 @@ const InventoryModal = ({ onClose }) => {
             margin: 0 !important;
             padding: 0 !important;
             border-radius: 14px !important;
-            box-shadow: 0 2px 10px 0 #ff36ba33;
-            background: rgba(36,0,56,0.22);
+            box-shadow: none !important;
+            background: none !important;
             display: flex !important;
             flex-direction: column !important;
             align-items: center !important;
