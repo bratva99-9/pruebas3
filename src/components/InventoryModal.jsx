@@ -182,9 +182,10 @@ const InventoryModal = ({ onClose }) => {
                   {selectedCategory === "packs" && (
                     <button
                       className="pack-action-btn"
-                      onClick={() =>
-                        console.log("Pack action clicked for", nft.asset_id)
-                      }
+                      onClick={() => {
+                        setSelectedPack(nft);
+                        setShowPackModal(true);
+                      }}
                     >
                       Open Pack
                     </button>
