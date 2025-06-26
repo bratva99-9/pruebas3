@@ -324,37 +324,27 @@ const StoreItemDetailModal = ({ item, atomicData, user, onClose, onSuccess, feed
           }
         }
         @media (max-width: 900px) {
+          /* Elimino todos los overrides de layout para móvil horizontal */
+        }
+        @media (max-width: 900px) and (orientation: landscape) {
           .detail-modal-flex {
-            flex-direction: column;
-            max-width: 98vw;
-            min-width: 0;
-            width: 98vw;
-            min-height: 0;
-            max-height: 98vh;
-          }
-          .detail-media-col, .detail-info-col {
-            max-width: 100vw;
-            min-width: 0;
-            width: 100vw;
-            padding: 0 12px;
-          }
-          .detail-info-col {
-            padding: 24px 8px 18px 8px;
-          }
-          .item-media-modal {
-            max-width: 90vw;
-            max-height: 38vh;
-            margin: 0 auto 0 auto;
-          }
-          .detail-btn-row {
-            flex-direction: column;
-            gap: 12px;
-            align-items: stretch;
+            transform: scale(0.8);
+            transform-origin: center center;
+            margin: auto !important;
+            max-width: 90vw !important;
+            width: 90vw !important;
           }
           .detail-btn.same-btn {
-            width: 100%;
-            min-width: 0;
-            max-width: 100vw;
+            min-width: 160px !important;
+            max-width: 160px !important;
+            width: 160px !important;
+            height: 38px !important;
+            font-size: 13px !important;
+            line-height: 38px !important;
+            padding: 0 !important;
+          }
+          .detail-btn-row {
+            margin-top: 5px !important;
           }
         }
         @keyframes fadeInModal {
