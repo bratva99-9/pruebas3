@@ -242,6 +242,15 @@ const InventoryModal = ({ onClose }) => {
           )}
         </div>
       </div>
+      {showPackModal && selectedPack && (
+        <PackDetailModal
+          pack={selectedPack}
+          onClose={() => {
+            setShowPackModal(false);
+            setSelectedPack(null);
+          }}
+        />
+      )}
       <style jsx>{`
         .inventory-modal-fullscreen {
           position: fixed;
