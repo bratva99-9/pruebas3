@@ -720,6 +720,225 @@ const InventoryModal = ({ onClose }) => {
             border-radius: 16.2px;
           }
         }
+
+        /* Estilos para PackDetailModal */
+        .pack-modal-fullscreen {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          z-index: 10002;
+          background: hsl(245, 86.7%, 2.9%);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          animation: fadeInModal 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .pack-detail-modal-flex {
+          display: flex;
+          flex-direction: row;
+          background: rgba(24, 24, 40, 0.98);
+          border-radius: 24px;
+          box-shadow: 0 0 32px 0 #000a;
+          max-width: 820px;
+          min-width: 320px;
+          width: 90vw;
+          min-height: 340px;
+          max-height: 90vh;
+          overflow: hidden;
+          margin: auto;
+        }
+        .pack-detail-media-col {
+          flex: 1.1;
+          min-width: 210px;
+          max-width: 320px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #181828;
+          padding: 32px 18px 32px 32px;
+        }
+        .pack-item-media-modal {
+          width: 100%;
+          max-width: 198px;
+          height: auto;
+          max-height: 306px;
+          aspect-ratio: 105/154;
+          object-fit: contain;
+          border-radius: 18px;
+          box-shadow: 0 4px 32px 0 #000a;
+          background: #000;
+        }
+        .pack-detail-info-col {
+          flex: 1.5;
+          min-width: 220px;
+          max-width: 420px;
+          padding: 38px 32px 32px 18px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          color: #fff;
+        }
+        .pack-inventory-title {
+          text-align: left;
+          font-size: 28px;
+          font-weight: 700;
+          color: #ff6fff;
+          margin-bottom: 10px;
+          text-shadow: 0 0 12px #ff00ff99;
+          letter-spacing: 2px;
+        }
+        .pack-detail-desc {
+          font-size: 15px;
+          color: #bfc2d1;
+          margin-bottom: 0;
+          margin-top: 0;
+          text-align: left;
+          min-height: 32px;
+        }
+        .pack-detail-table {
+          margin: 18px 0 0 0;
+          width: 100%;
+          font-size: 15px;
+          color: #fff;
+        }
+        .pack-detail-table > div {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+          margin-bottom: 6px;
+        }
+        .pack-detail-label {
+          min-width: 90px;
+          font-weight: 600;
+          color: #00ffff;
+          margin-right: 6px;
+        }
+        .pack-detail-table-horizontal {
+          width: 100%;
+        }
+        .pack-detail-row-2col {
+          display: flex;
+          flex-direction: row;
+          gap: 48px;
+          width: 100%;
+          margin-top: 10px;
+          margin-bottom: 0;
+          align-items: flex-start;
+          justify-content: flex-start;
+        }
+        .pack-detail-col-left,
+        .pack-detail-col-right {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .pack-detail-col-left span,
+        .pack-detail-col-right span {
+          font-size: 15px;
+        }
+        .pack-detail-btn-row {
+          display: flex;
+          flex-direction: row;
+          gap: 18px;
+          margin-top: 48px;
+          width: 100%;
+          justify-content: center;
+          align-items: flex-end;
+        }
+        .pack-detail-btn.pack-same-btn {
+          min-width: 200px;
+          max-width: 200px;
+          width: 200px;
+          font-size: 16px;
+          height: 48px;
+          line-height: 48px;
+          padding: 0;
+          white-space: nowrap;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 12px;
+          text-align: center;
+          box-sizing: border-box;
+          font-weight: 700;
+          border: 2px solid #00ffff;
+          background: rgba(0, 255, 255, 0.1);
+          color: #fff;
+          transition:
+            background 0.2s,
+            border-color 0.2s,
+            color 0.2s;
+          box-shadow: none !important;
+          cursor: pointer;
+        }
+        .pack-detail-btn.pack-same-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+        .pack-detail-btn.pack-same-btn:hover:not(:disabled) {
+          background: rgba(255, 0, 255, 0.13);
+          border-color: #ff00ff;
+          color: #fff;
+        }
+        .pack-feedback-message.pack-feedback-inside-modal-centered {
+          position: absolute;
+          top: 4px;
+          left: 50%;
+          transform: translateX(-50%);
+          max-width: 95%;
+          width: auto;
+          text-align: center;
+          font-size: 17px;
+          font-weight: 600;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          background: none;
+          border: none;
+          color: #fff;
+          margin: 0;
+          padding: 8px 0 0 0;
+          z-index: 10;
+        }
+        .pack-feedback-message.success {
+          color: #00ff00;
+        }
+        .pack-feedback-message.error {
+          color: #ff3366;
+        }
+        .pack-feedback-message.info {
+          color: #00ffff;
+        }
+        @media (max-width: 900px) and (orientation: landscape) {
+          .pack-detail-modal-flex {
+            transform: scale(0.8);
+            transform-origin: center center;
+            margin: auto !important;
+            max-width: 90vw !important;
+            width: 90vw !important;
+          }
+          .pack-detail-btn.pack-same-btn {
+            min-width: 168px !important;
+            max-width: 168px !important;
+            width: 168px !important;
+            height: 40px !important;
+            font-size: 13.65px !important;
+            line-height: 40px !important;
+            padding: 0 !important;
+          }
+          .pack-detail-btn-row {
+            margin-top: 30px !important;
+          }
+          .pack-detail-info-col {
+            padding-left: 0 !important;
+            padding-right: 32px !important;
+          }
+        }
       `}</style>
     </div>
   );
