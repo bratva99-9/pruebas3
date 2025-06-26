@@ -335,16 +335,20 @@ const StoreItemDetailModal = ({ item, atomicData, user, onClose, onSuccess, feed
             width: 90vw !important;
           }
           .detail-btn.same-btn {
-            min-width: 160px !important;
-            max-width: 160px !important;
-            width: 160px !important;
-            height: 38px !important;
-            font-size: 13px !important;
-            line-height: 38px !important;
+            min-width: 168px !important;
+            max-width: 168px !important;
+            width: 168px !important;
+            height: 40px !important;
+            font-size: 13.65px !important;
+            line-height: 40px !important;
             padding: 0 !important;
           }
           .detail-btn-row {
-            margin-top: 5px !important;
+            margin-top: 30px !important;
+          }
+          .detail-info-col {
+            padding-left: 0 !important;
+            padding-right: 32px !important;
           }
         }
         @keyframes fadeInModal {
