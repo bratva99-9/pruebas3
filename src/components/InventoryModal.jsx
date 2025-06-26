@@ -115,17 +115,16 @@ const InventoryModal = ({ onClose }) => {
           })}
           {loading && <div style={{color:'#fff', gridColumn:'1/-1', textAlign:'center'}}>Loading...</div>}
         </div>
-        <div className="modal-bottom-bar">
-          <div className="modal-bottom-center-btns">
-            <button className="close-btn" onClick={onClose}>Close</button>
-          </div>
+        <div className="modal-bottom-bar" style={{ position: 'fixed', left: '50%', bottom: '0', transform: 'translateX(-50%)', width: '100%', maxWidth: '1200px', height: '60px', margin: '0 auto', zIndex: 10001, background: 'transparent', pointerEvents: 'auto' }}>
+          <button className="close-btn" onClick={onClose} style={{ position: 'absolute', left: '50%', bottom: '32px', transform: 'translateX(-50%)' }}>Close</button>
           {hasMore && (
             <button
               className="load-more-btn"
               onClick={handleLoadMore}
               disabled={loading}
+              style={{ position: 'absolute', right: '24px', bottom: '32px' }}
             >
-              {loading ? 'Loading...' : 'Load more NFTs'}
+              {loading ? 'Loading...' : 'Load more'}
             </button>
           )}
         </div>
@@ -144,6 +143,7 @@ const InventoryModal = ({ onClose }) => {
           align-items: center;
           justify-content: flex-start;
           animation: fadeInModal 0.5s cubic-bezier(0.4,0,0.2,1);
+          overflow: hidden;
         }
         .inventory-modal-content {
           width: 100%;
@@ -153,7 +153,7 @@ const InventoryModal = ({ onClose }) => {
           flex-direction: column;
           align-items: center;
           padding: 24px;
-          overflow-y: auto;
+          overflow-y: hidden;
         }
         .inventory-title {
           text-align: center;
@@ -241,26 +241,19 @@ const InventoryModal = ({ onClose }) => {
         .modal-bottom-bar {
           width: 100%;
           max-width: 1200px;
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          align-items: center;
           position: fixed;
           left: 50%;
           bottom: 32px;
           transform: translateX(-50%);
           z-index: 10001;
-          padding: 0 24px;
+          padding: 0 80px 0 180px;
           pointer-events: none;
-        }
-        .modal-bottom-bar > * {
-          pointer-events: auto;
-        }
-        .modal-bottom-center-btns {
-          flex: 1;
           display: flex;
           justify-content: center;
           align-items: center;
+        }
+        .modal-bottom-bar > * {
+          pointer-events: auto;
         }
         .close-btn {
           font-size: 15px;
@@ -272,7 +265,8 @@ const InventoryModal = ({ onClose }) => {
           padding: 8px 32px;
           cursor: pointer;
           transition: all 0.3s ease;
-          margin: 0 24px;
+          margin-right: 80px;
+          box-shadow: none;
         }
         .close-btn:hover {
           background: rgba(255,0,255,0.13);
@@ -286,10 +280,13 @@ const InventoryModal = ({ onClose }) => {
           border: 2px solid #00ffff;
           border-radius: 14px;
           padding: 8px 32px;
+          white-space: nowrap;
+          width: auto;
           cursor: pointer;
           transition: all 0.3s ease;
           margin-left: auto;
           margin-right: 24px;
+          box-shadow: none;
         }
         .load-more-btn:hover:enabled {
           background: rgba(255,0,255,0.13);
@@ -304,6 +301,14 @@ const InventoryModal = ({ onClose }) => {
           to { opacity: 1; }
         }
         @media (max-width: 900px) and (orientation: landscape) {
+          .inventory-modal-fullscreen {
+            overflow: hidden !important;
+          }
+          .inventory-modal-content {
+            height: 100% !important;
+            padding: 8px 24px 0 24px !important;
+            overflow: hidden !important;
+          }
           .inventory-title {
             font-size: 22px !important;
             margin-top: 8px !important;
@@ -325,15 +330,16 @@ const InventoryModal = ({ onClose }) => {
             flex-direction: row !important;
             gap: 18px !important;
             overflow-x: auto !important;
-            overflow-y: visible !important;
-            width: 100vw !important;
-            max-width: 100vw !important;
-            padding: 30px 10px 30px 10px !important;
+            overflow-y: hidden !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 0 10px 0 10px !important;
             margin: 0 !important;
             justify-content: flex-start !important;
             align-items: flex-start !important;
             scrollbar-color: #ff00ff #181828 !important;
             scrollbar-width: thin !important;
+            flex: 1 1 auto !important;
           }
           .nfts-grid::-webkit-scrollbar {
             height: 10px;
