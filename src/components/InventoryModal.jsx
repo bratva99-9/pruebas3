@@ -475,7 +475,7 @@ const InventoryModal = ({ onClose }) => {
           .nft-media video,
           .nft-media img,
           .nft-media div {
-            border-radius: 12px !important;
+            border-radius: 10.8px !important;
             min-width: 100% !important;
             min-height: 100% !important;
             max-width: 100% !important;
