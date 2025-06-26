@@ -333,7 +333,7 @@ const InventoryModal = ({ onClose }) => {
           width: 100%;
           height: 100%;
           aspect-ratio: 9/16;
-          border-radius: 18px;
+          border-radius: 16.2px;
           overflow: hidden;
           background: #19191d;
           display: flex;
