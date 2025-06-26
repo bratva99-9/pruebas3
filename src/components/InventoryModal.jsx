@@ -529,6 +529,13 @@ const InventoryModal = ({ onClose }) => {
             color: #fff !important;
             text-align: center !important;
           }
+          .pack-action-btn {
+            bottom: 4px !important;
+            font-size: 8px !important;
+            padding: 3px 8px !important;
+            border-radius: 8px !important;
+            border-width: 1px !important;
+          }
         }
         @media (min-width: 901px) {
           .nfts-grid {
