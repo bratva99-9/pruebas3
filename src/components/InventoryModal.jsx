@@ -458,13 +458,13 @@ const InventoryModal = ({ onClose }) => {
             background: #181828;
           }
           .nft-card {
-            min-width: 84px !important;
-            max-width: 84px !important;
-            width: 84px !important;
-            height: 149px !important;
+            min-width: 75.6px !important;
+            max-width: 75.6px !important;
+            width: 75.6px !important;
+            height: 134.1px !important;
             margin: 0 !important;
             padding: 0 !important;
-            border-radius: 14px !important;
+            border-radius: 12.6px !important;
             box-shadow: none !important;
             background: none !important;
             display: flex !important;
