@@ -238,6 +238,7 @@ const StoreModal = ({ user, onClose, onSuccess }) => {
           align-items: center;
           justify-content: flex-start;
           animation: fadeInModal 0.5s cubic-bezier(0.4,0,0.2,1);
+          overflow: hidden;
         }
         .inventory-modal-content {
           width: 100%;
@@ -408,6 +409,14 @@ const StoreModal = ({ user, onClose, onSuccess }) => {
           .buy-button-store { font-size: 10px; }
         }
         @media (max-width: 900px) and (orientation: landscape) {
+          .inventory-modal-fullscreen {
+            overflow: hidden !important;
+          }
+          .inventory-modal-content {
+            height: 100% !important;
+            padding: 8px 24px 0 24px !important;
+            overflow: hidden !important;
+          }
           .inventory-title {
             font-size: 172% !important;
             margin-top: -8px !important;
@@ -433,27 +442,21 @@ const StoreModal = ({ user, onClose, onSuccess }) => {
             gap: 8px !important;
             overflow-x: auto !important;
             overflow-y: hidden !important;
-            width: 100vw !important;
-            max-width: 100vw !important;
-            padding: 8px 10px 30px 10px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 0 10px 0 10px !important;
             margin: 0 !important;
             justify-content: flex-start !important;
             align-items: flex-start !important;
+            margin-top: 0px !important;
             scrollbar-color: #ff00ff #181828 !important;
             scrollbar-width: thin !important;
-            min-height: 180px !important;
-            max-height: 260px !important;
-            height: 220px !important;
-            padding-bottom: 0 !important;
+            flex: 1 1 auto !important;
           }
           .item-wrapper-store {
             transform: scale(0.8);
             margin-right: 0 !important;
             margin-left: 0 !important;
-          }
-          .inventory-modal-content {
-            padding-top: 8px !important;
-            margin-top: 0 !important;
           }
           .modal-bottom-bar {
             bottom: 18px !important;
