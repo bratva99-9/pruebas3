@@ -2,9 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { StoreService } from '../services/StoreService';
 import { Oval } from 'react-loader-spinner';
 
-const StoreItemDetailModal = ({ item, atomicData, user, onClose, onSuccess, feedback, setFeedback }) => {
+const StoreItemDetailModal = ({ item, atomicData, user, onClose, onSuccess, feedback, setFeedback, selectedCurrency }) => {
   const [purchasing, setPurchasing] = useState(false);
-  const [selectedCurrency] = useState(Object.keys(item.prices)[0]);
   const modalRef = useRef();
 
   // Estado para datos atomic actualizados

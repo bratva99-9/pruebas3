@@ -221,6 +221,7 @@ const StoreModal = ({ user, onClose, onSuccess }) => {
             onSuccess={onSuccess}
             feedback={feedback}
             setFeedback={setFeedback}
+            selectedCurrency={selectedCurrency}
           />
         </div>
       )}
