@@ -254,14 +254,14 @@ const StoreModal = ({ user, onClose, onSuccess }) => {
           font-size: 38px;
           font-weight: 700;
           color: #ff6fff;
-          margin-bottom: 6px;
+          margin-bottom: 24px;
           text-shadow: 0 0 12px #ff00ff99;
           letter-spacing: 2px;
         }
         .category-filters {
           display: flex;
           gap: 12px;
-          margin-bottom: 2px;
+          margin-bottom: 24px;
           flex-wrap: wrap;
           justify-content: center;
         }
@@ -313,7 +313,7 @@ const StoreModal = ({ user, onClose, onSuccess }) => {
           gap: 20px;
           align-items: start;
           width: 100%;
-          padding: 0px 10px 0px 10px;
+          padding: 0 24px;
           margin-bottom: 80px;
           flex-grow: 1;
           overflow-y: auto;
@@ -411,12 +411,12 @@ const StoreModal = ({ user, onClose, onSuccess }) => {
           .inventory-title {
             font-size: 172% !important;
             margin-top: -8px !important;
-            margin-bottom: 6px !important;
+            margin-bottom: 14px !important;
             letter-spacing: 0.5px !important;
           }
           .category-filters {
             margin-top: 0 !important;
-            margin-bottom: 2px !important;
+            margin-bottom: 0 !important;
             gap: 4px !important;
             font-size: 115% !important;
             padding-top: 0px !important;
@@ -430,12 +430,12 @@ const StoreModal = ({ user, onClose, onSuccess }) => {
             display: flex !important;
             flex-direction: row !important;
             flex-wrap: nowrap !important;
-            gap: 20px !important;
+            gap: 8px !important;
             overflow-x: auto !important;
             overflow-y: hidden !important;
             width: 100vw !important;
             max-width: 100vw !important;
-            padding: 0px 10px 8px 10px !important;
+            padding: 8px 10px 30px 10px !important;
             margin: 0 !important;
             justify-content: flex-start !important;
             align-items: flex-start !important;
@@ -444,6 +444,7 @@ const StoreModal = ({ user, onClose, onSuccess }) => {
             min-height: 180px !important;
             max-height: 260px !important;
             height: 220px !important;
+            padding-bottom: 0 !important;
           }
           .item-wrapper-store {
             transform: scale(0.8);
@@ -453,6 +454,9 @@ const StoreModal = ({ user, onClose, onSuccess }) => {
           .inventory-modal-content {
             padding-top: 8px !important;
             margin-top: 0 !important;
+          }
+          .modal-bottom-bar {
+            bottom: 18px !important;
           }
         }
         .modal-bottom-bar {
