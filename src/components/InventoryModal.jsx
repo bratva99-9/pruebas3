@@ -73,6 +73,143 @@ const InventoryModal = ({ onClose }) => {
     }
   };
 
+  const PackDetailModal = ({ pack, onClose }) => {
+    const modalRef = React.useRef();
+    const [feedback, setFeedback] = React.useState({ message: "", type: "" });
+    const [opening, setOpening] = React.useState(false);
+
+    // Cerrar modal al hacer clic fuera
+    React.useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (modalRef.current && !modalRef.current.contains(event.target)) {
+          onClose();
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }, [onClose]);
+
+    const handleOpenPack = async () => {
+      setOpening(true);
+      setFeedback({ message: "Opening pack...", type: "info" });
+
+      // Simular apertura de pack (aquí iría la lógica real)
+      setTimeout(() => {
+        setFeedback({ message: "Pack opened successfully!", type: "success" });
+        setTimeout(() => {
+          setFeedback({ message: "", type: "" });
+          setOpening(false);
+        }, 2000);
+      }, 2000);
+    };
+
+    // Media del pack
+    const videoHash =
+      pack.data && pack.data.video && pack.data.video.length > 10
+        ? pack.data.video
+        : null;
+    const imgHash =
+      pack.data && pack.data.img && pack.data.img.length > 10
+        ? pack.data.img
+        : null;
+    const fileUrl = videoHash
+      ? videoHash.startsWith("http")
+        ? videoHash
+        : `https://ipfs.io/ipfs/${videoHash}`
+      : imgHash
+        ? imgHash.startsWith("http")
+          ? imgHash
+          : `https://ipfs.io/ipfs/${imgHash}`
+        : "";
+    const isVideo = !!videoHash;
+
+    // Datos del pack
+    const name = pack.data?.name || pack.name || "Pack NFT";
+    const desc =
+      pack.data?.desc ||
+      pack.data?.description ||
+      "Premium pack containing exclusive items";
+    const templateId = pack.template_id || pack.template?.template_id;
+    const assetId = pack.asset_id;
+
+    return (
+      <div className="pack-modal-fullscreen" style={{ zIndex: 10002 }}>
+        <div
+          className="pack-detail-modal-flex"
+          ref={modalRef}
+          style={{ position: "relative" }}
+        >
+          {feedback.message && (
+            <div
+              className={`pack-feedback-message ${feedback.type} pack-feedback-inside-modal-centered`}
+            >
+              {feedback.message}
+            </div>
+          )}
+          <div className="pack-detail-media-col">
+            {isVideo ? (
+              <video
+                src={fileUrl}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="pack-item-media-modal"
+              />
+            ) : (
+              <img src={fileUrl} alt={name} className="pack-item-media-modal" />
+            )}
+          </div>
+          <div className="pack-detail-info-col">
+            <h1
+              className="pack-inventory-title"
+              style={{ marginBottom: 10, fontSize: 28 }}
+            >
+              {name}
+            </h1>
+            <div className="pack-detail-desc" style={{ marginBottom: 18 }}>
+              {desc}
+            </div>
+            <div className="pack-detail-table pack-detail-table-horizontal">
+              <div className="pack-detail-row-2col">
+                <div className="pack-detail-col-left">
+                  <div>
+                    <span className="pack-detail-label">Asset ID:</span>{" "}
+                    <span>{assetId ?? "—"}</span>
+                  </div>
+                  <div>
+                    <span className="pack-detail-label">Template ID:</span>{" "}
+                    <span>{templateId ?? "—"}</span>
+                  </div>
+                  <div>
+                    <span className="pack-detail-label">Type:</span>{" "}
+                    <span>Pack</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="pack-detail-btn-row">
+              <button
+                className="pack-detail-btn pack-same-btn"
+                onClick={onClose}
+              >
+                Close
+              </button>
+              <button
+                className="pack-detail-btn pack-same-btn"
+                onClick={handleOpenPack}
+                disabled={opening || feedback.message}
+              >
+                {opening ? "Opening..." : "Open Pack"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="inventory-modal-fullscreen">
       <div className="inventory-modal-content">
