@@ -505,6 +505,7 @@ const InventoryModal = ({ onClose }) => {
             flex-direction: column !important;
             align-items: center !important;
             justify-content: flex-end !important;
+            position: relative !important;
           }
           .nft-media video,
           .nft-media img,
