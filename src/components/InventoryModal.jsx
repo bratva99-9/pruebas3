@@ -384,6 +384,29 @@ const InventoryModal = ({ onClose }) => {
           background: rgba(255, 0, 255, 0.13);
           border-color: #ff00ff;
         }
+        .pack-action-btn {
+          position: absolute;
+          bottom: 8px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 12px;
+          font-weight: 500;
+          color: #fff;
+          background: rgba(0, 255, 255, 0.1);
+          border: 2px solid #00ffff;
+          border-radius: 12px;
+          padding: 6px 16px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: none;
+          white-space: nowrap;
+          z-index: 10;
+        }
+        .pack-action-btn:hover {
+          background: rgba(255, 0, 255, 0.13);
+          border-color: #ff00ff;
+          transform: translateX(-50%) scale(1.05);
+        }
         .load-more-btn {
           font-size: 15px;
           font-weight: 500;
