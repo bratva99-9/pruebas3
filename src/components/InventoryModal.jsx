@@ -19,6 +19,8 @@ const InventoryModal = ({ onClose }) => {
   const [selectedCategory, setSelectedCategory] = useState("girls");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [showPackModal, setShowPackModal] = useState(false);
+  const [selectedPack, setSelectedPack] = useState(null);
 
   const fetchNFTs = useCallback(
     async (category, reset = false) => {
